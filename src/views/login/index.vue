@@ -3,40 +3,40 @@
     <el-row>
       <el-col :span="24">
         <img alt="Vue logo" src="@/assets/logo.png" />
-        <HelloWorld msg="Welcome to Softeng Performance Management Application" />
+        <h1>Welcome to Softeng Performance Management Application</h1>
+        <p>For a guide and recipes on how to configure / customize this project</p>
       </el-col>
       <el-col :span="24">
         <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
-        <h6>{{ code }}</h6>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld.vue";
+import { login } from "@/api/login";
 import * as dd from "dingtalk-jsapi";
 export default {
   data: () => ({
     loading: true,
-    code: null
+    code: {
+      authcode: null
+    }
   }),
-  components: {
-    HelloWorld
-  },
   created() {
     dd.ready(() => {
       dd.runtime.permission.requestAuthCode({
         corpId: "dingeff939842ad9207f35c2f4657eb6378f",
         onSuccess: result => {
-          this.code = result.code;
-          console.log(result.code);
+          this.code.authcode = result.code;
+          login(this.code);
         },
         onFail: err => {
           console.log("err", err);
         }
       });
     });
+    //todo
   }
 };
 </script>

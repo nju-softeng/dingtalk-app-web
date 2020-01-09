@@ -1,10 +1,15 @@
 <template>
   <div class="home">
+    <div id="nav">
+      <router-link to="/login">Login</router-link>|
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view />
     <el-row>
       <el-col :span="24">
         <img alt="Vue logo" src="@/assets/logo.png" />
         <h1>Welcome to Softeng Performance Management Application</h1>
-        <p>For a guide and recipes on how to configure / customize this project</p>
+        <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
         <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
@@ -14,7 +19,6 @@
 </template>
 
 <script>
-import { login } from "@/api/login";
 import * as dd from "dingtalk-jsapi";
 export default {
   data: () => ({
@@ -24,24 +28,45 @@ export default {
     }
   }),
   created() {
+    // 获取钉钉临时授权码
     dd.ready(() => {
       dd.runtime.permission.requestAuthCode({
         corpId: "dingeff939842ad9207f35c2f4657eb6378f",
         onSuccess: result => {
-          this.code.authcode = result.code;
-          login(this.code);
+          this.code.authcode = result.code; // 获取authcode
+          this.$store.dispatch("user/_login", this.code); // 登录
         },
         onFail: err => {
           console.log("err", err);
         }
       });
     });
-    //todo
   }
 };
 </script>
 
 <style scoped>
+.home {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+
 .el-row {
   margin-bottom: 20px;
   &:last-child {

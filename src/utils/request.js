@@ -1,10 +1,11 @@
 import axios from "axios";
-import bus from "@/utils/bus";
 
 axios.defaults.baseURL = "/api";
+axios.defaults.headers.common["Content-Type"] =
+  "application/json;charset=UTF-8";
 axios.interceptors.request.use(
   function(req) {
-    req.headers.token = sessionStorage.getItem("token");
+    req.headers.token = sessionStorage.getItem("token"); // 请求头部添加token
     return req;
   },
   function(error) {
@@ -17,7 +18,6 @@ axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    bus.$emit(bus.e, error.response.data.message);
     return Promise.reject(error);
   }
 );

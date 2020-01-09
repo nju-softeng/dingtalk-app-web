@@ -37,7 +37,6 @@ const actions = {
   _login({ commit }, authcode) {
     login(authcode)
       .then(response => {
-        console.log(response);
         if (response.headers["token"] != null) {
           commit("SET_TOKEN", response.headers.token);
           localStorage.setItem("token", response.headers["token"]);

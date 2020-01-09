@@ -1,30 +1,48 @@
-/*
-set sidebar open or close,and some app setting
- */
 const state = {
-  opened: sessionStorage.getItem("open")
-    ? sessionStorage.getItem("open")
-    : "false",
-  msgIsShow: false,
-  showDriver: localStorage.getItem("driver")
-    ? localStorage.getItem("driver")
-    : "yes"
+  sidebar: {
+    opened: localStorage.getItem("sidebarStatus")
+      ? !!+localStorage.getItem("sidebarStatus")
+      : true,
+    withoutAnimation: false
+  },
+  device: "desktop"
 };
+
 const mutations = {
-  SET_OPENED(state, payload) {
-    state.opened = String(payload);
-    sessionStorage.setItem("open", payload);
+  TOGGLE_SIDEBAR: state => {
+    state.sidebar.opened = !state.sidebar.opened;
+    state.sidebar.withoutAnimation = false;
+    if (state.sidebar.opened) {
+      localStorage.setItem("sidebarStatus", 1);
+    } else {
+      localStorage.setItem("sidebarStatus", 0);
+    }
   },
-  SET_MSGISOPEN(state) {
-    state.msgIsShow = !state.msgIsShow;
+  CLOSE_SIDEBAR: (state, withoutAnimation) => {
+    localStorage.setItem("sidebarStatus", 0);
+    state.sidebar.opened = false;
+    state.sidebar.withoutAnimation = withoutAnimation;
   },
-  SET_DRIVER(state, payload) {
-    state.showDriver = payload;
-    localStorage.setItem("driver", payload);
+  TOGGLE_DEVICE: (state, device) => {
+    state.device = device;
   }
 };
+
+const actions = {
+  toggleSideBar({ commit }) {
+    commit("TOGGLE_SIDEBAR");
+  },
+  closeSideBar({ commit }, { withoutAnimation }) {
+    commit("CLOSE_SIDEBAR", withoutAnimation);
+  },
+  toggleDevice({ commit }, device) {
+    commit("TOGGLE_DEVICE", device);
+  }
+};
+
 export default {
   namespaced: true,
   state,
-  mutations
+  mutations,
+  actions
 };

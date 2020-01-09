@@ -7,3 +7,10 @@ export function login(data) {
     data
   });
 }
+
+export function getInfo() {
+  return axios({
+    url: "/user/info",
+    method: "get"
+  });
+}

@@ -7,7 +7,7 @@ import user from "./modules/user";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     app,
     settings,
@@ -15,3 +15,5 @@ export default new Vuex.Store({
   },
   getters
 });
+
+export default store;

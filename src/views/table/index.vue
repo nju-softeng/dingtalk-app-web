@@ -9,14 +9,10 @@
       highlight-current-row
     >
       <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
+        <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.title }}</template>
       </el-table-column>
       <el-table-column label="Author" width="110" align="center">
         <template slot-scope="scope">
@@ -24,9 +20,7 @@
         </template>
       </el-table-column>
       <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.pageviews }}</template>
       </el-table-column>
       <el-table-column class-name="status-col" label="Status" width="110" align="center">
         <template slot-scope="scope">
@@ -44,36 +38,36 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList } from "@/api/table";
 
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+        published: "success",
+        draft: "gray",
+        deleted: "danger"
+      };
+      return statusMap[status];
     }
   },
   data() {
     return {
       list: null,
       listLoading: true
-    }
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData() {
-      this.listLoading = true
+      this.listLoading = true;
       getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+        this.list = response.data.items;
+        this.listLoading = false;
+      });
     }
   }
-}
+};
 </script>

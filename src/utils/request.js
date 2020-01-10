@@ -5,7 +5,8 @@ axios.defaults.headers.common["Content-Type"] =
   "application/json;charset=UTF-8";
 axios.interceptors.request.use(
   function(req) {
-    req.headers.token = sessionStorage.getItem("token"); // 请求头部添加token
+    req.headers.token = localStorage.getItem("token"); // 请求头部添加token
+    console.log("req.headers.token" + req.headers.token);
     return req;
   },
   function(error) {

@@ -20,6 +20,7 @@
 
 <script>
 import * as dd from "dingtalk-jsapi";
+import { Message } from "element-ui";
 export default {
   data: () => ({
     loading: true,
@@ -34,7 +35,15 @@ export default {
         corpId: "dingeff939842ad9207f35c2f4657eb6378f",
         onSuccess: result => {
           this.code.authcode = result.code; // 获取authcode
-          this.$store.dispatch("user/_login", this.code); // 登录
+          this.$store
+            .dispatch("user/_login", this.code)
+            .then(() => {
+              this.$router.push({ path: "/" });
+            })
+            .catch(() => {
+              this.loading = false;
+              Message.error("登录失败");
+            });
         },
         onFail: err => {
           console.log("err", err);

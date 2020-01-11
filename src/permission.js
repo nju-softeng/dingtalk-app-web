@@ -17,7 +17,7 @@ router.beforeEach(async (to, from, next) => {
   document.title = getPageTitle(to.meta.title);
 
   // determine whether the user has logged in
-  const hasToken = localStorage.getItem("token");
+  const hasToken = sessionStorage.getItem("token");
 
   if (hasToken) {
     if (to.path === "/login") {
@@ -30,15 +30,29 @@ router.beforeEach(async (to, from, next) => {
         next();
       } else {
         try {
-          // get user info
+          // 获取用户信息
           await store.dispatch("user/_getInfo");
 
-          next();
+          // 基于角色生成可以获得的路由
+          const accessRoutes = await store.dispatch(
+            "permission/_generateRoutes",
+            [sessionStorage.getItem("role")]
+          );
+
+          console.log(JSON.stringify(accessRoutes));
+
+          // dynamically add accessible routes
+          router.addRoutes(accessRoutes);
+          console.log(router.options.routes);
+
+          // hack method to ensure that addRoutes is complete
+          // set the replace: true, so the navigation will not leave a history record
+          next({ ...to, replace: true });
         } catch (error) {
           // remove token and go to login page to re-login
           //await store.dispatch("user/resetToken");
           Message.error(error || "Has Error");
-          // next(`/login?redirect=${to.path}`);
+          next(`/login?redirect=${to.path}`);
           // NProgress.done();
         }
       }

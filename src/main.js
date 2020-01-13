@@ -8,6 +8,10 @@ import "@/styles/index.scss"; // global css
 import "@/icons"; // icon
 import "@/permission"; // permission control
 
+import "normalize.css/normalize.css"; // a modern alternative to CSS resets
+import "@/styles/element-variables.scss";
+import "@/styles/index.scss"; // global css
+
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 

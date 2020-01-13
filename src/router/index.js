@@ -65,8 +65,7 @@ export const constantRoutes = [
         meta: {
           title: "Dashboard",
           icon: "dashboard",
-          affix: true,
-          noCache: true
+          affix: true
         }
       }
     ]

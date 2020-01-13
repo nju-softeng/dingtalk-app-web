@@ -5,6 +5,12 @@ Vue.use(Router);
 
 import Layout from "@/layout";
 
+// 避免 NavigationDuplicated
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err);
+};
+
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -27,6 +33,17 @@ import Layout from "@/layout";
 //所有权限通用路由表: 如首页和登录页和一些不用权限的公用页面
 export const constantRoutes = [
   {
+    path: "/redirect",
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index")
+      }
+    ]
+  },
+  {
     path: "/login",
     component: () => import("@/views/login/index"),
     hidden: true
@@ -43,9 +60,14 @@ export const constantRoutes = [
     children: [
       {
         path: "dashboard",
-        name: "Dashboard",
         component: () => import("@/views/dashboard/index"),
-        meta: { title: "Dashboard", icon: "dashboard" }
+        name: "Dashboard",
+        meta: {
+          title: "Dashboard",
+          icon: "dashboard",
+          affix: true,
+          noCache: true
+        }
       }
     ]
   },

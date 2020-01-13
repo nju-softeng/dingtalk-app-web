@@ -10,6 +10,9 @@ NProgress.configure({ showSpinner: false }); // NProgress Configuration
 const whiteList = ["/login"]; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
+  console.log("router before each");
+  console.log(to.from);
+  console.log(to.path);
   // start progress bar
   NProgress.start();
 
@@ -28,6 +31,7 @@ router.beforeEach(async (to, from, next) => {
       const hasGetUserInfo = store.getters.name;
       if (hasGetUserInfo) {
         next();
+        console.log("???" + to.path);
       } else {
         try {
           // 获取用户信息
@@ -39,11 +43,8 @@ router.beforeEach(async (to, from, next) => {
             [sessionStorage.getItem("role")]
           );
 
-          console.log(JSON.stringify(accessRoutes));
-
           // dynamically add accessible routes
           router.addRoutes(accessRoutes);
-          console.log(router.options.routes);
 
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record

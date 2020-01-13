@@ -9,9 +9,7 @@
         :key="item.value"
         :disabled="size === item.value"
         :command="item.value"
-      >
-        {{ item.label }}
-      </el-dropdown-item>
+      >{{ item.label }}</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -45,9 +43,11 @@ export default {
     },
     refreshView() {
       // In order to make the cached page re-rendered
+      console.log(this.$route);
       this.$store.dispatch("tagsView/delAllCachedViews", this.$route);
-
+      console.log(this.$route);
       const { fullPath } = this.$route;
+      console.log(fullPath);
 
       this.$nextTick(() => {
         this.$router.replace({

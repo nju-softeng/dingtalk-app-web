@@ -15,6 +15,7 @@
     "element-ui": "^2.13.0",
     "fuse.js": "^3.4.6",
     "nprogress": "^0.2.0",
+    "path-to-regexp": "^6.1.0",
     "screenfull": "^5.0.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",

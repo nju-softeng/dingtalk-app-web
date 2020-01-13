@@ -5,7 +5,8 @@ const state = {
       : true,
     withoutAnimation: false
   },
-  device: "desktop"
+  device: "desktop",
+  size: localStorage.getItem("size") || "medium"
 };
 
 const mutations = {
@@ -25,6 +26,10 @@ const mutations = {
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device;
+  },
+  SET_SIZE: (state, size) => {
+    state.size = size;
+    localStorage.setItem("size", size);
   }
 };
 
@@ -37,6 +42,9 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit("TOGGLE_DEVICE", device);
+  },
+  setSize({ commit }, size) {
+    commit("SET_SIZE", size);
   }
 };
 

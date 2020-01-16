@@ -1,4 +1,4 @@
-import { login, getInfo } from "@/api/login";
+import { login, getInfo } from "@/api/user";
 //import router, { resetRouter } from "@/router";
 
 const state = {

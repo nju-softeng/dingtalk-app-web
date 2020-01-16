@@ -60,10 +60,10 @@ export const constantRoutes = [
     children: [
       {
         path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
+        component: () => import("@/views/dashboard/student/index"),
         name: "Dashboard",
         meta: {
-          title: "Dashboard",
+          title: "工作台",
           icon: "dashboard",
           affix: true
         }
@@ -75,19 +75,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/example/table",
     name: "Example",
-    meta: { title: "Example", icon: "example" },
+    meta: { title: "绩效管理", icon: "example" },
     children: [
       {
         path: "table",
         name: "Table",
-        component: () => import("@/views/table/index"),
-        meta: { title: "Table", icon: "table" }
+        component: () => import("@/views/weeklyReport/index"),
+        meta: { title: "周绩效申请", icon: "table" }
       },
       {
         path: "tree",
         name: "Tree",
         component: () => import("@/views/tree/index"),
-        meta: { title: "Tree", icon: "tree" }
+        meta: { title: "申请历史", icon: "tree" }
       }
     ]
   },

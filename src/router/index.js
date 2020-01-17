@@ -87,7 +87,13 @@ export const constantRoutes = [
         path: "tree",
         name: "Tree",
         component: () => import("@/views/tree/index"),
-        meta: { title: "申请历史", icon: "tree" }
+        meta: { title: "绩效汇总", icon: "tree" }
+      },
+      {
+        path: "tree",
+        name: "Tree",
+        component: () => import("@/views/tree/index"),
+        meta: { title: "AC汇总", icon: "tree" }
       }
     ]
   },

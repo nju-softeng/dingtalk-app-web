@@ -8,3 +8,10 @@ export function submitApplication(data) {
     data
   });
 }
+
+export function getUserApplication(uid, page) {
+  return axios({
+    url: "/application/" + uid + "/page=" + page,
+    method: "get"
+  });
+}

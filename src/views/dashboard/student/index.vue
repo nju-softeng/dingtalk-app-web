@@ -27,7 +27,7 @@
         :xl="{ span: 12 }"
         style="padding-right:8px;margin-bottom:30px;"
       >
-        <transaction-table />
+        <div class="chart-wrapper"></div>
       </el-col>
       <el-col
         :xs="{ span: 24 }"
@@ -56,13 +56,11 @@
 </template>
 
 <script>
-import TransactionTable from "./components/TransactionTable";
 import TodoList from "./components/TodoList";
 
 export default {
   name: "DashboardAdmin",
   components: {
-    TransactionTable,
     TodoList
   },
   data() {

@@ -1,6 +1,10 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card">
+    <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
+      <span>我来啦!</span>
+    </el-drawer>
+
+    <el-card class="box-card" v-show="showApplication">
       <el-form
         label-width="70px"
         label-position="left"
@@ -9,7 +13,10 @@
         ref="form"
       >
         <el-form-item label="审核人:" prop="dcRecord.auditor.id">
-          <el-select v-model="application.dcRecord.auditor.id" placeholder="请选择">
+          <el-select
+            v-model="application.dcRecord.auditor.id"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in auditors"
               :key="item.index"
@@ -19,7 +26,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="D值:" prop="dcRecord.dvalue">
-          <el-input v-model="application.dcRecord.dvalue" placeholder="请输入贡献值" style="width:200px"></el-input>
+          <el-input
+            v-model="application.dcRecord.dvalue"
+            placeholder="请输入贡献值"
+            style="width:220px"
+          ></el-input>
         </el-form-item>
         <el-divider></el-divider>
         <el-button type="text" @click="addAcItem">
@@ -40,89 +51,116 @@
               <el-input v-model="item.ac" placeholder="AC值"></el-input>
             </el-col>
             <el-col :span="2">
-              <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
+              <el-button
+                style="border: 0px"
+                icon="el-icon-close"
+                @click.prevent="rmAcItem(item)"
+              />
             </el-col>
           </el-row>
         </div>
         <br />
-        <el-col :offset="7">
-          <el-button type="primary" @click="submit()" style="margin : 0px 0px 5px 0px;">提交</el-button>
+        <el-col :offset="5">
+          <el-button
+            type="primary"
+            @click="submit()"
+            style="margin : 0px 0px 10px 0px;"
+            >提交</el-button
+          >
+          <el-button @click="showApplication = !showApplication"
+            >取 消</el-button
+          >
         </el-col>
       </el-form>
     </el-card>
-    <br />
-    <el-table :data="dcRecordList" border fit highlight-current-row style="width: 100%">
-      <el-table-column width="180px" align="center" label="提交日期">
-        <template slot-scope="{ row }">
-          <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column width="120px" align="center" label="报表月周">
-        <template slot-scope="{ row }">
-          <span>{{ row.auditor }}</span>
-        </template>
-      </el-table-column>
+    <el-button
+      type="primary"
+      @click="showApplication = !showApplication"
+      style="margin : 0px 0px 20px 0px;"
+      v-show="!showApplication"
+      >提交申请</el-button
+    >
 
-      <el-table-column width="120px" align="center" label="审核人">
-        <template slot-scope="{ row }">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="D值">
-        <template slot-scope="{ row }">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="AC值">
-        <template slot-scope="{ row }">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column class-name="status-col" label="审核结果" width="110">
-        <template slot-scope="{ row }">
-          <el-tag :type="row.status | statusFilter">{{ row.status }}</el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="300px" label="Title">
-        <template slot-scope="{ row }">
-          <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input" size="small" />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >cancel</el-button>
+    <div style="height:580px">
+      <el-table
+        :data="dcRecordList"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+      >
+        <el-table-column width="180px" align="center" label="提交日期">
+          <template slot-scope="{ row }">
+            <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
           </template>
-          <span v-else>{{ row.title }}</span>
-        </template>
-      </el-table-column>
+        </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
-        <template slot-scope="{ row }">
-          <el-button
-            v-if="row.edit"
-            type="success"
-            size="small"
-            icon="el-icon-circle-check-outline"
-            @click="confirmEdit(row)"
-          >Ok</el-button>
-          <el-button
-            v-else
-            type="primary"
-            size="small"
-            icon="el-icon-edit"
-            @click="row.edit = !row.edit"
-          >Edit</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column width="140px" align="center" label="报表月周">
+          <template slot-scope="{ row }">
+            <span>{{ reportTime(row.yearmonth, row.week) }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="120px" align="center" label="审核人">
+          <template slot-scope="{ row }">
+            <span>{{ obj[row.auditor.id] }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="100px" label="D值">
+          <template slot-scope="{ row }">
+            <span>{{ row.dvalue }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column min-width="200px" label="审核结果">
+          <template slot-scope="{ row }">
+            <template v-if="row.ischeck">
+              <el-tag style="margin-right:5px">C值: {{ row.cvalue }}</el-tag>
+              <el-tag style="margin-right:5px">DC值: {{ row.dc }}</el-tag>
+              <el-tag>AC值: {{ row.ac }}</el-tag>
+            </template>
+            <template v-else>
+              <el-tag type="warning">待审核</el-tag>
+            </template>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" label="操作">
+          <template slot-scope="{ row }">
+            <el-button
+              v-if="!row.ischeck"
+              type="danger"
+              size="small"
+              icon="el-icon-edit"
+              @click="drawer = true"
+            >
+              修改申请
+            </el-button>
+            <el-button
+              v-else
+              type="primary"
+              size="small"
+              icon="el-icon-edit"
+              @click="drawer = true"
+            >
+              重新申请
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div>
+      <el-pagination
+        :page-size="10"
+        :total="amount"
+        layout="total, prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+
+    {{ currentPage }}
   </div>
 </template>
 
@@ -131,7 +169,9 @@ import { getAuditors } from "@/api/user";
 import { getUserApplication } from "@/api/application";
 export default {
   data: () => ({
-    report: "test",
+    direction: "ttb",
+    drawer: false,
+    showApplication: false,
     auditors: [],
     application: {
       date: "2020-01-26",
@@ -148,6 +188,9 @@ export default {
         }
       ]
     },
+    obj: {},
+    dcRecordList: null,
+    amount: null,
     rules: {
       "dcRecord.auditor.id": [
         { required: true, message: "请选择审核人", trigger: "change" }
@@ -158,17 +201,31 @@ export default {
       "dcRecord.acItems.reason": [
         { required: true, message: "请填写AC申请", trigger: "blur" }
       ]
-    },
-    dcRecordList: null
+    }
   }),
+  computed: {
+    reportTime() {
+      return (yearmonth, week) => {
+        return yearmonth.toString().slice(5, 7) + " 月 第 " + week + " 周";
+      };
+    }
+  },
   created() {
-    getAuditors().then(res => {
-      this.auditors = res.data.auditorlist;
-    });
-    getUserApplication(0, 0).then(res => {
-      console.log(res.data.dcRecords);
-      this.dcRecordList = res.data.dcRecords;
-    });
+    getAuditors()
+      .then(res => {
+        this.auditors = res.data.auditorlist;
+        console.log(this.auditors);
+        this.auditors.map(item => {
+          this.obj[item.id] = item.name;
+        });
+      })
+      .then(() => {
+        getUserApplication(0, 0).then(res => {
+          console.log(res.data.dcRecords);
+          this.dcRecordList = res.data.dcRecords;
+          this.amount = res.data.amount;
+        });
+      });
   },
   methods: {
     submit() {
@@ -205,6 +262,12 @@ export default {
 </script>
 
 <style>
+.el-table td {
+  padding: 8px 0px;
+}
+.el-table tr {
+  height: 10px;
+}
 .el-form-item__label {
   font-weight: normal;
   font-size: 14px;
@@ -212,5 +275,6 @@ export default {
 
 .box-card {
   width: 100%;
+  margin-bottom: 10px;
 }
 </style>

@@ -15,3 +15,11 @@ export function getUserApplication(uid, page) {
     method: "get"
   });
 }
+
+export function getWeek(data) {
+  return axios({
+    url: "/getdate",
+    method: "post",
+    data
+  });
+}

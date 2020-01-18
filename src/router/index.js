@@ -78,15 +78,21 @@ export const constantRoutes = [
     meta: { title: "绩效管理", icon: "example" },
     children: [
       {
-        path: "table",
-        name: "Table",
-        component: () => import("@/views/weeklyReport/index"),
+        path: "perfApplication",
+        name: "PerfApplication",
+        component: () => import("@/views/perfApplication/index"),
         meta: { title: "周绩效申请", icon: "table" }
       },
       {
-        path: "tree",
-        name: "Tree",
-        component: () => import("@/views/tree/index"),
+        path: "perfAudit",
+        name: "PerfAudit",
+        component: () => import("@/views/perfAudit/index"),
+        meta: { title: "绩效审核", icon: "table" }
+      },
+      {
+        path: "performance",
+        name: "Performance",
+        component: () => import("@/views/performance/index"),
         meta: { title: "绩效汇总", icon: "tree" }
       },
       {

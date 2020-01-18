@@ -12,27 +12,42 @@
         :model="application"
         ref="form"
       >
-        <el-form-item label="审核人:" prop="dcRecord.auditor.id">
-          <el-select
-            v-model="application.dcRecord.auditor.id"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in auditors"
-              :key="item.index"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="D值:" prop="dcRecord.dvalue">
-          <el-input
-            v-model="application.dcRecord.dvalue"
-            placeholder="请输入贡献值"
-            style="width:220px"
-          ></el-input>
-        </el-form-item>
-        <el-divider></el-divider>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="审核人:" prop="dcRecord.auditor.id">
+              <el-select v-model="application.dcRecord.auditor.id" placeholder="请选择">
+                <el-option
+                  v-for="item in auditors"
+                  :key="item.index"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="D值:" prop="dcRecord.dvalue">
+              <el-input
+                v-model="application.dcRecord.dvalue"
+                placeholder="请输入贡献值"
+                style="width:220px"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item>
+              <el-tag style="width:220px; font-size:14px">{{ monthWeek }}</el-tag>
+            </el-form-item>
+            <el-form-item label="报表周:" prop="date">
+              <el-date-picker
+                v-model="application.date"
+                type="week"
+                format="yyyy 第 WW 周"
+                placeholder="选择周"
+                :picker-options="{ firstDayOfWeek: 1 }"
+                @change="getDate"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-button type="text" @click="addAcItem">
           <i class="el-icon-plus"></i>
           添加AC申请
@@ -51,25 +66,14 @@
               <el-input v-model="item.ac" placeholder="AC值"></el-input>
             </el-col>
             <el-col :span="2">
-              <el-button
-                style="border: 0px"
-                icon="el-icon-close"
-                @click.prevent="rmAcItem(item)"
-              />
+              <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
             </el-col>
           </el-row>
         </div>
         <br />
         <el-col :offset="5">
-          <el-button
-            type="primary"
-            @click="submit()"
-            style="margin : 0px 0px 10px 0px;"
-            >提交</el-button
-          >
-          <el-button @click="showApplication = !showApplication"
-            >取 消</el-button
-          >
+          <el-button type="primary" @click="submit()" style="margin : 0px 0px 10px 0px;">提交</el-button>
+          <el-button @click="showApplication = !showApplication">取 消</el-button>
         </el-col>
       </el-form>
     </el-card>
@@ -79,17 +83,10 @@
       @click="showApplication = !showApplication"
       style="margin : 0px 0px 20px 0px;"
       v-show="!showApplication"
-      >提交申请</el-button
-    >
+    >提交申请</el-button>
 
-    <div style="height:580px">
-      <el-table
-        :data="dcRecordList"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
+    <div style="height:480px">
+      <el-table :data="dcRecordList" border fit highlight-current-row style="width: 100%">
         <el-table-column width="180px" align="center" label="提交日期">
           <template slot-scope="{ row }">
             <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
@@ -135,23 +132,19 @@
               size="small"
               icon="el-icon-edit"
               @click="drawer = true"
-            >
-              修改申请
-            </el-button>
+            >修改申请</el-button>
             <el-button
               v-else
               type="primary"
               size="small"
               icon="el-icon-edit"
               @click="drawer = true"
-            >
-              重新申请
-            </el-button>
+            >重新申请</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <div>
+    <div style="text-align:center">
       <el-pagination
         :page-size="10"
         :total="amount"
@@ -159,27 +152,32 @@
         @current-change="handleCurrentChange"
       />
     </div>
-
-    {{ currentPage }}
   </div>
 </template>
 
 <script>
 import { getAuditors } from "@/api/user";
-import { getUserApplication } from "@/api/application";
+import {
+  submitApplication,
+  getUserApplication,
+  getWeek
+} from "@/api/application";
 export default {
   data: () => ({
     direction: "ttb",
     drawer: false,
     showApplication: false,
+    monthWeek: "请选择报表申请所在在周",
     auditors: [],
     application: {
-      date: "2020-01-26",
+      date: null,
       dcRecord: {
         auditor: {
           id: null
         },
-        dvalue: null
+        dvalue: null,
+        yearmonth: 111,
+        week: null
       },
       acItems: [
         {
@@ -200,13 +198,14 @@ export default {
       ],
       "dcRecord.acItems.reason": [
         { required: true, message: "请填写AC申请", trigger: "blur" }
-      ]
+      ],
+      date: [{ required: true, message: "请选择绩效所在周", trigger: "change" }]
     }
   }),
   computed: {
     reportTime() {
       return (yearmonth, week) => {
-        return yearmonth.toString().slice(5, 7) + " 月 第 " + week + " 周";
+        return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
       };
     }
   },
@@ -228,6 +227,26 @@ export default {
       });
   },
   methods: {
+    getDate() {
+      getWeek({ time: this.application.date }).then(res => {
+        let yearmonth = res.data.yearmonth.toString();
+        let week = res.data.week;
+        this.monthWeek =
+          yearmonth.slice(0, 4) +
+          " 年 " +
+          yearmonth.slice(4, 7) +
+          " 月 第 " +
+          week +
+          " 周";
+      });
+    },
+    // 分页获取数据
+    handleCurrentChange(val) {
+      getUserApplication(0, val).then(res => {
+        this.dcRecordList = res.data.dcRecords;
+      });
+    },
+    // 提交申请
     submit() {
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -235,9 +254,14 @@ export default {
           alert("submit!");
           // 过滤 acItems 中为空的选项
           this.application.acItems = this.application.acItems.filter(
-            item => item != null
+            item => item.ac != null
           );
-          //submitApplication(this.application);
+          submitApplication(this.application).then(() => {
+            getUserApplication(0, 0).then(res => {
+              this.dcRecordList = res.data.dcRecords;
+              this.amount = res.data.amount;
+            });
+          });
         } else {
           alert("no submit!");
         }
@@ -263,7 +287,7 @@ export default {
 
 <style>
 .el-table td {
-  padding: 8px 0px;
+  padding: 5px 0px;
 }
 .el-table tr {
   height: 10px;

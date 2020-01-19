@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
+    <el-drawer title="我是标题" :visible.sync="drawer" :modal="false" size="40%" :with-header="false">
       <span>我来啦!</span>
     </el-drawer>
 
@@ -81,7 +81,7 @@
     <el-button
       type="primary"
       @click="showApplication = !showApplication"
-      style="margin : 0px 0px 20px 0px;"
+      style="margin : 0px 0px 10px 0px;"
       v-show="!showApplication"
     >提交申请</el-button>
 
@@ -287,7 +287,7 @@ export default {
 
 <style>
 .el-table td {
-  padding: 5px 0px;
+  padding: 4px 0px;
 }
 .el-table tr {
   height: 10px;

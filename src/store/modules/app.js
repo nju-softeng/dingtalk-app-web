@@ -6,7 +6,7 @@ const state = {
     withoutAnimation: false
   },
   device: "desktop",
-  size: localStorage.getItem("size") || "medium"
+  size: localStorage.getItem("size") || "small"
 };
 
 const mutations = {

@@ -39,7 +39,10 @@
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.0",
     "svg-sprite-loader": "^4.1.6",
+    "terser-webpack-plugin": "^2.3.2",
+    "vue-cli-plugin-webpack-bundle-analyzer": "^2.0.0",
     "vue-template-compiler": "^2.6.10",
+    "webpack-bundle-analyzer": "^3.6.0",
     "webpack-chain": "^6.3.0"
   },
   "eslintConfig": {

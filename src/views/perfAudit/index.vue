@@ -1,10 +1,19 @@
 <template>
   <div class="app-container">
+    {{ drawer }}
+    <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false" size="50%">
+      <span>我来啦!</span>
+    </el-drawer>
     <el-tabs v-model="activetab">
       <el-tab-pane label="待审核" name="first">
         <div>
           <template>
-            <el-table :data="tableData" style="width: 100%" :row-style="{ height: '40px' }">
+            <el-table
+              :data="tableData"
+              style="width: 100%"
+              :row-style="{ height: '40px' }"
+              @row-click="toggleDrawer()"
+            >
               <el-table-column label="申请时间" width="150" align="center">
                 <template slot-scope="{ row }">
                   <span>
@@ -40,6 +49,7 @@ import { getAudit } from "@/api/application";
 export default {
   data() {
     return {
+      drawer: false,
       activetab: "first",
       tableData: []
     };
@@ -50,14 +60,15 @@ export default {
       console.log(this.tableData);
     });
   },
-  methods: {}
+  methods: {
+    toggleDrawer() {
+      this.drawer = !this.drawer;
+    }
+  }
 };
 </script>
 
 <style>
-.el-table td {
-  padding: 200px 0px;
-}
 .el-table tr {
   height: 10px;
 }

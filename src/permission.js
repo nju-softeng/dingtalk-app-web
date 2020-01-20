@@ -1,37 +1,28 @@
 import router from "./router";
 import store from "./store";
 import { Message } from "element-ui";
-import NProgress from "nprogress"; // progress bar
-import "nprogress/nprogress.css"; // progress bar style
-import getPageTitle from "@/utils/get-page-title";
+import NProgress from "nprogress"; // 进度条
+import "nprogress/nprogress.css"; // 进度条样式
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const whiteList = ["/login"]; // no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
-  // start progress bar
-  NProgress.start();
+  NProgress.start(); // 进度条开始
 
-  // set page title
-  document.title = getPageTitle(to.meta.title);
-
-  // determine whether the user has logged in
-  const hasToken = sessionStorage.getItem("token");
-
-  if (hasToken) {
+  if (sessionStorage.getItem("token")) {
+    // 判断用户是否已登陆
     if (to.path === "/login") {
-      // if is logged in, redirect to the home page
-      next({ path: "/" });
-      NProgress.done();
+      next({ path: "/" }); // 如果已登录，重定向到'/'
+      NProgress.done(); // 进度条完成
     } else {
       const hasGetUserInfo = store.getters.name;
       if (hasGetUserInfo) {
         next();
       } else {
         try {
-          // 获取用户信息
-          await store.dispatch("user/_getInfo");
+          await store.dispatch("user/_getInfo"); // 获取用户信息
 
           // 基于角色生成可以获得的路由
           const accessRoutes = await store.dispatch(

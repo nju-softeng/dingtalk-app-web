@@ -1,5 +1,6 @@
 //"use strict";
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -24,6 +25,26 @@ module.exports = {
   // 编译时资源按相对路径声明，可部署在任意路径
   // publicPath: "./",
   // productionSourceMap: false
+
+  configureWebpack: {
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            ecma: undefined,
+            warnings: false,
+            parse: {},
+            compress: {
+              drop_console: true,
+              drop_debugger: false,
+              pure_funcs: ["console.log"] // 移除console
+            }
+          }
+        })
+      ]
+    }
+  },
+
   chainWebpack(config) {
     config.plugins.delete("preload"); // TODO: need test
     config.plugins.delete("prefetch"); // TODO: need test

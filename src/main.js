@@ -10,12 +10,11 @@ import "@/permission"; // permission control
 
 import "normalize.css/normalize.css"; // a modern alternative to CSS resets
 import "@/styles/element-variables.scss";
-import "@/styles/index.scss"; // global css
 
 import * as filters from "./filters"; // global filters
 
 Vue.config.productionTip = false;
-Vue.use(ElementUI);
+Vue.use(ElementUI, { size: "small" });
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

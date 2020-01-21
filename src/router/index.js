@@ -178,8 +178,7 @@ export const constantRoutes = [
   { path: "*", redirect: "/404", hidden: true }
 ];
 
-//异步挂载的路由
-//动态需要根据权限加载的路由表
+//异步挂载的路由：动态需要根据权限加载的路由表
 export const asyncRoutes = [
   {
     path: "/tab",
@@ -198,12 +197,17 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: "external-link",
+    path: "/test",
     component: Layout,
     children: [
       {
-        path: "https://panjiachen.github.io/vue-element-admin-site/#/",
-        meta: { title: "External Link", icon: "link" }
+        path: "index",
+        component: () => import("@/views/test/index"),
+        name: "test",
+        meta: {
+          title: "Test",
+          icon: "tab"
+        }
       }
     ]
   },
@@ -219,7 +223,6 @@ const createRouter = () =>
 
 const router = createRouter();
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router

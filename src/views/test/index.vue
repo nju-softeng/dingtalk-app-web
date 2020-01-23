@@ -5,13 +5,12 @@
         <div v-for="o in 4" :key="o" class="text item">{{ data }}</div>
       </el-card>
     </div>
+    <el-button></el-button>
   </div>
 </template>
 
 <script>
-export default {
-  props: ["data"]
-};
+export default {};
 </script>
 
 <style scoped>

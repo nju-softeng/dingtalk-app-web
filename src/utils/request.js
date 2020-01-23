@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Message } from "element-ui";
 
 axios.defaults.baseURL = "/api";
 axios.defaults.headers.common["Content-Type"] =
@@ -18,6 +19,13 @@ axios.interceptors.response.use(
     return response;
   },
   function(error) {
+    console.log(error.response.data);
+    console.log("err:" + error); // for debug
+    Message({
+      message: error.response.data.message,
+      type: "error",
+      duration: 8 * 1000
+    });
     return Promise.reject(error);
   }
 );

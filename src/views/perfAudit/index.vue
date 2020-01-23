@@ -1,11 +1,27 @@
 <template>
   <div class="app-container">
-    <el-drawer title="我是标题" :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
-      <div class="drawer-bar">
-        <span>{{ obj.dcRecordVO.name }}</span>
+    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
+      <div v-if="tableData.length !== 0 && show">
+        <div class="drawer-bar">
+          <span>{{ tableData[index].dcRecordVO.name }} 的申请</span>
+          <el-tag style="margin-left:10px">
+            {{
+            transitionTime(
+            tableData[index].dcRecordVO.yearmonth,
+            tableData[index].dcRecordVO.week
+            )
+            }}
+          </el-tag>
+        </div>
+
+        <el-card class="box-card">
+          <el-button type="danger" @click="rmItem()">删除按钮</el-button>
+          <div v-for="(item, index) in report" :key="index" class="text item">
+            <li>{{ item.key }}</li>
+            <li>{{ item.value }}</li>
+          </div>
+        </el-card>
       </div>
-      <test v-bind:data="obj" />
-      <div>{{ obj }}</div>
     </el-drawer>
 
     <el-tabs v-model="activetab">
@@ -60,46 +76,62 @@
 </template>
 <script>
 import { getAudit } from "@/api/application";
+import { getReport } from "@/api/audit";
 export default {
   data() {
     return {
       drawer: false,
       activetab: "first",
       tableData: [],
-      index: null,
-      obj: {
-        dcRecordVO: {
-          name: null,
-          yearmonth: null,
-          week: null
-        }
-      }
+      index: 0,
+      show: true,
+      reportList: null,
+      report: null
     };
   },
-  components: {
-    test: () => import("@/views/test/index")
-  },
-  computed: {
-    transitionTime() {
-      return (yearmonth, week) => {
-        return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
-      };
-    }
-  },
+  components: {},
+  computed: {},
   created() {
     getAudit().then(res => {
       this.tableData = res.data;
       console.log(this.tableData);
     });
+    getReport().then(res => {
+      console.log(res.data);
+      this.reportList = res.data;
+    });
   },
   methods: {
-    tableRowClassName({ row, index }) {
+    transitionTime(yearmonth, week) {
+      return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
+    },
+    tableRowClassName({ row, rowIndex }) {
       //把每一行的索引放进row
-      row.index = index;
+      row.index = rowIndex;
     },
     onRowClick(row) {
+      console.log("行索引： " + row.index);
       this.drawer = !this.drawer;
-      this.obj = row;
+      this.index = row.index;
+      let value = this.reportList.filter(item => {
+        return item.uid == this.tableData[row.index].dcRecordVO.uid;
+      });
+      if (value instanceof Array) {
+        this.report = value[0].contents;
+      } else {
+        this.report = value.contents;
+      }
+    },
+    rmItem() {
+      console.log(this.index);
+      if (this.index !== this.tableData.length - 1) {
+        this.tableData.splice(this.index, 1);
+      } else {
+        this.show = false;
+        this.tableData.splice(this.index, 1);
+        this.index--;
+        this.show = true;
+      }
     }
   }
 };
@@ -115,9 +147,14 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.test {
-  height: 80px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+.drawer-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.app-container >>> .el-drawer__body {
+  height: 0;
 }
 
 .el-table tr {
@@ -128,10 +165,15 @@ export default {
   font-size: 14px;
 }
 
+.item {
+  padding: 18px 0;
+}
+
 .box-card {
+  margin-top: 2px;
+  font-size: 12px;
   width: 100%;
-  margin-bottom: 10px;
+  height: 400px;
   overflow: auto;
-  height: 0;
 }
 </style>

@@ -14,7 +14,7 @@ import "@/styles/element-variables.scss";
 import * as filters from "./filters"; // global filters
 
 Vue.config.productionTip = false;
-Vue.use(ElementUI, { size: "small" });
+Vue.use(ElementUI, { size: "mini" });
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

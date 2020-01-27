@@ -34,7 +34,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item>
-              <el-tag style="width:220px; font-size:14px">{{ monthWeek }}</el-tag>
+              <el-tag style="width:220px; font-size:14px">
+                {{
+                monthWeek
+                }}
+              </el-tag>
             </el-form-item>
             <el-form-item label="报表周:" prop="date">
               <el-date-picker
@@ -215,7 +219,7 @@ export default {
         this.auditors = res.data.auditorlist;
         console.log(this.auditors);
         this.auditors.map(item => {
-          this.obj[item.id] = item.name;
+          this.obj[item.id] = item.name; //todo 修改
         });
       })
       .then(() => {

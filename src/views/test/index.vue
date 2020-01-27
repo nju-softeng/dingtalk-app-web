@@ -1,26 +1,56 @@
 <template>
-  <div>
-    <div class="test">
-      <el-card class="box-card" header="周报">
-        <div v-for="o in 4" :key="o" class="text item">{{ data }}</div>
-      </el-card>
-    </div>
+  <div id="parent">
+    <div id="top">top content no need of scroll</div>
+    <div id="bottom">I need scroll here when this content overflow the parent.</div>
   </div>
 </template>
 
 <script>
-export default {
-  props: ["data"]
-};
+export default {};
 </script>
 
 <style scoped>
-.test >>> .el-card__header {
-  padding: 10px 20px;
+#parent {
+  height: 1000px;
+  width: 100%;
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+}
+
+#top {
+  background-color: #ccc;
+  width: 100%;
+  height: auto;
+}
+
+#bottom {
+  height: auto;
+  width: 100%;
+  background-color: grey;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.father {
+  position: relative;
+  height: 10000px;
+  border: 1px;
 }
 
 .text {
   font-size: 12px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.text {
+  font-size: 14px;
 }
 
 .item {
@@ -28,16 +58,6 @@ export default {
 }
 
 .box-card {
-  width: 100%;
-  overflow: auto;
-  height: 300px;
-}
-
-.test {
-  width: 100%;
-  height: 100px;
-  margin: 4px;
-
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  width: 480px;
 }
 </style>

@@ -1,34 +1,77 @@
 <template>
   <div class="app-container">
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
-      <div v-if="tableData.length !== 0 && show">
+      <div class="drawer-container" ref="box" v-if="list.length !== 0 && show">
         <div class="drawer-bar">
-          <span>{{ tableData[index].dcRecordVO.name }} 的申请</span>
+          <span>{{ list[index].dcRecordVO.name }} 的申请</span>
           <el-tag style="margin-left:10px">
             {{
             transitionTime(
-            tableData[index].dcRecordVO.yearmonth,
-            tableData[index].dcRecordVO.week
+            list[index].dcRecordVO.yearmonth,
+            list[index].dcRecordVO.week
             )
             }}
           </el-tag>
         </div>
 
-        <el-card class="box-card">
-          <el-button type="danger" @click="rmItem()">删除按钮</el-button>
-          <div v-for="(item, index) in report" :key="index" class="text item">
+        <el-card class="report-card">
+          <div v-for="(item, index) in report" :key="index" class="item">
             <li>{{ item.key }}</li>
-            <li>{{ item.value }}</li>
+            <p>{{ item.value }}</p>
+          </div>
+        </el-card>
+
+        <el-card class="ac-card">
+          <el-table
+            ref="multipleTable"
+            :data="form.acRecordList"
+            tooltip-effect="dark"
+            style="width: 100%"
+          >
+            <el-table-column label="AC申请理由" width="300">
+              <template slot-scope="scope">{{ scope.row.reason }}</template>
+            </el-table-column>
+            <el-table-column prop="ac" label="AC" width="120"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                <el-button
+                  @click.native.prevent="
+                    deleteRow(scope.$index, form.acRecordList)
+                  "
+                  type="text"
+                  size="small"
+                >拒绝</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+        <el-card class="form-card">
+          <div>
+            <el-tag style=" margin:5px 5px 5px 0px">D值：{{ list[index].dcRecordVO.dvalue }}</el-tag>
+            <el-tag style=" margin:5px">DC值：{{ form.dc }}</el-tag>
+            <el-tag style=" margin:5px">AC值：{{ form.ac }}</el-tag>
+          </div>
+          <el-form label-position="left" label-width="50px" :model="form">
+            <el-form-item label="C值">
+              <el-input style="width:100px" v-model="form.cvalue"></el-input>
+            </el-form-item>
+          </el-form>
+
+          <div>
+            <el-button>确认提交</el-button>
+            <el-button @click="toggleSelection()">上一个</el-button>
+            <el-button @click="toggleSelection()">下一个</el-button>
           </div>
         </el-card>
       </div>
     </el-drawer>
-
+    {{ form }}
     <el-tabs v-model="activetab">
       <el-tab-pane label="待审核" name="first">
         <div>
           <el-table
-            :data="tableData"
+            :data="list"
             style="width: 100%"
             :row-style="{ height: '30px' }"
             :row-class-name="tableRowClassName"
@@ -82,19 +125,23 @@ export default {
     return {
       drawer: false,
       activetab: "first",
-      tableData: [],
+      list: [],
       index: 0,
       show: true,
       reportList: null,
-      report: null
+      report: null,
+      form: {
+        cvalue: null,
+        dc: null,
+        ac: null,
+        acRecordList: []
+      }
     };
   },
-  components: {},
-  computed: {},
   created() {
     getAudit().then(res => {
-      this.tableData = res.data;
-      console.log(this.tableData);
+      this.list = res.data;
+      console.log(this.list);
     });
     getReport().then(res => {
       console.log(res.data);
@@ -106,15 +153,23 @@ export default {
       return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
     },
     tableRowClassName({ row, rowIndex }) {
-      //把每一行的索引放进row
       row.index = rowIndex;
     },
     onRowClick(row) {
-      console.log("行索引： " + row.index);
-      this.drawer = !this.drawer;
-      this.index = row.index;
+      this.drawer = !this.drawer; //开启抽屉
+      this.index = row.index; //指定当前列
+      this.form.acRecordList = this.list[this.index].acItems.slice(0);
+      this.form.ac = this.form.acRecordList.reduce(
+        (sum, item) => sum + item.ac,
+        0
+      );
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$refs.box.scrollTop = 0;
+        }, 100);
+      });
       let value = this.reportList.filter(item => {
-        return item.uid == this.tableData[row.index].dcRecordVO.uid;
+        return item.uid == this.list[row.index].dcRecordVO.uid;
       });
       if (value instanceof Array) {
         this.report = value[0].contents;
@@ -122,13 +177,20 @@ export default {
         this.report = value.contents;
       }
     },
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+      this.form.ac = this.form.acRecordList.reduce(
+        (sum, item) => sum + item.ac,
+        0
+      );
+    },
     rmItem() {
       console.log(this.index);
-      if (this.index !== this.tableData.length - 1) {
-        this.tableData.splice(this.index, 1);
+      if (this.index !== this.list.length - 1) {
+        this.list.splice(this.index, 1);
       } else {
         this.show = false;
-        this.tableData.splice(this.index, 1);
+        this.list.splice(this.index, 1);
         this.index--;
         this.show = true;
       }
@@ -138,6 +200,23 @@ export default {
 </script>
 
 <style scoped>
+.app-container >>> .el-drawer__body {
+  height: 0;
+}
+
+.app-container >>> .el-card__body {
+  padding: 5px 20px;
+}
+
+.drawer-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
 .drawer-bar {
   display: flex; /*Flex布局*/
   align-items: center; /*指定垂直居中*/
@@ -145,35 +224,48 @@ export default {
   width: 100%;
   height: 50px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-.drawer-content {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.app-container >>> .el-drawer__body {
-  height: 0;
+  position: fixed;
+  background-color: white;
 }
 
 .el-table tr {
   height: 10px;
 }
+
 .el-form-item__label {
   font-weight: normal;
   font-size: 14px;
 }
 
-.item {
-  padding: 18px 0;
+.el-form-item__label {
+  font-size: 200;
 }
 
-.box-card {
-  margin-top: 2px;
-  font-size: 12px;
+p {
+  word-wrap: break-word;
+}
+
+.item {
+  padding: 4px 0;
+}
+
+.report-card {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 50px;
+  font-size: 13px;
   width: 100%;
-  height: 400px;
-  overflow: auto;
+}
+
+.ac-card {
+  padding-bottom: 5px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.form-card {
+  padding: 10px 0px;
+  font-size: 13px;
+  width: 100%;
 }
 </style>

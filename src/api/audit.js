@@ -7,3 +7,11 @@ export function getReport() {
     method: "get"
   });
 }
+
+export function submitAudit(data) {
+  return axios({
+    url: "/audit",
+    method: "post",
+    data
+  });
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
-      <div v-if="list.length !== 0 && show" ref="box" class="drawer-container">
+      <div v-if="list.length !== 0 && show" ref="drawer" class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
           <span>{{ list[index].dcRecordVO.name }} 的申请</span>
           <el-tag style="margin-left:10px">
@@ -13,6 +13,7 @@
             }}
           </el-tag>
         </div>
+
         <el-card class="report-card">
           <div v-for="(item, index) in report" :key="index" class="item">
             <li>{{ item.key }}</li>
@@ -21,9 +22,9 @@
         </el-card>
 
         <el-card class="ac-card">
-          <el-table ref="multipleTable" :data="form.acRecordList" tooltip-effect="dark" style="width: 100%">
+          <el-table :data="form.acRecords" tooltip-effect="dark">
             <el-table-column label="AC申请理由" width="300">
-              <template slot-scope="scope">{{ scope.row.reason }}</template>
+              <template slot-scope="{ row }">{{ row.reason }}</template>
             </el-table-column>
             <el-table-column label="AC" align="center" width="120">
               <template slot-scope="{ row }">
@@ -39,15 +40,12 @@
                   <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">
                     保存
                   </el-button>
-                  <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="cancelEdit(row)">
-                    取消
-                  </el-button>
                 </template>
                 <el-button v-else type="text" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
                   编辑
                 </el-button>
                 <el-button type="text" size="small" @click.native.prevent="
-                    deleteAcRow(row.$index, form.acRecordList)
+                    deleteAcRow(row.$index, form.acRecords)
                   ">拒绝</el-button>
               </template>
             </el-table-column>
@@ -59,7 +57,6 @@
             <span style="margin-right:30px">AC值：{{ form.ac }}</span>
             <span>DC值：{{ form.dc }}</span>
           </div>
-
           <el-form label-position="left" label-width="50px" :model="form">
             <el-form-item label="C值">
               <el-input v-model="form.cvalue" style="width:80px" />
@@ -67,7 +64,7 @@
           </el-form>
 
           <div>
-            <el-button>确认提交</el-button>
+            <el-button @click="submit()">确认提交</el-button>
             <el-button @click="prev()">上一个</el-button>
             <el-button @click="next()">下一个</el-button>
           </div>
@@ -111,18 +108,18 @@
           </el-table>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="已审核" name="second">配置管理</el-tab-pane>
+      <el-tab-pane label="已审核" name="second"></el-tab-pane>
     </el-tabs>
-    {{ index }}
   </div>
 </template>
 <script>
 import { getAudit } from "@/api/application";
-import { getReport } from "@/api/audit";
+import { getReport, submitAudit } from "@/api/audit";
 export default {
   data() {
     return {
       drawer: false,
+      loading: false,
       activetab: "first",
       list: [],
       index: 0,
@@ -130,16 +127,18 @@ export default {
       reportList: null,
       report: null,
       form: {
+        id: null,
         cvalue: null,
         dc: null,
         ac: null,
-        acRecordList: []
+        acRecords: []
       }
     };
   },
   created() {
     getAudit().then(res => {
       this.list = res.data;
+      console.log(this.list);
     });
     getReport().then(res => {
       this.reportList = res.data;
@@ -181,7 +180,7 @@ export default {
     },
     deleteAcRow(index, rows) {
       rows.splice(index, 1);
-      this.form.ac = this.form.acRecordList.reduce(
+      this.form.ac = this.form.acRecords.reduce(
         (sum, item) => sum + item.ac,
         0
       );
@@ -199,21 +198,20 @@ export default {
     },
 
     showDetail(_self) {
-      _self.form.acRecordList = _self.list[_self.index].acItems
-        .slice(0)
-        .map(v => {
-          _self.$set(v, "edit", false);
-          v.originalAC = v.ac;
-          return v;
-        });
-      console.log(_self.form.acRecordList);
-      _self.form.ac = _self.form.acRecordList.reduce(
+      _self.form.id = _self.list[_self.index].dcRecordVO.id;
+      _self.form.acRecords = _self.list[_self.index].acItems.slice(0).map(v => {
+        _self.$set(v, "edit", false);
+        v.originalAC = v.ac;
+        return v;
+      });
+      console.log(_self.form.acRecords);
+      _self.form.ac = _self.form.acRecords.reduce(
         (sum, item) => sum + item.ac,
         0
       );
       _self.$nextTick(() => {
         setTimeout(() => {
-          _self.$refs.box.scrollTop = 0;
+          _self.$refs.drawer.scrollTop = 0;
         }, 100);
       });
       let value = _self.reportList.filter(item => {
@@ -227,16 +225,32 @@ export default {
     },
     prev() {
       if (this.index !== 0) {
+        this.loading = true;
         this.index--;
         let _self = this;
+
+        setTimeout(() => (this.loading = false), 400);
         this.$options.methods.showDetail(_self);
       }
     },
     next() {
       if (this.index !== this.list.length - 1) {
+        this.loading = true;
         this.index++;
         let _self = this;
+        setTimeout(() => (this.loading = false), 400);
         this.$options.methods.showDetail(_self);
+      }
+    },
+    submit() {
+      submitAudit(this.form);
+      if (this.index !== this.list.length - 1) {
+        this.list.splice(this.index, 1);
+      } else {
+        this.show = false;
+        this.list.splice(this.index, 1);
+        this.index--;
+        this.show = true;
       }
     }
   }
@@ -248,27 +262,12 @@ export default {
   width: 0px;
 }
 
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
-
 .app-container >>> .el-drawer__body {
   height: 0;
 }
 
 .app-container >>> .el-card__body {
   padding: 5px 20px;
-}
-
-.form-card >>> .el-form-item__label {
-  font-weight: normal;
-  font-size: 14px;
-  font-size: 200;
 }
 
 .drawer-container {
@@ -290,10 +289,6 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   position: fixed;
   background-color: white;
-}
-
-.el-table tr {
-  height: 10px;
 }
 
 p {
@@ -319,7 +314,7 @@ p {
 }
 
 .form-card {
-  padding: 10px 0px;
+  padding: 10px 0;
   font-size: 13px;
   width: 100%;
 }

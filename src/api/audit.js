@@ -15,3 +15,10 @@ export function submitAudit(data) {
     data
   });
 }
+
+export function getChecked() {
+  return axios({
+    url: "/checked",
+    method: "get"
+  });
+}

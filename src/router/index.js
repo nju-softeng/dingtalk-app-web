@@ -81,7 +81,7 @@ export const constantRoutes = [
         path: "perfApplication",
         name: "PerfApplication",
         component: () => import("@/views/perfApplication/index"),
-        meta: { title: "周绩效申请", icon: "table" }
+        meta: { title: "绩效申请", icon: "table" }
       },
       {
         path: "perfAudit",

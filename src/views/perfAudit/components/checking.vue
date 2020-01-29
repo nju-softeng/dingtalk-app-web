@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="checking">
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
       <div v-if="list.length !== 0 && show" ref="drawer" class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
           <span>{{ list[index].dcRecordVO.name }} 的申请</span>
           <el-tag style="margin-left:10px">
             {{
-              transitionTime(
+              showDate(
                 list[index].dcRecordVO.yearmonth,
                 list[index].dcRecordVO.week
               )
@@ -83,9 +83,7 @@
         <el-table-column label="申请周" width="100" align="center">
           <template slot-scope="{ row }">
             <span>
-              {{
-                transitionTime(row.dcRecordVO.yearmonth, row.dcRecordVO.week)
-              }}
+              {{ showDate(row.dcRecordVO.yearmonth, row.dcRecordVO.week) }}
             </span>
           </template>
         </el-table-column>
@@ -103,13 +101,13 @@
 </template>
 <script>
 import { getAudit } from "@/api/application";
-import { getReport, submitAudit, getChecked } from "@/api/audit";
+import { getReport, submitAudit } from "@/api/audit";
 export default {
   data() {
     return {
       drawer: false,
       loading: false,
-      activetab: "first",
+
       list: [],
       index: 0,
       show: true,
@@ -139,21 +137,15 @@ export default {
     }
   },
   methods: {
-    tabClick(tab) {
-      console.log(tab);
-      getChecked().then(res => {
-        console.log(res.data);
-      });
-    },
     confirmEdit(row) {
       row.edit = false;
       row.originalTitle = row.title;
       this.$message({
-        message: "The title has been edited",
+        message: "The AC has been edited",
         type: "success"
       });
     },
-    transitionTime(yearmonth, week) {
+    showDate(yearmonth, week) {
       return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
     },
     addTableIndex({ row, rowIndex }) {
@@ -234,3 +226,66 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.checking >>> .el-drawer__body {
+  height: 0;
+}
+
+.checking >>> .el-card__body {
+  padding: 5px 20px;
+}
+
+.drawer-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+.drawer-bar {
+  z-index: 9;
+  display: flex; /*Flex布局*/
+  align-items: center; /*指定垂直居中*/
+  padding: 0px 20px;
+  width: 100%;
+  height: 50px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  background-color: white;
+}
+
+p {
+  word-wrap: break-word;
+}
+
+.item {
+  padding: 4px 0;
+}
+
+.report-card {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 50px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.ac-card {
+  padding-bottom: 5px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.form-card {
+  padding: 10px 0;
+  font-size: 13px;
+  width: 100%;
+}
+</style>

@@ -40,17 +40,23 @@
                   <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">
                     保存
                   </el-button>
+                  <el-button type="text" size="small" @click="cancelEdit(row)">
+                    取消
+                  </el-button>
                 </template>
-                <el-button v-else type="text" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
-                  编辑
-                </el-button>
-                <el-button type="text" size="small" @click.native.prevent="
-                    deleteAcRow(row.$index, form.acRecords)
-                  ">拒绝</el-button>
+                <template v-else>
+                  <el-button type="text" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
+                    编辑
+                  </el-button>
+                  <el-button type="text" size="small" @click.native.prevent="
+                      deleteAcRow(row.$index, form.acRecords)
+                    ">拒绝</el-button>
+                </template>
               </template>
             </el-table-column>
           </el-table>
         </el-card>
+
         <el-card class="form-card">
           <div style="margin:10px 0">
             <span style="margin-right:30px">D值：{{ list[index].dcRecordVO.dvalue }}</span>
@@ -72,7 +78,7 @@
       </div>
     </el-drawer>
     <div>
-      <el-table :data="list" style="width: 100%" :row-style="{ height: '30px' }" :row-class-name="addTableIndex" @row-click="onRowClick">
+      <el-table :data="list" style="width: 100%" :row-class-name="addTableIndex" @row-click="onRowClick">
         <el-table-column label="申请时间" width="150" align="center">
           <template slot-scope="{ row }">
             <span>
@@ -101,7 +107,7 @@
 </template>
 <script>
 import { getAudit } from "@/api/application";
-import { getReport, submitAudit } from "@/api/audit";
+import { getReportList, submitAudit } from "@/api/audit";
 export default {
   data() {
     return {
@@ -127,7 +133,7 @@ export default {
       this.list = res.data;
       console.log(this.list);
     });
-    getReport().then(res => {
+    getReportList().then(res => {
       this.reportList = res.data;
     });
   },
@@ -137,9 +143,17 @@ export default {
     }
   },
   methods: {
+    cancelEdit(row) {
+      row.ac = row.originalAc;
+      row.edit = false;
+      this.$message({
+        message: "The title has been restored to the AC value",
+        type: "warning"
+      });
+    },
     confirmEdit(row) {
       row.edit = false;
-      row.originalTitle = row.title;
+      row.originalAc = row.ac;
       this.$message({
         message: "The AC has been edited",
         type: "success"
@@ -169,7 +183,7 @@ export default {
       _self.form.id = _self.list[_self.index].dcRecordVO.id;
       _self.form.acRecords = _self.list[_self.index].acItems.slice(0).map(v => {
         _self.$set(v, "edit", false);
-        v.originalAC = v.ac;
+        v.originalAc = v.ac;
         return v;
       });
       console.log(_self.form.acRecords);
@@ -211,7 +225,13 @@ export default {
       }
     },
     submit() {
-      submitAudit(this.form);
+      submitAudit(this.form).then(() => {
+        this.$notify({
+          title: "成功",
+          message: "提交成功",
+          type: "success"
+        });
+      });
       this.loading = true;
       if (this.index !== this.list.length - 1) {
         this.list.splice(this.index, 1);
@@ -221,7 +241,7 @@ export default {
         this.index--;
         this.show = true;
       }
-      setTimeout(() => (this.loading = false), 400);
+      setTimeout(() => (this.loading = false), 500);
     }
   }
 };

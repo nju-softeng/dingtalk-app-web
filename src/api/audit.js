@@ -1,9 +1,9 @@
 import axios from "@/utils/request";
 
 // 获取周报
-export function getReport() {
+export function getReportList() {
   return axios({
-    url: "/getreport",
+    url: "/getreportlist",
     method: "get"
   });
 }
@@ -20,5 +20,13 @@ export function getChecked() {
   return axios({
     url: "/checked",
     method: "get"
+  });
+}
+
+export function getReport(data) {
+  return axios({
+    url: "report",
+    method: "post",
+    data
   });
 }

@@ -203,20 +203,27 @@ export default {
     submit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          console.log("submit");
-          alert("submit!");
           // 过滤 acItems 中为空的选项
           this.application.acItems = this.application.acItems.filter(
             item => item.ac != null
           );
           submitApplication(this.application).then(() => {
+            this.$notify({
+              title: "成功",
+              message: "申请提交成功",
+              type: "success"
+            });
             getUserApplication(0, 0).then(res => {
               this.dcRecordList = res.data.dcRecords;
               this.amount = res.data.amount;
             });
           });
         } else {
-          alert("no submit!");
+          this.$notify({
+            title: "提交失败",
+            message: "请填充必要信息",
+            type: "warning"
+          });
         }
       });
     },

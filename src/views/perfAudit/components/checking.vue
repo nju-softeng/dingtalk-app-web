@@ -28,7 +28,7 @@
             <el-table-column label="AC" align="center" width="120">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
-                  <el-input v-model="row.ac" oninput="value=value.replace(/[^\d.]/g,'')" style="width:50px" />
+                  <el-input v-model="row.ac" type="number" style="width:50px" />
                 </template>
                 <span :class="{ text_span: !row.status }" v-else>{{
                   row.ac
@@ -58,7 +58,7 @@
             <span style="margin-right:30px">AC值：{{ form.ac }}</span>
             <span>DC值：{{ form.dc }}</span>
           </div>
-          <el-form label-position="left" label-width="50px" :model="form">
+          <el-form label-position="left" label-width="60px" :model="form">
             <el-form-item label="C值">
               <el-input v-model="form.cvalue" style="width:80px" />
             </el-form-item>
@@ -158,6 +158,7 @@ export default {
     },
     confirmEdit(row) {
       row.edit = false;
+      row.ac *= 1;
       row.originalAc = row.ac;
       this.form.ac = this.form.acItems
         .filter(item => item.status === true)
@@ -258,6 +259,15 @@ export default {
 </script>
 
 <style scoped>
+.ac-card >>> input[type="number"] {
+  -moz-appearance: textfield;
+}
+.ac-card >>> input[type="number"]::-webkit-inner-spin-button,
+.ac-card >>> input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .text_span {
   text-decoration: line-through;
   color: #d9d9d9;

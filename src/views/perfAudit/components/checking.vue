@@ -50,16 +50,18 @@
               </template>
             </el-table-column>
           </el-table>
+          <div style="margin:12px 0 4px 8px">
+            <span style="color:red">累计AC值：{{ form.ac }}</span>
+          </div>
         </el-card>
 
         <el-card class="form-card">
           <div style="margin:10px 0">
             <span style="margin-right:30px">D值：{{ temp.dvalue }}</span>
-            <span style="margin-right:30px">AC值：{{ form.ac }}</span>
             <span>DC值：{{ form.dc }}</span>
           </div>
-          <el-form label-position="left" label-width="60px" :model="form">
-            <el-form-item label="C值">
+          <el-form label-position="left" label-width="60px" :rules="rules" :model="form" ref="form">
+            <el-form-item label="C值" prop="cvalue">
               <el-input v-model="form.cvalue" style="width:80px" />
             </el-form-item>
           </el-form>
@@ -130,6 +132,9 @@ export default {
         yearmonth: "",
         week: "",
         acItems: []
+      },
+      rules: {
+        cvalue: [{ required: true, message: "请输入C值", trigger: "blur" }]
       }
     };
   },
@@ -221,6 +226,7 @@ export default {
       if (this.index !== 0) {
         this.loading = true;
         this.index--;
+        this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
         let _self = this;
         setTimeout(() => (this.loading = false), 400);
         this.$options.methods.showDetail(_self);
@@ -230,29 +236,47 @@ export default {
       if (this.index !== this.list.length - 1) {
         this.loading = true;
         this.index++;
+        this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
         let _self = this;
         setTimeout(() => (this.loading = false), 400);
         this.$options.methods.showDetail(_self);
       }
     },
     submit() {
-      submitAudit(this.form).then(() => {
-        this.$notify({
-          title: "成功",
-          message: "提交成功",
-          type: "success"
-        });
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          submitAudit(this.form).then(() => {
+            this.$notify({
+              title: "成功",
+              message:
+                this.temp.name +
+                "  DC值：" +
+                this.form.dc +
+                "  AC值：" +
+                this.form.ac,
+              type: "success"
+            });
+          });
+          this.loading = true;
+          if (this.index !== this.list.length - 1) {
+            this.list.splice(this.index, 1);
+            this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
+          } else {
+            this.show = false;
+            this.list.splice(this.index, 1);
+            this.index--;
+            this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
+            this.show = true;
+          }
+          setTimeout(() => (this.loading = false), 500);
+        } else {
+          this.$notify({
+            title: "失败",
+            message: "C值不能为空",
+            type: "warning"
+          });
+        }
       });
-      this.loading = true;
-      if (this.index !== this.list.length - 1) {
-        this.list.splice(this.index, 1);
-      } else {
-        this.show = false;
-        this.list.splice(this.index, 1);
-        this.index--;
-        this.show = true;
-      }
-      setTimeout(() => (this.loading = false), 500);
     }
   }
 };
@@ -275,10 +299,6 @@ export default {
 
 ::-webkit-scrollbar {
   width: 0px;
-}
-
-.checking >>> .el-drawer__body {
-  height: 0;
 }
 
 .checking >>> .el-card__body {
@@ -320,6 +340,7 @@ p {
   margin-top: 50px;
   font-size: 13px;
   width: 100%;
+  height: 50%;
 }
 
 .ac-card {

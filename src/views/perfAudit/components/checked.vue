@@ -1,6 +1,6 @@
 <template>
   <div class="checked">
-    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
+    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
       <div class="drawer-container">
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
@@ -12,54 +12,62 @@
         <el-card class="report-card">
           <div v-for="(item, index) in report" :key="index" class="item">
             <li>{{ item.key }}</li>
-            <p>{{ item.value }}</p>
+            <p style="white-space: pre-line">{{ item.value }}</p>
           </div>
         </el-card>
 
         <el-card class="ac-card">
           <el-table :data="temp.acItems" tooltip-effect="dark">
             <el-table-column label="AC申请理由" width="300">
-              <template slot-scope="{ row }">{{ row.reason }}</template>
+              <template slot-scope="{ row }">
+                <span :class="{ text_span: !row.status }">{{
+                  row.reason
+                }}</span>
+              </template>
             </el-table-column>
             <el-table-column label="AC" align="center" width="120">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
-                  <el-input v-model="row.ac" />
+                  <el-input v-model="row.ac" style="width:50px" />
                 </template>
-                <span v-else>{{ row.ac }}</span>
+                <span :class="{ text_span: !row.status }" v-else>{{
+                  row.ac
+                }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
                   <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">
-                    保存
+                    确定
                   </el-button>
                   <el-button type="text" size="small" @click="cancelEdit(row)">
                     取消
                   </el-button>
                 </template>
                 <template v-else>
-                  <el-button type="text" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
-                    编辑
+                  <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
+                    修改
                   </el-button>
-                  <el-button type="text" size="small" @click.native.prevent="
-                      deleteAcRow(row.$index, temp.acItems)
-                    ">拒绝</el-button>
+                  <el-button v-if="!row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">拒绝</el-button>
+                  <el-button v-if="row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">恢复</el-button>
                 </template>
               </template>
             </el-table-column>
           </el-table>
+          <div style="margin:12px 0 4px 8px">
+            <span style="color:red">累计AC值：{{ temp.ac }}</span>
+          </div>
         </el-card>
 
         <el-card class="form-card">
           <div style="margin:10px 0">
             <span style="margin-right:30px">D值：{{ temp.dvalue }}</span>
-            <span style="margin-right:30px">AC值：{{ temp.ac }}</span>
+
             <span>DC值：{{ temp.dc }}</span>
           </div>
-          <el-form label-position="left" label-width="50px" :model="form">
-            <el-form-item label="C值">
+          <el-form label-position="left" label-width="50px" ref="form">
+            <el-form-item label="C值:">
               <el-input v-model="temp.cvalue" style="width:80px" />
             </el-form-item>
           </el-form>
@@ -77,10 +85,6 @@
     <el-button type="primary" icon="el-icon-search" style="margin-left:5px">
       筛选
     </el-button>
-    <br />
-    {{ list[0] }}
-    <br />
-    {{ temp }}
 
     <el-table :data="list" style="width: 100%">
       <el-table-column label="申请时间" width="180">
@@ -105,8 +109,8 @@
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="{ row }">
-          <el-button type="text" size="mini" icon="el-icon-edit" @click="modify(row)">
+        <template slot-scope="{ row, $index }">
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="modify(row, $index)">
             修改
           </el-button>
         </template>
@@ -115,11 +119,12 @@
   </div>
 </template>
 <script>
-import { getChecked } from "@/api/audit";
+import { getChecked, updateAudit } from "@/api/audit";
 export default {
   data() {
     return {
       list: [],
+      span_style: true,
       show: true,
       drawer: false,
       date: null,
@@ -134,13 +139,16 @@ export default {
         yearmonth: "",
         week: "",
         acItems: []
+      },
+      rules: {
+        cvalue: [{ required: true, message: "请输入C值", trigger: "blur" }]
       }
     };
   },
   watch: {
     "temp.cvalue"() {
-      console.log("test");
-      this.temp.dc = this.temp.cvalue * this.temp.dvalue;
+      this.temp.dc =
+        (this.temp.cvalue * 100 * (this.temp.dvalue * 100)) / 10000; // 小数计算存在精度问题
     }
   },
   created() {
@@ -148,10 +156,37 @@ export default {
       console.log(res.data);
       this.list = res.data;
     });
-    console.log("hello checked");
   },
   methods: {
-    submit() {},
+    submit() {
+      if (this.temp.ac != null) {
+        console.log("?????");
+        console.log(this.temp);
+        updateAudit(this.temp).then(() => {
+          console.log("chengg");
+          this.$notify({
+            title: "成功",
+            message:
+              this.temp.name +
+              "  DC值：" +
+              this.temp.dc +
+              "  AC值：" +
+              this.temp.ac,
+            type: "success"
+          });
+          //todo 更新列表
+          this.$set(this.list, this.index, this.temp);
+        });
+
+        setTimeout(() => (this.drawer = false), 800);
+      } else {
+        this.$notify({
+          title: "失败",
+          message: "C值不能为空",
+          type: "warning"
+        });
+      }
+    },
     cancelEdit(row) {
       row.ac = row.originalAc;
       row.edit = false;
@@ -162,7 +197,11 @@ export default {
     },
     confirmEdit(row) {
       row.edit = false;
+      row.ac *= 1;
       row.originalAc = row.ac;
+      this.temp.ac = this.temp.acItems
+        .filter(item => item.status === true)
+        .reduce((sum, item) => sum + item.ac, 0);
       this.$message({
         message: "The AC has been edited",
         type: "success"
@@ -171,28 +210,37 @@ export default {
     showDate(yearmonth, week) {
       return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
     },
-    modify(row) {
+    modify(row, index) {
+      this.index = index;
+      console.log("index" + index);
       this.drawer = !this.drawer;
       this.temp = JSON.parse(JSON.stringify(row)); //深拷贝
       this.temp.acItems = this.temp.acItems.map(item => {
         this.$set(item, "edit", false);
+        this.$set(item, "reject", false);
+        item.reject = !item.status;
         item.originalAc = item.ac;
         return item;
       });
       console.log(row);
     },
-    deleteAcRow(index, rows) {
-      rows.splice(index, 1);
-      this.temp.ac = this.temp.acRecords.reduce(
-        (sum, item) => sum + item.ac,
-        0
-      );
+    rejectAcRow(row) {
+      row.reject = !row.reject;
+      row.status = !row.status;
+      this.temp.ac = this.temp.acItems
+        .filter(item => item.status === true)
+        .reduce((sum, item) => sum + item.ac, 0);
     }
   }
 };
 </script>
 
 <style scoped>
+.text_span {
+  text-decoration: line-through;
+  color: #d9d9d9;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
 }
@@ -240,6 +288,7 @@ p {
   margin-top: 50px;
   font-size: 13px;
   width: 100%;
+  height: 50%;
 }
 
 .ac-card {

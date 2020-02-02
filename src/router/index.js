@@ -181,22 +181,6 @@ export const constantRoutes = [
 //异步挂载的路由：动态需要根据权限加载的路由表
 export const asyncRoutes = [
   {
-    path: "/tab",
-    component: Layout,
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/tab/index"),
-        name: "Tab",
-        meta: {
-          title: "Tab",
-          icon: "tab",
-          roles: ["admin"]
-        }
-      }
-    ]
-  },
-  {
     path: "/test",
     component: Layout,
     children: [

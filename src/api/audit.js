@@ -16,6 +16,14 @@ export function submitAudit(data) {
   });
 }
 
+export function updateAudit(data) {
+  return axios({
+    url: "/updateAudit",
+    method: "post",
+    data
+  });
+}
+
 export function getChecked() {
   return axios({
     url: "/checked",

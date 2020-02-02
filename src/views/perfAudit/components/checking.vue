@@ -12,7 +12,9 @@
         <el-card class="report-card">
           <div v-for="(item, index) in report" :key="index" class="item">
             <li>{{ item.key }}</li>
-            <p>{{ item.value }}</p>
+            <p style="white-space: pre-line; line-height:20px">
+              {{ item.value }}
+            </p>
           </div>
         </el-card>
 
@@ -38,11 +40,11 @@
             <el-table-column label="操作">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
-                  <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">保存</el-button>
+                  <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">确定</el-button>
                   <el-button type="text" size="small" @click="cancelEdit(row)">取消</el-button>
                 </template>
                 <template v-else>
-                  <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">编辑
+                  <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">修改
                   </el-button>
                   <el-button v-if="!row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">拒绝</el-button>
                   <el-button v-if="row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">恢复</el-button>
@@ -100,7 +102,6 @@
         </el-table-column>
       </el-table>
     </div>
-    {{ temp }}
   </div>
 </template>
 <script>
@@ -149,7 +150,8 @@ export default {
   },
   watch: {
     "form.cvalue"() {
-      this.form.dc = this.form.cvalue * this.temp.dvalue;
+      this.form.dc =
+        (this.form.cvalue * 100 * (this.temp.dvalue * 100)) / 10000;
     }
   },
   methods: {
@@ -340,7 +342,6 @@ p {
   margin-top: 50px;
   font-size: 13px;
   width: 100%;
-  height: 50%;
 }
 
 .ac-card {

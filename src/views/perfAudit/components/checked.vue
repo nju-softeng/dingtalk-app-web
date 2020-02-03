@@ -5,7 +5,7 @@
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
           <el-tag style="margin-left:10px">
-            {{ showDate(temp.yearmonth, temp.week) }}
+            {{ temp.yearmonth | formatWeek(temp.week) }}
           </el-tag>
         </div>
 
@@ -94,7 +94,7 @@
       </el-table-column>
       <el-table-column label="申请周" width="180">
         <template slot-scope="{ row }">
-          {{ showDate(row.yearmonth, row.week) }}
+          {{ row.yearmonth | formatWeek(row.week) }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" width="180">
@@ -207,12 +207,10 @@ export default {
         type: "success"
       });
     },
-    showDate(yearmonth, week) {
-      return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
-    },
     modify(row, index) {
       this.index = index;
       console.log("index" + index);
+      //fetchReport(row.)
       this.drawer = !this.drawer;
       this.temp = JSON.parse(JSON.stringify(row)); //深拷贝
       this.temp.acItems = this.temp.acItems.map(item => {

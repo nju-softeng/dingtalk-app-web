@@ -1,10 +1,19 @@
 import axios from "@/utils/request";
 
-// 获取周报
+// 批量获取周报
 export function getReportList() {
   return axios({
     url: "/getreportlist",
     method: "get"
+  });
+}
+
+// 获取单个周报
+export function fetchReport(uid, date) {
+  return axios({
+    url: "/getreport/" + uid,
+    method: "post",
+    date
   });
 }
 

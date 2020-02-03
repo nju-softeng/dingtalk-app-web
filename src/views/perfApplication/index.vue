@@ -1,45 +1,20 @@
 <template>
   <div class="app-container">
-    <el-drawer
-      title="我是标题"
-      :visible.sync="drawer"
-      :modal="false"
-      size="50%"
-      :with-header="false"
-    >
+    <el-drawer title="我是标题" :visible.sync="drawer" :modal="false" size="50%" :with-header="false">
       <div class="drawer-container"></div>
     </el-drawer>
 
-    {{ application.date }}
     <el-card class="box-card" v-show="showApplication">
-      <el-form
-        label-width="70px"
-        label-position="left"
-        :rules="rules"
-        :model="application"
-        ref="form"
-      >
+      <el-form label-width="70px" label-position="left" :rules="rules" :model="application" ref="form">
         <el-row>
           <el-col :span="8">
             <el-form-item label="审核人:" prop="dcRecord.auditor.id">
-              <el-select
-                v-model="application.dcRecord.auditor.id"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in auditors"
-                  :key="item.index"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
+              <el-select v-model="application.auditorid" placeholder="请选择">
+                <el-option v-for="item in auditors" :key="item.index" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="D值:" prop="dcRecord.dvalue">
-              <el-input
-                v-model="application.dcRecord.dvalue"
-                placeholder="请输入贡献值"
-                style="width:193px"
-              ></el-input>
+              <el-input v-model="application.dvalue" placeholder="请输入贡献值" style="width:193px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -49,15 +24,7 @@
               </el-tag>
             </el-form-item>
             <el-form-item label="报表周:" prop="date">
-              <el-date-picker
-                v-model="application.date"
-                type="week"
-                value-format="yyyy-MM-dd"
-                format="yyyy 第 WW 周"
-                placeholder="选择周"
-                :picker-options="{ firstDayOfWeek: 1 }"
-                @change="getDate"
-              ></el-date-picker>
+              <el-date-picker v-model="application.date" type="week" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -65,12 +32,7 @@
           <i class="el-icon-plus"></i>
           添加AC申请
         </el-button>
-        <div
-          :label="index === 0 ? 'AC值' : ''"
-          v-for="(item, index) in application.acItems"
-          :key="index"
-          style="margin : 5px 0px 5px 0px;"
-        >
+        <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in application.acItems" :key="index" style="margin : 5px 0px 5px 0px;">
           <el-row :gutter="2">
             <el-col :span="6">
               <el-input v-model="item.reason" placeholder="申请原因"></el-input>
@@ -79,45 +41,22 @@
               <el-input v-model="item.ac" placeholder="AC值"></el-input>
             </el-col>
             <el-col :span="2">
-              <el-button
-                style="border: 0px"
-                icon="el-icon-close"
-                @click.prevent="rmAcItem(item)"
-              />
+              <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
             </el-col>
           </el-row>
         </div>
         <br />
         <el-col :offset="5">
-          <el-button
-            type="primary"
-            @click="submit()"
-            style="margin : 0px 0px 10px 0px;"
-            >提交</el-button
-          >
-          <el-button @click="showApplication = !showApplication"
-            >取 消</el-button
-          >
+          <el-button type="primary" @click="submit()" style="margin : 0px 0px 10px 0px;">提交</el-button>
+          <el-button @click="showApplication = !showApplication">取 消</el-button>
         </el-col>
       </el-form>
     </el-card>
 
-    <el-button
-      type="primary"
-      @click="showApplication = !showApplication"
-      style="margin : 0px 0px 10px 0px;"
-      v-show="!showApplication"
-      >提交申请</el-button
-    >
+    <el-button type="primary" @click="showApplication = !showApplication" style="margin : 0px 0px 10px 0px;" v-show="!showApplication">提交申请</el-button>
 
     <div style="height:480px">
-      <el-table
-        :data="list"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
+      <el-table :data="list" border fit highlight-current-row style="width: 100%">
         <el-table-column width="180px" align="center" label="提交日期">
           <template slot-scope="{ row }">
             <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
@@ -126,7 +65,7 @@
 
         <el-table-column width="140px" align="center" label="报表月周">
           <template slot-scope="{ row }">
-            <span>{{ reportTime(row.yearmonth, row.week) }}</span>
+            <span>{{ row.yearmonth | formatWeek(row.week) }}</span>
           </template>
         </el-table-column>
 
@@ -157,27 +96,17 @@
 
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button
-              v-if="!row.ischeck"
-              type="text"
-              size="mini"
-              icon="el-icon-edit"
-              @click="drawer = true"
-              >修改申请</el-button
-            >
+            <el-button v-if="!row.ischeck" type="text" size="mini" icon="el-icon-edit" @click="drawer = true">修改申请</el-button>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div style="text-align:center">
-      <el-pagination
-        :page-size="10"
-        :total="amount"
-        layout="total, prev, pager, next, jumper"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :page-size="10" :total="amount" layout="total, prev, pager, next, jumper" @current-change="handleCurrentChange" />
     </div>
+
+    {{ application }}
   </div>
 </template>
 
@@ -196,15 +125,9 @@ export default {
     monthWeek: "请选择报表申请所在在周",
     auditors: [],
     application: {
-      date: null,
-      dcRecord: {
-        auditor: {
-          id: null
-        },
-        dvalue: null,
-        yearmonth: 111,
-        week: null
-      },
+      auditorid: null,
+      date: "",
+      dvalue: "",
       acItems: [
         {
           reason: null,
@@ -214,6 +137,7 @@ export default {
     },
     obj: {},
     list: null,
+    date: null,
     amount: null,
     rules: {
       "dcRecord.auditor.id": [
@@ -228,13 +152,6 @@ export default {
       date: [{ required: true, message: "请选择绩效所在周", trigger: "change" }]
     }
   }),
-  computed: {
-    reportTime() {
-      return (yearmonth, week) => {
-        return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
-      };
-    }
-  },
   created() {
     getAuditors()
       .then(res => {
@@ -254,8 +171,9 @@ export default {
   },
   methods: {
     getDate() {
-      this.application.data;
-      getWeek({ time: this.application.date }).then(res => {
+      let date = new Date(this.application.date);
+      this.application.date = new Date(date.setDate(date.getDate() + 2));
+      getWeek(this.application.date).then(res => {
         let yearmonth = res.data.yearmonth.toString();
         let week = res.data.week;
         this.monthWeek =

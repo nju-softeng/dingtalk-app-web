@@ -5,7 +5,7 @@
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
           <el-tag style="margin-left:10px">
-            {{ showDate(temp.yearmonth, temp.week) }}
+            {{ temp.yearmonth | formatWeek(temp.week) }}
           </el-tag>
         </div>
 
@@ -88,7 +88,7 @@
         <el-table-column label="申请周" width="100" align="center">
           <template slot-scope="{ row }">
             <span>
-              {{ showDate(row.yearmonth, row.week) }}
+              {{ row.yearmonth | formatWeek(row.week) }}
             </span>
           </template>
         </el-table-column>
@@ -175,9 +175,7 @@ export default {
         type: "success"
       });
     },
-    showDate(yearmonth, week) {
-      return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
-    },
+
     addTableIndex({ row, rowIndex }) {
       row.index = rowIndex;
     },

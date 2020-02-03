@@ -8,12 +8,12 @@
       <el-form label-width="70px" label-position="left" :rules="rules" :model="application" ref="form">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="审核人:" prop="dcRecord.auditor.id">
+            <el-form-item label="审核人:" prop="auditorid">
               <el-select v-model="application.auditorid" placeholder="请选择">
                 <el-option v-for="item in auditors" :key="item.index" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="D值:" prop="dcRecord.dvalue">
+            <el-form-item label="D值:" prop="dvalue">
               <el-input v-model="application.dvalue" placeholder="请输入贡献值" style="width:193px"></el-input>
             </el-form-item>
           </el-col>
@@ -24,7 +24,7 @@
               </el-tag>
             </el-form-item>
             <el-form-item label="报表周:" prop="date">
-              <el-date-picker v-model="application.date" type="week" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
+              <el-date-picker v-model="application.date" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -55,7 +55,7 @@
 
     <el-button type="primary" @click="showApplication = !showApplication" style="margin : 0px 0px 10px 0px;" v-show="!showApplication">提交申请</el-button>
 
-    <div style="height:480px">
+    <div style="height:430px">
       <el-table :data="list" border fit highlight-current-row style="width: 100%">
         <el-table-column width="180px" align="center" label="提交日期">
           <template slot-scope="{ row }">
@@ -105,8 +105,6 @@
     <div style="text-align:center">
       <el-pagination :page-size="10" :total="amount" layout="total, prev, pager, next, jumper" @current-change="handleCurrentChange" />
     </div>
-
-    {{ application }}
   </div>
 </template>
 
@@ -137,16 +135,13 @@ export default {
     },
     obj: {},
     list: null,
-    date: null,
     amount: null,
     rules: {
-      "dcRecord.auditor.id": [
+      auditorid: [
         { required: true, message: "请选择审核人", trigger: "change" }
       ],
-      "dcRecord.dvalue": [
-        { required: true, message: "请输入D值", trigger: "blur" }
-      ],
-      "dcRecord.acItems.reason": [
+      dvalue: [{ required: true, message: "请输入D值", trigger: "blur" }],
+      "acItems.reason": [
         { required: true, message: "请填写AC申请", trigger: "blur" }
       ],
       date: [{ required: true, message: "请选择绩效所在周", trigger: "change" }]
@@ -174,12 +169,12 @@ export default {
       let date = new Date(this.application.date);
       this.application.date = new Date(date.setDate(date.getDate() + 2));
       getWeek(this.application.date).then(res => {
-        let yearmonth = res.data.yearmonth.toString();
-        let week = res.data.week;
+        let yearmonth = res.data[0];
+        let week = res.data[1];
         this.monthWeek =
-          yearmonth.slice(0, 4) +
+          yearmonth.toString().slice(0, 4) +
           " 年 " +
-          yearmonth.slice(4, 7) +
+          yearmonth.toString().slice(4, 7) +
           " 月 第 " +
           week +
           " 周";

@@ -33,9 +33,18 @@ export function updateAudit(data) {
   });
 }
 
+// 审核人获取已经审核的申请记录
 export function getChecked() {
   return axios({
     url: "/checked",
+    method: "get"
+  });
+}
+
+// 审核人获取已经审核的申请记录
+export function getToChecked() {
+  return axios({
+    url: "/pending_audit",
     method: "get"
   });
 }

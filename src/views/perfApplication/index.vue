@@ -71,7 +71,7 @@
 
         <el-table-column width="120px" align="center" label="审核人">
           <template slot-scope="{ row }">
-            <span>{{ obj[row.auditor.id] }}</span>
+            <span>{{ row.auditorName }}</span>
           </template>
         </el-table-column>
 

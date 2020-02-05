@@ -105,8 +105,8 @@
   </div>
 </template>
 <script>
-import { getAudit } from "@/api/application";
-import { getReportList, submitAudit } from "@/api/audit";
+// getReportList
+import { submitAudit, getToChecked } from "@/api/audit";
 export default {
   data() {
     return {
@@ -140,13 +140,13 @@ export default {
     };
   },
   created() {
-    getAudit().then(res => {
+    getToChecked().then(res => {
       this.list = res.data;
       console.log(this.list);
     });
-    getReportList().then(res => {
-      this.reportList = res.data;
-    });
+    // getReportList().then(res => {
+    //   this.reportList = res.data;
+    // });
   },
   watch: {
     "form.cvalue"() {

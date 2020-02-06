@@ -1,4 +1,6 @@
 import { login, getInfo } from "@/api/user";
+import { test_login } from "@/api/user"; //测试登陆
+
 //import router, { resetRouter } from "@/router";
 
 const state = {
@@ -83,6 +85,25 @@ const actions = {
         })
         .catch(error => {
           console.log("getinfo error");
+          reject(error);
+        });
+    });
+  },
+
+  test_login({ commit }, uid) {
+    console.log("test login");
+    return new Promise((resolve, reject) => {
+      test_login(uid)
+        .then(response => {
+          if (response.headers["token"] != null) {
+            commit("SET_TOKEN", response.headers.token);
+            sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
+            sessionStorage.setItem("role", getRoles(response.headers["role"]));
+            console.log(sessionStorage.getItem("role"));
+            resolve();
+          }
+        })
+        .catch(error => {
           reject(error);
         });
     });

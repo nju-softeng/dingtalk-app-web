@@ -12,11 +12,7 @@
         <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
-        <div
-          class="grid-content"
-          v-loading="loading"
-          element-loading-text="登录中"
-        ></div>
+        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
       </el-col>
     </el-row>
   </div>
@@ -34,6 +30,18 @@ export default {
     }
   }),
   created() {
+    // 配置测试状态无需钉钉登陆
+    // this.$store
+    //   .dispatch("user/test_login", 1)
+    //   .then(() => {
+    //     this.$router.push({ path: "/" });
+    //     Message.success("测试状态，跳过钉钉登陆");
+    //   })
+    //   .catch(() => {
+    //     this.loading = false;
+    //     Message.error("登录失败");
+    //   });
+
     // 获取钉钉临时授权码
     dd.ready(() => {
       requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" })

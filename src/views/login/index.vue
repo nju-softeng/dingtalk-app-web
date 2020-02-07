@@ -31,16 +31,16 @@ export default {
   }),
   created() {
     // 配置测试状态无需钉钉登陆
-    this.$store
-      .dispatch("user/test_login", 2)
-      .then(() => {
-        this.$router.push({ path: "/" });
-        Message.success("测试状态，跳过钉钉登陆");
-      })
-      .catch(() => {
-        this.loading = false;
-        Message.error("登录失败");
-      });
+    // this.$store
+    //   .dispatch("user/test_login", 2)
+    //   .then(() => {
+    //     this.$router.push({ path: "/" });
+    //     Message.success("测试状态，跳过钉钉登陆");
+    //   })
+    //   .catch(() => {
+    //     this.loading = false;
+    //     Message.error("登录失败");
+    //   });
 
     // 获取钉钉临时授权码
     dd.ready(() => {

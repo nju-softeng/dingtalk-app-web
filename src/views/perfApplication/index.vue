@@ -53,7 +53,7 @@
       </el-form>
     </el-card>
 
-    <el-button type="primary" @click="showApplication = !showApplication" style="margin : 0px 0px 10px 0px;" v-show="!showApplication">提交申请</el-button>
+    <el-button type="primary" @click="showApplication = !showApplication" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;" v-show="!showApplication">提交申请</el-button>
 
     <div style="height:430px">
       <el-table :data="list" border fit highlight-current-row style="width: 100%">

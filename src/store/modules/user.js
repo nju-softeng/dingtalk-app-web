@@ -18,6 +18,7 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar;
+    sessionStorage.setItem("avatar", avatar);
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles;
@@ -76,7 +77,12 @@ const actions = {
           const { data } = response;
 
           if (!data) reject("Verification failed, please Login again.");
-
+          if (data.avatar == "") {
+            console.log("avatar is null");
+            data.avatar =
+              "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView";
+          }
+          console.log(data.avatar);
           commit("SET_NAME", data.name);
           commit("SET_AVATAR", data.avatar);
           commit("SET_ROLES", data.roles);

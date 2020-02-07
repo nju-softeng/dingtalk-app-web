@@ -104,6 +104,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: "/paper",
+    component: Layout,
+    children: [
+      {
+        path: "index",
+        name: "Paper",
+        component: () => import("@/views/paper/index"),
+        meta: { title: "论文管理", icon: "form" }
+      }
+    ]
+  },
+  {
     path: "/form",
     component: Layout,
     children: [
@@ -111,7 +123,7 @@ export const constantRoutes = [
         path: "index",
         name: "Form",
         component: () => import("@/views/form/index"),
-        meta: { title: "Form", icon: "form" }
+        meta: { title: "Form", icon: "table" }
       }
     ]
   },
@@ -180,18 +192,6 @@ export const constantRoutes = [
 
 //异步挂载的路由：动态需要根据权限加载的路由表
 export const asyncRoutes = [
-  {
-    path: "/paper",
-    component: Layout,
-    children: [
-      {
-        path: "index",
-        name: "Paper",
-        component: () => import("@/views/paper/index"),
-        meta: { title: "论文管理", icon: "table" }
-      }
-    ]
-  },
   {
     path: "/test",
     component: Layout,

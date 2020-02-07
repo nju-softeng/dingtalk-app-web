@@ -71,10 +71,10 @@ export const constantRoutes = [
     ]
   },
   {
-    path: "/example",
+    path: "/performance",
     component: Layout,
-    redirect: "/example/table",
-    name: "Example",
+    redirect: "/performance/perfApplication",
+    name: "Performance",
     meta: { title: "绩效管理", icon: "example" },
     children: [
       {
@@ -180,6 +180,18 @@ export const constantRoutes = [
 
 //异步挂载的路由：动态需要根据权限加载的路由表
 export const asyncRoutes = [
+  {
+    path: "/paper",
+    component: Layout,
+    children: [
+      {
+        path: "index",
+        name: "Paper",
+        component: () => import("@/views/paper/index"),
+        meta: { title: "论文管理", icon: "table" }
+      }
+    ]
+  },
   {
     path: "/test",
     component: Layout,

@@ -13,7 +13,7 @@ export function fetchReport(uid, date) {
   return axios({
     url: "/getreport/" + uid,
     method: "post",
-    date
+    data: { date: date }
   });
 }
 

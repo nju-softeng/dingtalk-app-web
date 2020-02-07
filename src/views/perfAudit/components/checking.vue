@@ -1,7 +1,7 @@
 <template>
   <div class="checking">
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
-      <div v-if="list.length !== 0 && show" ref="drawer" class="drawer-container" v-loading="loading">
+      <div v-if="list.length !== 0" ref="drawer" class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
           <el-tag style="margin-left:10px">
@@ -16,10 +16,18 @@
               {{ item.value }}
             </p>
           </div>
+          <div v-if="report == null" style="height:180px">
+            未获取到周报内容,可能原因：
+            <ul>
+              <li>bug</li>
+              <li>申请人未在指定时间提交</li>
+              <li>申请人选择未选择正确的周</li>
+            </ul>
+          </div>
         </el-card>
 
         <el-card class="ac-card">
-          <el-table :data="form.acItems" tooltip-effect="dark">
+          <el-table :data="form.acItems">
             <el-table-column label="AC申请理由" width="300">
               <template slot-scope="{ row }">
                 <span :class="{ text_span: !row.status }">
@@ -76,21 +84,18 @@
         </el-card>
       </div>
     </el-drawer>
+
     <div>
-      <el-table :data="list" style="width: 100%" :row-class-name="addTableIndex" @row-click="onRowClick">
+      <el-table :data="list" style="width: 100%" :row-class-name="addIndex" @row-click="onRowClick">
         <el-table-column label="申请时间" width="150" align="center">
           <template slot-scope="{ row }">
-            <span>
-              {{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
-            </span>
+            {{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
           </template>
         </el-table-column>
         <el-table-column label="申请周" width="100" align="center">
-          <template slot-scope="{ row }">
-            <span>
-              {{ row.yearmonth | formatWeek(row.week) }}
-            </span>
-          </template>
+          <template slot-scope="{ row }">{{
+            row.yearmonth | formatWeek(row.week)
+          }}</template>
         </el-table-column>
         <el-table-column prop="name" label="姓名" align="center" width="100" />
         <el-table-column prop="dvalue" label="申请D值" align="center" width="80" />
@@ -105,8 +110,8 @@
   </div>
 </template>
 <script>
-// getReportList
-import { submitAudit, getToChecked } from "@/api/audit";
+//
+import { fetchReport, submitAudit, getToChecked } from "@/api/audit";
 export default {
   data() {
     return {
@@ -115,7 +120,6 @@ export default {
       span_style: true,
       list: [],
       index: 0,
-      show: true,
       reportList: null,
       report: null,
       form: {
@@ -144,14 +148,11 @@ export default {
       this.list = res.data;
       console.log(this.list);
     });
-    // getReportList().then(res => {
-    //   this.reportList = res.data;
-    // });
   },
   watch: {
     "form.cvalue"() {
       this.form.dc =
-        (this.form.cvalue * 100 * (this.temp.dvalue * 100)) / 10000;
+        (this.form.cvalue * 1000 * (this.temp.dvalue * 1000)) / 1000000;
     }
   },
   methods: {
@@ -175,18 +176,6 @@ export default {
         type: "success"
       });
     },
-
-    addTableIndex({ row, rowIndex }) {
-      row.index = rowIndex;
-    },
-    onRowClick(row) {
-      this.drawer = !this.drawer; // 开启抽屉
-      this.temp = JSON.parse(JSON.stringify(row));
-      console.log(this.temp);
-      this.index = row.index; // 指定当前列
-      let _self = this;
-      this.$options.methods.showDetail(_self);
-    },
     rejectAcRow(row) {
       row.reject = !row.reject;
       row.status = !row.status;
@@ -194,42 +183,46 @@ export default {
         .filter(item => item.status === true)
         .reduce((sum, item) => sum + item.ac, 0);
     },
-
-    showDetail(_self) {
-      _self.form.id = _self.temp.id;
-      _self.form.acItems = _self.temp.acItems.slice(0).map(v => {
-        _self.$set(v, "edit", false);
-        _self.$set(v, "reject", false);
+    addIndex({ row, rowIndex }) {
+      row.index = rowIndex; //为表格的每一行增加索引
+    },
+    onRowClick(row) {
+      this.drawer = !this.drawer; // 开启抽屉
+      this.temp = JSON.parse(JSON.stringify(row));
+      this.index = row.index; // 指定当前列
+      this.$options.methods.initData(this);
+    },
+    initData(that) {
+      that.form.id = that.temp.id;
+      that.form.acItems = that.temp.acItems.slice(0).map(v => {
+        that.$set(v, "edit", false);
+        that.$set(v, "reject", false);
         v.originalAc = v.ac;
         v.status = true;
         return v;
       });
-      console.log(_self.form.acItems);
-      _self.form.ac = _self.form.acItems
+      that.form.ac = that.form.acItems
         .filter(item => item.status === true)
         .reduce((sum, item) => sum + item.ac, 0);
-      _self.$nextTick(() => {
+      that.$nextTick(() => {
         setTimeout(() => {
-          _self.$refs.drawer.scrollTop = 0;
+          that.$refs.drawer.scrollTop = 0;
         }, 100);
       });
-      let value = _self.reportList.filter(item => {
-        return item.uid == _self.temp.uid;
+      fetchReport(that.temp.uid, that.temp.weekdate).then(res => {
+        that.report = res.data.contents;
+        console.log(that.report);
+        that.loading = false;
       });
-      if (value instanceof Array) {
-        _self.report = value[0].contents;
-      } else {
-        _self.report = value.contents;
-      }
+      this.$refs.from.resetFields();
     },
     prev() {
       if (this.index !== 0) {
         this.loading = true;
         this.index--;
         this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
-        let _self = this;
-        setTimeout(() => (this.loading = false), 400);
-        this.$options.methods.showDetail(_self);
+
+        this.$options.methods.initData(this);
       }
     },
     next() {
@@ -237,9 +230,8 @@ export default {
         this.loading = true;
         this.index++;
         this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
-        let _self = this;
-        setTimeout(() => (this.loading = false), 400);
-        this.$options.methods.showDetail(_self);
+
+        this.$options.methods.initData(this);
       }
     },
     submit() {
@@ -249,6 +241,9 @@ export default {
             this.$notify({
               title: "成功",
               message:
+                this.form.id +
+                "  this->" +
+                this.form.id +
                 this.temp.name +
                 "  DC值：" +
                 this.form.dc +
@@ -256,19 +251,20 @@ export default {
                 this.form.ac,
               type: "success"
             });
+            if (this.index == 0 && this.list.length == 1) {
+              this.list.splice(this.index, 1);
+            } else if (this.index == this.list.length - 1) {
+              this.index--;
+              this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
+              this.list.splice(this.index + 1, 1);
+              this.$options.methods.initData(this);
+            } else {
+              this.list.splice(this.index, 1);
+              this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
+              this.$options.methods.initData(this);
+            }
+            this.$refs.from.resetFields();
           });
-          this.loading = true;
-          if (this.index !== this.list.length - 1) {
-            this.list.splice(this.index, 1);
-            this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
-          } else {
-            this.show = false;
-            this.list.splice(this.index, 1);
-            this.index--;
-            this.temp = JSON.parse(JSON.stringify(this.list[this.index]));
-            this.show = true;
-          }
-          setTimeout(() => (this.loading = false), 500);
         } else {
           this.$notify({
             title: "失败",

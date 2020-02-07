@@ -1,11 +1,11 @@
 <template>
   <div class="checked">
-    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
-      <div class="drawer-container">
+    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
+      <div class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
           <el-tag style="margin-left:10px">
-            {{ showDate(temp.yearmonth, temp.week) }}
+            {{ temp.yearmonth | formatWeek(temp.week) }}
           </el-tag>
         </div>
 
@@ -13,6 +13,14 @@
           <div v-for="(item, index) in report" :key="index" class="item">
             <li>{{ item.key }}</li>
             <p style="white-space: pre-line">{{ item.value }}</p>
+          </div>
+          <div v-if="report == null" style="height:180px">
+            未获取到周报内容,可能原因：
+            <ul>
+              <li>bug</li>
+              <li>申请人未在指定时间提交</li>
+              <li>申请人选择未选择正确的周</li>
+            </ul>
           </div>
         </el-card>
 
@@ -94,7 +102,7 @@
       </el-table-column>
       <el-table-column label="申请周" width="180">
         <template slot-scope="{ row }">
-          {{ showDate(row.yearmonth, row.week) }}
+          {{ row.yearmonth | formatWeek(row.week) }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" width="180">
@@ -119,13 +127,14 @@
   </div>
 </template>
 <script>
-import { getChecked, updateAudit } from "@/api/audit";
+import { getChecked, fetchReport, updateAudit } from "@/api/audit";
 export default {
   data() {
     return {
       list: [],
       span_style: true,
       show: true,
+      loading: false,
       drawer: false,
       date: null,
       index: null,
@@ -148,7 +157,7 @@ export default {
   watch: {
     "temp.cvalue"() {
       this.temp.dc =
-        (this.temp.cvalue * 100 * (this.temp.dvalue * 100)) / 10000; // 小数计算存在精度问题
+        (this.temp.cvalue * 1000 * (this.temp.dvalue * 1000)) / 1000000; // 小数计算存在精度问题
     }
   },
   created() {
@@ -207,12 +216,11 @@ export default {
         type: "success"
       });
     },
-    showDate(yearmonth, week) {
-      return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
-    },
     modify(row, index) {
       this.index = index;
+      this.loading = true;
       console.log("index" + index);
+
       this.drawer = !this.drawer;
       this.temp = JSON.parse(JSON.stringify(row)); //深拷贝
       this.temp.acItems = this.temp.acItems.map(item => {
@@ -221,6 +229,10 @@ export default {
         item.reject = !item.status;
         item.originalAc = item.ac;
         return item;
+      });
+      fetchReport(row.uid, row.weekdate).then(res => {
+        this.report = res.data.contents;
+        this.loading = false;
       });
       console.log(row);
     },
@@ -288,7 +300,6 @@ p {
   margin-top: 50px;
   font-size: 13px;
   width: 100%;
-  height: 50%;
 }
 
 .ac-card {

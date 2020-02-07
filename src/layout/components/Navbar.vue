@@ -49,7 +49,6 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
-
     SizeSelect
   },
   computed: {

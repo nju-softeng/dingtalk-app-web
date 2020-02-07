@@ -1,10 +1,19 @@
 import axios from "@/utils/request";
 
-// 获取周报
+// 批量获取周报
 export function getReportList() {
   return axios({
     url: "/getreportlist",
     method: "get"
+  });
+}
+
+// 获取单个周报
+export function fetchReport(uid, date) {
+  return axios({
+    url: "/getreport/" + uid,
+    method: "post",
+    data: { date: date }
   });
 }
 
@@ -24,9 +33,18 @@ export function updateAudit(data) {
   });
 }
 
+// 审核人获取已经审核的申请记录
 export function getChecked() {
   return axios({
     url: "/checked",
+    method: "get"
+  });
+}
+
+// 审核人获取已经审核的申请记录
+export function getToChecked() {
+  return axios({
+    url: "/pending_audit",
     method: "get"
   });
 }

@@ -88,6 +88,10 @@ export function formatTime(time, option) {
   }
 }
 
+export function formatWeek(yearmonth, week) {
+  return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
+}
+
 /**
  * @param {string} url
  * @returns {Object}

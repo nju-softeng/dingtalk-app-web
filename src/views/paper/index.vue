@@ -7,7 +7,7 @@
       <div v-for="(item, index) in list" :key="index">
         <div class="item">
           <div class="content">
-            <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar>
+            <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
             <div class="title">
               {{ item.title }}
               <el-tag>{{ item.journal }}</el-tag>
@@ -16,9 +16,44 @@
         </div>
       </div>
     </div>
+    <el-drag-select
+      v-model="value"
+      style="width:500px;"
+      multiple
+      placeholder="请选择"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-drag-select>
 
     <el-dialog title="添加论文记录" :visible.sync="dialog" width="50%" center>
-      <span>需要注意的是内容是默认不居中的</span>
+      <div class="paper-form">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="论文名称">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="投稿地点">
+            <el-input></el-input>
+          </el-form-item>
+
+          <el-form-item label="论文分类">
+            <el-select v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item> </el-form-item>
+        </el-form>
+      </div>
 
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialog = false">确 定</el-button>
@@ -31,8 +66,36 @@
 export default {
   data() {
     return {
+      author: [],
       dialog: false,
       journalrank: [],
+      userlist: [],
+      options: [
+        {
+          value: 1,
+          label: "Journal A"
+        },
+        {
+          value: 2,
+          label: "Conference A"
+        },
+        {
+          value: 3,
+          label: "Journal B"
+        },
+        {
+          value: 4,
+          label: "Conference B"
+        },
+        {
+          value: 5,
+          label: "Journal C"
+        },
+        {
+          value: 6,
+          label: "Conference C"
+        }
+      ],
       list: [
         {
           title: "The 'Java' extension pack is recommended for this file type.",
@@ -48,9 +111,16 @@ export default {
 };
 </script>
 <style scoped>
+.paper-form >>> .el-input__inner {
+  width: 220px;
+
+  border-end-end-radius: 0;
+  /*outline: medium;*/
+}
 .app-container {
   background-color: #f5f5f5;
-  min-height: 800px;
+  min-height: 750px;
+  border-radius: 0;
 }
 .box {
   background: #fff;

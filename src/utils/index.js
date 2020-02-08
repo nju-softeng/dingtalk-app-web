@@ -15,7 +15,7 @@ export const showHelloTime = time => {
   if (hr >= 13 && hr <= 17) time_format = "下午好，";
   if (hr >= 17 && hr <= 18) time_format = "进入傍晚了，";
   if (hr >= 18 && hr <= 20) time_format = "吃过晚饭了吗，";
-  if (hr >= 20 && hr <= 24) time_format = "在加班吗？辛苦了，";
+  if (hr >= 20 && hr <= 24) time_format = "赶任务吗？辛苦了，";
   return time_format;
 };
 

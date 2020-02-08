@@ -1,6 +1,11 @@
 <template>
   <div class="checked">
-    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
+    <el-drawer
+      :visible.sync="drawer"
+      :modal="false"
+      :with-header="false"
+      size="50%"
+    >
       <div class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
@@ -46,7 +51,12 @@
             <el-table-column label="操作">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
-                  <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-circle-check-outline"
+                    @click="confirmEdit(row)"
+                  >
                     确定
                   </el-button>
                   <el-button type="text" size="small" @click="cancelEdit(row)">
@@ -54,11 +64,29 @@
                   </el-button>
                 </template>
                 <template v-else>
-                  <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
+                  <el-button
+                    type="text"
+                    :disabled="row.reject"
+                    size="small"
+                    icon="el-icon-edit"
+                    @click="row.edit = !row.edit"
+                  >
                     修改
                   </el-button>
-                  <el-button v-if="!row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">拒绝</el-button>
-                  <el-button v-if="row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">恢复</el-button>
+                  <el-button
+                    v-if="!row.reject"
+                    type="text"
+                    size="small"
+                    @click.native.prevent="rejectAcRow(row)"
+                    >拒绝</el-button
+                  >
+                  <el-button
+                    v-if="row.reject"
+                    type="text"
+                    size="small"
+                    @click.native.prevent="rejectAcRow(row)"
+                    >恢复</el-button
+                  >
                 </template>
               </template>
             </el-table-column>
@@ -87,7 +115,14 @@
       </div>
     </el-drawer>
 
-    <el-date-picker v-model="date" type="week" format="yyyy 第 WW 周" style="width:150px" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }">
+    <el-date-picker
+      v-model="date"
+      type="week"
+      format="yyyy 第 WW 周"
+      style="width:150px"
+      placeholder="选择周"
+      :picker-options="{ firstDayOfWeek: 1 }"
+    >
     </el-date-picker>
 
     <el-button type="primary" icon="el-icon-search" style="margin-left:5px">
@@ -95,6 +130,15 @@
     </el-button>
 
     <el-table :data="list" style="width: 100%">
+      <el-table-column width="30px" type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="详细信息">
+              <span>{{ props.row.name }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column label="申请时间" width="180">
         <template slot-scope="{ row }">{{
           row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
@@ -118,7 +162,12 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="{ row, $index }">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="modify(row, $index)">
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-edit"
+            @click="modify(row, $index)"
+          >
             修改
           </el-button>
         </template>

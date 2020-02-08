@@ -30,30 +30,48 @@
       />
     </el-drag-select>
 
-    <el-dialog title="添加论文记录" :visible.sync="dialog" width="50%" center>
-      <div class="paper-form">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="论文名称">
-            <el-input></el-input>
-          </el-form-item>
-          <el-form-item label="投稿地点">
-            <el-input></el-input>
-          </el-form-item>
-
-          <el-form-item label="论文分类">
-            <el-select v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+    <el-dialog title="添加论文记录" :visible.sync="dialog" width="70%" center>
+      <div class="dialog-content">
+        <div class="paper-form">
+          <el-form ref="form" :model="form" label-width="100px">
+            <el-form-item>
+              <span slot="label"><svg-icon icon-class="paper" /> 论文名称</span>
+              <el-input style="width:1000px"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <span slot="label"
+                ><svg-icon icon-class="school" /> 投稿地点</span
               >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item> </el-form-item>
-        </el-form>
+              <el-input></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <span slot="label"><svg-icon icon-class="grade" /> 论文分类</span>
+              <el-select v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <span slot="label"
+                ><svg-icon icon-class="people" /> 论文作者</span
+              >
+              <el-autocomplete
+                v-model="state"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                @select="handleSelect"
+              ></el-autocomplete>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
+      <div class="test"></div>
 
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialog = false">确 定</el-button>
@@ -69,6 +87,7 @@ export default {
       author: [],
       dialog: false,
       journalrank: [],
+      state: "",
       userlist: [],
       options: [
         {
@@ -107,10 +126,48 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    querySearchAsync(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createStateFilter(queryString))
+        : restaurants;
+
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+    createStateFilter(queryString) {
+      return state => {
+        return (
+          state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    handleSelect(item) {
+      console.log(item);
+    }
   }
 };
 </script>
 <style scoped>
+.paper-form {
+  display: flex;
+  background-color: yellow;
+}
+
+.test {
+  background-color: red;
+  height: 100px;
+}
+
+.dialog-content {
+  background-color: aquamarine;
+  display: flex;
+}
+
 .paper-form >>> .el-input__inner {
   width: 220px;
 

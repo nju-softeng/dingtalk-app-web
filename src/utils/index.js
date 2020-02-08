@@ -2,6 +2,23 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+export const showHelloTime = time => {
+  let time_format = "";
+  if (time == undefined) {
+    time = new Date();
+  }
+  let hr = time.getHours();
+  if (hr >= 0 && hr <= 4) time_format = "深夜了，注意身体，";
+  if (hr >= 4 && hr < 7) time_format = "清晨好， ";
+  if (hr >= 7 && hr < 12) time_format = "早安，";
+  if (hr >= 12 && hr <= 13) time_format = "午饭时间到了，";
+  if (hr >= 13 && hr <= 17) time_format = "下午好，";
+  if (hr >= 17 && hr <= 18) time_format = "进入傍晚了，";
+  if (hr >= 18 && hr <= 20) time_format = "吃过晚饭了吗，";
+  if (hr >= 20 && hr <= 24) time_format = "在加班吗？辛苦了，";
+  return time_format;
+};
+
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time

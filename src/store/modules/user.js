@@ -25,6 +25,7 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name;
+    sessionStorage.setItem("name", name);
   },
   SET_INTRODUCE: (state, payload) => {
     state.introduce = payload;

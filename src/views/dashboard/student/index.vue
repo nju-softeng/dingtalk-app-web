@@ -9,19 +9,16 @@
       </p>
       <div class="header-content">
         <div class="left-content">
-          <div class="avatar">
-            <el-avatar shape="square" :size="50" :src="avatar"></el-avatar>
-            <div class="user-info">
-              <div class="title">
-                {{ helloTime }}{{ name }}，祝你开心每一天！
-              </div>
-            </div>
+          <el-avatar class="avatar" shape="square" :size="50" :src="avatar"></el-avatar>
+
+          <div class="user-info title">
+            {{ helloTime }}{{ name }}，祝你开心每一天！
           </div>
         </div>
         <div class="right-content">
           <div class="content-item">
             <div class="item-title muted">
-              任务数
+              当前AC值
             </div>
             <div class="item-text">
               <span>{{ tasksTotal }}</span>
@@ -29,7 +26,7 @@
           </div>
           <div class="content-item">
             <div class="item-title muted">
-              团队内排名
+              本月DC排名
             </div>
             <div class="item-text">
               <span>2 <span class="small muted">/ 8</span> </span>
@@ -83,6 +80,7 @@
 </template>
 
 <script>
+import { showHelloTime } from "@/utils/index";
 import { getYiYan } from "@/api/other";
 import TodoList from "./components/TodoList";
 
@@ -103,6 +101,12 @@ export default {
     this.name = sessionStorage.getItem("name");
     this.getYiYan();
   },
+  computed: {
+    helloTime() {
+      return showHelloTime();
+    }
+  },
+
   methods: {
     getYiYan() {
       getYiYan("d").then(res => {
@@ -138,16 +142,16 @@ export default {
     .left-content {
       display: flex;
       align-items: center;
-
+      flex-direction: row;
+      .avatar {
+        margin-left: 15px;
+      }
       .user-info {
         margin-left: 12px;
         line-height: 33px;
 
         .title {
           font-size: 20px;
-        }
-
-        .team {
         }
       }
     }

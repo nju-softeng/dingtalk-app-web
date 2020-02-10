@@ -9,12 +9,7 @@
       </p>
       <div class="header-content">
         <div class="left-content">
-          <el-avatar
-            class="avatar"
-            shape="square"
-            :size="50"
-            :src="avatar"
-          ></el-avatar>
+          <el-avatar class="avatar" shape="square" :size="50" :src="avatar"></el-avatar>
 
           <div class="user-info title">
             {{ helloTime }}{{ name }}，祝你开心每一天！
@@ -26,7 +21,7 @@
               当前AC值
             </div>
             <div class="item-text">
-              <span>{{ tasksTotal }}</span>
+              <span>xxxxxx</span>
             </div>
           </div>
           <div class="content-item">
@@ -42,7 +37,7 @@
               项目总数
             </div>
             <div class="item-text">
-              <span>{{ projectTotal }}</span>
+              <span>xxxx</span>
             </div>
           </div>
         </div>
@@ -68,34 +63,13 @@
       </el-row>
 
       <el-row :gutter="12">
-        <el-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 24 }"
-          :md="{ span: 24 }"
-          :lg="{ span: 12 }"
-          :xl="{ span: 12 }"
-          style="padding-right:8px;margin-bottom:30px;"
-        >
+        <el-col :xs="{ span: 24 }" :sm="{ span: 24 }" :md="{ span: 24 }" :lg="{ span: 12 }" :xl="{ span: 12 }" style="padding-right:8px;margin-bottom:30px;">
           <div class="chart-wrapper"></div>
         </el-col>
-        <el-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 12 }"
-          :md="{ span: 12 }"
-          :lg="{ span: 6 }"
-          :xl="{ span: 6 }"
-          style="margin-bottom:30px;"
-        >
+        <el-col :xs="{ span: 24 }" :sm="{ span: 12 }" :md="{ span: 12 }" :lg="{ span: 6 }" :xl="{ span: 6 }" style="margin-bottom:30px;">
           <todo-list />
         </el-col>
-        <el-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 12 }"
-          :md="{ span: 12 }"
-          :lg="{ span: 6 }"
-          :xl="{ span: 6 }"
-          style="margin-bottom:30px;"
-        >
+        <el-col :xs="{ span: 24 }" :sm="{ span: 12 }" :md="{ span: 12 }" :lg="{ span: 6 }" :xl="{ span: 6 }" style="margin-bottom:30px;">
           <div class="chart-wrapper">
             <div style="height:500px"></div>
           </div>

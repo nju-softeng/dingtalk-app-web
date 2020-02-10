@@ -19,7 +19,7 @@ export function getAcItem(id) {
 // 用户获得已经申请的绩效
 export function getUserApplication(uid, page) {
   return axios({
-    url: "/application/" + uid + "/page=" + page,
+    url: "/application/" + uid + "/page/" + page,
     method: "get"
   });
 }

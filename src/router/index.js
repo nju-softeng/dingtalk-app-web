@@ -103,18 +103,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: "/paper",
-    component: Layout,
-    children: [
-      {
-        path: "index",
-        name: "Paper",
-        component: () => import("@/views/paper/index"),
-        meta: { title: "论文管理", icon: "form" }
-      }
-    ]
-  },
+
   {
     path: "/form",
     component: Layout,
@@ -124,6 +113,18 @@ export const constantRoutes = [
         name: "Form",
         component: () => import("@/views/form/index"),
         meta: { title: "Form", icon: "table" }
+      }
+    ]
+  },
+  {
+    path: "/paper",
+    component: Layout,
+    children: [
+      {
+        path: "index",
+        name: "Paper",
+        component: () => import("@/views/paper/index"),
+        meta: { title: "论文管理", icon: "form" }
       }
     ]
   },

@@ -1,59 +1,28 @@
 <template>
   <div class="app-container">
-    <el-drawer
-      title="绩效申请"
-      :visible.sync="drawer"
-      :modal="false"
-      :direction="direction"
-      size="40%"
-    >
+    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="35%">
       <div class="drawer-content">
-        <el-form
-          :model="form"
-          label-width="90px"
-          :rules="rules"
-          ref="form"
-          label-position="left"
-        >
+        <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
           <el-form-item prop="auditorid">
-            <span slot="label"><svg-icon icon-class="people" /> 审核人</span>
-            <el-select
-              style="width:200px"
-              v-model="form.auditorid"
-              placeholder="请选择审核人"
-            >
-              <el-option
-                v-for="item in auditors"
-                :key="item.index"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
+            <span slot="label">
+              <svg-icon icon-class="people" /> 审核人</span>
+            <el-select style="width:200px" v-model="form.auditorid" placeholder="请选择审核人">
+              <el-option v-for="item in auditors" :key="item.index" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="dvalue">
-            <span slot="label"><svg-icon icon-class="dvalue" /> D值</span>
+            <span slot="label">
+              <svg-icon icon-class="dvalue" /> D值</span>
             <el-input v-model="form.dvalue" style="width:200px"></el-input>
           </el-form-item>
           <el-form-item prop="date">
-            <span slot="label"><svg-icon icon-class="week" /> 申请周</span>
-            <el-date-picker
-              v-model="form.date"
-              style="width:200px"
-              type="week"
-              value-format="yyyy-MM-dd"
-              format="yyyy 第 WW 周"
-              placeholder="选择周"
-              :picker-options="{ firstDayOfWeek: 1 }"
-              @change="getDate"
-            ></el-date-picker>
+            <span slot="label">
+              <svg-icon icon-class="week" /> 申请周</span>
+            <el-date-picker v-model="form.date" style="width:200px" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
           </el-form-item>
         </el-form>
         <div>
-          <el-tag
-            v-if="form.date"
-            size="medial"
-            style="font-size:12px;margin:5px 0;"
-          >
+          <el-tag v-if="form.date" size="medial" style="font-size:12px;margin:5px 0;">
             您选择的是 {{ monthWeek }}
           </el-tag>
         </div>
@@ -63,29 +32,11 @@
             <i class="el-icon-plus"></i>
             添加AC申请
           </el-button>
-          <div
-            :label="index === 0 ? 'AC值' : ''"
-            v-for="(item, index) in form.acItems"
-            :key="index"
-            style="margin : 5px 0px 5px 0px;display:flex"
-          >
-            <el-input
-              v-model="item.reason"
-              style="border-radius: 0px; !important"
-              placeholder="申请原因"
-            ></el-input>
+          <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index" style="margin : 5px 0px 5px 0px;display:flex">
+            <el-input v-model="item.reason" style="border-radius: 0px; !important" placeholder="申请原因"></el-input>
+            <el-input v-model="item.ac" style="width:18%" placeholder="AC"></el-input>
 
-            <el-input
-              v-model="item.ac"
-              style="width:18%"
-              placeholder="AC"
-            ></el-input>
-
-            <el-button
-              style="border: 0px"
-              icon="el-icon-close"
-              @click.prevent="rmAcItem(item)"
-            />
+            <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
           </div>
           <br />
         </div>
@@ -93,37 +44,22 @@
 
       <div class="drawer-footer">
         <el-button style="width:50%" @click="drawer = false">取 消</el-button>
-        <el-button
-          style="width:50%"
-          type="primary"
-          @click="submit()"
-          :loading="loading"
-          >{{ loading ? "提交中 ..." : "确 定" }}</el-button
-        >
+        <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
       </div>
     </el-drawer>
 
-    <el-button
-      type="primary"
-      @click="addApply()"
-      icon="el-icon-plus"
-      style="margin : 0px 0px 10px 0px;"
-      >提交申请</el-button
-    >
+    <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
 
     <div style="height:430px">
-      <el-table
-        :data="list"
-        border
-        fit
-        highlight-current-row
-        style="width: 100%"
-      >
+      <el-table :data="list" border fit highlight-current-row style="width: 100%">
         <el-table-column width="30px" type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="详细信息">
+            <el-form label-position="left" inline>
+              <el-form-item label="AC申请信息：">
                 <span>{{ props.row.name }}</span>
+                <li v-for="item in props.row.acItems" :key="item.index">
+                  申请理由：{{ item.reason }} 申请值: {{ item.ac }}
+                </li>
               </el-form-item>
             </el-form>
           </template>
@@ -143,7 +79,7 @@
 
         <el-table-column width="120px" align="center" label="审核人">
           <template slot-scope="{ row }">
-            <span>{{ row.auditorName }}</span>
+            <span>{{ obj[row.auditor.id] }}</span>
           </template>
         </el-table-column>
 
@@ -168,27 +104,18 @@
 
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button
-              v-if="!row.ischeck"
-              type="text"
-              size="mini"
-              icon="el-icon-edit"
-              @click="addModify(row)"
-              >修改申请</el-button
-            >
+            <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改申请</el-button>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
         </el-table-column>
       </el-table>
     </div>
+
     <div style="text-align:center">
-      <el-pagination
-        :page-size="10"
-        :total="amount"
-        layout="total, prev, pager, next, jumper"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+      </el-pagination>
     </div>
+    {{ form }}
   </div>
 </template>
 
@@ -197,11 +124,11 @@ import { getAuditors } from "@/api/user";
 import {
   submitApplication,
   getUserApplication,
-  getWeek,
-  getAcItem
+  getWeek
 } from "@/api/application";
 export default {
   data: () => ({
+    uid: "",
     direction: "ltr",
     drawer: false,
     monthWeek: "请选择报表申请所在在周",
@@ -214,19 +141,9 @@ export default {
       dvalue: "",
       acItems: []
     },
-    application: {
-      auditorid: null,
-      date: "",
-      dvalue: "",
-      acItems: []
-    },
-    modify: {
-      title: "teststest",
-      region: ""
-    },
     obj: {},
     list: null,
-    amount: null,
+    total: null,
     rules: {
       auditorid: [
         { required: true, message: "请选择审核人", trigger: "change" }
@@ -239,6 +156,7 @@ export default {
     }
   }),
   created() {
+    this.uid = sessionStorage.getItem("uid");
     getAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
@@ -248,31 +166,49 @@ export default {
         });
       })
       .then(() => {
-        getUserApplication(0, 0).then(res => {
+        getUserApplication(this.uid, 0).then(res => {
           console.log(res.data);
-          this.list = res.data.dcRecords;
-          this.amount = res.data.amount;
+          this.list = res.data.list;
+          this.total = res.data.total;
+          console.log(res.data.total);
         });
       });
   },
   methods: {
+    emptyForm() {
+      console.log("test");
+      this.$refs["form"].resetFields();
+      this.form.acItems = [];
+    },
+    // 分页获取数据
+    handleCurrentChange(val) {
+      getUserApplication(this.uid, val - 1).then(res => {
+        this.list = res.data.list;
+      });
+    },
+    handlePrev(val) {
+      getUserApplication(this.uid, val - 1).then(res => {
+        this.list = res.data.list;
+        console.log(this.list);
+      });
+    },
+    handleNext(val) {
+      getUserApplication(this.uid, val - 1).then(res => {
+        this.list = res.data.list;
+      });
+    },
     addApply() {
       this.direction = "ltr";
       this.drawer = true;
     },
     addModify(row) {
-      getAcItem(row.id).then(res => {
-        console.log(res.data);
-        if (res.data != null) {
-          this.form.acItems = res.data;
-        }
-      });
       this.direction = "rtl";
       this.drawer = true;
       console.log(row);
+      this.form.acItems = row.acItems;
       this.form.dvalue = row.dvalue;
-      this.form.auditorid = row.auditorid;
-      this.form.date = row.date;
+      this.form.auditorid = row.auditor.id;
+      this.form.date = row.weekdate;
       this.form.acItems = row.acItems;
     },
     getDate() {
@@ -290,12 +226,7 @@ export default {
           " 周";
       });
     },
-    // 分页获取数据
-    handleCurrentChange(val) {
-      getUserApplication(0, val).then(res => {
-        this.list = res.data.dcRecords;
-      });
-    },
+
     // 提交申请
     submit() {
       this.$refs.form.validate(valid => {
@@ -312,12 +243,11 @@ export default {
                 message: "申请提交成功",
                 type: "success"
               });
-              getUserApplication(0, 0).then(res => {
-                this.list = res.data.dcRecords;
-                this.amount = res.data.amount;
+              getUserApplication(this.uid, 0).then(res => {
+                this.list = res.data.list;
+                this.total = res.data.total;
               });
               this.drawer = false;
-              this.$refs.form.resetFields();
             })
             .catch(() => {
               this.loading = false;
@@ -350,6 +280,10 @@ export default {
 </script>
 
 <style>
+.el-table__expanded-cell[class*="cell"] {
+  padding: 10px 50px;
+}
+
 .el-drawer > header > span:focus {
   outline-color: white;
 }

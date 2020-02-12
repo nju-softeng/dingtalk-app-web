@@ -30,10 +30,12 @@ export default {
     }
   }),
   created() {
-    // 配置测试状态无需钉钉登陆
+    //配置测试状态无需钉钉登陆;
     this.$store
       .dispatch("user/test_login", 2)
-      .then(() => {
+      .then(res => {
+        console.log("???????");
+        sessionStorage.setItem("uid", res.headers["uid"]);
         this.$router.push({ path: "/" });
         Message.success("测试状态，跳过钉钉登陆");
       })

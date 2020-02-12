@@ -1,7 +1,17 @@
 <template>
   <div class="checking">
-    <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="55%">
-      <div v-if="list.length !== 0" ref="drawer" class="drawer-container" v-loading="loading">
+    <el-drawer
+      :visible.sync="drawer"
+      :modal="false"
+      :with-header="false"
+      size="55%"
+    >
+      <div
+        v-if="list.length !== 0"
+        ref="drawer"
+        class="drawer-container"
+        v-loading="loading"
+      >
         <div class="drawer-bar">
           <span>{{ temp.name }} 的申请</span>
           <el-tag style="margin-left:10px">
@@ -48,14 +58,40 @@
             <el-table-column label="操作">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
-                  <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">确定</el-button>
-                  <el-button type="text" size="small" @click="cancelEdit(row)">取消</el-button>
+                  <el-button
+                    type="text"
+                    size="small"
+                    icon="el-icon-circle-check-outline"
+                    @click="confirmEdit(row)"
+                    >确定</el-button
+                  >
+                  <el-button type="text" size="small" @click="cancelEdit(row)"
+                    >取消</el-button
+                  >
                 </template>
                 <template v-else>
-                  <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">修改
+                  <el-button
+                    type="text"
+                    :disabled="row.reject"
+                    size="small"
+                    icon="el-icon-edit"
+                    @click="row.edit = !row.edit"
+                    >修改
                   </el-button>
-                  <el-button v-if="!row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">拒绝</el-button>
-                  <el-button v-if="row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">恢复</el-button>
+                  <el-button
+                    v-if="!row.reject"
+                    type="text"
+                    size="small"
+                    @click.native.prevent="rejectAcRow(row)"
+                    >拒绝</el-button
+                  >
+                  <el-button
+                    v-if="row.reject"
+                    type="text"
+                    size="small"
+                    @click.native.prevent="rejectAcRow(row)"
+                    >恢复</el-button
+                  >
                 </template>
               </template>
             </el-table-column>
@@ -70,7 +106,13 @@
             <span style="margin-right:30px">D值：{{ temp.dvalue }}</span>
             <span>DC值：{{ form.dc }}</span>
           </div>
-          <el-form label-position="left" label-width="60px" :rules="rules" :model="form" ref="form">
+          <el-form
+            label-position="left"
+            label-width="60px"
+            :rules="rules"
+            :model="form"
+            ref="form"
+          >
             <el-form-item label="C值" prop="cvalue">
               <el-input v-model="form.cvalue" style="width:80px" />
             </el-form-item>
@@ -86,7 +128,13 @@
     </el-drawer>
 
     <div>
-      <el-table :data="list" style="width: 100%" :row-class-name="addIndex" @row-click="onRowClick">
+      <el-table
+        :data="list"
+        style="width: 100%"
+        :row-style="{ height: '37.67px' }"
+        :row-class-name="addIndex"
+        @row-click="onRowClick"
+      >
         <el-table-column label="申请时间" width="150" align="center">
           <template slot-scope="{ row }">
             {{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
@@ -98,11 +146,23 @@
           }}</template>
         </el-table-column>
         <el-table-column prop="name" label="姓名" align="center" width="100" />
-        <el-table-column prop="dvalue" label="申请D值" align="center" width="80" />
+        <el-table-column
+          prop="dvalue"
+          label="申请D值"
+          align="center"
+          width="80"
+        />
         <el-table-column label="  AC申请">
           <template slot-scope="{ row }">
-            <el-tag v-if="row.acItems.length === 0" style="margin:0px 5px">无</el-tag>
-            <el-tag v-for="(item, index) in row.acItems" :key="index" style="margin:0px 5px">{{ item.reason }} : {{ item.ac }}</el-tag>
+            <el-tag v-if="row.acItems.length === 0" style="margin:0px 5px"
+              >无</el-tag
+            >
+            <el-tag
+              v-for="(item, index) in row.acItems"
+              :key="index"
+              style="margin:0px 5px"
+              >{{ item.reason }} : {{ item.ac }}</el-tag
+            >
           </template>
         </el-table-column>
       </el-table>

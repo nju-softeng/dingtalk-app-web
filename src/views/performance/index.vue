@@ -1,89 +1,68 @@
 <template>
   <div class="app-container">
-    <el-date-picker v-model="value2" type="month" style="width:120px" placeholder="选择月">
-    </el-date-picker>
-    <el-button type="primary" icon="el-icon-search" style="margin:0 0 15px 5px">
-      筛选
-    </el-button>
+    <el-tag
+      size="medium"
+      :type="success"
+      effect="dark"
+      style="margin-right:5px; padding-left: 15px;padding-right:15px"
+    >
+      <span>筛 选</span>
+    </el-tag>
 
-    <el-table :data="list" style="width: 100%">
-      <el-table-column label="姓名">
-        <template slot-scope="{ row }">{{
-          row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
-        }}</template>
+    <el-date-picker
+      v-model="date"
+      value-format="yyyy-MM-dd"
+      @change="filtrate"
+      type="month"
+      style="width:120px"
+      placeholder="选择月"
+    >
+    </el-date-picker>
+
+    <el-table :data="list" border style="width: 100%;margin-top:10px;">
+      <el-table-column fixed prop="name" label="姓名" width="90">
       </el-table-column>
-      <el-table-column label="第一周">
-        <template slot-scope="{ row }">
-          {{ row.yearmonth | formatWeek(row.week) }}
-        </template>
+      <el-table-column prop="week1" label="第1周DC" width="80">
       </el-table-column>
-      <el-table-column label="第二周">
-        <template slot-scope="{ row }">
-          {{ row.name }}
-        </template>
+      <el-table-column prop="week2" label="第2周DC" width="80">
       </el-table-column>
-      <el-table-column label="第三周">
-        <template slot-scope="{ row }">
-          <el-tag style="margin-right:10px">DC值：{{ row.dc }} </el-tag>
-          <el-tag>AC值：{{ row.ac }} </el-tag>
-        </template>
+      <el-table-column prop="week3" label="第3周DC" width="80">
       </el-table-column>
-      <el-table-column label="第四周">
-        <template slot-scope="{ row }">
-          <el-tag>AC值：{{ row.ac }} </el-tag>
-        </template>
+      <el-table-column prop="week4" label="第4周DC" width="80">
       </el-table-column>
-      <el-table-column label="第五周">
-        <template slot-scope="{ row }">
-          <el-tag>AC值：{{ row.ac }} </el-tag>
-        </template>
+      <el-table-column prop="week5" label="第5周DC" width="80">
+      </el-table-column>
+
+      <el-table-column prop="zip" label="总DC" width="80"> </el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+import { getDcSummary } from "@/api/performance";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ]
+      list: null,
+      date: ""
     };
+  },
+  created() {
+    this.date = new Date();
+    getDcSummary(this.date).then(res => {
+      this.list = res.data;
+      console.log(res);
+    });
+  },
+  methods: {
+    filtrate() {
+      getDcSummary(this.date).then(res => {
+        this.list = res.data;
+        console.log(res);
+      });
+    }
   }
 };
 </script>

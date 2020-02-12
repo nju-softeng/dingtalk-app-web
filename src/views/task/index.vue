@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="box">
       <div class="action" style="margin-bottom:10px">
-        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建论文记录</el-button>
+        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代记录</el-button>
       </div>
       <div v-for="(item, index) in list" :key="index">
         <div class="item">
@@ -57,8 +57,8 @@
 
       <div class="dialog-content">
         <div class="paper-form">
-          <el-form ref="paperform" :rules="rules" :model="paperform" label-width="110px">
-            <el-form-item prop="title">
+          <el-form ref="paperform" :model="paperform" label-width="110px">
+            <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="paper" /> 论文名称</span>
               <el-input v-model="paperform.title"></el-input>
@@ -69,7 +69,7 @@
               <el-input v-model="paperform.journal"></el-input>
             </el-form-item>
 
-            <el-form-item prop="level">
+            <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="grade" /> 论文分类</span>
               <el-select v-model="paperform.level" placeholder="请选择">
@@ -78,11 +78,7 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item v-for="(author, index) in paperform.paperDetails" :prop="'paperDetails.' + index + '.user.id'" :key="index" :rules="{
-                required: true,
-                message: '请选择论文作者',
-                trigger: 'change'
-              }">
+            <el-form-item v-for="(author, index) in paperform.paperDetails" :prop="'paperDetails.' + index + '.user.id'" :key="index">
               <span slot="label">
                 <svg-icon icon-class="people" /> 论文作者 {{ index + 1 }}</span>
 
@@ -97,7 +93,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit('paperform')">确 定</el-button>
+        <el-button type="primary" @click="submit(paperform)">确 定</el-button>
         <el-button @click="dialog = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -153,13 +149,7 @@ export default {
           label: "Conference C"
         }
       ],
-      list: [],
-      rules: {
-        title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
-        level: [
-          { required: true, message: "请选择论文分类", trigger: "change" }
-        ]
-      }
+      list: []
     };
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div id="parent">
-    <div id="top">top content no need of scroll</div>
+    <div id="top">WebSocket Test</div>
     <div id="bottom">
       I need scroll here when this content overflow the parent.
     </div>

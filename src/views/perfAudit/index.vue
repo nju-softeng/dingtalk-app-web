@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activetab" @tab-click="handleClick">
+    <el-tabs v-model="activetab" @tab-click="handleClick" type="border-card">
       <el-tab-pane label="待审核" name="first">
         <checking v-if="firstTab" />
       </el-tab-pane>

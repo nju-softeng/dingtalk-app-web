@@ -9,6 +9,14 @@ export function submitApplication(data) {
   });
 }
 
+export function updateApplication(data) {
+  return axios({
+    url: "/application/update",
+    method: "post",
+    data
+  });
+}
+
 export function getAcItem(id) {
   return axios({
     url: "/application/" + id,
@@ -17,9 +25,9 @@ export function getAcItem(id) {
 }
 
 // 用户获得已经申请的绩效
-export function getUserApplication(uid, page) {
+export function getUserApplication(page) {
   return axios({
-    url: "/application/" + uid + "/page/" + page,
+    url: "/application/page/" + page,
     method: "get"
   });
 }

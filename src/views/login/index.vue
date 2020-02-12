@@ -12,11 +12,7 @@
         <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
-        <div
-          class="grid-content"
-          v-loading="loading"
-          element-loading-text="登录中"
-        ></div>
+        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
       </el-col>
     </el-row>
   </div>
@@ -35,16 +31,18 @@ export default {
   }),
   created() {
     //配置测试状态无需钉钉登陆;
-    // this.$store
-    //   .dispatch("user/test_login", 2)
-    //   .then(() => {
-    //     this.$router.push({ path: "/" });
-    //     Message.success("测试状态，跳过钉钉登陆");
-    //   })
-    //   .catch(() => {
-    //     this.loading = false;
-    //     Message.error("登录失败");
-    //   });
+    this.$store
+      .dispatch("user/test_login", 2)
+      .then(res => {
+        console.log("???????");
+        sessionStorage.setItem("uid", res.headers["uid"]);
+        this.$router.push({ path: "/" });
+        Message.success("测试状态，跳过钉钉登陆");
+      })
+      .catch(() => {
+        this.loading = false;
+        Message.error("登录失败");
+      });
 
     // 获取钉钉临时授权码
     dd.ready(() => {

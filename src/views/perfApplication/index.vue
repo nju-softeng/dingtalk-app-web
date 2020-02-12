@@ -123,12 +123,14 @@
 import { getAuditors } from "@/api/user";
 import {
   submitApplication,
+  updateApplication,
   getUserApplication,
   getWeek
 } from "@/api/application";
 export default {
   data: () => ({
-    uid: "",
+    apply: null,
+    uid: "11",
     direction: "ltr",
     drawer: false,
     monthWeek: "请选择报表申请所在在周",
@@ -156,7 +158,6 @@ export default {
     }
   }),
   created() {
-    this.uid = sessionStorage.getItem("uid");
     getAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
@@ -166,11 +167,9 @@ export default {
         });
       })
       .then(() => {
-        getUserApplication(this.uid, 0).then(res => {
-          console.log(res.data);
+        getUserApplication(0).then(res => {
           this.list = res.data.list;
           this.total = res.data.total;
-          console.log(res.data.total);
         });
       });
   },
@@ -182,29 +181,33 @@ export default {
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      getUserApplication(this.uid, val - 1).then(res => {
+      getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
       });
     },
     handlePrev(val) {
-      getUserApplication(this.uid, val - 1).then(res => {
+      getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
         console.log(this.list);
       });
     },
     handleNext(val) {
-      getUserApplication(this.uid, val - 1).then(res => {
+      getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
       });
     },
     addApply() {
+      this.apply = true;
       this.direction = "ltr";
       this.drawer = true;
     },
     addModify(row) {
+      this.apply = false;
+      console.log("00000");
       this.direction = "rtl";
       this.drawer = true;
       console.log(row);
+      this.form.id = row.id;
       this.form.acItems = row.acItems;
       this.form.dvalue = row.dvalue;
       this.form.auditorid = row.auditor.id;
@@ -234,24 +237,42 @@ export default {
           // 过滤 acItems 中为空的选项
           this.form.acItems = this.form.acItems.filter(item => item.ac != null);
           this.loading = true;
-          submitApplication(this.form)
-            .then(() => {
-              this.loading = false;
-
-              this.$notify({
-                title: "成功",
-                message: "申请提交成功",
-                type: "success"
+          if (this.apply) {
+            submitApplication(this.form)
+              .then(() => {
+                getUserApplication(0).then(res => {
+                  this.list = res.data.list;
+                  this.total = res.data.total;
+                });
+                this.loading = false;
+                this.$notify({
+                  title: "成功",
+                  message: "申请提交成功",
+                  type: "success"
+                });
+                this.drawer = false;
+              })
+              .catch(() => {
+                this.loading = false;
               });
-              getUserApplication(this.uid, 0).then(res => {
-                this.list = res.data.list;
-                this.total = res.data.total;
+          } else {
+            updateApplication(this.form)
+              .then(() => {
+                getUserApplication(0).then(res => {
+                  this.list = res.data.list;
+                  this.total = res.data.total;
+                });
+                this.loading = false;
+                this.$notify({
+                  title: "成功",
+                  message: "修改提交成功",
+                  type: "success"
+                });
+              })
+              .catch(() => {
+                this.loading = false;
               });
-              this.drawer = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+          }
         } else {
           this.$notify({
             title: "提交失败",

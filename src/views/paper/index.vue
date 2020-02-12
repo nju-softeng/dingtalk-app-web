@@ -50,48 +50,43 @@
       </div>
     </div>
 
-    <el-dialog title="添加论文记录" :visible.sync="dialog" width="60%" center>
+    <el-dialog :visible.sync="dialog" :custom-class="test" width="60%" center>
+      <div slot="title" class="header-title">
+        <span class="title-age">内部论文评审记录 </span>
+      </div>
+
       <div class="dialog-content">
         <div class="paper-form">
           <el-form ref="form" :model="form" label-width="100px">
             <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="paper" /> 论文名称</span>
-              <el-input></el-input>
+              <el-input v-model="form.title"></el-input>
             </el-form-item>
             <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="school" /> 投稿地点</span>
-              <el-input></el-input>
+              <el-input v-model="form.journal"></el-input>
             </el-form-item>
 
             <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="grade" /> 论文分类</span>
-              <el-select v-model="value" placeholder="请选择">
+              <el-select v-model="form.level" placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
+
+            <el-button type="text" style="margin-left:10px;" icon="el-icon-plus">添加作者</el-button>
             <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="people" /> 论文作者</span>
-              <el-autocomplete v-model="state" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div class="test">
-          <el-form ref="form" :model="form" label-width="100px">
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="people" /> 论文作者</span>
-              <el-autocomplete v-model="state" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
-              <el-button type="primary" icon="el-icon-plus"></el-button>
+              <el-button type="primary" @click="dialog = true" icon="el-icon-plus"></el-button>
             </el-form-item>
           </el-form>
         </div>
       </div>
-
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialog = false">确 定</el-button>
         <el-button @click="dialog = false">取 消</el-button>
@@ -109,6 +104,11 @@ export default {
       dialog: false,
       journalrank: [],
       state: "",
+      form: {
+        title: null,
+        journal: null,
+        level: null
+      },
       options: [
         {
           value: 1,
@@ -205,23 +205,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-form {
-  width: 400px;
-}
-.paper-form {
-  display: flex;
-  background-color: yellow;
+.header-title {
 }
 
 .test {
-  background-color: red;
-  height: 100px;
+  border-radius: 8px;
+  width: 90%;
+}
+.el-form {
+  width: 600px;
+}
+.paper-form {
+  display: flex;
+  // background-color: yellow;
 }
 
 .dialog-content {
-  background-color: aquamarine;
+  // background-color: aquamarine;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
 }
 
 .paper-form >>> .el-input__inner {

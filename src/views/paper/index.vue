@@ -11,8 +11,9 @@
 
             <div class="left-content">
               <div class="title">
-                <a>
-                  <svg-icon icon-class="paper" /> {{ item.title }} </a>
+                <router-link :to="'/paper/vote/' + item.id" class="link-type">
+                  <svg-icon icon-class="paper" /> {{ item.title }}
+                </router-link>
               </div>
               <div style="display:flex" class="detail">
                 <div class="journal">

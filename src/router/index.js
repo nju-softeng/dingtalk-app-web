@@ -90,15 +90,15 @@ export const constantRoutes = [
         meta: { title: "绩效审核", icon: "table" }
       },
       {
-        path: "performance",
-        name: "Performance",
-        component: () => import("@/views/performance/index"),
+        path: "performance_dc",
+        name: "Performance_dc",
+        component: () => import("@/views/performance/dc-index"),
         meta: { title: "绩效汇总", icon: "tree" }
       },
       {
-        path: "tree",
-        name: "Tree",
-        component: () => import("@/views/tree/index"),
+        path: "performance_ac",
+        name: "Performance_ac",
+        component: () => import("@/views/performance/ac-index"),
         meta: { title: "AC汇总", icon: "tree" }
       }
     ]
@@ -125,6 +125,13 @@ export const constantRoutes = [
         name: "Paper",
         component: () => import("@/views/paper/index"),
         meta: { title: "论文管理", icon: "form" }
+      },
+      {
+        path: "vote/:id",
+        component: () => import("@/views/paper/vote"),
+        name: "Vote",
+        meta: { title: "投票", noCache: true, activeMenu: "/paper/index" },
+        hidden: true
       }
     ]
   },
@@ -154,7 +161,7 @@ export const asyncRoutes = [
 
 const createRouter = () =>
   new Router({
-    // mode: 'history', // require service support
+    mode: "history", // require service support
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes
   });

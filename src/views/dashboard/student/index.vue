@@ -9,7 +9,7 @@
       </p>
       <div class="header-content">
         <div class="left-content">
-          <el-avatar class="avatar" shape="square" :size="50" :src="avatar"></el-avatar>
+          <el-avatar class="avatar" shape="square" :size="40" :src="avatar"></el-avatar>
 
           <div class="user-info title">
             {{ helloTime }}{{ name }}，祝你开心每一天！

@@ -161,7 +161,6 @@ export default {
     getAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
-        console.log(this.auditors);
         this.auditors.map(item => {
           this.obj[item.id] = item.name; //todo 修改
         });
@@ -175,7 +174,6 @@ export default {
   },
   methods: {
     emptyForm() {
-      console.log("test");
       this.$refs["form"].resetFields();
       this.form.acItems = [];
     },
@@ -188,7 +186,6 @@ export default {
     handlePrev(val) {
       getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
-        console.log(this.list);
       });
     },
     handleNext(val) {
@@ -203,10 +200,8 @@ export default {
     },
     addModify(row) {
       this.apply = false;
-      console.log("00000");
       this.direction = "rtl";
       this.drawer = true;
-      console.log(row);
       this.form.id = row.id;
       this.form.acItems = row.acItems;
       this.form.dvalue = row.dvalue;

@@ -15,3 +15,10 @@ export function listPaper() {
     method: "get"
   });
 }
+
+export function getPaper(id) {
+  return axios({
+    url: "/paper/" + id,
+    method: "get"
+  });
+}

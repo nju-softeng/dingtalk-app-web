@@ -19,24 +19,40 @@
 </template>
 
 <script>
-import * as dd from "dingtalk-jsapi/entry/union"; //
-import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
+// import * as dd from "dingtalk-jsapi/entry/union";
+// import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
 import { Message } from "element-ui";
 export default {
   data: () => ({
     loading: true,
     code: {
       authcode: null
-    }
+    },
+    redirect: undefined,
+    otherQuery: {}
   }),
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query;
+        if (query) {
+          this.redirect = query.redirect;
+          this.otherQuery = this.getOtherQuery(query);
+        }
+      },
+      immediate: true
+    }
+  },
   created() {
     //配置测试状态无需钉钉登陆;
     this.$store
       .dispatch("user/test_login", 2)
-      .then(res => {
-        console.log("???????");
-        sessionStorage.setItem("uid", res.headers["uid"]);
-        this.$router.push({ path: "/" });
+      .then(() => {
+        //sessionStorage.setItem("uid", res.headers["uid"]);
+        this.$router.push({
+          path: this.redirect || "/",
+          query: this.otherQuery
+        });
         Message.success("测试状态，跳过钉钉登陆");
       })
       .catch(() => {
@@ -45,24 +61,34 @@ export default {
       });
 
     // 获取钉钉临时授权码
-    dd.ready(() => {
-      requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" })
-        .then(result => {
-          this.code.authcode = result.code; // 获取authcode
-          this.$store
-            .dispatch("user/_login", this.code)
-            .then(() => {
-              this.$router.push({ path: "/" });
-            })
-            .catch(() => {
-              this.loading = false;
-              Message.error("登录失败");
-            });
-        })
-        .catch(err => {
-          console.log("err", err);
-        });
-    });
+    // dd.ready(() => {
+    //   requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" })
+    //     .then(result => {
+    //       this.code.authcode = result.code; // 获取authcode
+    //       this.$store
+    //         .dispatch("user/_login", this.code)
+    //         .then(() => {
+    //           this.$router.push({
+    //             path: this.redirect || "/",
+    //             query: this.otherQuery
+    //           });
+    //         })
+    //         .catch(() => {
+    //           this.loading = false;
+    //           Message.error("登录失败");
+    //         });
+    //     })
+    // });
+  },
+  methods: {
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== "redirect") {
+          acc[cur] = query[cur];
+        }
+        return acc;
+      }, {});
+    }
   }
 };
 </script>

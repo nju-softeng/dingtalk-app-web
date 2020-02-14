@@ -18,7 +18,7 @@
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="grade" /> 论文分类</span>
-            {{ getlevel(paper.level) }}
+            {{ getlevel(paper.level).label }}
           </el-form-item>
           <el-form-item>
             <span slot="label">
@@ -29,57 +29,44 @@
         </el-form>
       </div>
       <div class="chart">
-        <div>
-          <el-button type="primary" v-if="!vote" @click="dialog = true">发起投票</el-button>
-        </div>
-
-        <div v-if="vote" style="width:50%">
-          <el-popconfirm title="确定要接受吗？">
-            <el-button slot="reference" type="success">Accept</el-button>
+        <div v-if="!showAns" style="width:50%">
+          <el-popconfirm title="确定要接收吗？" @onConfirm="addpoll(true)">
+            <el-button slot="reference" type="primary">Accept</el-button>
           </el-popconfirm>
 
-          <el-popconfirm style="margin-left:100px" confirmButtonText="好的" cancelButtonText="再想想" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
+          <el-popconfirm @onConfirm="addpoll(false)" style="margin-left:50px" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
             <el-button slot="reference" type="danger">Reject</el-button>
           </el-popconfirm>
         </div>
-
-        <div v-if="vote && voted">
+        <div v-if="showAns">
           <el-form>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Accept {{}}</span>
-              <el-progress class="progress" :percentage="100" status="success"></el-progress>
+                <svg-icon icon-class="paper" /> Accept {{ accept }} 人</span>
+              <el-progress class="progress" :percentage="(accept / total) * 100" status="success"></el-progress>
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Reject {{}}</span>
-              <el-progress class="progress" :percentage="50" status="exception"></el-progress>
+                <svg-icon icon-class="paper" /> Reject {{ reject }}人</span>
+              <el-progress class="progress" :percentage="(reject / total) * 100" status="exception"></el-progress>
+            </el-form-item>
+            <el-form-item>
+              <span slot="label">
+                <svg-icon icon-class="paper" /> 投票人数 {{ total }} 人</span>
             </el-form-item>
           </el-form>
         </div>
       </div>
     </div>
-
-    <el-dialog title="发起投票" :visible.sync="dialog" width="40%">
-      <span style="margin-right:10px">截止时间 </span>
-      <el-time-select v-model="endtime" :picker-options="{
-          start: '08:30',
-          step: '00:15',
-          end: '18:30'
-        }" placeholder="截止时间">
-      </el-time-select>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="createVote">确 定</el-button>
-      </span>
-    </el-dialog>
-    {{ vote }}
+    {{ accept }}
+    {{ reject }}
+    {{ total }}
+    {{ wsData }}
     <!-- {{ paper }} -->
   </div>
 </template>
 <script>
-import { getPaper } from "@/api/paper";
+import { getPaper, getVoteDetail, addpoll } from "@/api/paper";
 
 export default {
   data() {
@@ -110,31 +97,105 @@ export default {
           label: "Conference C"
         }
       ],
-      id: null,
+      pid: null,
+      vid: "",
+      showAns: false,
       dialog: false,
-      vote: false,
-      voted: false,
-      endtime: "",
-      paper: {}
+      accept: "",
+      reject: "",
+      total: "",
+      paper: {},
+      pollform: {
+        result: "",
+        vote: {
+          id: ""
+        }
+      },
+      wsData: {
+        accept: "",
+        reject: "",
+        total: ""
+      }
     };
   },
   computed: {
     getlevel() {
-      return val => this.level.find(item => item.value == val).label;
+      return val => this.level.find(item => item.value == val);
     }
   },
   created() {
-    this.id = this.$route.params.id;
-    getPaper(this.id).then(res => {
+    this.pid = this.$route.params.id;
+    getPaper(this.pid).then(res => {
       this.paper = res.data;
+      this.vid = res.data.vote.id;
     });
-    console.log(this.$route.params.id);
+    getVoteDetail(this.pid).then(res => {
+      console.log(res);
+      this.showAns = res.data.status;
+      if (this.showAns) {
+        this.accept = res.data.accept;
+        this.reject = res.data.reject;
+        this.total = res.data.total;
+      }
+    });
+    this.initWebSocket();
+  },
+  watch: {
+    wsData: {
+      handler() {
+        console.log("???");
+        console.log(this.wsData.accept);
+        console.log(this.wsData["accept"]);
+        console.log(this.wsData);
+        this.total = this.wsData.total;
+        this.accept = this.wsData.accept;
+        this.reject = this.wsData.reject;
+      }
+    }
+  },
+  destroyed() {
+    // 离开页面时关闭websocket连接
+    this.ws.close();
   },
   methods: {
+    initWebSocket() {
+      let that = this;
+      if (window.WebSocket) {
+        //var server_host = window.location.hostname;//localhost:8080/
+        var url = "ws://localhost:8080/websocket";
+        let ws = new WebSocket(url);
+        that.ws = ws;
+        ws.onopen = function() {
+          console.log("服务器连接成功: " + url);
+        };
+        ws.onclose = function() {
+          console.log("服务器连接关闭: " + url);
+        };
+        ws.onerror = function() {
+          console.log("服务器连接出错: " + url);
+        };
+        ws.onmessage = function(e) {
+          //接收服务器返回的数据
+          console.log(e.data);
+          that.wsData = JSON.parse(e.data);
+        };
+      }
+    },
+    addpoll(result) {
+      this.pollform.result = result;
+      this.pollform.vote.id = this.vid;
+      addpoll(this.vid, this.pollform).then(res => {
+        this.showAns = true;
+        this.accept = res.data.accept;
+        this.reject = res.data.reject;
+        this.total = res.data.total;
+      });
+    },
+    toAccept() {},
+    roReject() {},
     createVote() {
       console.log("????");
       this.dialog = false;
-      this.vote = true;
     },
     goBack() {
       this.$router.go(-1);

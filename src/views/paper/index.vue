@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="box">
       <div class="action" style="margin-bottom:10px">
-        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建论文记录</el-button>
+        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
       </div>
       <div v-for="(item, index) in list" :key="index">
         <div class="paper-item">
@@ -11,8 +11,10 @@
 
             <div class="left-content">
               <div class="title">
-                <router-link :to="'/paper/vote/' + item.id" class="link-type">
-                  <svg-icon icon-class="paper" /> {{ item.title }}
+                <router-link :to="'/paper/detail/' + item.id" class="link-type">
+                  <el-link type="primary">
+                    <svg-icon icon-class="paper" /> {{ item.title }}
+                  </el-link>
                 </router-link>
               </div>
               <div style="display:flex" class="detail">
@@ -37,10 +39,11 @@
               <span>评审结果</span>
 
               <div style="margin-top:7px">
-                <el-link type="primary" @click="voteDialog = true">
+                <el-link v-if="item.vote == undefined" type="primary" @click="createVote(item)">
                   <svg-icon icon-class="vote" /> 发起投票</el-link>
-                <router-link :to="'/paper/vote/' + item.id" class="link-type">
-                  <el-link type="primary" @click="voteDialog = true">
+
+                <router-link v-else :to="'/paper/vote/' + item.id" class="link-type">
+                  <el-link type="success">
                     <svg-icon icon-class="vote" /> 前往投票</el-link>
                 </router-link>
               </div>
@@ -66,16 +69,17 @@
 
     <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
       <span style="margin-right:10px">截止时间 </span>
-      <el-time-select v-model="endtime" :picker-options="{
-          start: '08:30',
-          step: '00:15',
-          end: '18:30'
-        }" placeholder="截止时间">
+
+      <el-time-select value-format="HH:mm:ss" v-model="voteform.endTime" :picker-options="{
+          start: '09:00',
+          step: '00:30',
+          end: '21:30'
+        }" placeholder="选择时间">
       </el-time-select>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="voteDialog = false">取 消</el-button>
-        <el-button type="primary" @click="createVote">确 定</el-button>
+        <el-button type="primary" @click="submitvote">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -138,7 +142,7 @@
 </template>
 <script>
 import { getUserList } from "@/api/common";
-import { addPaper, listPaper } from "@/api/paper";
+import { addPaper, listPaper, createVote } from "@/api/paper";
 export default {
   data() {
     return {
@@ -147,7 +151,6 @@ export default {
       dialog: false,
       journalrank: [],
       state: "",
-      endtime: "",
       paperform: {
         title: null,
         journal: null,
@@ -160,6 +163,10 @@ export default {
             }
           }
         ]
+      },
+      voteform: {
+        paperid: "",
+        endTime: ""
       },
       options: [
         {
@@ -208,9 +215,26 @@ export default {
     });
   },
   methods: {
-    createVote() {
+    submitvote() {
+      if (this.voteform.endTime != null) {
+        createVote(this.voteform).then(() => {
+          this.$notify({
+            title: "发起投票",
+            message: "发起投票成功",
+            type: "success"
+          });
+          this.voteDialog = false;
+          this.$router.push({
+            path: "/paper/vote/" + this.voteform.paperid
+          });
+        });
+      }
+    },
+    createVote(item) {
+      this.voteform.paperid = item.id;
+      console.log(item);
+      this.voteDialog = true;
       console.log("????");
-      this.voteDialog = false;
     },
     submit(formName) {
       this.$refs[formName].validate(valid => {

@@ -127,6 +127,13 @@ export const constantRoutes = [
         meta: { title: "论文管理", icon: "form" }
       },
       {
+        path: "detail/:id",
+        component: () => import("@/views/paper/detail"),
+        name: "Vote",
+        meta: { title: "详细", noCache: true, activeMenu: "/paper/index" },
+        hidden: true
+      },
+      {
         path: "vote/:id",
         component: () => import("@/views/paper/vote"),
         name: "Vote",

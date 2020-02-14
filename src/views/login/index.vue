@@ -19,8 +19,8 @@
 </template>
 
 <script>
-// import * as dd from "dingtalk-jsapi/entry/union";
-// import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
+import * as dd from "dingtalk-jsapi/entry/union";
+import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
 import { Message } from "element-ui";
 export default {
   data: () => ({
@@ -47,13 +47,13 @@ export default {
     //配置测试状态无需钉钉登陆;
     this.$store
       .dispatch("user/test_login", 2)
-      .then(() => {
-        //sessionStorage.setItem("uid", res.headers["uid"]);
+      .then(res => {
         this.$router.push({
           path: this.redirect || "/",
           query: this.otherQuery
         });
         Message.success("测试状态，跳过钉钉登陆");
+        console.log(res);
       })
       .catch(() => {
         this.loading = false;
@@ -61,24 +61,25 @@ export default {
       });
 
     // 获取钉钉临时授权码
-    // dd.ready(() => {
-    //   requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" })
-    //     .then(result => {
-    //       this.code.authcode = result.code; // 获取authcode
-    //       this.$store
-    //         .dispatch("user/_login", this.code)
-    //         .then(() => {
-    //           this.$router.push({
-    //             path: this.redirect || "/",
-    //             query: this.otherQuery
-    //           });
-    //         })
-    //         .catch(() => {
-    //           this.loading = false;
-    //           Message.error("登录失败");
-    //         });
-    //     })
-    // });
+    dd.ready(() => {
+      requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" }).then(
+        result => {
+          this.code.authcode = result.code; // 获取authcode
+          this.$store
+            .dispatch("user/_login", this.code)
+            .then(() => {
+              this.$router.push({
+                path: this.redirect || "/",
+                query: this.otherQuery
+              });
+            })
+            .catch(() => {
+              this.loading = false;
+              Message.error("登录失败");
+            });
+        }
+      );
+    });
   },
   methods: {
     getOtherQuery(query) {

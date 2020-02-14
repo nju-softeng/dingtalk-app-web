@@ -109,7 +109,6 @@ export default {
   methods: {
     getYiYan() {
       getYiYan("d").then(res => {
-        console.log(res.data);
         this.yiyan = res.data;
       });
     }

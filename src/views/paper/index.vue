@@ -5,7 +5,7 @@
         <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建论文记录</el-button>
       </div>
       <div v-for="(item, index) in list" :key="index">
-        <div class="item">
+        <div class="paper-item">
           <div class="content">
             <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
 
@@ -25,31 +25,59 @@
                 </div>
               </div>
             </div>
+
             <div class="info-item namelist">
               <span>论文作者</span>
-              <div style="padding:5px;">
+              <div style="margin-top:7px;padding:5px;width:200px">
                 <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
               </div>
             </div>
 
             <div class="info-item">
               <span>评审结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+
+              <div style="margin-top:7px">
+                <el-link type="primary" @click="voteDialog = true">
+                  <svg-icon icon-class="vote" /> 发起投票</el-link>
+                <router-link :to="'/paper/vote/' + item.id" class="link-type">
+                  <el-link type="primary" @click="voteDialog = true">
+                    <svg-icon icon-class="vote" /> 前往投票</el-link>
+                </router-link>
+              </div>
             </div>
 
             <div class="info-item">
               <span>投稿结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+              <div style="margin-top:7px">
+                <el-tag v-if="item.result == 0">Wait</el-tag>
+                <el-tag v-else-if="item.result == 0" type="success">Accept</el-tag>
+                <el-tag v-else type="danger">Reject</el-tag>
+                <span style="padding:5px;">{{ item.date }}</span>
+              </div>
             </div>
 
             <div class="info-item">
-              <span>xxxx</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+              <span>操作</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
+      <span style="margin-right:10px">截止时间 </span>
+      <el-time-select v-model="endtime" :picker-options="{
+          start: '08:30',
+          step: '00:15',
+          end: '18:30'
+        }" placeholder="截止时间">
+      </el-time-select>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="voteDialog = false">取 消</el-button>
+        <el-button type="primary" @click="createVote">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="60%" center>
       <div slot="title" class="header-title">
@@ -91,6 +119,10 @@
                 <el-option v-for="item in userlist" :key="item.index" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
+              <el-tooltip class="item" effect="dark" content="支持搜索功能快速查找用户" placement="right">
+                <span style="margin-left:8px">
+                  <svg-icon icon-class="hint" /></span>
+              </el-tooltip>
             </el-form-item>
             <el-button type="text" @click="addAuthor" style="margin-left:20px;" icon="el-icon-plus">添加作者</el-button>
             <el-button type="text" @click="rmAuthor" style="margin-left:20px;" icon="el-icon-minus">减少作者</el-button>
@@ -115,6 +147,7 @@ export default {
       dialog: false,
       journalrank: [],
       state: "",
+      endtime: "",
       paperform: {
         title: null,
         journal: null,
@@ -155,6 +188,7 @@ export default {
         }
       ],
       list: [],
+      voteDialog: false,
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -174,6 +208,10 @@ export default {
     });
   },
   methods: {
+    createVote() {
+      console.log("????");
+      this.voteDialog = false;
+    },
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -255,36 +293,43 @@ export default {
   background: #fff;
   padding: 20px 20px 0 20px;
 }
-.item {
+
+.paper-item {
   background: #fff;
   padding: 12px 12px 12px 0;
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: #f6f6f6;
-  .left-content {
+
+  .content {
     display: flex;
-    flex-direction: column;
-    .title {
-      color: #1897ff;
-      font-weight: 500;
-      margin-bottom: 5px;
-      width: 400px;
-      overflow: hidden; /*超出部分隐藏*/
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .detail {
-      color: gray;
-      font-size: 13px;
-      padding-top: 5px;
-      .journal {
-        width: 250px;
+    justify-content: space-around;
+
+    .left-content {
+      display: flex;
+      flex-direction: column;
+      .title {
+        color: #1897ff;
+        font-weight: 500;
+        margin-bottom: 5px;
+        width: 400px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .time {
-        padding-left: 5px;
+      .detail {
+        color: gray;
+        font-size: 13px;
+        padding-top: 5px;
+        .journal {
+          width: 250px;
+          overflow: hidden; /*超出部分隐藏*/
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .time {
+          padding-left: 5px;
+        }
       }
     }
   }

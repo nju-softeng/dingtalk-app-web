@@ -45,14 +45,14 @@ export default {
     this.date = new Date();
     getDcSummary(this.date).then(res => {
       this.list = res.data;
-      console.log(res);
+
     });
   },
   methods: {
     filtrate() {
       getDcSummary(this.date).then(res => {
         this.list = res.data;
-        console.log(res);
+
       });
     }
   }

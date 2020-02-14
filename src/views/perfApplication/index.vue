@@ -79,7 +79,7 @@
 
         <el-table-column width="120px" align="center" label="审核人">
           <template slot-scope="{ row }">
-            <span>{{ obj[row.auditor.id] }}</span>
+            <span>{{ getname(row.auditor.id) }}</span>
           </template>
         </el-table-column>
 
@@ -105,6 +105,7 @@
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
             <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改申请</el-button>
+            <el-tag v-else type="info">已被审核无法操作</el-tag>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
         </el-table-column>
@@ -143,7 +144,6 @@ export default {
       dvalue: "",
       acItems: []
     },
-    obj: {},
     list: null,
     total: null,
     rules: {
@@ -161,9 +161,6 @@ export default {
     getAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
-        this.auditors.map(item => {
-          this.obj[item.id] = item.name; //todo 修改
-        });
       })
       .then(() => {
         getUserApplication(0).then(res => {
@@ -171,6 +168,11 @@ export default {
           this.total = res.data.total;
         });
       });
+  },
+  computed: {
+    getname() {
+      return val => this.auditors.find(item => item.id == val).name;
+    }
   },
   methods: {
     emptyForm() {

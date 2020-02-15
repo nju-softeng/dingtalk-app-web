@@ -107,6 +107,7 @@ const actions = {
             sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
             sessionStorage.setItem("role", getRoles(response.headers["role"]));
             console.log(sessionStorage.getItem("role"));
+            sessionStorage.setItem("uid", response.headers["uid"]);
             resolve();
           }
         })

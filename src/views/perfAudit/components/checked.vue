@@ -211,17 +211,13 @@ export default {
   },
   created() {
     getChecked().then(res => {
-      console.log(res.data);
       this.list = res.data;
     });
   },
   methods: {
     submit() {
       if (this.temp.ac != null) {
-        console.log("?????");
-        console.log(this.temp);
         updateAudit(this.temp).then(() => {
-          console.log("chengg");
           this.$notify({
             title: "成功",
             message:
@@ -268,7 +264,6 @@ export default {
     modify(row, index) {
       this.index = index;
       this.loading = true;
-      console.log("index" + index);
 
       this.drawer = !this.drawer;
       this.temp = JSON.parse(JSON.stringify(row)); //深拷贝
@@ -283,7 +278,6 @@ export default {
         this.report = res.data.contents;
         this.loading = false;
       });
-      console.log(row);
     },
     rejectAcRow(row) {
       row.reject = !row.reject;

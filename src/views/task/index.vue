@@ -2,48 +2,50 @@
   <div class="app-container">
     <div class="box">
       <div class="action" style="margin-bottom:10px">
-        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代记录</el-button>
+        <el-button type="primary" @click="" icon="el-icon-plus">创建迭代记录</el-button>
       </div>
-      <div v-for="(item, index) in list" :key="index">
-        <div class="item">
-          <div class="content">
-            <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
+      <div v-if="flag">
+        <div v-for="(item, index) in list" :key="index">
+          <div class="item">
+            <div class="content">
+              <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
 
-            <div class="left-content">
-              <div class="title">
-                <a>
-                  <svg-icon icon-class="paper" /> {{ item.title }} </a>
-              </div>
-              <div style="display:flex" class="detail">
-                <div class="journal">
-                  <svg-icon icon-class="school" /> {{ item.journal }}
+              <div class="left-content">
+                <div class="title">
+                  <a>
+                    <svg-icon icon-class="paper" /> {{ item.title }} </a>
                 </div>
-                <div class="time">
-                  <svg-icon icon-class="date" />
-                  {{ item.insertTime.substr(0, 10) }}
+                <div style="display:flex" class="detail">
+                  <div class="journal">
+                    <svg-icon icon-class="school" /> {{ item.journal }}
+                  </div>
+                  <div class="time">
+                    <svg-icon icon-class="date" />
+                    {{ item.insertTime.substr(0, 10) }}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="info-item namelist">
-              <span>论文作者</span>
-              <div style="padding:5px;">
-                <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+              <div class="info-item namelist">
+                <span>论文作者</span>
+                <div style="padding:5px;">
+                  <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+                </div>
               </div>
-            </div>
 
-            <div class="info-item">
-              <span>评审结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
-            </div>
+              <div class="info-item">
+                <span>评审结果</span>
+                <span style="padding:5px;">{{ item.date }}</span>
+              </div>
 
-            <div class="info-item">
-              <span>投稿结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
-            </div>
+              <div class="info-item">
+                <span>投稿结果</span>
+                <span style="padding:5px;">{{ item.date }}</span>
+              </div>
 
-            <div class="info-item">
-              <span>xxxx</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+              <div class="info-item">
+                <span>xxxx</span>
+                <span style="padding:5px;">{{ item.date }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -105,6 +107,7 @@ import { addPaper, listPaper } from "@/api/paper";
 export default {
   data() {
     return {
+      flag: false,
       userlist: [],
       author: [],
       dialog: false,
@@ -155,11 +158,9 @@ export default {
   created() {
     getUserList().then(res => {
       this.userlist = res.data;
-      console.log(this.userlist);
     });
     listPaper().then(res => {
       this.list = res.data;
-      console.log(this.list);
     });
   },
   methods: {

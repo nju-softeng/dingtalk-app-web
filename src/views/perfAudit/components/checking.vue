@@ -206,7 +206,6 @@ export default {
   created() {
     getToChecked().then(res => {
       this.list = res.data;
-      console.log(this.list);
     });
   },
   watch: {
@@ -271,7 +270,7 @@ export default {
       });
       fetchReport(that.temp.uid, that.temp.weekdate).then(res => {
         that.report = res.data.contents;
-        console.log(that.report);
+
         that.loading = false;
       });
       this.$refs.from.resetFields();

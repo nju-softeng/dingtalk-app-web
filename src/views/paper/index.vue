@@ -2,17 +2,20 @@
   <div class="app-container">
     <div class="box">
       <div class="action" style="margin-bottom:10px">
-        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建论文记录</el-button>
+        <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
       </div>
       <div v-for="(item, index) in list" :key="index">
-        <div class="item">
+        <div class="paper-item">
           <div class="content">
             <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
 
             <div class="left-content">
               <div class="title">
-                <a>
-                  <svg-icon icon-class="paper" /> {{ item.title }} </a>
+                <router-link :to="'/paper/detail/' + item.id" class="link-type">
+                  <el-link type="primary">
+                    <svg-icon icon-class="paper" /> {{ item.title }}
+                  </el-link>
+                </router-link>
               </div>
               <div style="display:flex" class="detail">
                 <div class="journal">
@@ -24,31 +27,61 @@
                 </div>
               </div>
             </div>
+
             <div class="info-item namelist">
               <span>论文作者</span>
-              <div style="padding:5px;">
+              <div style="margin-top:7px;padding:5px;width:200px">
                 <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
               </div>
             </div>
 
             <div class="info-item">
               <span>评审结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+
+              <div style="margin-top:7px">
+                <el-link v-if="item.vote == undefined" type="primary" @click="createVote(item)">
+                  <svg-icon icon-class="vote" /> 发起投票</el-link>
+
+                <router-link v-else :to="'/paper/vote/' + item.id" class="link-type">
+                  <el-link type="success">
+                    <svg-icon icon-class="vote" /> 前往投票</el-link>
+                </router-link>
+              </div>
             </div>
 
             <div class="info-item">
               <span>投稿结果</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+              <div style="margin-top:7px">
+                <el-tag v-if="item.result == 0">Wait</el-tag>
+                <el-tag v-else-if="item.result == 0" type="success">Accept</el-tag>
+                <el-tag v-else type="danger">Reject</el-tag>
+                <span style="padding:5px;">{{ item.date }}</span>
+              </div>
             </div>
 
             <div class="info-item">
-              <span>xxxx</span>
-              <span style="padding:5px;">{{ item.date }}</span>
+              <span>操作</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
+      <span style="margin-right:10px">截止时间 </span>
+
+      <el-time-select value-format="HH:mm:ss" v-model="voteform.endTime" :picker-options="{
+          start: '09:00',
+          step: '00:30',
+          end: '21:30'
+        }" placeholder="选择时间">
+      </el-time-select>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="voteDialog = false">取 消</el-button>
+        <el-button type="primary" @click="submitvote">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="60%" center>
       <div slot="title" class="header-title">
@@ -90,6 +123,10 @@
                 <el-option v-for="item in userlist" :key="item.index" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
+              <el-tooltip class="item" effect="dark" content="支持搜索功能快速查找用户" placement="right">
+                <span style="margin-left:8px">
+                  <svg-icon icon-class="hint" /></span>
+              </el-tooltip>
             </el-form-item>
             <el-button type="text" @click="addAuthor" style="margin-left:20px;" icon="el-icon-plus">添加作者</el-button>
             <el-button type="text" @click="rmAuthor" style="margin-left:20px;" icon="el-icon-minus">减少作者</el-button>
@@ -105,7 +142,7 @@
 </template>
 <script>
 import { getUserList } from "@/api/common";
-import { addPaper, listPaper } from "@/api/paper";
+import { addPaper, listPaper, createVote } from "@/api/paper";
 export default {
   data() {
     return {
@@ -126,6 +163,10 @@ export default {
             }
           }
         ]
+      },
+      voteform: {
+        paperid: "",
+        endTime: ""
       },
       options: [
         {
@@ -154,6 +195,7 @@ export default {
         }
       ],
       list: [],
+      voteDialog: false,
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -173,6 +215,27 @@ export default {
     });
   },
   methods: {
+    submitvote() {
+      if (this.voteform.endTime != null) {
+        createVote(this.voteform).then(() => {
+          this.$notify({
+            title: "发起投票",
+            message: "发起投票成功",
+            type: "success"
+          });
+          this.voteDialog = false;
+          this.$router.push({
+            path: "/paper/vote/" + this.voteform.paperid
+          });
+        });
+      }
+    },
+    createVote(item) {
+      this.voteform.paperid = item.id;
+      console.log(item);
+      this.voteDialog = true;
+      console.log("????");
+    },
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -254,36 +317,43 @@ export default {
   background: #fff;
   padding: 20px 20px 0 20px;
 }
-.item {
+
+.paper-item {
   background: #fff;
   padding: 12px 12px 12px 0;
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: #f6f6f6;
-  .left-content {
+
+  .content {
     display: flex;
-    flex-direction: column;
-    .title {
-      color: #1897ff;
-      font-weight: 500;
-      margin-bottom: 5px;
-      width: 400px;
-      overflow: hidden; /*超出部分隐藏*/
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .detail {
-      color: gray;
-      font-size: 13px;
-      padding-top: 5px;
-      .journal {
-        width: 250px;
+    justify-content: space-around;
+
+    .left-content {
+      display: flex;
+      flex-direction: column;
+      .title {
+        color: #1897ff;
+        font-weight: 500;
+        margin-bottom: 5px;
+        width: 400px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .time {
-        padding-left: 5px;
+      .detail {
+        color: gray;
+        font-size: 13px;
+        padding-top: 5px;
+        .journal {
+          width: 250px;
+          overflow: hidden; /*超出部分隐藏*/
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .time {
+          padding-left: 5px;
+        }
       }
     }
   }

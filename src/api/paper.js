@@ -15,3 +15,33 @@ export function listPaper() {
     method: "get"
   });
 }
+
+export function getPaper(id) {
+  return axios({
+    url: "/paper/" + id,
+    method: "get"
+  });
+}
+
+export function createVote(data) {
+  return axios({
+    url: "/vote",
+    method: "post",
+    data
+  });
+}
+
+export function getVoteDetail(pid) {
+  return axios({
+    url: "/vote/" + pid + "/detail",
+    method: "get"
+  });
+}
+
+export function addpoll(vid, data) {
+  return axios({
+    url: "/vote/" + vid,
+    method: "post",
+    data
+  });
+}

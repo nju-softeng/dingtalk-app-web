@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Message } from "element-ui";
 
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = process.env.VUE_APP_BASE_API;
 axios.defaults.headers.common["Content-Type"] =
   "application/json;charset=UTF-8";
 axios.interceptors.request.use(

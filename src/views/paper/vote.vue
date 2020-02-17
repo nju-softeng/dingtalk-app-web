@@ -245,6 +245,8 @@ export default {
           that.accept = data.accept;
           that.reject = data.reject;
           that.myresult = data.result;
+          that.acceptlist = data.acceptnames;
+          that.rejectlist = data.rejectnames;
         };
       }
     },

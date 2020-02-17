@@ -9,9 +9,9 @@ export function addPaper(data) {
   });
 }
 
-export function listPaper() {
+export function listPaper(page) {
   return axios({
-    url: "/paper",
+    url: "/paper/page/" + page,
     method: "get"
   });
 }

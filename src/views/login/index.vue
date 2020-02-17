@@ -12,7 +12,11 @@
         <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
-        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
+        <div
+          class="grid-content"
+          v-loading="loading"
+          element-loading-text="登录中"
+        ></div>
       </el-col>
     </el-row>
   </div>
@@ -46,7 +50,7 @@ export default {
   created() {
     //配置测试状态无需钉钉登陆;
     this.$store
-      .dispatch("user/test_login", 2)
+      .dispatch("user/test_login", 1)
       .then(res => {
         this.$router.push({
           path: this.redirect || "/",

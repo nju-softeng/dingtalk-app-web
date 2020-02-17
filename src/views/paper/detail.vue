@@ -6,39 +6,48 @@
       <div class="test">
         <el-form>
           <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 论文名称</span>
+            <span slot="label"> <svg-icon icon-class="paper" /> 论文名称</span>
             {{ paper.title }}
           </el-form-item>
           <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="school" /> 投稿地点</span>
+            <span slot="label"> <svg-icon icon-class="school" /> 投稿地点</span>
             {{ paper.journal }}
           </el-form-item>
           <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="grade" /> 论文分类</span>
+            <span slot="label"> <svg-icon icon-class="grade" /> 论文分类</span>
             {{ getlevel(paper.level) }}
           </el-form-item>
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="people" /> 论文作者
             </span>
-            <span style="margin:10px" v-for="p in paper.paperDetails" :key="p.index">{{ p.user.name }}</span>
+            <span
+              style="margin:10px"
+              v-for="p in paper.paperDetails"
+              :key="p.index"
+              >{{ p.user.name }}</span
+            >
           </el-form-item>
         </el-form>
       </div>
       <div class="chart">
-        <div>
+        <!-- <div>
           <el-button type="primary" v-if="!vote" @click="dialog = true">发起投票</el-button>
-        </div>
+        </div> -->
 
         <div v-if="vote" style="width:50%">
           <el-popconfirm title="确定要接受吗？">
             <el-button slot="reference" type="success">Accept</el-button>
           </el-popconfirm>
 
-          <el-popconfirm style="margin-left:100px" confirmButtonText="好的" cancelButtonText="再想想" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
+          <el-popconfirm
+            style="margin-left:100px"
+            confirmButtonText="好的"
+            cancelButtonText="再想想"
+            icon="el-icon-info"
+            iconColor="red"
+            title="确定要拒绝吗？"
+          >
             <el-button slot="reference" type="danger">Reject</el-button>
           </el-popconfirm>
         </div>
@@ -47,13 +56,23 @@
           <el-form>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Accept {{}}</span>
-              <el-progress class="progress" :percentage="100" status="success"></el-progress>
+                <svg-icon icon-class="paper" /> Accept {{}}</span
+              >
+              <el-progress
+                class="progress"
+                :percentage="100"
+                status="success"
+              ></el-progress>
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Reject {{}}</span>
-              <el-progress class="progress" :percentage="50" status="exception"></el-progress>
+                <svg-icon icon-class="paper" /> Reject {{}}</span
+              >
+              <el-progress
+                class="progress"
+                :percentage="50"
+                status="exception"
+              ></el-progress>
             </el-form-item>
           </el-form>
         </div>

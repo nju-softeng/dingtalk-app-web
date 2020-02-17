@@ -55,13 +55,22 @@
                 >
 
                 <router-link
-                  v-else
+                  v-else-if="item.vote.status == false"
                   :to="'/paper/vote/' + item.id"
                   class="link-type"
                 >
                   <el-link type="success">
                     <svg-icon icon-class="vote" /> 前往投票</el-link
                   >
+                </router-link>
+
+                <router-link
+                  v-else-if="item.vote.status == true"
+                  :to="'/paper/vote/' + item.id"
+                  class="link-type"
+                >
+                  <el-tag v-if="item.vote.result == true">ACCEPT</el-tag>
+                  <el-tag v-else>REJECT</el-tag>
                 </router-link>
               </div>
             </div>

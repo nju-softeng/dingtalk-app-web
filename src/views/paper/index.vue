@@ -69,8 +69,10 @@
                   :to="'/paper/vote/' + item.id"
                   class="link-type"
                 >
-                  <el-tag v-if="item.vote.result == true">ACCEPT</el-tag>
-                  <el-tag v-else>REJECT</el-tag>
+                  <el-tag type="success" v-if="item.vote.result == true"
+                    >ACCEPT</el-tag
+                  >
+                  <el-tag type="danger" v-else>REJECT</el-tag>
                 </router-link>
               </div>
             </div>
@@ -78,17 +80,28 @@
             <div class="info-item">
               <span>投稿结果</span>
               <div style="margin-top:7px">
-                <el-tag v-if="item.result == 0">Wait</el-tag>
-                <el-tag v-else-if="item.result == 0" type="success"
-                  >Accept</el-tag
+                <el-tag
+                  v-if="item.vote == undefined || item.vote.status == false"
+                  >待评审</el-tag
                 >
-                <el-tag v-else type="danger">Reject</el-tag>
+                <el-tag type="danger" v-else-if="item.vote.result == false"
+                  >内审未通过</el-tag
+                >
+                <el-tag v-else-if="item.result == 0">等待中</el-tag>
+                <el-tag v-else-if="item.result == 1" type="success"
+                  >接收</el-tag
+                >
+                <el-tag v-else type="danger">拒绝</el-tag>
                 <span style="padding:5px;">{{ item.date }}</span>
               </div>
             </div>
 
             <div class="info-item">
               <span>操作</span>
+              <div>
+                <el-button size="mini" type="primary">编辑</el-button>
+                <el-button size="mini" type="danger">删除</el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -365,6 +378,7 @@ export default {
               type: "success"
             });
             listPaper(0).then(res => {
+              console.log(res.data.content);
               this.list = res.data.content;
             });
           });
@@ -483,7 +497,7 @@ export default {
     color: gray;
     display: flex;
     flex-direction: column;
-    padding-left: 48px;
+    padding-left: 45px;
     font-size: 13px;
     align-items: center;
   }

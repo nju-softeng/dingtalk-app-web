@@ -16,8 +16,6 @@
       <div v-for="(item, index) in list" :key="index">
         <div class="paper-item">
           <div class="content">
-            <!-- <el-avatar shape="square" :size="50" :src="squareUrl"></el-avatar> -->
-
             <div class="left-content">
               <div class="title">
                 <router-link :to="'/paper/detail/' + item.id" class="link-type">
@@ -99,8 +97,28 @@
 
             <div class="info-item" style="width:180px;">
               <div>
-                <el-button size="mini" type="primary">编辑</el-button>
-                <el-button size="mini" type="danger">删除</el-button>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="审核人和论文作者才可以编辑"
+                  placement="top-start"
+                >
+                  <div>
+                    <el-button
+                      size="mini"
+                      @click="editDialog = true"
+                      type="primary"
+                      :disabled="getPermission(item.paperDetails, uid)"
+                      >编辑</el-button
+                    >
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      :disabled="getPermission(item.paperDetails, uid)"
+                      >删除</el-button
+                    >
+                  </div>
+                </el-tooltip>
               </div>
             </div>
           </div>
@@ -122,20 +140,41 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
-      <span style="margin-right:10px">截止时间 </span>
+    <el-dialog title="收货地址" :visible.sync="editDialog">
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button type="primary" @click="editDialog = false">确 定</el-button>
+      </div>
+    </el-dialog>
 
-      <el-time-select
-        value-format="HH:mm:ss"
-        v-model="voteform.endTime"
-        :picker-options="{
-          start: '09:00',
-          step: '00:30',
-          end: '21:30'
-        }"
-        placeholder="选择时间"
-      >
-      </el-time-select>
+    <el-dialog
+      title="发起投票"
+      v-loading="loading"
+      :visible.sync="voteDialog"
+      width="40%"
+    >
+      <el-form ref="voteform" :model="voteform">
+        <el-form-item
+          prop="endTime"
+          :rules="{
+            required: true,
+            message: '请选择截止时间',
+            trigger: 'change'
+          }"
+        >
+          <span slot="label">截止时间 </span>
+          <el-time-picker
+            arrow-control
+            v-model="voteform.endTime"
+            value-format="HH:mm:ss"
+            :picker-options="{
+              selectableRange: '08:30:00 - 21:30:00'
+            }"
+            placeholder="选择时间"
+          >
+          </el-time-picker>
+        </el-form-item>
+      </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="voteDialog = false">取 消</el-button>
@@ -145,6 +184,7 @@
 
     <el-dialog
       :visible.sync="dialog"
+      v-loading="loading"
       top="10vh"
       @closed="closeDialog"
       width="60%"
@@ -261,6 +301,7 @@ export default {
       userlist: [],
       total: 0,
       author: [],
+      editDialog: false,
       dialog: false,
       journalrank: [],
       state: "",
@@ -308,7 +349,10 @@ export default {
         }
       ],
       list: [],
+      loading: false,
       voteDialog: false,
+      uid: "",
+      role: "",
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -327,8 +371,21 @@ export default {
       this.total = res.data.total;
       console.log(res.data);
     });
+    this.uid = sessionStorage.getItem("uid");
+    this.role = sessionStorage.getItem("role");
   },
-  computed: {},
+  computed: {
+    getPermission() {
+      return (val, uid) => {
+        if (this.role == "admin" || this.role == "auditor") return false;
+        if (val.map(item => item.user.id).indexOf(eval(uid)) != -1) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+    }
+  },
   methods: {
     handlePrev(val) {
       listPaper(val - 1).then(res => {
@@ -347,19 +404,27 @@ export default {
     },
 
     submitvote() {
-      if (this.voteform.endTime != null) {
-        createVote(this.voteform).then(() => {
-          this.voteDialog = false;
-          this.$notify({
-            title: "发起投票",
-            message: "发起投票成功",
-            type: "success"
-          });
-          this.$router.push({
-            path: "/paper/vote/" + this.voteform.paperid
-          });
-        });
-      }
+      this.$refs.voteform.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          createVote(this.voteform)
+            .then(() => {
+              this.voteDialog = false;
+              this.loading = false;
+              this.$notify({
+                title: "发起投票",
+                message: "发起投票成功",
+                type: "success"
+              });
+              this.$router.push({
+                path: "/paper/vote/" + this.voteform.paperid
+              });
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        }
+      });
     },
     createVote(item) {
       this.voteform.paperid = item.id;
@@ -368,20 +433,26 @@ export default {
       console.log("????");
     },
     submit(formName) {
+      this.loading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          addPaper(this.paperform).then(() => {
-            this.dialog = false;
-            this.$notify({
-              title: "成功",
-              message: "论文记录创建成功",
-              type: "success"
+          addPaper(this.paperform)
+            .then(() => {
+              this.dialog = false;
+              this.loading = false;
+              this.$notify({
+                title: "成功",
+                message: "论文记录创建成功",
+                type: "success"
+              });
+              listPaper(0).then(res => {
+                console.log(res.data.content);
+                this.list = res.data.content;
+              });
+            })
+            .catch(() => {
+              this.loading = false;
             });
-            listPaper(0).then(res => {
-              console.log(res.data.content);
-              this.list = res.data.content;
-            });
-          });
         } else {
           this.$notify({
             title: "提交失败",
@@ -412,9 +483,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.header-title {
-}
-
 .test {
   border-radius: 8px;
   width: 90%;

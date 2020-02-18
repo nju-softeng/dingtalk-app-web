@@ -40,7 +40,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="chart">
+      <div class="chart" v-loading="loading">
         <div v-if="!showAns" style="width:50%">
           <el-popconfirm title="确定要接收吗？" @onConfirm="addpoll(true)">
             <el-button slot="reference" type="primary">Accept</el-button>
@@ -97,7 +97,7 @@
               <span
                 v-if="myresult == undefined"
                 style="color:#409EFF; font-weight:500;margin-right:5px"
-                >[未参与投票]
+                >[您未参与投票]
               </span>
               <el-link type="primary" :underline="false" @click="dialog = true"
                 >详情
@@ -139,10 +139,6 @@
         </span>
       </el-dialog>
     </div>
-    {{ acceptlist }}
-    {{ rejectlist }}
-    {{ total }}
-    <!-- {{ paper }} -->
   </div>
 </template>
 <script>
@@ -151,6 +147,7 @@ import { getPaper, getVoteDetail, addpoll } from "@/api/paper";
 export default {
   data() {
     return {
+      loading: false,
       level: [
         {
           value: 1,
@@ -284,12 +281,17 @@ export default {
     addpoll(result) {
       this.pollform.result = result;
       this.pollform.vote.id = this.vid;
-      addpoll(this.vid, this.pollform).then(res => {
-        this.showAns = true;
-        this.accept = res.data.accept;
-        this.reject = res.data.reject;
-        this.total = res.data.total;
-      });
+      this.loading = true;
+      addpoll(this.vid, this.pollform)
+        .then(res => {
+          this.showAns = true;
+          this.accept = res.data.accept;
+          this.reject = res.data.reject;
+          this.total = res.data.total;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     toAccept() {},
     roReject() {},

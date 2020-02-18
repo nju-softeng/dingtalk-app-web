@@ -6,6 +6,13 @@
           >创建评审记录</el-button
         >
       </div>
+      <div class="bar">
+        <div style="width:400px;">论文信息</div>
+        <div style="width:200px;">论文作者</div>
+        <div style="width:100px;">评审结果</div>
+        <div style="width:180px;">投稿结果</div>
+        <div style="width:100px;">操作</div>
+      </div>
       <div v-for="(item, index) in list" :key="index">
         <div class="paper-item">
           <div class="content">
@@ -31,20 +38,15 @@
             </div>
 
             <div class="info-item namelist">
-              <span>论文作者</span>
-              <div style="margin-top:7px;padding:5px;width:200px">
-                <span
-                  style="padding:5px;"
-                  v-for="o in item.paperDetails"
-                  :key="o.index"
-                  >{{ o.user.name }}</span
-                >
-              </div>
+              <span
+                style="padding:5px;"
+                v-for="o in item.paperDetails"
+                :key="o.index"
+                >{{ o.user.name }}</span
+              >
             </div>
 
-            <div class="info-item">
-              <span>评审结果</span>
-
+            <div class="info-item" style="width:100px;">
               <div style="margin-top:7px">
                 <el-link
                   v-if="item.vote == undefined"
@@ -77,8 +79,7 @@
               </div>
             </div>
 
-            <div class="info-item">
-              <span>投稿结果</span>
+            <div class="info-item" style="width:120px;">
               <div style="margin-top:7px">
                 <el-tag
                   v-if="item.vote == undefined || item.vote.status == false"
@@ -96,8 +97,7 @@
               </div>
             </div>
 
-            <div class="info-item">
-              <span>操作</span>
+            <div class="info-item" style="width:180px;">
               <div>
                 <el-button size="mini" type="primary">编辑</el-button>
                 <el-button size="mini" type="danger">删除</el-button>
@@ -450,6 +450,16 @@ export default {
   padding: 20px 20px 0 20px;
 }
 
+.bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 28px;
+  color: gray;
+  font-size: 13px;
+}
+
 .paper-item {
   background: #fff;
   padding: 12px 12px 12px 0;
@@ -459,7 +469,7 @@ export default {
 
   .content {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 
     .left-content {
       display: flex;
@@ -492,12 +502,13 @@ export default {
   .namelist {
     width: 200px;
     padding: 0 20px;
+    justify-content: flex-start;
   }
   .info-item {
     color: gray;
     display: flex;
-    flex-direction: column;
-    padding-left: 45px;
+    justify-content: flex-start;
+    padding-left: 15px;
     font-size: 13px;
     align-items: center;
   }

@@ -49,7 +49,7 @@
                 <el-link
                   v-if="item.vote == undefined"
                   type="primary"
-                  @click="createVote(item)"
+                  @click="newVote(item)"
                 >
                   <svg-icon icon-class="vote" /> 发起投票</el-link
                 >
@@ -96,28 +96,28 @@
             </div>
 
             <div class="info-item" style="width:180px;">
-              <div>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="审核人和论文作者才可以编辑"
-                  placement="top-start"
-                >
-                  <div>
-                    <el-button
-                      size="mini"
-                      @click="editDialog = true"
-                      type="primary"
-                      :disabled="getPermission(item.paperDetails, uid)"
-                      >编辑</el-button
-                    >
-                    <el-button
-                      size="mini"
-                      type="danger"
-                      :disabled="getPermission(item.paperDetails, uid)"
-                      >删除</el-button
-                    >
-                  </div>
+              <div style="font-size:15px">
+                <el-tooltip effect="dark" content="评审投票" placement="top">
+                  <svg-icon @click="newVote(item)" icon-class="vote" />
+                </el-tooltip>
+
+                <el-divider direction="vertical"></el-divider>
+
+                <el-tooltip effect="dark" content="投稿结果" placement="top">
+                  <svg-icon
+                    @click="updatePaperResult(item)"
+                    icon-class="review"
+                  />
+                </el-tooltip>
+
+                <el-divider direction="vertical"></el-divider>
+                <el-tooltip effect="dark" content="编辑" placement="top">
+                  <svg-icon icon-class="edit" />
+                </el-tooltip>
+
+                <el-divider direction="vertical"></el-divider>
+                <el-tooltip effect="dark" content="删除" placement="top">
+                  <svg-icon icon-class="remove" />
                 </el-tooltip>
               </div>
             </div>
@@ -140,10 +140,24 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="收货地址" :visible.sync="editDialog">
+    {{ paperResult }}
+    {{ typeof paperResult }}
+
+    <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
+      <el-form>
+        <el-form-item>
+          <span slot="label"> <svg-icon icon-class="paper" /> 接收情况: </span>
+          <el-radio-group v-model="paperResult">
+            <el-radio :label="true">接收</el-radio>
+            <el-radio :label="false">拒绝</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="editDialog = false">确 定</el-button>
+        <el-button @click="resultDialog = false">取 消</el-button>
+        <el-button type="primary" @click="resultDialog = false"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
 
@@ -294,14 +308,14 @@
 </template>
 <script>
 import { getUserList } from "@/api/common";
-import { addPaper, listPaper, createVote } from "@/api/paper";
+import { addPaper, listPaper, createVote, submitResult } from "@/api/paper";
 export default {
   data() {
     return {
       userlist: [],
       total: 0,
       author: [],
-      editDialog: false,
+      resultDialog: false,
       dialog: false,
       journalrank: [],
       state: "",
@@ -353,6 +367,7 @@ export default {
       voteDialog: false,
       uid: "",
       role: "",
+      paperResult: undefined,
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -373,6 +388,9 @@ export default {
     });
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
+    submitResult(1, 2).then(res => {
+      console.res.data;
+    });
   },
   computed: {
     getPermission() {
@@ -387,22 +405,25 @@ export default {
     }
   },
   methods: {
+    // 分页前一页
     handlePrev(val) {
       listPaper(val - 1).then(res => {
         this.list = res.data.content;
       });
     },
+    // 分页下一页
     handleNext(val) {
       listPaper(val - 1).then(res => {
         this.list = res.data.content;
       });
     },
+    // 分页当前页
     handleCurrentChange(val) {
       listPaper(val - 1).then(res => {
         this.list = res.data.content;
       });
     },
-
+    // 提交新创建的投票
     submitvote() {
       this.$refs.voteform.validate(valid => {
         if (valid) {
@@ -410,7 +431,6 @@ export default {
           createVote(this.voteform)
             .then(() => {
               this.voteDialog = false;
-              this.loading = false;
               this.$notify({
                 title: "发起投票",
                 message: "发起投票成功",
@@ -420,18 +440,25 @@ export default {
                 path: "/paper/vote/" + this.voteform.paperid
               });
             })
-            .catch(() => {
+            .finally(() => {
               this.loading = false;
             });
         }
       });
     },
-    createVote(item) {
+    // 创建投票，唤起dialog
+    newVote(item) {
       this.voteform.paperid = item.id;
-      console.log(item);
-      this.voteDialog = true;
-      console.log("????");
+      if (item.vote == undefined) {
+        console.log(item);
+        this.voteDialog = true;
+      } else {
+        this.$router.push({
+          path: "/paper/vote/" + item.id
+        });
+      }
     },
+    // 提交论文评审记录
     submit(formName) {
       this.loading = true;
       this.$refs[formName].validate(valid => {
@@ -462,9 +489,11 @@ export default {
         }
       });
     },
+    // 关闭前清空表单
     closeDialog() {
       this.$refs.paperform.resetFields();
     },
+    // 添加论文作者
     addAuthor() {
       let val = this.paperform.paperDetails.length + 1;
       this.paperform.paperDetails.push({
@@ -474,11 +503,40 @@ export default {
         }
       });
     },
+    // 移除论文作者
     rmAuthor() {
       if (this.paperform.paperDetails.length != 1) {
         this.paperform.paperDetails.pop();
       }
-    }
+    },
+    // 更新论文投稿结果
+    updatePaperResult(item) {
+      let val = item.paperDetails;
+      let uid = this.uid;
+      console.log(val);
+      console.log(uid);
+      if (
+        this.role == "admin" ||
+        this.role == "auditor" ||
+        val.map(item => item.user.id).indexOf(eval(uid)) != -1
+      ) {
+        this.resultDialog = true;
+      } else {
+        this.$message({
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
+        });
+      }
+    },
+    submitPaperResult() {
+      if (this.paperResult != undefined) {
+      } else {
+      }
+    },
+    // 修改论文记录
+    modifyPaper() {},
+    // 删除论文记录
+    removePaper() {}
   }
 };
 </script>

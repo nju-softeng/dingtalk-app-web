@@ -16,6 +16,7 @@ export function listPaper(page) {
   });
 }
 
+// 获取某个论文的详细信息
 export function getPaper(id) {
   return axios({
     url: "/paper/" + id,
@@ -38,9 +39,21 @@ export function getVoteDetail(pid) {
   });
 }
 
+// 用户投票
 export function addpoll(vid, data) {
   return axios({
     url: "/vote/" + vid,
+    method: "post",
+    data
+  });
+}
+
+///paper_result/{id}
+
+// 提交论文结果
+export function submitResult(id, data) {
+  return axios({
+    url: "/paper_result/" + id,
     method: "post",
     data
   });

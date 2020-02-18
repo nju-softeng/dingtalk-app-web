@@ -192,7 +192,8 @@ export default {
         vote: {
           id: ""
         }
-      }
+      },
+      paperResult: 3
     };
   },
   computed: {
@@ -249,6 +250,7 @@ export default {
     this.ws.close();
   },
   methods: {
+    // 初始化websocket
     initWebSocket() {
       let that = this;
       if (window.WebSocket) {

@@ -51,10 +51,9 @@ export function addpoll(vid, data) {
 ///paper_result/{id}
 
 // 提交论文结果
-export function submitResult(id, data) {
+export function submitResult(id, result) {
   return axios({
-    url: "/paper_result/" + id,
-    method: "post",
-    data
+    url: "/paper_result/" + id + "/" + result,
+    method: "get"
   });
 }

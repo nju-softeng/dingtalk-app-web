@@ -297,8 +297,7 @@ export default {
           this.loading = false;
         });
     },
-    toAccept() {},
-    roReject() {},
+
     createVote() {
       console.log("????");
       this.dialog = false;

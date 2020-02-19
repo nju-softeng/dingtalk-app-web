@@ -50,7 +50,7 @@ export default {
   created() {
     //配置测试状态无需钉钉登陆;
     this.$store
-      .dispatch("user/test_login", 4)
+      .dispatch("user/test_login", 1)
       .then(res => {
         this.$router.push({
           path: this.redirect || "/",

@@ -1,126 +1,134 @@
 <template>
   <div class="app-container">
-    <div class="box">
-      <div class="action" style="margin-bottom:10px">
-        <el-button type="primary" @click="dialog = true" icon="el-icon-plus"
-          >创建评审记录</el-button
+    <div style="height:80vh">
+      <div class="box">
+        <div class="action" style="margin-bottom:10px">
+          <el-button type="primary" @click="dialog = true" icon="el-icon-plus"
+            >创建评审记录</el-button
+          >
+        </div>
+        <div
+          class="bar"
+          style="border-width: 0 0 1px 0;border-style: solid;border-color: #f6f6f6;"
         >
-      </div>
-      <div class="bar">
-        <div style="width:400px;">论文信息</div>
-        <div style="width:200px;">论文作者</div>
-        <div style="width:100px;">评审结果</div>
-        <div style="width:180px;">投稿结果</div>
-        <div style="width:100px;">操作</div>
-      </div>
-      <div v-for="(item, index) in list" :key="index">
-        <div class="paper-item">
-          <div class="content">
-            <div class="left-content">
-              <div class="title">
-                <router-link :to="'/paper/detail/' + item.id" class="link-type">
-                  <el-link type="primary">
-                    <svg-icon icon-class="paper" /> {{ item.title }}
-                  </el-link>
-                </router-link>
-              </div>
-              <div style="display:flex" class="detail">
-                <div class="journal">
-                  <svg-icon icon-class="school" /> {{ item.journal }}
-                </div>
-                <div class="time">
-                  <svg-icon icon-class="date" />
-                  {{ item.insertTime.substr(0, 10) }}
-                </div>
-              </div>
-            </div>
-
-            <div class="info-item namelist">
-              <span
-                style="padding:5px;"
-                v-for="o in item.paperDetails"
-                :key="o.index"
-                >{{ o.user.name }}</span
-              >
-            </div>
-
-            <div class="info-item" style="width:100px;">
-              <div style="margin-top:7px">
-                <el-link
-                  v-if="item.vote == undefined"
-                  type="primary"
-                  @click="newVote(item)"
-                >
-                  <svg-icon icon-class="vote" /> 发起投票</el-link
-                >
-
-                <router-link
-                  v-else-if="item.vote.status == false"
-                  :to="'/paper/vote/' + item.id"
-                  class="link-type"
-                >
-                  <el-link type="success">
-                    <svg-icon icon-class="vote" /> 前往投票</el-link
+          <div style="width:400px;">论文信息</div>
+          <div style="width:200px;">论文作者</div>
+          <div style="width:100px;">评审结果</div>
+          <div style="width:180px;">投稿结果</div>
+          <div style="width:100px;">操作</div>
+        </div>
+        <div v-for="(item, index) in list" :key="index">
+          <div class="paper-item">
+            <div class="content">
+              <div class="left-content">
+                <div class="title">
+                  <router-link
+                    :to="'/paper/detail/' + item.id"
+                    class="link-type"
                   >
-                </router-link>
+                    <el-link type="primary">
+                      <svg-icon icon-class="paper" /> {{ item.title }}
+                    </el-link>
+                  </router-link>
+                </div>
+                <div style="display:flex" class="detail">
+                  <div class="journal">
+                    <svg-icon icon-class="school" /> {{ item.journal }}
+                  </div>
+                  <div class="time">
+                    <svg-icon icon-class="date" />
+                    {{ item.insertTime.substr(0, 10) }}
+                  </div>
+                </div>
+              </div>
 
-                <router-link
-                  v-else-if="item.vote.status == true"
-                  :to="'/paper/vote/' + item.id"
-                  class="link-type"
+              <div class="info-item namelist">
+                <span
+                  style="padding:5px;"
+                  v-for="o in item.paperDetails"
+                  :key="o.index"
+                  >{{ o.user.name }}</span
                 >
-                  <el-tag type="success" v-if="item.vote.result == true"
-                    >ACCEPT</el-tag
+              </div>
+
+              <div class="info-item" style="width:100px;">
+                <div style="margin-top:7px">
+                  <el-link
+                    v-if="item.vote == undefined"
+                    type="primary"
+                    @click="newVote(item)"
                   >
-                  <el-tag type="danger" v-else>REJECT</el-tag>
-                </router-link>
+                    <svg-icon icon-class="vote" /> 发起投票</el-link
+                  >
+
+                  <router-link
+                    v-else-if="item.vote.status == false"
+                    :to="'/paper/vote/' + item.id"
+                    class="link-type"
+                  >
+                    <el-link type="success">
+                      <svg-icon icon-class="vote" /> 前往投票</el-link
+                    >
+                  </router-link>
+
+                  <router-link
+                    v-else-if="item.vote.status == true"
+                    :to="'/paper/vote/' + item.id"
+                    class="link-type"
+                  >
+                    <el-tag type="success" v-if="item.vote.result == true"
+                      >ACCEPT</el-tag
+                    >
+                    <el-tag type="danger" v-else>REJECT</el-tag>
+                  </router-link>
+                </div>
               </div>
-            </div>
 
-            <div class="info-item" style="width:120px;">
-              <div style="margin-top:7px">
-                <el-tag
-                  v-if="item.vote == undefined || item.vote.status == false"
-                  >待内部投票</el-tag
-                >
-                <el-tag type="danger" v-else-if="item.vote.result == false"
-                  >内审未通过</el-tag
-                >
-                <el-tag v-else-if="item.result == undefined"
-                  >等待最终结果</el-tag
-                >
-                <el-tag v-else-if="item.result == true" type="success"
-                  >接收</el-tag
-                >
-                <el-tag v-else type="danger">拒绝</el-tag>
-                <span style="padding:5px;">{{ item.date }}</span>
+              <div class="info-item" style="width:120px;">
+                <div style="margin-top:7px">
+                  <el-tag
+                    v-if="item.vote == undefined || item.vote.status == false"
+                    >待内部投票</el-tag
+                  >
+                  <el-tag type="danger" v-else-if="item.vote.result == false"
+                    >内审未通过</el-tag
+                  >
+                  <el-tag v-else-if="item.result == undefined"
+                    >等待最终结果</el-tag
+                  >
+                  <el-tag v-else-if="item.result == true" type="success"
+                    >接收</el-tag
+                  >
+                  <el-tag v-else type="danger">拒绝</el-tag>
+                  <span style="padding:5px;">{{ item.date }}</span>
+                </div>
               </div>
-            </div>
 
-            <div class="info-item" style="width:180px;">
-              <div style="font-size:15px">
-                <el-tooltip effect="dark" content="评审投票" placement="top">
-                  <svg-icon @click="newVote(item)" icon-class="vote" />
-                </el-tooltip>
+              <div class="info-item" style="width:180px;">
+                <div style="font-size:14px">
+                  <el-tooltip effect="dark" content="评审投票" placement="top">
+                    <svg-icon @click="newVote(item)" icon-class="vote" />
+                  </el-tooltip>
 
-                <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical"></el-divider>
 
-                <el-tooltip effect="dark" content="投稿结果" placement="top">
-                  <svg-icon
-                    @click="updatePaperResult(item)"
-                    icon-class="review"
-                  />
-                </el-tooltip>
+                  <el-tooltip effect="dark" content="投稿结果" placement="top">
+                    <svg-icon
+                      @click="updatePaperResult(item)"
+                      icon-class="review"
+                    />
+                  </el-tooltip>
 
-                <el-divider direction="vertical"></el-divider>
-                <el-tooltip effect="dark" content="编辑" placement="top">
-                  <svg-icon icon-class="edit" />
-                </el-tooltip>
+                  <el-divider direction="vertical"></el-divider>
+                  <el-tooltip effect="dark" content="编辑" placement="top">
+                    <svg-icon @click="modifyPaper(item)" icon-class="edit" />
+                  </el-tooltip>
 
-                <el-divider direction="vertical"></el-divider>
-                <el-tooltip effect="dark" content="删除" placement="top">
-                  <svg-icon icon-class="remove" />
-                </el-tooltip>
+                  <el-divider direction="vertical"></el-divider>
+                  <el-tooltip effect="dark" content="删除" placement="top">
+                    <svg-icon @click="removePaper(item)" icon-class="remove" />
+                  </el-tooltip>
+                </div>
               </div>
             </div>
           </div>
@@ -133,11 +141,11 @@
         @next-click="handleNext"
         @current-change="handleCurrentChange"
         background
-        :hide-on-single-page="total > 8"
+        :hide-on-single-page="total > 6"
         small
         layout="prev, pager, next"
         :total="total"
-        :page-size="8"
+        :page-size="6"
       >
       </el-pagination>
     </div>
@@ -312,7 +320,13 @@
 </template>
 <script>
 import { getUserList } from "@/api/common";
-import { addPaper, listPaper, createVote, submitResult } from "@/api/paper";
+import {
+  addPaper,
+  listPaper,
+  createVote,
+  submitResult,
+  rmPaper
+} from "@/api/paper";
 export default {
   data() {
     return {
@@ -324,6 +338,7 @@ export default {
       journalrank: [],
       state: "",
       paperform: {
+        id: null,
         title: null,
         journal: null,
         level: null,
@@ -497,6 +512,19 @@ export default {
     // 关闭前清空表单
     closeDialog() {
       this.$refs.paperform.resetFields();
+      this.paperform.id = null;
+      this.paperform.journal = "";
+      this.paperform.title = "";
+
+      this.paperform.level = "";
+      this.paperform.paperDetails = [
+        {
+          num: 1,
+          user: {
+            id: ""
+          }
+        }
+      ];
     },
     // 添加论文作者
     addAuthor() {
@@ -518,13 +546,10 @@ export default {
     updatePaperResult(item) {
       this.resultForm.paperid = item.id;
       let val = item.paperDetails;
-      let uid = this.uid;
-      console.log(val);
-      console.log(uid);
       if (
         this.role == "admin" ||
         this.role == "auditor" ||
-        val.map(item => item.user.id).indexOf(eval(uid)) != -1
+        val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
       ) {
         this.resultDialog = true;
       } else {
@@ -559,9 +584,67 @@ export default {
       }
     },
     // 修改论文记录
-    modifyPaper() {},
+    modifyPaper(item) {
+      let val = item.paperDetails;
+      if (
+        this.role == "admin" ||
+        this.role == "auditor" ||
+        val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
+      ) {
+        this.dialog = true;
+        this.paperform.id = item.id;
+        this.paperform.title = item.title;
+        this.paperform.journal = item.journal;
+        this.paperform.level = item.level;
+        this.paperform.paperDetails = item.paperDetails;
+      } else {
+        this.$message({
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
+        });
+      }
+    },
     // 删除论文记录
-    removePaper() {}
+    removePaper(item) {
+      let val = item.paperDetails;
+      if (
+        this.role == "admin" ||
+        this.role == "auditor" ||
+        val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
+      ) {
+        this.$confirm(
+          "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
+            rmPaper(id).then(() => {
+              listPaper(0).then(res => {
+                this.list = res.data.content;
+              });
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          });
+      } else {
+        this.$message({
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
+        });
+      }
+    }
   }
 };
 </script>
@@ -597,7 +680,7 @@ export default {
 }
 .app-container {
   background-color: #f5f5f5;
-  min-height: 750px;
+  height: 100vh;
   border-radius: 0;
 }
 .box {
@@ -628,13 +711,14 @@ export default {
     justify-content: space-between;
 
     .left-content {
+      padding-left: 10px;
       display: flex;
       flex-direction: column;
       .title {
         color: #1897ff;
         font-weight: 500;
         margin-bottom: 5px;
-        width: 400px;
+        width: 380px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -642,9 +726,9 @@ export default {
       .detail {
         color: gray;
         font-size: 13px;
-        padding-top: 5px;
+        padding-top: 7px;
         .journal {
-          width: 250px;
+          width: 200px;
           overflow: hidden; /*超出部分隐藏*/
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -665,7 +749,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     padding-left: 15px;
-    font-size: 14px;
+    font-size: 13px;
     align-items: center;
   }
 }

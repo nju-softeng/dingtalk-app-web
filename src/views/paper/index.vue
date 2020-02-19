@@ -86,8 +86,8 @@
                 <el-tag type="danger" v-else-if="item.vote.result == false"
                   >内审未通过</el-tag
                 >
-                <el-tag v-else-if="item.result == 0">等待中</el-tag>
-                <el-tag v-else-if="item.result == 1" type="success"
+                <el-tag v-else-if="item.result == false">等待中</el-tag>
+                <el-tag v-else-if="item.result == true" type="success"
                   >接收</el-tag
                 >
                 <el-tag v-else type="danger">拒绝</el-tag>
@@ -144,61 +144,61 @@
     {{ typeof paperResult }}
 
     <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
-      <el-form>
-        <el-form-item>
-          <span slot="label"> <svg-icon icon-class="paper" /> 接收情况: </span>
-          <el-radio-group v-model="paperResult">
-            <el-radio :label="true">接收</el-radio>
-            <el-radio :label="false">拒绝</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="resultDialog = false">取 消</el-button>
-        <el-button type="primary" @click="resultDialog = false"
-          >确 定</el-button
-        >
+      <div v-loading="loading">
+        <el-form>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 接收情况:
+            </span>
+            <el-radio-group v-model="paperResult">
+              <el-radio :label="true">接收</el-radio>
+              <el-radio :label="false">拒绝</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+        <div class="dialog-footer">
+          <el-button @click="resultDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitPaperResult()"
+            >确 定</el-button
+          >
+        </div>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
+      <div v-loading="loading">
+        <el-form ref="voteform" :model="voteform">
+          <el-form-item
+            prop="endTime"
+            :rules="{
+              required: true,
+              message: '请选择截止时间',
+              trigger: 'change'
+            }"
+          >
+            <span slot="label">截止时间 </span>
+            <el-time-picker
+              arrow-control
+              v-model="voteform.endTime"
+              value-format="HH:mm:ss"
+              :picker-options="{
+                selectableRange: '08:30:00 - 21:30:00'
+              }"
+              placeholder="选择时间"
+            >
+            </el-time-picker>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="voteDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitvote">确 定</el-button>
+        </span>
       </div>
     </el-dialog>
 
     <el-dialog
-      title="发起投票"
-      v-loading="loading"
-      :visible.sync="voteDialog"
-      width="40%"
-    >
-      <el-form ref="voteform" :model="voteform">
-        <el-form-item
-          prop="endTime"
-          :rules="{
-            required: true,
-            message: '请选择截止时间',
-            trigger: 'change'
-          }"
-        >
-          <span slot="label">截止时间 </span>
-          <el-time-picker
-            arrow-control
-            v-model="voteform.endTime"
-            value-format="HH:mm:ss"
-            :picker-options="{
-              selectableRange: '08:30:00 - 21:30:00'
-            }"
-            placeholder="选择时间"
-          >
-          </el-time-picker>
-        </el-form-item>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="voteDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitvote">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
       :visible.sync="dialog"
-      v-loading="loading"
       top="10vh"
       @closed="closeDialog"
       width="60%"
@@ -208,101 +208,106 @@
         <span class="title-age">内部论文评审记录 </span>
       </div>
 
-      <div class="dialog-content">
-        <div class="paper-form">
-          <el-form
-            ref="paperform"
-            :rules="rules"
-            :model="paperform"
-            label-width="110px"
-          >
-            <el-form-item prop="title">
-              <span slot="label">
-                <svg-icon icon-class="paper" /> 论文名称</span
-              >
-              <el-input v-model="paperform.title"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="school" /> 投稿地点</span
-              >
-              <el-input v-model="paperform.journal"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="level">
-              <span slot="label">
-                <svg-icon icon-class="grade" /> 论文分类</span
-              >
-              <el-select v-model="paperform.level" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.index"
-                  :label="item.label"
-                  :value="item.value"
+      <div v-loading="loading">
+        <div class="dialog-content">
+          <div class="paper-form">
+            <el-form
+              ref="paperform"
+              :rules="rules"
+              :model="paperform"
+              label-width="110px"
+            >
+              <el-form-item prop="title">
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 论文名称</span
                 >
-                </el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item
-              v-for="(author, index) in paperform.paperDetails"
-              :prop="'paperDetails.' + index + '.user.id'"
-              :key="index"
-              :rules="{
-                required: true,
-                message: '请选择论文作者',
-                trigger: 'change'
-              }"
-            >
-              <span slot="label">
-                <svg-icon icon-class="people" /> 论文作者 {{ index + 1 }}</span
-              >
-
-              <el-select
-                v-model="author.user.id"
-                filterable
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in userlist"
-                  :key="item.index"
-                  :label="item.name"
-                  :value="item.id"
+                <el-input v-model="paperform.title"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 投稿地点</span
                 >
-                </el-option>
-              </el-select>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="支持搜索功能快速查找用户"
-                placement="right"
+                <el-input v-model="paperform.journal"></el-input>
+              </el-form-item>
+
+              <el-form-item prop="level">
+                <span slot="label">
+                  <svg-icon icon-class="grade" /> 论文分类</span
+                >
+                <el-select v-model="paperform.level" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.index"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item
+                v-for="(author, index) in paperform.paperDetails"
+                :prop="'paperDetails.' + index + '.user.id'"
+                :key="index"
+                :rules="{
+                  required: true,
+                  message: '请选择论文作者',
+                  trigger: 'change'
+                }"
               >
-                <span style="margin-left:8px">
-                  <svg-icon icon-class="hint"
-                /></span>
-              </el-tooltip>
-            </el-form-item>
-            <el-button
-              type="text"
-              @click="addAuthor"
-              style="margin-left:20px;"
-              icon="el-icon-plus"
-              >添加作者</el-button
-            >
-            <el-button
-              type="text"
-              @click="rmAuthor"
-              style="margin-left:20px;"
-              icon="el-icon-minus"
-              >减少作者</el-button
-            >
-          </el-form>
+                <span slot="label">
+                  <svg-icon icon-class="people" /> 论文作者
+                  {{ index + 1 }}</span
+                >
+
+                <el-select
+                  v-model="author.user.id"
+                  filterable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in userlist"
+                    :key="item.index"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="支持搜索功能快速查找用户"
+                  placement="right"
+                >
+                  <span style="margin-left:8px">
+                    <svg-icon icon-class="hint"
+                  /></span>
+                </el-tooltip>
+              </el-form-item>
+              <el-button
+                type="text"
+                @click="addAuthor"
+                style="margin-left:20px;"
+                icon="el-icon-plus"
+                >添加作者</el-button
+              >
+              <el-button
+                type="text"
+                @click="rmAuthor"
+                style="margin-left:20px;"
+                icon="el-icon-minus"
+                >减少作者</el-button
+              >
+            </el-form>
+          </div>
         </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submit('paperform')"
+            >确 定</el-button
+          >
+          <el-button @click="dialog = false">取 消</el-button>
+        </span>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit('paperform')">确 定</el-button>
-        <el-button @click="dialog = false">取 消</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -388,9 +393,6 @@ export default {
     });
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
-    submitResult(1, 2).then(res => {
-      console.res.data;
-    });
   },
   computed: {
     getPermission() {
@@ -530,7 +532,24 @@ export default {
     },
     submitPaperResult() {
       if (this.paperResult != undefined) {
+        this.loading = true;
+        submitResult(1, this.paperResult)
+          .then(res => {
+            console.log(res.data);
+            this.resultDialog = false;
+            listPaper(0).then(res => {
+              this.list = res.data.content;
+              this.total = res.data.total;
+            });
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       } else {
+        this.$message({
+          message: "请选择结果",
+          type: "warning"
+        });
       }
     },
     // 修改论文记录
@@ -541,6 +560,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .test {
   border-radius: 8px;
   width: 90%;

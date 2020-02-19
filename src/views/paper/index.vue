@@ -141,6 +141,7 @@
         @next-click="handleNext"
         @current-change="handleCurrentChange"
         background
+        :current-page.sync="currentPage"
         :hide-on-single-page="total > 6"
         small
         layout="prev, pager, next"
@@ -149,6 +150,7 @@
       >
       </el-pagination>
     </div>
+    {{ currentPage }}
 
     <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
       <div v-loading="loading">
@@ -342,6 +344,7 @@ export default {
         title: null,
         journal: null,
         level: null,
+        currentPage: 0,
         paperDetails: [
           {
             num: 1,
@@ -480,6 +483,10 @@ export default {
     },
     // 提交论文评审记录
     submit(formName) {
+      let page = 0;
+      if (this.paperform.id != undefined) {
+        page = this.currentPage - 1;
+      }
       this.loading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -489,10 +496,10 @@ export default {
               this.loading = false;
               this.$notify({
                 title: "成功",
-                message: "论文记录创建成功",
+                message: "论文记录提交成功",
                 type: "success"
               });
-              listPaper(0).then(res => {
+              listPaper(page).then(res => {
                 console.log(res.data.content);
                 this.list = res.data.content;
               });
@@ -567,7 +574,7 @@ export default {
           .then(res => {
             console.log(res.data);
             this.resultDialog = false;
-            listPaper(0).then(res => {
+            listPaper(this.currentPage - 1).then(res => {
               this.list = res.data.content;
               this.total = res.data.total;
               console.log(this.list);
@@ -622,9 +629,10 @@ export default {
           }
         )
           .then(() => {
-            rmPaper(id).then(() => {
+            rmPaper(item.id).then(() => {
               listPaper(0).then(res => {
                 this.list = res.data.content;
+                this.total = res.data.total;
               });
               this.$message({
                 type: "success",

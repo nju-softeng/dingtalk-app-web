@@ -81,12 +81,14 @@
               <div style="margin-top:7px">
                 <el-tag
                   v-if="item.vote == undefined || item.vote.status == false"
-                  >待评审</el-tag
+                  >待内部投票</el-tag
                 >
                 <el-tag type="danger" v-else-if="item.vote.result == false"
                   >内审未通过</el-tag
                 >
-                <el-tag v-else-if="item.result == false">等待中</el-tag>
+                <el-tag v-else-if="item.result == undefined"
+                  >等待最终结果</el-tag
+                >
                 <el-tag v-else-if="item.result == true" type="success"
                   >接收</el-tag
                 >
@@ -140,9 +142,6 @@
       </el-pagination>
     </div>
 
-    {{ paperResult }}
-    {{ typeof paperResult }}
-
     <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
       <div v-loading="loading">
         <el-form>
@@ -150,7 +149,7 @@
             <span slot="label">
               <svg-icon icon-class="paper" /> 接收情况:
             </span>
-            <el-radio-group v-model="paperResult">
+            <el-radio-group v-model="resultForm.result">
               <el-radio :label="true">接收</el-radio>
               <el-radio :label="false">拒绝</el-radio>
             </el-radio-group>
@@ -372,7 +371,11 @@ export default {
       voteDialog: false,
       uid: "",
       role: "",
-      paperResult: undefined,
+      resultForm: {
+        paperid: "",
+        result: ""
+      },
+
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -513,6 +516,7 @@ export default {
     },
     // 更新论文投稿结果
     updatePaperResult(item) {
+      this.resultForm.paperid = item.id;
       let val = item.paperDetails;
       let uid = this.uid;
       console.log(val);
@@ -530,16 +534,18 @@ export default {
         });
       }
     },
+
     submitPaperResult() {
-      if (this.paperResult != undefined) {
+      if (this.resultForm.result != undefined) {
         this.loading = true;
-        submitResult(1, this.paperResult)
+        submitResult(this.resultForm.paperid, this.resultForm.result)
           .then(res => {
             console.log(res.data);
             this.resultDialog = false;
             listPaper(0).then(res => {
               this.list = res.data.content;
               this.total = res.data.total;
+              console.log(this.list);
             });
           })
           .finally(() => {
@@ -659,7 +665,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     padding-left: 15px;
-    font-size: 13px;
+    font-size: 14px;
     align-items: center;
   }
 }

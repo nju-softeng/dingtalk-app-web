@@ -26,7 +26,8 @@
           </el-form-item>
           <el-form-item>
             <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
-            {{ endtime }}
+            {{ getddl(startTime, endtime) }}
+            <span v-if="isEnd"> [已结束]</span>
             <el-tooltip
               class="item"
               effect="dark"
@@ -180,6 +181,7 @@ export default {
       dialog: false,
       accept: "",
       reject: "",
+      isEnd: "false",
       startTime: "",
       endtime: "",
       acceptlist: [],
@@ -192,8 +194,7 @@ export default {
         vote: {
           id: ""
         }
-      },
-      paperResult: 3
+      }
     };
   },
   computed: {
@@ -215,12 +216,12 @@ export default {
         }
         return (val / total).toFixed(2) * 100;
       };
+    },
+    getddl() {
+      return (st, et) => {
+        return st + " " + et.slice(0, 5);
+      };
     }
-    // getddl() {
-    //   return (st, et) => {
-    //     return st.
-    //   }
-    // }
   },
   created() {
     this.pid = this.$route.params.id;
@@ -229,7 +230,8 @@ export default {
       this.paper = res.data;
       this.vid = res.data.vote.id;
       this.endtime = res.data.vote.endTime;
-      this.startTime = res.data.vote.startTIme;
+      this.startTime = res.data.vote.startTime;
+      this.isEnd = res.data.vote.status;
     });
     getVoteDetail(this.pid).then(res => {
       console.log(res);

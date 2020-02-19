@@ -10,12 +10,8 @@
             {{ paper.title }}
           </el-form-item>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="school" /> 投稿地点</span>
-            {{ paper.journal }}
-          </el-form-item>
-          <el-form-item>
             <span slot="label"> <svg-icon icon-class="grade" /> 论文分类</span>
-            {{ getlevel(paper.level).label }}
+            {{ getlevel(paper.level) }}
           </el-form-item>
           <el-form-item>
             <span slot="label">
@@ -28,9 +24,23 @@
               >{{ p.user.name }}</span
             >
           </el-form-item>
+          <el-form-item>
+            <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
+            {{ endtime }}
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="截止时间后投票无效"
+              placement="right"
+            >
+              <span style="margin-left:8px">
+                <svg-icon icon-class="hint"
+              /></span>
+            </el-tooltip>
+          </el-form-item>
         </el-form>
       </div>
-      <div class="chart">
+      <div class="chart" v-loading="loading">
         <div v-if="!showAns" style="width:50%">
           <el-popconfirm title="确定要接收吗？" @onConfirm="addpoll(true)">
             <el-button slot="reference" type="primary">Accept</el-button>
@@ -52,7 +62,7 @@
               <span slot="label">
                 <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span
               >
-              <span> {{ (accept / total).toFixed(2) * 100 }}% </span>
+              <span> {{ getNum(accept, total) }}% </span>
               <span
                 v-if="myresult == true"
                 style="color:#409EFF; font-weight:500"
@@ -60,7 +70,7 @@
               >
               <el-progress
                 class="progress"
-                :percentage="(accept / total) * 100"
+                :percentage="getpercentage(accept, total)"
                 status="success"
               ></el-progress>
             </el-form-item>
@@ -68,7 +78,7 @@
               <span slot="label">
                 <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span
               >
-              {{ (reject / total).toFixed(2) * 100 }}%
+              {{ getNum(reject, total) }}%
               <span
                 v-if="myresult == false"
                 style="color:#409EFF; font-weight:500"
@@ -76,7 +86,7 @@
               >
               <el-progress
                 class="progress"
-                :percentage="(reject / total) * 100"
+                :percentage="getpercentage(reject, total)"
                 status="exception"
               ></el-progress>
             </el-form-item>
@@ -86,9 +96,9 @@
               >
               <span
                 v-if="myresult == undefined"
-                style="color:#409EFF; font-weight:500"
-                >[未参与投票]</span
-              >
+                style="color:#409EFF; font-weight:500;margin-right:5px"
+                >[您未参与投票]
+              </span>
               <el-link type="primary" :underline="false" @click="dialog = true"
                 >详情
               </el-link>
@@ -97,12 +107,7 @@
         </div>
       </div>
 
-      <el-dialog
-        title="投票详情"
-        :visible.sync="dialog"
-        width="55%"
-        :before-close="handleClose"
-      >
+      <el-dialog title="投票详情" :visible.sync="dialog" width="55%">
         <el-form>
           <el-form-item>
             <span slot="label">
@@ -134,10 +139,6 @@
         </span>
       </el-dialog>
     </div>
-    {{ acceptlist }}
-    {{ rejectlist }}
-    {{ total }}
-    <!-- {{ paper }} -->
   </div>
 </template>
 <script>
@@ -146,6 +147,7 @@ import { getPaper, getVoteDetail, addpoll } from "@/api/paper";
 export default {
   data() {
     return {
+      loading: false,
       level: [
         {
           value: 1,
@@ -178,6 +180,8 @@ export default {
       dialog: false,
       accept: "",
       reject: "",
+      startTime: "",
+      endtime: "",
       acceptlist: [],
       rejectlist: [],
       total: "",
@@ -188,19 +192,44 @@ export default {
         vote: {
           id: ""
         }
-      }
+      },
+      paperResult: 3
     };
   },
   computed: {
     getlevel() {
-      return val => this.level.find(item => item.value == val);
+      return val => this.level.find(item => item.value == val).label;
+    },
+    getpercentage() {
+      return (val, total) => {
+        if (total == 0) {
+          return 0;
+        }
+        return (val / total) * 100;
+      };
+    },
+    getNum() {
+      return (val, total) => {
+        if (total == 0) {
+          return 0;
+        }
+        return (val / total).toFixed(2) * 100;
+      };
     }
+    // getddl() {
+    //   return (st, et) => {
+    //     return st.
+    //   }
+    // }
   },
   created() {
     this.pid = this.$route.params.id;
     getPaper(this.pid).then(res => {
+      console.log(res.data);
       this.paper = res.data;
       this.vid = res.data.vote.id;
+      this.endtime = res.data.vote.endTime;
+      this.startTime = res.data.vote.startTIme;
     });
     getVoteDetail(this.pid).then(res => {
       console.log(res);
@@ -221,6 +250,7 @@ export default {
     this.ws.close();
   },
   methods: {
+    // 初始化websocket
     initWebSocket() {
       let that = this;
       if (window.WebSocket) {
@@ -245,18 +275,25 @@ export default {
           that.accept = data.accept;
           that.reject = data.reject;
           that.myresult = data.result;
+          that.acceptlist = data.acceptnames;
+          that.rejectlist = data.rejectnames;
         };
       }
     },
     addpoll(result) {
       this.pollform.result = result;
       this.pollform.vote.id = this.vid;
-      addpoll(this.vid, this.pollform).then(res => {
-        this.showAns = true;
-        this.accept = res.data.accept;
-        this.reject = res.data.reject;
-        this.total = res.data.total;
-      });
+      this.loading = true;
+      addpoll(this.vid, this.pollform)
+        .then(res => {
+          this.showAns = true;
+          this.accept = res.data.accept;
+          this.reject = res.data.reject;
+          this.total = res.data.total;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     toAccept() {},
     roReject() {},

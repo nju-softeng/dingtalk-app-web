@@ -129,7 +129,7 @@ export const constantRoutes = [
       {
         path: "detail/:id",
         component: () => import("@/views/paper/detail"),
-        name: "Vote",
+        name: "Detail",
         meta: { title: "详细", noCache: true, activeMenu: "/paper/index" },
         hidden: true
       },

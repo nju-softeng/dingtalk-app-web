@@ -131,11 +131,12 @@ export default {
     this.id = this.$route.params.id;
     getPaper(this.id).then(res => {
       this.paper = res.data;
-      console.log(this.paper);
-    });
-    getVoteDetail(this.id).then(res => {
-      this.acceptlist = res.data.acceptnames;
-      this.rejectlist = res.data.rejectnames;
+      if (this.paper.paper.result != undefined) {
+        getVoteDetail(this.id).then(res => {
+          this.acceptlist = res.data.acceptnames;
+          this.rejectlist = res.data.rejectnames;
+        });
+      }
     });
   },
   methods: {

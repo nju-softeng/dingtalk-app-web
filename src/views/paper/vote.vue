@@ -6,36 +6,29 @@
       <div class="test">
         <el-form>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="paper" /> 论文名称</span>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 论文名称</span>
             {{ paper.title }}
           </el-form-item>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="grade" /> 论文分类</span>
+            <span slot="label">
+              <svg-icon icon-class="grade" /> 论文分类</span>
             {{ getlevel(paper.level) }}
           </el-form-item>
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="people" /> 论文作者
             </span>
-            <span
-              style="margin:10px"
-              v-for="p in paper.paperDetails"
-              :key="p.index"
-              >{{ p.user.name }}</span
-            >
+            <span style="margin:10px" v-for="p in paper.paperDetails" :key="p.index">{{ p.user.name }}</span>
           </el-form-item>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
-            {{ endtime }}
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="截止时间后投票无效"
-              placement="right"
-            >
+            <span slot="label">
+              <svg-icon icon-class="date" /> 投票截止</span>
+            {{ getddl(startTime, endtime) }}
+            <span v-if="isEnd"> [已结束]</span>
+            <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
               <span style="margin-left:8px">
-                <svg-icon icon-class="hint"
-              /></span>
+                <svg-icon icon-class="hint" /></span>
             </el-tooltip>
           </el-form-item>
         </el-form>
@@ -46,13 +39,7 @@
             <el-button slot="reference" type="primary">Accept</el-button>
           </el-popconfirm>
 
-          <el-popconfirm
-            @onConfirm="addpoll(false)"
-            style="margin-left:50px"
-            icon="el-icon-info"
-            iconColor="red"
-            title="确定要拒绝吗？"
-          >
+          <el-popconfirm @onConfirm="addpoll(false)" style="margin-left:50px" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
             <el-button slot="reference" type="danger">Reject</el-button>
           </el-popconfirm>
         </div>
@@ -60,47 +47,24 @@
           <el-form>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span
-              >
+                <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
               <span> {{ getNum(accept, total) }}% </span>
-              <span
-                v-if="myresult == true"
-                style="color:#409EFF; font-weight:500"
-                >[已选]</span
-              >
-              <el-progress
-                class="progress"
-                :percentage="getpercentage(accept, total)"
-                status="success"
-              ></el-progress>
+              <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
+              <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span
-              >
+                <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
               {{ getNum(reject, total) }}%
-              <span
-                v-if="myresult == false"
-                style="color:#409EFF; font-weight:500"
-                >[已选]</span
-              >
-              <el-progress
-                class="progress"
-                :percentage="getpercentage(reject, total)"
-                status="exception"
-              ></el-progress>
+              <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
+              <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span
-              >
-              <span
-                v-if="myresult == undefined"
-                style="color:#409EFF; font-weight:500;margin-right:5px"
-                >[您未参与投票]
+                <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
+              <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
               </span>
-              <el-link type="primary" :underline="false" @click="dialog = true"
-                >详情
+              <el-link type="primary" :underline="false" @click="dialog = true">详情
               </el-link>
             </el-form-item>
           </el-form>
@@ -114,24 +78,14 @@
               <svg-icon icon-class="paper" /> 接收{{ accept }}票:
             </span>
 
-            <el-tag
-              style="margin:0px 4px;"
-              v-for="item in acceptlist"
-              :key="item.index"
-              >{{ item }}</el-tag
-            >
+            <el-tag style="margin:0px 4px;" v-for="item in acceptlist" :key="item.index">{{ item }}</el-tag>
           </el-form-item>
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
             </span>
 
-            <el-tag
-              style="margin:0px 4px;"
-              v-for="item in rejectlist"
-              :key="item.index"
-              >{{ item }}</el-tag
-            >
+            <el-tag style="margin:0px 4px;" v-for="item in rejectlist" :key="item.index">{{ item }}</el-tag>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -180,6 +134,7 @@ export default {
       dialog: false,
       accept: "",
       reject: "",
+      isEnd: "false",
       startTime: "",
       endtime: "",
       acceptlist: [],
@@ -192,8 +147,7 @@ export default {
         vote: {
           id: ""
         }
-      },
-      paperResult: 3
+      }
     };
   },
   computed: {
@@ -215,12 +169,12 @@ export default {
         }
         return (val / total).toFixed(2) * 100;
       };
+    },
+    getddl() {
+      return (st, et) => {
+        return st + " " + et.slice(0, 5);
+      };
     }
-    // getddl() {
-    //   return (st, et) => {
-    //     return st.
-    //   }
-    // }
   },
   created() {
     this.pid = this.$route.params.id;
@@ -229,7 +183,8 @@ export default {
       this.paper = res.data;
       this.vid = res.data.vote.id;
       this.endtime = res.data.vote.endTime;
-      this.startTime = res.data.vote.startTIme;
+      this.startTime = res.data.vote.startTime;
+      this.isEnd = res.data.vote.status;
     });
     getVoteDetail(this.pid).then(res => {
       console.log(res);
@@ -295,14 +250,13 @@ export default {
           this.loading = false;
         });
     },
-    toAccept() {},
-    roReject() {},
+
     createVote() {
       console.log("????");
       this.dialog = false;
     },
     goBack() {
-      this.$router.go(-1);
+      this.$router.push({ path: "/paper/index" });
     }
   }
 };

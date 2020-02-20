@@ -58,3 +58,11 @@ export function submitResult(id, result) {
     }
   });
 }
+
+// 删除论文记录
+export function rmPaper(id) {
+  return axios({
+    url: "/paper/delete/" + id,
+    method: "get"
+  });
+}

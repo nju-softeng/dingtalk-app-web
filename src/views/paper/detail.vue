@@ -6,85 +6,83 @@
       <div class="test">
         <el-form>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="paper" /> 论文名称</span>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 论文名称</span>
             {{ paper.title }}
           </el-form-item>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="school" /> 投稿地点</span>
+            <span slot="label">
+              <svg-icon icon-class="school" /> 投稿地点</span>
             {{ paper.journal }}
           </el-form-item>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="grade" /> 论文分类</span>
+            <span slot="label">
+              <svg-icon icon-class="grade" /> 论文分类</span>
             {{ getlevel(paper.level) }}
           </el-form-item>
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="people" /> 论文作者
             </span>
-            <span
-              style="margin:10px"
-              v-for="p in paper.paperDetails"
-              :key="p.index"
-              >{{ p.user.name }}</span
-            >
+            <span style="margin:10px" v-for="p in paper.paperDetails" :key="p.index">{{ p.user.name }}</span>
           </el-form-item>
         </el-form>
       </div>
-      <div class="chart">
-        <!-- <div>
-          <el-button type="primary" v-if="!vote" @click="dialog = true">发起投票</el-button>
-        </div> -->
+      <div style="width:50%">
+        <el-form>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="vote" /> 投票结果</span>
+            <el-tag v-if="paper.vote == undefined" size="small">投票未发起</el-tag>
+            <el-tag type="success" size="small" v-else-if="paper.vote.result == true">ACCEPT</el-tag>
+            <el-tag type="danger" size="small" v-else-if="paper.vote.result == false">REJECT</el-tag>
+            <el-tag v-else size="small">等待投票结果</el-tag>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 最终结果</span>
 
-        <div v-if="vote" style="width:50%">
-          <el-popconfirm title="确定要接受吗？">
-            <el-button slot="reference" type="success">Accept</el-button>
-          </el-popconfirm>
-
-          <el-popconfirm
-            style="margin-left:100px"
-            confirmButtonText="好的"
-            cancelButtonText="再想想"
-            icon="el-icon-info"
-            iconColor="red"
-            title="确定要拒绝吗？"
-          >
-            <el-button slot="reference" type="danger">Reject</el-button>
-          </el-popconfirm>
-        </div>
-
-        <div v-if="vote && voted">
-          <el-form>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="paper" /> Accept {{}}</span
-              >
-              <el-progress
-                class="progress"
-                :percentage="100"
-                status="success"
-              ></el-progress>
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="paper" /> Reject {{}}</span
-              >
-              <el-progress
-                class="progress"
-                :percentage="50"
-                status="exception"
-              ></el-progress>
-            </el-form-item>
-          </el-form>
-        </div>
+            <el-tag type="success" size="small" v-if="paper.result == true">ACCEPT</el-tag>
+            <el-tag type="danger" size="small" v-else-if="paper.result == false">REJECT</el-tag>
+            <el-tag size="small" v-else-if="paper.vote == undefined || paper.vote.result == null">论文尚未投稿</el-tag>
+            <el-tag size="small" type="danger" v-else-if="paper.vote.result == false">内审未通过</el-tag>
+            <el-tag size="small" v-else>等待中</el-tag>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
-
-    {{ vote }}
-    <!-- {{ paper }} -->
+    <el-divider></el-divider>
+    <el-alert v-if="paper.result == undefined" title="论文投稿结果尚未确定，无AC变化显示" type="warning">
+    </el-alert>
+    <div class="ac" v-else>
+      <el-form :label-position="top">
+        <el-form-item>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 作者AC变化</span>
+          <span style="padding:6px" v-for="item in paper.paperDetails" :key="item.index">{{ item.user.name }}: {{ item.ac }}</span>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 投稿支持者AC</span>
+          <span>
+            <span v-if="paper.result == true">+ 1</span>
+            <span v-else>- 1</span>
+          </span>
+          <el-tag style="margin:0px 4px;" v-for="item in acceptlist" :key="item.index">{{ item }}</el-tag>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 投稿反对者AC</span>
+          <span v-if="paper.result == false"> + 1</span>
+          <span v-else> - 1</span>
+          <el-tag style="margin:0px 4px;" v-for="item in rejectlist" :key="item.index">{{ item }}</el-tag>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
-import { getPaper } from "@/api/paper";
+import { getPaper, getVoteDetail } from "@/api/paper";
 
 export default {
   data() {
@@ -116,11 +114,12 @@ export default {
         }
       ],
       id: null,
-      dialog: false,
       vote: false,
       voted: false,
       endtime: "",
-      paper: {}
+      paper: {},
+      acceptlist: "",
+      rejectlist: ""
     };
   },
   computed: {
@@ -132,17 +131,16 @@ export default {
     this.id = this.$route.params.id;
     getPaper(this.id).then(res => {
       this.paper = res.data;
+      console.log(this.paper);
     });
-    console.log(this.$route.params.id);
+    getVoteDetail(this.id).then(res => {
+      this.acceptlist = res.data.acceptnames;
+      this.rejectlist = res.data.rejectnames;
+    });
   },
   methods: {
     accept() {},
     reject() {},
-    createVote() {
-      console.log("????");
-      this.dialog = false;
-      this.vote = true;
-    },
     goBack() {
       this.$router.go(-1);
     }
@@ -157,14 +155,19 @@ export default {
   margin-top: 20px;
   margin-left: 10px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  // justify-content: space-around;
+  // align-items: center;
 }
 .test {
-  width: 50%;
+  padding-left: 20px;
+  width: 60%;
   border: 1px;
   // border-style: solid;
 }
+.ac {
+  padding-left: 20px;
+}
+
 .chart {
   width: 50%;
   border: 1px;

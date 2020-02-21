@@ -107,12 +107,20 @@ export const constantRoutes = [
   {
     path: "/task",
     component: Layout,
+    name: "Task",
+    meta: { title: "迭代绩效", icon: "component" },
     children: [
+      {
+        path: "assign",
+        name: "Assign",
+        component: () => import("@/views/task/assign"),
+        meta: { title: "迭代分配", icon: "table" }
+      },
       {
         path: "index",
         name: "Task",
         component: () => import("@/views/task/index"),
-        meta: { title: "迭代绩效", icon: "table" }
+        meta: { title: "我的迭代", icon: "table" }
       }
     ]
   },

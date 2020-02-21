@@ -2,10 +2,15 @@
   <div class="app-container">
     <el-tabs v-model="activetab" @tab-click="handleClick" type="border-card">
       <el-tab-pane label="待审核" name="first">
-        <checking v-if="firstTab" />
+        <span slot="label"><i class="el-icon-s-claim"></i> 待审核</span>
+        <div style="height:74vh">
+          <checking v-if="firstTab" />
+        </div>
       </el-tab-pane>
       <el-tab-pane label="已审核" name="second" lazy>
-        <checked v-if="secondTab" />
+        <div style="height:74vh">
+          <checked v-if="secondTab" />
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>

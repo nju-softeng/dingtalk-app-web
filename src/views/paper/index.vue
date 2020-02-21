@@ -295,6 +295,10 @@ export default {
     });
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
+    this.$message({
+      showClose: true,
+      message: "点击论文标题可以查看详细内容"
+    });
   },
   computed: {
     getPermission() {

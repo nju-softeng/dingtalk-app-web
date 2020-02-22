@@ -121,6 +121,12 @@ export const constantRoutes = [
         name: "Task",
         component: () => import("@/views/task/index"),
         meta: { title: "我的迭代", icon: "table" }
+      },
+      {
+        path: "bug",
+        name: "Bug",
+        component: () => import("@/views/task/bug"),
+        meta: { title: "bug报告", icon: "bug" }
       }
     ]
   },

@@ -5,6 +5,21 @@
       I need scroll here when this content overflow the parent.
     </div>
     <el-button @click="close()">close</el-button>
+    <el-tooltip class="item" effect="dark" placement="top-start">
+      <div slot="content">
+        <span style="padding:5px;">asdf</span>
+        <span style="padding:5px;">asdfa</span>
+        <span style="padding:5px;"> asdf</span>
+        <span style="padding:5px;">asdfad</span>
+      </div>
+
+      <div class="tt">
+        <span style="padding:5px;">asdf</span>
+        <span style="padding:5px;">asdfa</span>
+        <span style="padding:5px;"> asdf</span>
+        <span style="padding:5px;">asdfad</span>
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
@@ -12,6 +27,7 @@
 export default {
   created() {
     this.initWebSocket();
+    console.log(window.location.href);
   },
   destroyed() {
     // 离开页面时关闭websocket连接
@@ -47,4 +63,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.tt {
+  width: 100px;
+  justify-content: flex-start;
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>

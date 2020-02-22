@@ -6,22 +6,22 @@
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
         </div>
         <div class="bar" style="border-width: 0 0 1px 0;border-style: solid;border-color: #f6f6f6;">
-          <div style="width:380px;">论文信息</div>
-          <div style="width:230px; padding-left:40px">论文作者</div>
-          <div style="width:100px;">评审结果</div>
+          <div style="width:390px;padding-left: 10px;">论文信息</div>
+          <div style="width:200px; padding-left:40px">论文作者</div>
+          <div style="width:100px;">投票结果</div>
           <div style="width:180px;">投稿结果</div>
-          <div style="width:100px;">操作</div>
+          <div style="width:120px;">操作</div>
         </div>
         <div v-for="(item, index) in list" :key="index">
           <div class="paper-item">
             <div class="content">
               <div class="left-content">
                 <div class="title">
-                  <router-link :to="'/paper/detail/' + item.id" class="link-type">
-                    <el-link type="primary">
+                  <el-tooltip class="item" effect="dark" :content="item.title" placement="top-start">
+                    <router-link :to="'/paper/detail/' + item.id" class="link-type">
                       <svg-icon icon-class="paper" /> {{ item.title }}
-                    </el-link>
-                  </router-link>
+                    </router-link>
+                  </el-tooltip>
                 </div>
                 <div style="display:flex" class="detail">
                   <div class="journal">
@@ -29,13 +29,20 @@
                   </div>
                   <div class="time">
                     <svg-icon icon-class="date" />
-                    {{ item.insertTime.substr(0, 10) }}
+                    结果日期： {{ item.issueDate }}
                   </div>
                 </div>
               </div>
 
-              <div class="info-item namelist">
-                <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+              <div class="info-item">
+                <el-tooltip :disabled="item.paperDetails.length <= 3" class="item" effect="dark" placement="top-start">
+                  <div slot="content">
+                    <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+                  </div>
+                  <div class="namelist">
+                    <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+                  </div>
+                </el-tooltip>
               </div>
 
               <div class="info-item" style="width:100px;">
@@ -56,12 +63,11 @@
 
               <div class="info-item" style="width:120px;">
                 <div style="margin-top:7px">
-                  <el-tag v-if="item.vote == undefined || item.vote.status == false">待内部投票</el-tag>
-                  <el-tag type="danger" v-else-if="item.vote.result == false">内审未通过</el-tag>
-                  <el-tag v-else-if="item.result == undefined">等待最终结果</el-tag>
-                  <el-tag v-else-if="item.result == true" type="success">ACCEPT</el-tag>
-                  <el-tag v-else type="danger">REJECT</el-tag>
-                  <span style="padding:5px;">{{ item.date }}</span>
+                  <el-tag class="paper-tag" v-if="item.vote == undefined || item.vote.status == false">待内部投票</el-tag>
+                  <el-tag class="paper-tag" type="danger" v-else-if="item.vote.result == false">未提交</el-tag>
+                  <el-tag class="paper-tag" type="info" v-else-if="item.result == undefined">审稿中</el-tag>
+                  <el-tag class="paper-tag" v-else-if="item.result == true" type="success">ACCEPT</el-tag>
+                  <el-tag class="paper-tag" v-else type="danger">REJECT</el-tag>
                 </div>
               </div>
 
@@ -157,7 +163,7 @@
               </el-form-item>
               <el-form-item>
                 <span slot="label">
-                  <svg-icon icon-class="school" /> 投稿地点</span>
+                  <svg-icon icon-class="school" /> 刊物/会议</span>
                 <el-input v-model="paperform.journal"></el-input>
               </el-form-item>
 
@@ -168,6 +174,13 @@
                   <el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
+              </el-form-item>
+
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 通知时间</span>
+                <el-date-picker style="width:193px" v-model="paperform.issueDate" type="date" placeholder="选择日期">
+                </el-date-picker>
               </el-form-item>
 
               <el-form-item v-for="(author, index) in paperform.paperDetails" :prop="'paperDetails.' + index + '.user.id'" :key="index" :rules="{
@@ -220,12 +233,13 @@ export default {
       dialog: false,
       journalrank: [],
       state: "",
+      currentPage: 0,
       paperform: {
         id: null,
         title: null,
         journal: null,
         level: null,
-        currentPage: 0,
+        issueDate: null,
         paperDetails: [
           {
             num: 1,
@@ -407,7 +421,7 @@ export default {
       this.paperform.id = null;
       this.paperform.journal = "";
       this.paperform.title = "";
-
+      this.paperform.issueDate = "";
       this.paperform.level = "";
       this.paperform.paperDetails = [
         {
@@ -488,6 +502,7 @@ export default {
         this.paperform.title = item.title;
         this.paperform.journal = item.journal;
         this.paperform.level = item.level;
+        this.paperform.issueDate = item.issueDate;
         this.paperform.paperDetails = item.paperDetails;
       } else {
         this.$message({
@@ -609,7 +624,10 @@ export default {
       display: flex;
       flex-direction: column;
       .title {
-        color: #1897ff;
+        a {
+          color: #409eff;
+        }
+        color: #409eff;
         font-weight: 500;
         margin-bottom: 5px;
         width: 380px;
@@ -622,7 +640,7 @@ export default {
         font-size: 13px;
         padding-top: 7px;
         .journal {
-          width: 200px;
+          width: 180px;
           overflow: hidden; /*超出部分隐藏*/
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -634,9 +652,12 @@ export default {
     }
   }
   .namelist {
-    width: 240px;
+    width: 200px;
     padding: 0 20px;
-    justify-content: flex-start;
+
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .info-item {
     color: gray;
@@ -651,5 +672,10 @@ export default {
   height: 50px;
   display: flex;
   justify-content: flex-start;
+}
+
+.paper-tag {
+  width: 72px;
+  text-align: center;
 }
 </style>

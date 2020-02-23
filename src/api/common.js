@@ -7,3 +7,13 @@ export function getUserList() {
     method: "get"
   });
 }
+
+export function authenticate(url) {
+  return axios({
+    url: "/jsapi_signature",
+    method: "post",
+    data: {
+      url: url
+    }
+  });
+}

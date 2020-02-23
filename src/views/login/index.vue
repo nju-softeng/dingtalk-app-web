@@ -12,15 +12,18 @@
         <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
-        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
+        <div
+          class="grid-content"
+          v-loading="loading"
+          element-loading-text="登录中"
+        ></div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import * as dd from "dingtalk-jsapi/entry/union";
-import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
+import { getAuthCode } from "@/utils/dingtalk";
 import { Message } from "element-ui";
 export default {
   data: () => ({
@@ -61,24 +64,20 @@ export default {
     //   });
 
     // 获取钉钉临时授权码
-    dd.ready(() => {
-      requestAuthCode({ corpId: "dingeff939842ad9207f35c2f4657eb6378f" }).then(
-        result => {
-          this.code.authcode = result.code; // 获取authcode
-          this.$store
-            .dispatch("user/_login", this.code)
-            .then(() => {
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
-              });
-            })
-            .catch(() => {
-              this.loading = false;
-              Message.error("登录失败");
-            });
-        }
-      );
+    getAuthCode("dingeff939842ad9207f35c2f4657eb6378f").then(res => {
+      this.code.authcode = res.code; // 获取authcode
+      this.$store
+        .dispatch("user/_login", this.code)
+        .then(() => {
+          this.$router.push({
+            path: this.redirect || "/",
+            query: this.otherQuery
+          });
+        })
+        .catch(() => {
+          this.loading = false;
+          Message.error("登录失败");
+        });
     });
   },
   methods: {

@@ -1,8 +1,13 @@
-import * as dd from "dingtalk-jsapi/entry/union";
-import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode";
-import { authenticate } from "@/api/common";
+import { authenticate } from "@/api/common"; // jsapi 鉴权时获取签名信息
+import * as dd from "dingtalk-jsapi/entry/union"; // 按需应用，微应用部分
+import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode"; // 登陆用临时授权码
+import choose from "dingtalk-jsapi/api/biz/contact/choose"; // PC 通讯录选人
 
-function dingtalkconfig(url) {
+/**
+ * 鉴权
+ * @param url 前端当前的url
+ */
+function ddconfig(url) {
   authenticate(url).then(res => {
     dd.config({
       agentId: res.data.agentId, // 必填，微应用ID
@@ -26,8 +31,8 @@ function dingtalkconfig(url) {
 
 // 通讯录选人
 export function contactChoose(url) {
-  dingtalkconfig(url);
-  return dd.biz.contact.choose({
+  ddconfig(url); // 鉴权
+  return choose({
     multiple: true, //是否多选：true多选 false单选； 默认true
     corpId: "dingeff939842ad9207f35c2f4657eb6378f", //企业id
     max: 10 //人数限制，当multiple为true才生效，可选范围1-1500
@@ -36,5 +41,5 @@ export function contactChoose(url) {
 
 // 获取登陆用临时授权码
 export function getAuthCode(corpId) {
-  return dd.runtime.permission.requestAuthCode({ corpId: corpId });
+  return requestAuthCode({ corpId: corpId });
 }

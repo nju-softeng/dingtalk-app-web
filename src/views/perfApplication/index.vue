@@ -1,28 +1,60 @@
 <template>
   <div class="app-container">
-    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="35%">
+    <el-drawer
+      title="绩效申请"
+      :visible.sync="drawer"
+      :modal="false"
+      :direction="direction"
+      @closed="emptyForm"
+      size="35%"
+    >
       <div class="drawer-content">
-        <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
+        <el-form
+          :model="form"
+          label-width="90px"
+          :rules="rules"
+          ref="form"
+          label-position="left"
+        >
           <el-form-item prop="auditorid">
-            <span slot="label">
-              <svg-icon icon-class="people" /> 审核人</span>
-            <el-select style="width:200px" v-model="form.auditorid" placeholder="请选择审核人">
-              <el-option v-for="item in auditors" :key="item.index" :label="item.name" :value="item.id"></el-option>
+            <span slot="label"> <svg-icon icon-class="people" /> 审核人</span>
+            <el-select
+              style="width:200px"
+              v-model="form.auditorid"
+              placeholder="请选择审核人"
+            >
+              <el-option
+                v-for="item in auditors"
+                :key="item.index"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="dvalue">
-            <span slot="label">
-              <svg-icon icon-class="dvalue" /> D值</span>
+            <span slot="label"> <svg-icon icon-class="dvalue" /> D值</span>
             <el-input v-model="form.dvalue" style="width:200px"></el-input>
           </el-form-item>
           <el-form-item prop="date">
-            <span slot="label">
-              <svg-icon icon-class="week" /> 申请周</span>
-            <el-date-picker v-model="form.date" style="width:200px" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
+            <span slot="label"> <svg-icon icon-class="week" /> 申请周</span>
+            <el-date-picker
+              v-model="form.date"
+              style="width:200px"
+              type="week"
+              value-format="yyyy-MM-dd"
+              format="yyyy 第 WW 周"
+              placeholder="选择周"
+              :picker-options="{ firstDayOfWeek: 1 }"
+              @change="getDate"
+            ></el-date-picker>
           </el-form-item>
         </el-form>
         <div>
-          <el-tag v-if="form.date" size="medial" style="font-size:12px;margin:5px 0;">
+          <el-tag
+            v-if="form.date"
+            size="medial"
+            style="font-size:12px;margin:5px 0;"
+          >
             您选择的是 {{ monthWeek }}
           </el-tag>
         </div>
@@ -32,11 +64,28 @@
             <i class="el-icon-plus"></i>
             添加AC申请
           </el-button>
-          <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index" style="margin : 5px 0px 5px 0px;display:flex">
-            <el-input v-model="item.reason" style="border-radius: 0px; !important" placeholder="申请原因"></el-input>
-            <el-input v-model="item.ac" style="width:18%" placeholder="AC"></el-input>
+          <div
+            :label="index === 0 ? 'AC值' : ''"
+            v-for="(item, index) in form.acItems"
+            :key="index"
+            style="margin : 5px 0px 5px 0px;display:flex"
+          >
+            <el-input
+              v-model="item.reason"
+              style="border-radius: 0px; !important"
+              placeholder="申请原因"
+            ></el-input>
+            <el-input
+              v-model="item.ac"
+              style="width:18%"
+              placeholder="AC"
+            ></el-input>
 
-            <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
+            <el-button
+              style="border: 0px"
+              icon="el-icon-close"
+              @click.prevent="rmAcItem(item)"
+            />
           </div>
           <br />
         </div>
@@ -44,15 +93,33 @@
 
       <div class="drawer-footer">
         <el-button style="width:50%" @click="drawer = false">取 消</el-button>
-        <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
+        <el-button
+          style="width:50%"
+          type="primary"
+          @click="submit()"
+          :loading="loading"
+          >{{ loading ? "提交中 ..." : "确 定" }}</el-button
+        >
       </div>
     </el-drawer>
 
-    <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
+    <el-button
+      type="primary"
+      @click="addApply()"
+      icon="el-icon-plus"
+      style="margin : 0px 0px 10px 0px;"
+      >提交申请</el-button
+    >
 
     <div style="height:430px">
-      <el-table :data="list" border fit highlight-current-row style="width: 100%">
-        <el-table-column width="30px" type="expand">
+      <el-table
+        :data="list"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+      >
+        <el-table-column width="30px" label="#" type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline>
               <el-form-item label="AC申请信息：">
@@ -104,7 +171,14 @@
 
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改申请</el-button>
+            <el-button
+              v-if="!row.status"
+              type="text"
+              size="mini"
+              icon="el-icon-edit"
+              @click="addModify(row)"
+              >修改申请</el-button
+            >
             <el-tag v-else type="info">已被审核无法操作</el-tag>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
@@ -113,7 +187,17 @@
     </div>
 
     <div style="text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+      <el-pagination
+        @prev-click="handlePrev"
+        @next-click="handleNext"
+        @current-change="handleCurrentChange"
+        background
+        :hide-on-single-page="total > 10"
+        small
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="10"
+      >
       </el-pagination>
     </div>
     {{ form }}

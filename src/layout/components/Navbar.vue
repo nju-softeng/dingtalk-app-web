@@ -1,6 +1,11 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      id="hamburger-container"
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
+    />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
@@ -11,7 +16,10 @@
         </el-tooltip>
       </template>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+      >
         <div class="avatar-wrapper">
           <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
@@ -23,10 +31,16 @@
           <router-link to="/">
             <el-dropdown-item>Dashboard</el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <a
+            target="_blank"
+            href="https://github.com/PanJiaChen/vue-element-admin/"
+          >
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+          <a
+            target="_blank"
+            href="https://panjiachen.github.io/vue-element-admin-site/#/"
+          >
             <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
@@ -73,6 +87,9 @@ export default {
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  border-width: 0 0 0 0.5px;
+  border-style: solid;
+  border-color: #cccccc;
 
   .hamburger-container {
     line-height: 46px;

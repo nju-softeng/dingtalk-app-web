@@ -12,13 +12,10 @@
             <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
 
-          角色管理</el-tab-pane
-        >
+          角色管理</el-tab-pane>
         <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
       </el-tabs>
     </div>
-
-    {{ userlist }}
   </div>
 </template>
 <script>

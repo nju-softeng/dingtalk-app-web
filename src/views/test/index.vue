@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import Identicon from "identicon.js";
+import { getavatar } from "@/utils/initavatar";
 
 export default {
   data() {
@@ -33,12 +33,7 @@ export default {
     };
   },
   created() {
-    let imgData = new Identicon(
-      "d3b07384d113edec49eaa6238ad5ff00",
-      100
-    ).toString();
-    console.log(imgData);
-    this.imgUrl = "data:image/png;base64," + imgData;
+    this.imgUrl = getavatar("刘博涵");
   },
   methods: {}
 };

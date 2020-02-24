@@ -9,6 +9,7 @@ import choose from "dingtalk-jsapi/api/biz/contact/choose"; // PC 通讯录选�
  */
 function ddconfig(url) {
   authenticate(url).then(res => {
+    console.log(res);
     dd.config({
       agentId: res.data.agentId, // 必填，微应用ID
       corpId: res.data.corpId, //必填，企业ID
@@ -31,7 +32,12 @@ function ddconfig(url) {
 
 // 通讯录选人
 export function contactChoose(url) {
+  console.log(url);
   ddconfig(url); // 鉴权
+  for (let i = 0; i < 1000; i++) {
+    console.log("????");
+  }
+
   return choose({
     multiple: true, //是否多选：true多选 false单选； 默认true
     corpId: "dingeff939842ad9207f35c2f4657eb6378f", //企业id

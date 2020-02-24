@@ -4,6 +4,7 @@
     <div id="bottom">
       I need scroll here when this content overflow the parent.
     </div>
+    <img width="100" :src="imgUrl" />
 
     <el-tooltip class="item" effect="dark" placement="top-start">
       <div slot="content">
@@ -22,19 +23,22 @@
     </el-tooltip>
   </div>
 </template>
-
 <script>
-//import { authenticate } from "@/api/common";
+import Identicon from "identicon.js";
 
-import { contactChoose, getAuthCode } from "@/utils/dingtalk";
 export default {
+  data() {
+    return {
+      imgUrl: ""
+    };
+  },
   created() {
-    getAuthCode("dingeff939842ad9207f35c2f4657eb6378f").then(res => {
-      console.log(res);
-    });
-    contactChoose(window.location.href).then(res => {
-      console.log(res);
-    });
+    let imgData = new Identicon(
+      "d3b07384d113edec49eaa6238ad5ff00",
+      100
+    ).toString();
+    console.log(imgData);
+    this.imgUrl = "data:image/png;base64," + imgData;
   },
   methods: {}
 };

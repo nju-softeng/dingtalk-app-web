@@ -7,6 +7,7 @@ import { getavatar } from "@/utils/initavatar";
 const state = {
   token: sessionStorage.getItem("token") ? sessionStorage.getItem("token") : "", // 认证凭证'
   name: "",
+  uid: "",
   roles: [],
   avatar: "",
   introduce: ""
@@ -20,6 +21,9 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar;
     sessionStorage.setItem("avatar", avatar);
+  },
+  SET_UID: (state, uid) => {
+    state.uid = uid;
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles;
@@ -59,6 +63,7 @@ const actions = {
         .then(response => {
           if (response.headers["token"] != null) {
             commit("SET_TOKEN", response.headers.token);
+            commit("SET_UID", response.headers.uid);
             sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
             sessionStorage.setItem("role", getRoles(response.headers["role"]));
             sessionStorage.setItem("uid", response.headers["uid"]);

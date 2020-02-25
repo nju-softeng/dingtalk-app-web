@@ -3,88 +3,110 @@
     <div class="action" style="margin-bottom:10px">
       <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代任务</el-button>
     </div>
-    {{ taskform }}
+    {{ projectform }}
     <div class="list">
       <el-card class="item" shadow="hover">
         鼠标悬浮时显示
       </el-card>
-      <el-card class="item" shadow="hover">
-        鼠标悬浮时显示
-      </el-card>
-      <el-card class="item" shadow="hover">
-        鼠标悬浮时显示
-      </el-card>
-      <el-card class="item" shadow="hover">
-        鼠标悬浮时显示
-      </el-card>
-      <el-card class="item" shadow="hover">
-        鼠标悬浮时显示
-      </el-card>
     </div>
-
+    {{ uid }}
     <el-dialog :visible.sync="dialog">
       <div slot="title">
         <span class="title-age">创建迭代任务 </span>
       </div>
-      <div>
-        <el-form>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 迭代名称:
-            </span>
-            <el-input v-model="taskform.name" style="width:350px" placeholder="请输入内容"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 起止时间:
-            </span>
-            <el-date-picker v-model="taskform.date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 分配任务:
-            </span>
-            <el-tag size="medium" closable style="margin: 0 2px" v-for="u in userlist" :key="u.index" @close="closeTag(u)">{{ u.name }}</el-tag>
-            <el-button style="margin-left:2px" size="mini" @click="choose()">
-              <i>
-                <svg-icon icon-class="addperson" /> </i> 添加</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+
+      <el-form v-loading="loading" ref="projectform" :rules="rules" :model="projectform">
+        <el-form-item prop="name">
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 迭代名称: </span>
+          <el-input v-model="projectform.name" style="width:350px" placeholder="请输入内容"></el-input>
+        </el-form-item>
+        <el-form-item prop="dates">
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 起止时间: </span>
+          <el-date-picker v-model="projectform.dates" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item prop="dingIds">
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 分配任务: </span>
+          <el-tag size="medium" closable style="margin: 0 2px" v-for="u in userlist" :key="u.index" @close="closeTag(u)">{{ u.name }}</el-tag>
+          <el-button style="margin-left:2px" size="mini" @click="choose()">
+            <i>
+              <svg-icon icon-class="addperson" /> </i> 添加</el-button>
+        </el-form-item>
+      </el-form>
+      {{ uid }}
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="dialog = false">确 定</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
+import { addProject } from "@/api/project.js";
 import { contactChoose } from "@/utils/dingtalk";
+
 export default {
   data() {
     return {
       userlist: [],
       dialog: false,
       list: [],
-      taskform: {
+      uid: "",
+      loading: false,
+      projectform: {
         name: "",
-        date: [],
-        userids: []
+        auditorid: "",
+        dates: [],
+        dingIds: []
+      },
+      rules: {
+        name: [{ required: true, message: "请输入任务名称", trigger: "blur" }],
+        dates: [{ required: true, message: "请选择时间", trigger: "blur" }],
+        dingIds: [{ required: true, message: "请分配任务", trigger: "blur" }]
       }
     };
   },
-  created() {},
+  created() {
+    this.uid = sessionStorage.getItem("uid");
+  },
+  computed: {},
   methods: {
-    choose() {
-      contactChoose(window.location.href, this.taskform.userids).then(res => {
-        console.log(res);
-        this.userlist = res;
-        this.taskform.userids = res.map(x => x.emplId);
+    submit() {
+      this.projectform.auditorid = this.uid;
+      this.$refs.projectform.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          addProject(this.projectform)
+            .then(() => {
+              this.dialog = false;
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        } else {
+          this.$notify({
+            title: "提交失败",
+            message: "请填写必要信息",
+            type: "warning"
+          });
+        }
       });
+    },
+    choose() {
+      contactChoose(window.location.href, this.projectform.dingIds).then(
+        res => {
+          console.log(res);
+          this.userlist = res;
+          this.projectform.dingIds = res.map(x => x.emplId);
+        }
+      );
     },
     closeTag(u) {
       this.userlist.splice(this.userlist.indexOf(u), 1);
+      this.projectform.dingIds.splice(this.projectform.dingIds.indexOf(u), 1);
     },
     closeDialog() {
       this.$refs.paperform.resetFields();

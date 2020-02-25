@@ -563,10 +563,6 @@ export default {
   justify-content: flex-end;
 }
 
-.test {
-  border-radius: 8px;
-  width: 90%;
-}
 .el-form {
   width: 618px;
 }

@@ -8,7 +8,7 @@ import choose from "dingtalk-jsapi/api/biz/contact/choose"; // PC 通讯录选�
  * @param url 前端当前的url
  */
 function ddconfig(url) {
-  authenticate(url).then(res => {
+  return authenticate(url).then(res => {
     dd.config({
       agentId: res.data.agentId, // 必填，微应用ID
       corpId: res.data.corpId, //必填，企业ID
@@ -30,12 +30,22 @@ function ddconfig(url) {
 }
 
 // 通讯录选人
-export function contactChoose(url) {
-  ddconfig(url); // 鉴权
-  return choose({
-    multiple: true, //是否多选：true多选 false单选； 默认true
-    corpId: "dingeff939842ad9207f35c2f4657eb6378f", //企业id
-    max: 10 //人数限制，当multiple为true才生效，可选范围1-1500
+export function contactChoose(url, userids) {
+  return new Promise((resolve, reject) => {
+    ddconfig(url)
+      .then(() => {
+        choose({
+          users: userids,
+          multiple: true, //是否多选：true多选 false单选； 默认true
+          corpId: "dingeff939842ad9207f35c2f4657eb6378f", //企业id
+          max: 10 //人数限制，当multiple为true才生效，可选范围1-1500
+        }).then(res => {
+          resolve(res);
+        });
+      })
+      .catch(err => {
+        reject(err);
+      });
   });
 }
 

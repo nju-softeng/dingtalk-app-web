@@ -111,9 +111,9 @@ export const constantRoutes = [
     meta: { title: "迭代绩效", icon: "component" },
     children: [
       {
-        path: "assign",
-        name: "Assign",
-        component: () => import("@/views/task/assign"),
+        path: "manage",
+        name: "Manage",
+        component: () => import("@/views/task/manage"),
         meta: { title: "迭代分配", icon: "table" }
       },
       {

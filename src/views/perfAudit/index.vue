@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activetab" @tab-click="handleClick" type="border-card">
+    <el-tabs v-model="activetab" @tab-click="handleClick">
       <el-tab-pane label="待审核" name="first">
         <span slot="label"><i class="el-icon-s-claim"></i> 待审核</span>
         <div style="height:74vh">

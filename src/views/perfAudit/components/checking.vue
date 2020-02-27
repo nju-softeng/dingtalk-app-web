@@ -252,6 +252,7 @@ export default {
       this.$options.methods.initData(this);
     },
     initData(that) {
+      that.form.cvalue = null;
       that.form.id = that.temp.id;
       that.form.acItems = that.temp.acItems.slice(0).map(v => {
         that.$set(v, "edit", false);

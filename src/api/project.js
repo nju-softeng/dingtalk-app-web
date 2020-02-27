@@ -7,3 +7,10 @@ export function addProject(data) {
     data
   });
 }
+
+export function listUnfinishProject(aid) {
+  return request({
+    url: "/project/unfinish/" + aid,
+    method: "get"
+  });
+}

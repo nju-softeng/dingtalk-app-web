@@ -38,6 +38,7 @@
           <el-form-item prop="date">
             <span slot="label"> <svg-icon icon-class="week" /> 申请周</span>
             <el-date-picker
+              v-show="!form.date"
               v-model="form.date"
               style="width:200px"
               type="week"
@@ -47,17 +48,18 @@
               :picker-options="{ firstDayOfWeek: 1 }"
               @change="getDate"
             ></el-date-picker>
+            <el-tag
+              v-show="form.date"
+              closable
+              @close="closeTag"
+              effect="plain"
+              size="medium"
+              style="font-size:12px;"
+            >
+              {{ monthWeek }}
+            </el-tag>
           </el-form-item>
         </el-form>
-        <div>
-          <el-tag
-            v-if="form.date"
-            size="medial"
-            style="font-size:12px;margin:5px 0;"
-          >
-            您选择的是 {{ monthWeek }}
-          </el-tag>
-        </div>
 
         <div>
           <el-button type="text" @click="addAcItem">
@@ -298,17 +300,17 @@ export default {
     getDate() {
       let date = new Date(this.form.date);
       this.form.date = new Date(date.setDate(date.getDate() + 2));
+      console.log("???????");
       getWeek(this.form.date).then(res => {
+        console.log("???????");
         let yearmonth = res.data[0];
         let week = res.data[1];
         this.monthWeek =
-          yearmonth.toString().slice(0, 4) +
-          " 年 " +
-          yearmonth.toString().slice(4, 7) +
-          " 月 第 " +
-          week +
-          " 周";
+          yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
       });
+    },
+    closeTag() {
+      this.form.date = "";
     },
 
     // 提交申请

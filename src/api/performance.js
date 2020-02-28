@@ -10,3 +10,10 @@ export function getDcSummary(date) {
     }
   });
 }
+
+export function getAcSummary() {
+  return axios({
+    url: "/acsummary",
+    method: "get"
+  });
+}

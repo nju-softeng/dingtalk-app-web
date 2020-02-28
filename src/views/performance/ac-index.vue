@@ -31,9 +31,12 @@
             <div class="test">
               <el-card class="ac-card">
                 <h4>{{ item.reason }}</h4>
-                <p v-if="item.ac > 0">AC值变化：+ {{ item.ac }}</p>
-                <p v-else>AC值变化： {{ item.ac }}</p>
-                <p>{{ item.auditor }} 审核</p>
+                <p>
+                  <span v-if="item.ac > 0">AC值变化：+ {{ item.ac }}</span>
+                  <span v-else>AC值变化： {{ item.ac }}</span>
+                  <span style="padding:20px">审核: {{ item.auditor }}</span>
+                  <el-tag>{{ getClassfy(item.classify) }}</el-tag>
+                </p>
               </el-card>
             </div>
           </el-timeline-item>
@@ -60,6 +63,16 @@ export default {
       aclist: []
     };
   },
+  computed: {
+    getClassfy() {
+      return val => {
+        if (val == 0) return "周报申请";
+        else if (val == 1) return "项目AC";
+        else if (val == 2) return "论文AC";
+        else return "投票AC";
+      };
+    }
+  },
   created() {
     getAcSummary().then(res => {
       this.list = res.data;
@@ -80,9 +93,8 @@ export default {
       this.loading = true;
       this.name = val.name;
       this.ac = val.total;
-      console.log(val);
       listUserAc(val.id).then(res => {
-        console.log(res.data.length);
+        console.log(res.data);
         this.aclist = res.data;
         this.loading = false;
       });

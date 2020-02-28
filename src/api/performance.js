@@ -17,3 +17,10 @@ export function getAcSummary() {
     method: "get"
   });
 }
+
+export function listUserAc(uid) {
+  return axios({
+    url: "/userac/" + uid,
+    method: "get"
+  });
+}

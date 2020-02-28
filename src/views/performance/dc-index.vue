@@ -17,7 +17,12 @@
         >下一月<i class="el-icon-arrow-right el-icon--right"></i
       ></el-button>
     </el-button-group>
-    <el-table :data="list" border style="width: 100%;margin-top:10px;">
+    <el-table
+      :data="list"
+      border
+      style="width: 100%;margin-top:10px;"
+      height="80vh"
+    >
       <el-table-column fixed prop="name" label="姓名"> </el-table-column>
       <el-table-column prop="salary" label="补贴总金额" sortable>
       </el-table-column>

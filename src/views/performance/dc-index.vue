@@ -10,15 +10,22 @@
     >
     </el-date-picker>
     <el-button-group style="margin-left:5px">
-      <el-button type="primary" icon="el-icon-arrow-left">上一月</el-button>
-      <el-button type="primary"
+      <el-button type="primary" @click="prev" icon="el-icon-arrow-left"
+        >上一月</el-button
+      >
+      <el-button type="primary" @click="next"
         >下一月<i class="el-icon-arrow-right el-icon--right"></i
       ></el-button>
     </el-button-group>
-    {{ date }}
-    <el-table :data="list" border style="width: 100%;margin-top:10px;">
+    <el-table
+      :data="list"
+      border
+      style="width: 100%;margin-top:10px;"
+      height="80vh"
+    >
       <el-table-column fixed prop="name" label="姓名"> </el-table-column>
-      <el-table-column prop="salary" label="补贴总金额"> </el-table-column>
+      <el-table-column prop="salary" label="补贴总金额" sortable>
+      </el-table-column>
       <el-table-column prop="week1" label="第一周DC"> </el-table-column>
       <el-table-column prop="week2" label="第二周DC"> </el-table-column>
       <el-table-column prop="week3" label="第三周DC"> </el-table-column>
@@ -37,18 +44,36 @@ export default {
   data() {
     return {
       list: null,
-      date: ""
+      date: new Date()
     };
   },
   created() {
-    this.date = new Date();
-    getDcSummary(this.date).then(res => {
+    getDcSummary(new Date()).then(res => {
       this.list = res.data;
-      console.log(res.data);
     });
   },
   methods: {
     filtrate() {
+      getDcSummary(this.date).then(res => {
+        this.list = res.data;
+      });
+    },
+    next() {
+      if (typeof this.date == "string") {
+        this.date = new Date(this.date);
+      }
+      this.date.setMonth(this.date.getMonth() + 1);
+      this.date = this.date.toISOString().slice(0, 10);
+      getDcSummary(this.date).then(res => {
+        this.list = res.data;
+      });
+    },
+    prev() {
+      if (typeof this.date == "string") {
+        this.date = new Date(this.date);
+      }
+      this.date.setMonth(this.date.getMonth() - 1);
+      this.date = this.date.toISOString().slice(0, 10);
       getDcSummary(this.date).then(res => {
         this.list = res.data;
       });

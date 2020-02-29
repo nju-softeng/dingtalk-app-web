@@ -5,15 +5,15 @@
         <el-tab-pane label="任务分配">
           <assign />
         </el-tab-pane>
-        <el-tab-pane label="历史任务">配置管理</el-tab-pane>
+        <el-tab-pane label="历史任务">历史任务</el-tab-pane>
         <el-tab-pane>
           <span slot="label">
             <i class="el-icon-message">bug管理</i>
             <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
 
-          角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+          bug管理</el-tab-pane
+        >
       </el-tabs>
     </div>
   </div>

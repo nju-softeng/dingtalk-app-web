@@ -14,6 +14,18 @@
         shadow="hover"
       >
         {{ item.name }}
+
+        <p style="font-size:12px">
+          迭代周期: {{ item.beginTime }} ~ {{ item.endTime }}
+        </p>
+
+        <el-tag
+          style="margin-right:5px"
+          size="small"
+          v-for="pd in item.projectDetails"
+          :key="pd.inex"
+          >{{ pd.user.name }}</el-tag
+        >
       </el-card>
     </div>
     {{ uid }}
@@ -162,7 +174,7 @@ export default {
 
 .item {
   margin: 5px 5px 5px 0;
-  height: 100px;
+  height: 120px;
   width: 49%;
 }
 

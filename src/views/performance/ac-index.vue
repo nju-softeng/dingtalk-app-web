@@ -32,9 +32,15 @@
               <el-card class="ac-card">
                 <h4>{{ item.reason }}</h4>
                 <p>
-                  <span v-if="item.ac > 0">AC值变化：+ {{ item.ac }}</span>
-                  <span v-else>AC值变化： {{ item.ac }}</span>
-                  <span style="padding:20px">审核: {{ item.auditor }}</span>
+                  <span v-if="item.ac > 0" style="padding-right:20px"
+                    >AC值变化：+ {{ item.ac }}</span
+                  >
+                  <span v-else style="padding-right:20px"
+                    >AC值变化： {{ item.ac }}</span
+                  >
+                  <span v-if="item.classify == 0" style="padding-right:20px"
+                    >审核人: {{ item.auditor }}</span
+                  >
                   <el-tag>{{ getClassfy(item.classify) }}</el-tag>
                 </p>
               </el-card>

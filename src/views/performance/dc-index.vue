@@ -6,7 +6,7 @@
       <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
       <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </el-button-group>
-    <el-table :data="list" border style="width: 100%;margin-top:10px;" height="80vh">
+    <el-table class="table" :data="list" border style="margin-top:10px;" height="80vh">
       <el-table-column fixed prop="name" label="姓名"> </el-table-column>
       <el-table-column prop="salary" label="补贴总金额"> </el-table-column>
       <el-table-column prop="week1" label="第一周DC"> </el-table-column>
@@ -68,4 +68,13 @@ export default {
 .app-container >>> .el-table th.gutter {
   display: table-cell !important;
 }
+
+/* .table >>> .el-table__body-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.table >>> .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border-radius: 3px;
+} */
 </style>

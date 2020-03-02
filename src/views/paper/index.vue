@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div style="height:83vh">
+    <div style="height:540px">
       <div class="box">
         <div class="action" style="margin-bottom:10px">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
@@ -585,7 +585,7 @@ export default {
 }
 .app-container {
   background-color: #f5f5f5;
-  height: 92.8vh;
+
   border-radius: 0;
 }
 .box {
@@ -648,7 +648,7 @@ export default {
     }
   }
   .namelist {
-    width: 200px;
+    width: 160px;
     padding: 0 20px;
 
     overflow: hidden; /*超出部分隐藏*/

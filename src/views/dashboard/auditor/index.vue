@@ -76,7 +76,7 @@
       <el-row :gutter="12">
         <el-col :xs="24" :sm="16" :lg="16">
           <el-card shadow="never" style="height:50px; margin-bottom: 5px">
-            studentDashboard
+            auditorDashboard
           </el-card>
           <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">

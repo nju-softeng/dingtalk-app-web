@@ -46,11 +46,11 @@ const mutations = {
 
 function getRoles(role) {
   if (role === "6983f953b49c88210cb9") {
-    return "admin";
+    return "admin"; // 老师，超级管理员
   } else if (role === "bb63e5f7e0f2ffae845c") {
-    return "user";
+    return "postgraduate"; // 研究生
   } else {
-    return "auditor";
+    return "doctor"; // 博士生，管理员
   }
 }
 
@@ -64,6 +64,7 @@ const actions = {
           if (response.headers["token"] != null) {
             commit("SET_TOKEN", response.headers.token);
             commit("SET_UID", response.headers.uid);
+            commit("SET_ROLES", getRoles(response.headers["role"]));
             sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
             sessionStorage.setItem("role", getRoles(response.headers["role"]));
             sessionStorage.setItem("uid", response.headers["uid"]);
@@ -88,10 +89,8 @@ const actions = {
             console.log("avatar is null");
             data.avatar = getavatar(data.name);
           }
-          console.log(data.avatar);
           commit("SET_NAME", data.name);
           commit("SET_AVATAR", data.avatar);
-          commit("SET_ROLES", data.roles);
 
           resolve();
         })

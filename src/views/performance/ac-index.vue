@@ -1,17 +1,9 @@
 <template>
   <div class="app-container">
     <el-card shadow="never" class="box-card" style="width: 35%;">
-      <el-table
-        ref="table"
-        height="83vh"
-        :data="list"
-        highlight-current-row
-        @current-change="handleCurrentChange"
-        style="width: 100%"
-      >
+      <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
         <el-table-column type="index"> </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
-        </el-table-column>
+        <el-table-column prop="name" label="姓名"> </el-table-column>
         <el-table-column prop="total" label="总AC"> </el-table-column>
       </el-table>
     </el-card>
@@ -22,25 +14,14 @@
       </div>
       <el-scrollbar style="height: 95%;" v-if="aclist.length != 0">
         <el-timeline>
-          <el-timeline-item
-            :timestamp="item.create_time"
-            placement="top"
-            v-for="item in aclist"
-            :key="item.index"
-          >
+          <el-timeline-item :timestamp="item.create_time" placement="top" v-for="item in aclist" :key="item.index">
             <div class="test">
               <el-card class="ac-card">
                 <h4>{{ item.reason }}</h4>
                 <p>
-                  <span v-if="item.ac > 0" style="padding-right:20px"
-                    >AC值变化：+ {{ item.ac }}</span
-                  >
-                  <span v-else style="padding-right:20px"
-                    >AC值变化： {{ item.ac }}</span
-                  >
-                  <span v-if="item.classify == 0" style="padding-right:20px"
-                    >审核人: {{ item.auditor }}</span
-                  >
+                  <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
+                  <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
+                  <span v-if="item.classify == 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
                   <el-tag>{{ getClassfy(item.classify) }}</el-tag>
                 </p>
               </el-card>
@@ -142,5 +123,15 @@ export default {
   align-items: center; /* 垂直居中 */
   height: 100%;
   flex-direction: column;
+}
+
+//滚动条的宽度
+.table /deep/ .el-table__body-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+//滚动条的滑块
+.table /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border-radius: 3px;
 }
 </style>

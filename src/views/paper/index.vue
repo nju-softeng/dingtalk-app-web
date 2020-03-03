@@ -147,7 +147,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="60%" center>
+    <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="75%" center>
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
       </div>

@@ -83,8 +83,11 @@
               <span>动态</span>
               <el-button style="float: right;padding:0" type="text">查看更多</el-button>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              <div class="message"></div>
+
+            <div class="message" v-for="msg in messages" :key="msg.index">
+              <p>{{ msg.title }}</p>
+              <span>{{ msg.content }}</span>
+              <span style="padding:20px">{{ msg.createTime }}</span>
             </div>
           </el-card>
         </el-col>
@@ -136,22 +139,23 @@
 
 <script>
 import { showHelloTime } from "@/utils/index";
-import { getYiYan } from "@/api/other";
-
+import { getMessages } from "@/api/message";
 export default {
-  name: "DashboardAdmin",
-
   data() {
     return {
+      messages: [],
       name: "",
-      yiyan: {},
-      avatar: null
+      avatar: null,
+      count: 0
     };
   },
   created() {
     this.avatar = sessionStorage.getItem("avatar");
     this.name = sessionStorage.getItem("name");
-    this.getYiYan();
+    getMessages(0).then(res => {
+      this.messages = res.data.content;
+      console.log(this.messages);
+    });
   },
   computed: {
     helloTime() {
@@ -159,10 +163,8 @@ export default {
     }
   },
   methods: {
-    getYiYan() {
-      getYiYan("d").then(res => {
-        this.yiyan = res.data;
-      });
+    load() {
+      this.count += 2;
     }
   }
 };

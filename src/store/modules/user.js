@@ -64,7 +64,7 @@ const actions = {
           if (response.headers["token"] != null) {
             commit("SET_TOKEN", response.headers.token);
             commit("SET_UID", response.headers.uid);
-            commit("SET_ROLES", getRoles(response.headers["role"]));
+
             sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
             sessionStorage.setItem("role", getRoles(response.headers["role"]));
             sessionStorage.setItem("uid", response.headers["uid"]);
@@ -91,7 +91,7 @@ const actions = {
           }
           commit("SET_NAME", data.name);
           commit("SET_AVATAR", data.avatar);
-
+          commit("SET_ROLES", sessionStorage.getItem("role"));
           resolve();
         })
         .catch(error => {

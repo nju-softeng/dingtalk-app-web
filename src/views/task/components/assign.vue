@@ -1,78 +1,45 @@
 <template>
   <div>
     <div class="action" style="margin-bottom:10px">
-      <el-button type="primary" @click="dialog = true" icon="el-icon-plus"
-        >创建迭代任务</el-button
-      >
+      <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代任务</el-button>
     </div>
     {{ projectform }}
     <div class="list">
-      <el-card
-        class="item"
-        v-for="item in list"
-        :key="item.index"
-        shadow="hover"
-      >
+      <el-card class="item" v-for="item in list" :key="item.index" shadow="hover">
         {{ item.name }}
 
         <p style="font-size:12px">
           迭代周期: {{ item.beginTime }} ~ {{ item.endTime }}
         </p>
 
-        <el-tag
-          style="margin-right:5px"
-          size="small"
-          v-for="pd in item.projectDetails"
-          :key="pd.inex"
-          >{{ pd.user.name }}</el-tag
-        >
+        <el-tag style="margin-right:5px" size="small" v-for="pd in item.projectDetails" :key="pd.inex">{{ pd.user.name }}</el-tag>
       </el-card>
     </div>
     {{ uid }}
-    <el-dialog :visible.sync="dialog">
+    <el-dialog :visible.sync="dialog" width="55%">
       <div slot="title">
         <span class="title-age">创建迭代任务 </span>
       </div>
 
-      <el-form
-        v-loading="loading"
-        ref="projectform"
-        :rules="rules"
-        :model="projectform"
-      >
+      <el-form v-loading="loading" ref="projectform" :rules="rules" :model="projectform">
         <el-form-item prop="name">
-          <span slot="label"> <svg-icon icon-class="paper" /> 迭代名称: </span>
-          <el-input
-            v-model="projectform.name"
-            style="width:350px"
-            placeholder="请输入内容"
-          ></el-input>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 迭代名称: </span>
+          <el-input v-model="projectform.name" style="width:350px" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item prop="dates">
-          <span slot="label"> <svg-icon icon-class="paper" /> 起止时间: </span>
-          <el-date-picker
-            v-model="projectform.dates"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 起止时间: </span>
+          <el-date-picker v-model="projectform.dates" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="dingIds">
-          <span slot="label"> <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag
-            size="medium"
-            closable
-            style="margin: 0 2px"
-            v-for="u in userlist"
-            :key="u.index"
-            @close="closeTag(u)"
-            >{{ u.name }}</el-tag
-          >
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 分配任务: </span>
+          <el-tag size="medium" closable style="margin: 0 2px" v-for="u in userlist" :key="u.index" @close="closeTag(u)">{{ u.name }}</el-tag>
           <el-button style="margin-left:2px" size="mini" @click="choose()">
-            <i> <svg-icon icon-class="addperson" /> </i> 添加</el-button
-          >
+            <i>
+              <svg-icon icon-class="addperson" /> </i> 添加</el-button>
         </el-form-item>
       </el-form>
       {{ uid }}

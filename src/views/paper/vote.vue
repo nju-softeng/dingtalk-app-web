@@ -19,7 +19,7 @@
             <span slot="label">
               <svg-icon icon-class="people" /> 论文作者
             </span>
-            <span style="margin:10px" v-for="p in paper.paperDetails" :key="p.index">{{ p.user.name }}</span>
+            <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
           </el-form-item>
           <el-form-item>
             <span slot="label">
@@ -78,14 +78,14 @@
               <svg-icon icon-class="paper" /> 接收{{ accept }}票:
             </span>
 
-            <el-tag style="margin:0px 4px;" v-for="item in acceptlist" :key="item.index">{{ item }}</el-tag>
+            <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
           </el-form-item>
           <el-form-item>
             <span slot="label">
               <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
             </span>
 
-            <el-tag style="margin:0px 4px;" v-for="item in rejectlist" :key="item.index">{{ item }}</el-tag>
+            <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">

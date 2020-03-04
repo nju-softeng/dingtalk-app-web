@@ -37,10 +37,10 @@
               <div class="info-item">
                 <el-tooltip :disabled="item.paperDetails.length <= 3" class="item" effect="dark" placement="top-start">
                   <div slot="content">
-                    <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in item.paperDetails" :key="index">{{ o.user.name }}</span>
                   </div>
                   <div class="namelist">
-                    <span style="padding:5px;" v-for="o in item.paperDetails" :key="o.index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in item.paperDetails" :key="index">{{ o.user.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
@@ -147,7 +147,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="60%" center>
+    <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="75%" center>
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
       </div>
@@ -171,7 +171,7 @@
                 <span slot="label">
                   <svg-icon icon-class="grade" /> 论文分类</span>
                 <el-select v-model="paperform.level" placeholder="请选择">
-                  <el-option v-for="item in options" :key="item.index" :label="item.label" :value="item.value">
+                  <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -193,7 +193,7 @@
                   {{ index + 1 }}</span>
 
                 <el-select v-model="author.user.id" filterable placeholder="请选择">
-                  <el-option v-for="item in userlist" :key="item.index" :label="item.name" :value="item.id">
+                  <el-option v-for="(item, index) in userlist" :key="index" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
                 <el-tooltip class="item" effect="dark" content="支持搜索功能快速查找用户" placement="right">

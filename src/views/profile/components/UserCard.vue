@@ -6,10 +6,7 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <img src="user.avatar" />
-
-        <div>Hello</div>
-        {{ user.role }}
+        <el-avatar class="avatar" shape="square" :size="60" :src="avatar"></el-avatar>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
@@ -72,6 +69,9 @@ export default {
         };
       }
     }
+  },
+  created() {
+    this.avatar = sessionStorage.getItem("avatar");
   }
 };
 </script>

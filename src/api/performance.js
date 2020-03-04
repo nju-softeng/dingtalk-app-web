@@ -24,3 +24,10 @@ export function listUserAc(uid) {
     method: "get"
   });
 }
+
+export function lastAc() {
+  return axios({
+    url: "/lastac",
+    method: "get"
+  });
+}

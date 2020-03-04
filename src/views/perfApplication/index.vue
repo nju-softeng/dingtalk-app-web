@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="35%">
+    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="38%">
       <div class="drawer-content">
         <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
           <el-form-item prop="auditorid">
@@ -77,7 +77,7 @@
 
         <el-table-column width="120px" align="center" label="审核人">
           <template slot-scope="{ row }">
-            <span>{{ getname(row.auditor.id) }}</span>
+            <span>{{ row.auditor.name }}</span>
           </template>
         </el-table-column>
 
@@ -156,9 +156,11 @@ export default {
     }
   }),
   created() {
+    console.log("ceshi");
     getAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
+        console.log(this.auditors);
       })
       .then(() => {
         getUserApplication(0).then(res => {
@@ -168,11 +170,7 @@ export default {
         });
       });
   },
-  computed: {
-    getname() {
-      return val => this.auditors.find(item => item.id == val).name;
-    }
-  },
+  computed: {},
   methods: {
     emptyForm() {
       this.$refs["form"].resetFields();

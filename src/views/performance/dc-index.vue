@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
-    <el-date-picker v-model="date" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月">
+    <el-date-picker size="small" v-model="date" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月">
     </el-date-picker>
     <el-button-group style="margin-left:5px">
       <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
       <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </el-button-group>
-    <el-table class="table" :data="list" border style="margin-top:10px;" height="80vh">
+    <el-table class="table" :data="list" border style="margin-top:10px;" height="77.5vh">
       <el-table-column fixed prop="name" label="姓名"> </el-table-column>
-      <el-table-column prop="salary" label="补贴总金额"> </el-table-column>
+      <el-table-column prop="salary" label="助研金"> </el-table-column>
       <el-table-column prop="week1" label="第一周DC"> </el-table-column>
       <el-table-column prop="week2" label="第二周DC"> </el-table-column>
       <el-table-column prop="week3" label="第三周DC"> </el-table-column>
@@ -68,13 +68,7 @@ export default {
 .app-container >>> .el-table th.gutter {
   display: table-cell !important;
 }
-
-/* .table >>> .el-table__body-wrapper::-webkit-scrollbar {
-  width: 5px;
+.app-container {
+  padding-top: 10px;
 }
-
-.table >>> .el-table__body-wrapper::-webkit-scrollbar-thumb {
-  background-color: #d3d3d3;
-  border-radius: 3px;
-} */
 </style>

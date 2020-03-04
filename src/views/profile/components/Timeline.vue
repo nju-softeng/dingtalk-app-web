@@ -1,10 +1,15 @@
 <template>
   <div class="block">
     <el-timeline>
-      <el-timeline-item v-for="(item,index) of timeline" :key="index" :timestamp="item.timestamp" placement="top">
+      <el-timeline-item v-for="(item, index) of list" :key="index" :timestamp="item.create_time" placement="top">
         <el-card>
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.content }}</p>
+          <h4>{{ item.reason }}</h4>
+          <p>
+            <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
+            <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
+            <span v-if="item.classify == 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+            <el-tag>{{ getClassify(item.classify) }}</el-tag>
+          </p>
         </el-card>
       </el-timeline-item>
     </el-timeline>
@@ -12,32 +17,34 @@
 </template>
 
 <script>
+import { listUserAc } from "@/api/performance";
 export default {
   data() {
     return {
-      timeline: [
-        {
-          timestamp: '2019/4/20',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/20 20:46'
-        },
-        {
-          timestamp: '2019/4/21',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/21 20:46'
-        },
-        {
-          timestamp: '2019/4/22',
-          title: 'Build Template',
-          content: 'PanJiaChen committed 2019/4/22 20:46'
-        },
-        {
-          timestamp: '2019/4/23',
-          title: 'Release New Version',
-          content: 'PanJiaChen committed 2019/4/23 20:46'
-        }
-      ]
+      list: []
+    };
+  },
+  computed: {
+    getClassify() {
+      return val => {
+        if (val == 0) return "周报申请";
+        else if (val == 1) return "项目AC";
+        else if (val == 2) return "论文AC";
+        else return "投票AC";
+      };
     }
+  },
+  created() {
+    let uid = sessionStorage.getItem("uid");
+    listUserAc(uid).then(res => {
+      this.list = res.data;
+    });
   }
-}
+};
 </script>
+
+<style lang="scss" scoped>
+.block /deep/ .el-card__body {
+  padding: 0px 20px 5px;
+}
+</style>

@@ -6,7 +6,34 @@
           <div style="height:107.67px; margin-bottom: 5px; display:flex">
             <el-card shadow="never" class="head">
               <div class="title">本月DC值</div>
-              <div class="content">1.44</div>
+              <div>
+                <el-popover placement="right-start" width="400" trigger="hover">
+                  <div class="popover">
+                    <div class="item">
+                      <div>第一周</div>
+                      <div class="dc">0.5</div>
+                    </div>
+                    <div class="item">
+                      <div>第二周</div>
+                      <div class="dc">0.5</div>
+                    </div>
+                    <div class="item">
+                      <div>第三周</div>
+                      <div class="dc">0.5</div>
+                    </div>
+                    <div class="item">
+                      <div>第四周</div>
+                      <div class="dc">0.5</div>
+                    </div>
+                    <div class="item">
+                      <div>第五周</div>
+                      <div class="dc">0.5</div>
+                    </div>
+                  </div>
+
+                  <span slot="reference" class="content">1.44</span>
+                </el-popover>
+              </div>
               <div class="rank">
                 排名:
               </div>
@@ -58,13 +85,19 @@
             </div>
             <div class="shortcut">
               <div class="item">
-                <el-link type="primary">绩效申请</el-link>
+                <router-link to="/performance/perfApplication">
+                  <el-link type="primary">绩效申请</el-link>
+                </router-link>
               </div>
               <div class="item">
-                <el-link type="primary">绩效汇总</el-link>
+                <router-link to="/performance/performance_dc">
+                  <el-link type="primary">绩效汇总</el-link>
+                </router-link>
               </div>
               <div class="item">
-                <el-link type="primary">AC汇总</el-link>
+                <router-link to="/performance/performance_ac">
+                  <el-link type="primary">AC汇总</el-link>
+                </router-link>
               </div>
               <div class="item">
                 <el-link type="primary">主要链接</el-link>
@@ -83,11 +116,26 @@
               <span>AC变动公告</span>
               <el-button style="float: right; padding:0" type="text">查看详情</el-button>
             </div>
-            <el-carousel trigger="click" height="150px">
+            <el-carousel indicator-position="none" trigger="click" height="150px">
               <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
-                {{ index }}
-                {{ item.ac }}
-                <el-avatar :size="40" style="background-color:blue">詹泽晔</el-avatar>
+                <div class="ac-card">
+                  <div class="ac-head">
+                    <el-avatar :size="35" class="avatar">{{
+                      item.username
+                    }}</el-avatar>
+                    <div class="title">
+                      <span>{{ item.username }} AC值</span>
+                      <span v-if="item.ac > 0"> + </span>
+                      <span>{{ item.ac }}</span>
+                    </div>
+                  </div>
+                  <div class="reason">
+                    <span>变更原因：{{ item.reason }}</span>
+                  </div>
+                  <div class="auditor" v-if="item.auditorname != undefined">
+                    <span>审核人: {{ item.auditorname }}</span>
+                  </div>
+                </div>
               </el-carousel-item>
             </el-carousel>
           </el-card>
@@ -145,6 +193,17 @@ export default {
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 14px;
+}
+
+.popover {
+  display: flex;
+  .item {
+    padding: 0px 15px 5px;
+    font-size: 12px;
+  }
+  .dc {
+    text-align: center;
+  }
 }
 
 .head {
@@ -214,6 +273,24 @@ export default {
     color: rgba(0, 0, 0, 0.45);
     padding-top: 6px;
     padding-left: 15px;
+  }
+}
+.ac-card {
+  .ac-head {
+    padding-top: 10px;
+    display: flex;
+    .avatar {
+      background-color: #409eff;
+    }
+    .title {
+      padding: 10px;
+    }
+  }
+  .reason {
+    margin-top: 15px;
+  }
+  .auditor {
+    margin-top: 15px;
   }
 }
 </style>

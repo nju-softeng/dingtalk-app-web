@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="38%">
+    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="45%">
       <div class="drawer-content">
         <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
           <el-form-item prop="auditorid">
@@ -63,7 +63,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="180px" align="center" label="提交日期">
+        <el-table-column width="140px" align="center" label="提交日期">
           <template slot-scope="{ row }">
             <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
           </template>
@@ -75,13 +75,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="120px" align="center" label="审核人">
+        <el-table-column width="90px" align="center" label="审核人">
           <template slot-scope="{ row }">
             <span>{{ row.auditor.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column width="100px" label="D值">
+        <el-table-column width="80px" label="D值">
           <template slot-scope="{ row }">
             <span>{{ row.dvalue }}</span>
           </template>
@@ -103,7 +103,7 @@
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
             <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改申请</el-button>
-            <el-tag v-else type="info">已被审核无法操作</el-tag>
+            <el-tag v-else type="info">已审核</el-tag>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
         </el-table-column>

@@ -14,7 +14,7 @@
       </div>
       <el-scrollbar style="height: 95%;" v-if="aclist.length != 0">
         <el-timeline>
-          <el-timeline-item :timestamp="item.create_time" placement="top" v-for="item in aclist" :key="item.index">
+          <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
             <div class="test">
               <el-card class="ac-card">
                 <h4>{{ item.reason }}</h4>

@@ -7,7 +7,7 @@
             <span slot="label">
               <svg-icon icon-class="people" /> 审核人</span>
             <el-select style="width:200px" v-model="form.auditorid" placeholder="请选择审核人">
-              <el-option v-for="item in auditors" :key="item.index" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="(item, index) in auditors" :key="index" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="dvalue">
@@ -55,7 +55,7 @@
             <el-form label-position="left" inline>
               <el-form-item label="AC申请信息：">
                 <span>{{ props.row.name }}</span>
-                <li v-for="item in props.row.acItems" :key="item.index">
+                <li v-for="(item, index) in props.row.acItems" :key="index">
                   申请理由：{{ item.reason }} 申请值: {{ item.ac }}
                 </li>
               </el-form-item>

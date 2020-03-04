@@ -5,14 +5,14 @@
     </div>
     {{ projectform }}
     <div class="list">
-      <el-card class="item" v-for="item in list" :key="item.index" shadow="hover">
+      <el-card class="item" v-for="(item, index) in list" :key="index" shadow="hover">
         {{ item.name }}
 
         <p style="font-size:12px">
           迭代周期: {{ item.beginTime }} ~ {{ item.endTime }}
         </p>
 
-        <el-tag style="margin-right:5px" size="small" v-for="pd in item.projectDetails" :key="pd.inex">{{ pd.user.name }}</el-tag>
+        <el-tag style="margin-right:5px" size="small" v-for="(pd, index) in item.projectDetails" :key="index">{{ pd.user.name }}</el-tag>
       </el-card>
     </div>
     {{ uid }}
@@ -36,7 +36,7 @@
         <el-form-item prop="dingIds">
           <span slot="label">
             <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag size="medium" closable style="margin: 0 2px" v-for="u in userlist" :key="u.index" @close="closeTag(u)">{{ u.name }}</el-tag>
+          <el-tag size="medium" closable style="margin: 0 2px" v-for="(u, index) in userlist" :key="index" @close="closeTag(u)">{{ u.name }}</el-tag>
           <el-button style="margin-left:2px" size="mini" @click="choose()">
             <i>
               <svg-icon icon-class="addperson" /> </i> 添加</el-button>

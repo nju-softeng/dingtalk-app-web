@@ -85,7 +85,7 @@ const actions = {
           const { data } = response;
 
           if (!data) reject("Verification failed, please Login again.");
-          if (data.avatar == "") {
+          if (data.avatar == undefined) {
             console.log("avatar is null");
             data.avatar = getavatar(data.name);
           }

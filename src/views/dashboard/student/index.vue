@@ -38,7 +38,7 @@
               </router-link>
             </div>
 
-            <div class="message" v-for="msg in messages" :key="msg.index">
+            <div class="message" v-for="(msg, index) in messages" :key="index">
               <div class="title">{{ msg.title }}</div>
               <div style="display:flex">
                 <div class="content">
@@ -84,8 +84,10 @@
               <el-button style="float: right; padding:0" type="text">查看详情</el-button>
             </div>
             <el-carousel trigger="click" height="150px">
-              <el-carousel-item v-for="item in 4" :key="item">
-                <h3 class="small">{{ item }}</h3>
+              <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
+                {{ index }}
+                {{ item.ac }}
+                <el-avatar :size="40" style="background-color:blue">詹泽晔</el-avatar>
               </el-carousel-item>
             </el-carousel>
           </el-card>
@@ -98,10 +100,12 @@
 <script>
 import { showHelloTime } from "@/utils/index";
 import { getMessages } from "@/api/message";
+import { lastAc } from "@/api/performance";
 export default {
   data() {
     return {
       messages: [],
+      lastAcs: [],
       name: "",
       avatar: null,
       count: 0
@@ -112,7 +116,10 @@ export default {
     this.name = sessionStorage.getItem("name");
     getMessages(0).then(res => {
       this.messages = res.data.content;
-      console.log(this.messages);
+    });
+    lastAc().then(res => {
+      this.lastAcs = res.data;
+      console.log(this.lastAcs);
     });
   },
   computed: {

@@ -24,7 +24,7 @@
             <span slot="label">
               <svg-icon icon-class="people" /> 论文作者
             </span>
-            <span style="margin:10px" v-for="p in paper.paperDetails" :key="p.index">{{ p.user.name }}</span>
+            <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
           </el-form-item>
         </el-form>
       </div>
@@ -59,7 +59,7 @@
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 作者AC变化</span>
-          <span style="padding:6px" v-for="item in paper.paperDetails" :key="item.index">{{ item.user.name }}: {{ item.ac }}</span>
+          <span style="padding:6px" v-for="(item, index) in paper.paperDetails" :key="index">{{ item.user.name }}: {{ item.ac }}</span>
         </el-form-item>
         <el-form-item>
           <span slot="label">
@@ -68,14 +68,14 @@
             <span v-if="paper.result == true">+ 1</span>
             <span v-else>- 1</span>
           </span>
-          <el-tag style="margin:0px 4px;" v-for="item in acceptlist" :key="item.index">{{ item }}</el-tag>
+          <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿反对者AC</span>
           <span v-if="paper.result == false"> + 1</span>
           <span v-else> - 1</span>
-          <el-tag style="margin:0px 4px;" v-for="item in rejectlist" :key="item.index">{{ item }}</el-tag>
+          <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
         </el-form-item>
       </el-form>
     </div>

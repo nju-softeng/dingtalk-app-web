@@ -6,6 +6,10 @@
     position: relative;
   }
 
+  .el-submenu__title {
+    font-size: 13px;
+  }
+
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;
@@ -79,6 +83,7 @@
 
     & .nest-menu .el-submenu > .el-submenu__title,
     & .el-submenu .el-menu-item {
+      font-size: 13px;
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
 
@@ -115,7 +120,6 @@
 
       & > .el-submenu__title {
         padding: 0 !important;
-
         .svg-icon {
           margin-left: 15px;
         }

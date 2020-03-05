@@ -26,14 +26,14 @@
 
         <el-card class="ac-card">
           <el-table :data="temp.acItems" tooltip-effect="dark">
-            <el-table-column label="AC申请理由" width="300">
+            <el-table-column label="AC申请理由">
               <template slot-scope="{ row }">
                 <span :class="{ text_span: !row.status }">{{
                   row.reason
                 }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="AC" align="center" width="120">
+            <el-table-column label="AC" align="center">
               <template slot-scope="{ row }">
                 <template v-if="row.edit">
                   <el-input v-model="row.ac" style="width:50px" />
@@ -104,17 +104,17 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="申请时间" width="180">
+      <el-table-column label="申请时间">
         <template slot-scope="{ row }">{{
           row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
         }}</template>
       </el-table-column>
-      <el-table-column label="申请周" width="180">
+      <el-table-column label="申请周">
         <template slot-scope="{ row }">
           {{ row.yearmonth | formatWeek(row.week) }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width="180">
+      <el-table-column label="姓名">
         <template slot-scope="{ row }">
           {{ row.name }}
         </template>
@@ -158,6 +158,13 @@ export default {
         week: "",
         acItems: []
       },
+      form: {
+        id: null,
+        cvalue: null,
+        dc: null,
+        ac: null,
+        acItems: []
+      },
       rules: {
         cvalue: [{ required: true, message: "请输入C值", trigger: "blur" }]
       }
@@ -176,8 +183,13 @@ export default {
   },
   methods: {
     submit() {
-      if (this.temp.ac != null) {
-        updateAudit(this.temp).then(() => {
+      if (this.temp.cvalue) {
+        this.form.id = this.temp.id;
+        this.form.cvalue = this.temp.cvalue;
+        this.form.dc = this.temp.dc;
+        this.form.ac = this.temp.ac;
+        this.form.acItems = this.temp.acItems;
+        updateAudit(this.form).then(() => {
           this.$notify({
             title: "成功",
             message:

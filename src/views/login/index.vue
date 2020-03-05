@@ -8,15 +8,11 @@
     <el-row>
       <el-col :span="24">
         <img alt="Vue logo" src="@/assets/logo.png" />
-        <h1>Welcome to Softeng Performance Management Application</h1>
+        <h1>Welcome</h1>
         <p>For a guide and recipes on how to configure</p>
       </el-col>
       <el-col :span="24">
-        <div
-          class="grid-content"
-          v-loading="loading"
-          element-loading-text="登录中"
-        ></div>
+        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
       </el-col>
     </el-row>
   </div>

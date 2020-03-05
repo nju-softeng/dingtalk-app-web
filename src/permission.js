@@ -11,7 +11,7 @@ const whiteList = ["/login"]; // no redirect whitelist
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (sessionStorage.getItem("token")) {
-    // 判断用户是否已登陆
+    // 判断是否有token
     if (to.path === "/login") {
       next({ path: "/" }); // 如果已登录，重定向到'/'
       NProgress.done();
@@ -24,7 +24,7 @@ router.beforeEach(async (to, from, next) => {
           await store.dispatch("user/_getInfo"); // 获取用户信息
           // 基于角色生成可以获得的路由
           const accessRoutes = await store.dispatch(
-            "permission/_generateRoutes",
+            "permission/generateRoutes",
             [sessionStorage.getItem("role")]
           );
           // 动态添加可访问路由表

@@ -80,6 +80,12 @@ export const constantRoutes = [
       }
     ]
   },
+  // 404 page must be placed at the end !!!
+  { path: "*", redirect: "/404", hidden: true }
+];
+
+//异步挂载的路由：动态需要根据权限加载的路由表
+export const asyncRoutes = [
   {
     path: "/performance",
     component: Layout,
@@ -97,7 +103,11 @@ export const constantRoutes = [
         path: "perfAudit",
         name: "PerfAudit",
         component: () => import("@/views/perfAudit/index"),
-        meta: { title: "绩效审核", icon: "table" }
+        meta: {
+          title: "绩效审核",
+          icon: "table",
+          roles: ["admin", "doctor"]
+        }
       },
       {
         path: "performance_dc",
@@ -124,13 +134,17 @@ export const constantRoutes = [
         path: "manage",
         name: "Manage",
         component: () => import("@/views/task/manage"),
-        meta: { title: "迭代分配", icon: "table" }
+        meta: { title: "迭代分配", icon: "table", roles: ["admin", "doctor"] }
       },
       {
         path: "index",
         name: "Task",
         component: () => import("@/views/task/index"),
-        meta: { title: "我的迭代", icon: "table" }
+        meta: {
+          title: "我的迭代",
+          icon: "table",
+          roles: ["admin", "postgraduate"]
+        }
       },
       {
         path: "bug",
@@ -166,12 +180,28 @@ export const constantRoutes = [
       }
     ]
   },
-  // 404 page must be placed at the end !!!
-  { path: "*", redirect: "/404", hidden: true }
-];
-
-//异步挂载的路由：动态需要根据权限加载的路由表
-export const asyncRoutes = [
+  {
+    path: "/system",
+    component: Layout,
+    name: "System",
+    meta: { title: "系统设置", icon: "component", roles: ["admin", "doctor"] },
+    children: [
+      {
+        path: "userMan",
+        name: "UserMan",
+        component: () => import("@/views/sysMan/userMan/index"),
+        meta: { title: "用户管理", icon: "user" },
+        roles: ["admin", "doctor"]
+      },
+      {
+        path: "configMan",
+        name: "ConfigMan",
+        component: () => import("@/views/sysMan/configMan/index"),
+        meta: { title: "参数管理", icon: "skill" },
+        roles: ["admin", "doctor"]
+      }
+    ]
+  },
   {
     path: "/test",
     component: Layout,

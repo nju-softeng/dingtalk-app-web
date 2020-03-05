@@ -7,31 +7,33 @@
             <el-card shadow="never" class="head">
               <div class="title">本月DC值</div>
               <div>
-                <el-popover placement="right-start" width="370" trigger="hover">
+                <el-popover placement="right-start" width="400" trigger="hover">
                   <div class="popover">
                     <div class="item">
                       <div>第一周</div>
-                      <div class="dc">0.5</div>
+                      <div class="dc">{{ perf.w1 }}</div>
                     </div>
                     <div class="item">
                       <div>第二周</div>
-                      <div class="dc">0.5</div>
+                      <div class="dc">{{ perf.w2 }}</div>
                     </div>
                     <div class="item">
                       <div>第三周</div>
-                      <div class="dc">0.5</div>
+                      <div class="dc">{{ perf.w3 }}</div>
                     </div>
                     <div class="item">
                       <div>第四周</div>
-                      <div class="dc">0.5</div>
+                      <div class="dc">{{ perf.w4 }}</div>
                     </div>
                     <div class="item">
                       <div>第五周</div>
-                      <div class="dc">0.5</div>
+                      <div class="dc">{{ perf.w5 }}</div>
                     </div>
                   </div>
 
-                  <span slot="reference" class="content">1.44</span>
+                  <span slot="reference" class="content">{{
+                    perf.dcTotal
+                  }}</span>
                 </el-popover>
               </div>
               <div class="rank">
@@ -41,7 +43,7 @@
             <el-card shadow="never" class="head">
               <div class="title">累计AC</div>
               <div class="content">
-                12.5
+                {{ perf.acTotal }}
               </div>
             </el-card>
             <el-card shadow="never" class="head">
@@ -135,6 +137,9 @@
                   <div class="auditor" v-if="item.auditorname != undefined">
                     <span>审核人: {{ item.auditorname }}</span>
                   </div>
+                  <div style="padding-top:15px">
+                    时间: {{ item.create_time }}
+                  </div>
                 </div>
               </el-carousel-item>
             </el-carousel>
@@ -148,12 +153,22 @@
 <script>
 import { showHelloTime } from "@/utils/index";
 import { getMessages } from "@/api/message";
-import { lastAc } from "@/api/performance";
+import { lastAc, getPerformance } from "@/api/performance";
+
 export default {
   data() {
     return {
       messages: [],
       lastAcs: [],
+      perf: {
+        dcTotal: "",
+        acTotal: "",
+        w1: "",
+        w2: "",
+        w3: "",
+        w4: "",
+        w5: ""
+      },
       name: "",
       avatar: null,
       count: 0
@@ -168,6 +183,10 @@ export default {
     lastAc().then(res => {
       this.lastAcs = res.data;
       console.log(this.lastAcs);
+    });
+    getPerformance().then(res => {
+      this.perf = res.data;
+      console.log(this.perf);
     });
   },
   computed: {
@@ -277,7 +296,7 @@ export default {
 }
 .ac-card {
   .ac-head {
-    padding-top: 10px;
+    padding-top: 9px;
     display: flex;
     .avatar {
       background-color: #409eff;

@@ -31,3 +31,10 @@ export function lastAc() {
     method: "get"
   });
 }
+
+export function getPerformance() {
+  return axios({
+    url: "/performance",
+    method: "get"
+  });
+}

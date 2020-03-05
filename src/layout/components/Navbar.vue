@@ -5,11 +5,22 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
-      <template v-if="device !== 'mobile'">
+      <!-- <template v-if="device !== 'mobile'">
         <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-      </template>
+      </template> -->
+      <div></div>
+      <el-dropdown class="right-menu-item ">
+        <span class=" el-dropdown-link" style="color:#409EFF">
+          <i class="el-icon-circle-plus el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>选项1</el-dropdown-item>
+          <el-dropdown-item>选项2</el-dropdown-item>
+          <el-dropdown-item>选项3</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -34,13 +45,10 @@ import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 
-import SizeSelect from "@/components/SizeSelect";
-
 export default {
   components: {
     Breadcrumb,
-    Hamburger,
-    SizeSelect
+    Hamburger
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"])

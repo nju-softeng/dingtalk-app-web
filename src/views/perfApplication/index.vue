@@ -114,7 +114,6 @@
       <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
     </div>
-    {{ form }}
   </div>
 </template>
 
@@ -201,19 +200,21 @@ export default {
       this.apply = false;
       this.direction = "rtl";
       this.drawer = true;
-      this.form.id = row.id;
-      this.form.acItems = row.acItems;
-      this.form.dvalue = row.dvalue;
-      this.form.auditorid = row.auditor.id;
-      this.form.date = row.weekdate;
-      this.form.acItems = row.acItems;
+      this.$nextTick(() => {
+        this.form.id = row.id;
+        this.form.acItems = row.acItems;
+        this.form.dvalue = row.dvalue;
+        this.form.auditorid = row.auditor.id;
+        this.form.date = row.weekdate;
+        this.form.acItems = row.acItems;
+        this.monthWeek =
+          row.yearmonth.toString().slice(4, 7) + " 月 第 " + row.week + " 周";
+      });
     },
     getDate() {
       let date = new Date(this.form.date);
       this.form.date = new Date(date.setDate(date.getDate() + 2));
-      console.log("???????");
       getWeek(this.form.date).then(res => {
-        console.log("???????");
         let yearmonth = res.data[0];
         let week = res.data[1];
         this.monthWeek =

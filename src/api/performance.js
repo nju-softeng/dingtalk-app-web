@@ -11,6 +11,7 @@ export function getDcSummary(date) {
   });
 }
 
+// 查询用户总AC
 export function getAcSummary() {
   return axios({
     url: "/acsummary",
@@ -18,6 +19,7 @@ export function getAcSummary() {
   });
 }
 
+// 查询用户AC变更日志
 export function listUserAc(uid) {
   return axios({
     url: "/userac/" + uid,
@@ -25,6 +27,7 @@ export function listUserAc(uid) {
   });
 }
 
+// 获取最近10条AC 变动公告
 export function lastAc() {
   return axios({
     url: "/lastac",
@@ -32,6 +35,7 @@ export function lastAc() {
   });
 }
 
+// 获取首页的绩效信息
 export function getPerformance() {
   return axios({
     url: "/performance",

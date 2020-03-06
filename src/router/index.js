@@ -79,9 +79,7 @@ export const constantRoutes = [
         meta: { title: "Profile", icon: "user", noCache: true }
       }
     ]
-  },
-  // 404 page must be placed at the end !!!
-  { path: "*", redirect: "/404", hidden: true }
+  }
 ];
 
 //异步挂载的路由：动态需要根据权限加载的路由表
@@ -184,21 +182,25 @@ export const asyncRoutes = [
     path: "/system",
     component: Layout,
     name: "System",
-    meta: { title: "系统设置", icon: "component", roles: ["admin", "doctor"] },
+    meta: {
+      title: "系统设置",
+      icon: "setting",
+      roles: ["admin", "doctor", "postgraduate"]
+    },
     children: [
       {
         path: "userMan",
         name: "UserMan",
         component: () => import("@/views/sysMan/userMan/index"),
         meta: { title: "用户管理", icon: "user" },
-        roles: ["admin", "doctor"]
+        roles: ["admin", "doctor", "postgraduate"]
       },
       {
         path: "configMan",
         name: "ConfigMan",
         component: () => import("@/views/sysMan/configMan/index"),
         meta: { title: "参数管理", icon: "skill" },
-        roles: ["admin", "doctor"]
+        roles: ["admin", "doctor", "postgraduate"]
       }
     ]
   },

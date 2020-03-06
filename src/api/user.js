@@ -40,3 +40,20 @@ export function getReport() {
     method: "get"
   });
 }
+
+// 查询用户权限
+export function listUserRole() {
+  return axios({
+    url: "/listrole",
+    method: "get"
+  });
+}
+
+// 更新用户权限
+export function updateUserRole(data) {
+  return axios({
+    url: "/updaterole",
+    method: "post",
+    data
+  });
+}

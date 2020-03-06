@@ -247,7 +247,7 @@ export default {
 
 .dashboard-container {
   padding: 12px;
-
+  min-height: 480px;
   background-color: rgb(240, 242, 245);
 
   .chart-wrapper {

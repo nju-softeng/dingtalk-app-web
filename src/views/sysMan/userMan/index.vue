@@ -4,6 +4,14 @@
       <el-button type="primary">拉取钉钉用户</el-button>
     </el-tooltip>
 
+    <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
+    <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
+      {{ item.name }}
+    </el-tag>
+    <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
+      未设置
+    </el-tag>
+
     <div style="width:800px">
       <el-table :data="list" style="margin-top:10px;" border>
         <el-table-column align="center" label="姓名">
@@ -21,6 +29,7 @@
         <el-table-column align="center" label="职位">
           <template slot-scope="scope">
             {{ scope.row.position }}
+            <span v-if="scope.row.position == undefined">未设置</span>
           </template>
         </el-table-column>
         <el-table-column prop="role" align="center" label="审核人权限">
@@ -46,17 +55,20 @@
 </template>
 <script>
 import { listUserRole, updateUserRole } from "@/api/user";
-
+import { listAuditors } from "@/api/user";
 export default {
   data() {
     return {
+      auditors: [],
       list: []
     };
   },
   created() {
     listUserRole().then(res => {
       this.list = res.data;
-      console.log(res.data);
+    });
+    listAuditors().then(res => {
+      this.auditors = res.data.auditorlist;
     });
   },
   methods: {
@@ -66,6 +78,9 @@ export default {
         authority: row.authority
       })
         .then(() => {
+          listAuditors().then(res => {
+            this.auditors = res.data.auditorlist;
+          });
           this.$message({
             showClose: true,
             message: "审核人设置成功",

@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { getAuditors } from "@/api/user";
+import { listAuditors } from "@/api/user";
 import {
   submitApplication,
   updateApplication,
@@ -157,8 +157,7 @@ export default {
     }
   }),
   created() {
-    console.log("ceshi");
-    getAuditors()
+    listAuditors()
       .then(res => {
         this.auditors = res.data.auditorlist;
         console.log(this.auditors);

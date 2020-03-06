@@ -1,7 +1,5 @@
 <template>
   <div class="tab-container">
-    <el-tag>mounted times ：{{ createdTimes }}</el-tag>
-    <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="Tab with keep-alive" type="success" />
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
       <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.key">
         <keep-alive> </keep-alive>
@@ -16,10 +14,8 @@ export default {
   data() {
     return {
       tabMapOptions: [
-        { label: "China", key: "CN" },
-        { label: "USA", key: "US" },
-        { label: "Japan", key: "JP" },
-        { label: "Eurozone", key: "EU" }
+        { label: "数据初始化", key: "CN" },
+        { label: "参数配置", key: "US" }
       ],
       activeName: "CN",
       createdTimes: 0

@@ -26,7 +26,7 @@ export function getInfo() {
 }
 
 // 获取审核人
-export function getAuditors() {
+export function listAuditors() {
   return axios({
     url: "/user/getAuditors",
     method: "get"

@@ -9,10 +9,18 @@ export function addProject(data) {
   });
 }
 
-// 审核人查询未完成项目
+// 审核人查询进行中的项目
 export function listUnfinishProject(aid) {
   return request({
     url: "/project/unfinish/" + aid,
+    method: "get"
+  });
+}
+
+// 审核人查询进行中的项目
+export function listfinishProject(aid) {
+  return request({
+    url: "/project/finish/" + aid,
     method: "get"
   });
 }

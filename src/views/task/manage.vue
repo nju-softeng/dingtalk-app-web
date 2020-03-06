@@ -40,6 +40,7 @@ export default {
 }
 
 .app-container {
+  padding: 10px;
   background-color: #f5f5f5;
   height: 92vh;
   border-radius: 0;

@@ -24,7 +24,9 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar" />
+          <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
+            {{ name }}
+          </el-avatar>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -51,7 +53,14 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"])
+    ...mapGetters(["sidebar", "avatar", "device", "name"])
+  },
+  created() {
+    console.log("头像");
+    if (this.avatar == "") {
+      console.log("null");
+    }
+    console.log(this.avatar);
   },
   methods: {
     toggleSideBar() {
@@ -134,6 +143,7 @@ export default {
           width: 35px;
           height: 35px;
           border-radius: 10px;
+          background-color: #409eff;
         }
 
         .el-icon-caret-bottom {

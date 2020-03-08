@@ -47,13 +47,13 @@
               </div>
             </el-card>
             <el-card shadow="never" class="head">
-              <div class="title">参与项目</div>
+              <div class="title">连续按时交付</div>
               <div class="content">
                 0
               </div>
             </el-card>
             <el-card shadow="never" class="head">
-              <div class="title">bug数</div>
+              <div class="title">defect voucher</div>
               <div class="content">
                 0
               </div>
@@ -102,13 +102,19 @@
                 </router-link>
               </div>
               <div class="item">
-                <el-link type="primary">主要链接</el-link>
+                <router-link to="/task/index">
+                  <el-link type="primary">迭代任务 </el-link>
+                </router-link>
               </div>
               <div class="item">
-                <el-link type="primary">主要链接</el-link>
+                <router-link to="/task/bug">
+                  <el-link type="primary">bug报告</el-link>
+                </router-link>
               </div>
               <div class="item">
-                <el-link type="primary">主要链接</el-link>
+                <router-link to="/paper/index">
+                  <el-link type="primary">论文管理</el-link>
+                </router-link>
               </div>
             </div>
           </el-card>
@@ -247,7 +253,7 @@ export default {
 
 .dashboard-container {
   padding: 12px;
-
+  min-height: 580px;
   background-color: rgb(240, 242, 245);
 
   .chart-wrapper {
@@ -266,7 +272,7 @@ export default {
 .shortcut {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   .item {
     padding: 5px;
   }

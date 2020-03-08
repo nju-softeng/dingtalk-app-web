@@ -589,6 +589,7 @@ export default {
   border-radius: 0;
 }
 .box {
+  min-width: 940px;
   min-height: 60px;
   background: #fff;
   padding: 20px 20px 0 20px;

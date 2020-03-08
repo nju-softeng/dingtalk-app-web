@@ -40,6 +40,7 @@ export function contactChoose(url, userids) {
           corpId: "dingeff939842ad9207f35c2f4657eb6378f", //企业id
           max: 10 //人数限制，当multiple为true才生效，可选范围1-1500
         }).then(res => {
+          res = JSON.parse(JSON.stringify(res).replace(/emplId/g, "userid"));
           resolve(res);
         });
       })

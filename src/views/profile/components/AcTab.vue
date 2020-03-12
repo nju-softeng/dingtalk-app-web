@@ -1,5 +1,10 @@
 <template>
   <div class="block">
+    <template v-if="list.length == 0">
+      <div style="height:200px;text-align:center;padding-top:70px;">
+        <svg-icon icon-class="null" style="font-size:32px" />
+      </div>
+    </template>
     <el-timeline>
       <el-timeline-item v-for="(item, index) of list" :key="index" :timestamp="item.create_time" placement="top">
         <el-card shadow="never">

@@ -1,11 +1,16 @@
 <template>
   <div class="user-activity">
+    <template v-if="list.length == 0">
+      <div style="height:200px;text-align:center;padding-top:70px;">
+        <svg-icon icon-class="null" style="font-size:32px" />
+      </div>
+    </template>
     <div class="post" v-for="(dc, index) in list" :key="index">
       {{ dc.yearmonth | formatWeek(dc.week) }}
       {{ dc }}
     </div>
     <div style="text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="singlePage" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
     </div>
   </div>
@@ -23,10 +28,16 @@ export default {
   },
   created() {
     getUserApplication(0).then(res => {
-      this.list = res.data.list;
-      this.total = res.data.total;
+      this.list = res.data.list || [];
+      this.total = res.data.total || 0;
+      console.log(this.total);
       console.log(this.list);
     });
+  },
+  computed: {
+    singlePage() {
+      return this.total < 10;
+    }
   },
   methods: {
     // 分页获取数据

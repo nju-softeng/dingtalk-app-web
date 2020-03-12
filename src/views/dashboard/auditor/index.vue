@@ -3,6 +3,7 @@
     <div class="dashboard-container">
       <el-row :gutter="5">
         <el-col :xs="24" :sm="16" :lg="16">
+          <!-- 四位展示板 -->
           <div style="height:107.67px; margin-bottom: 5px; display:flex">
             <el-card shadow="never" class="head">
               <div class="title">本月DC值</div>
@@ -44,10 +45,10 @@
                 {{ perf.acTotal }}
               </div>
             </el-card>
-            <el-card shadow="never" class="head">
-              <div class="title">连续按时交付</div>
+            <el-card @click.native="goAuditor" shadow="never" class="head" style="cursor:pointer;">
+              <div class="title">待审核申请</div>
               <div class="content">
-                0
+                {{ unCheckCnt }}
               </div>
             </el-card>
             <el-card shadow="never" class="head">
@@ -169,12 +170,14 @@
 import { showHelloTime } from "@/utils/index";
 import { getMessages } from "@/api/message";
 import { lastAc, getPerformance } from "@/api/performance";
+import { getUnCheckCnt } from "@/api/audit";
 
 export default {
   data() {
     return {
       messages: [],
       lastAcs: [],
+      unCheckCnt: 0,
       perf: {
         dcTotal: "",
         acTotal: "",
@@ -197,21 +200,18 @@ export default {
     });
     lastAc().then(res => {
       this.lastAcs = res.data;
-      console.log(this.lastAcs);
     });
     getPerformance().then(res => {
       this.perf = res.data;
-      console.log(this.perf);
+    });
+    getUnCheckCnt().then(res => {
+      this.unCheckCnt = res.data;
     });
   },
-  computed: {
-    helloTime() {
-      return showHelloTime();
-    }
-  },
+  computed: {},
   methods: {
-    load() {
-      this.count += 2;
+    goAuditor() {
+      this.$router.push({ path: "/performance/perfAudit" });
     }
   }
 };

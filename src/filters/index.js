@@ -9,7 +9,7 @@ export { parseTime, formatTime, formatWeek } from "@/utils";
  */
 function pluralize(time, label) {
   if (time === 1) {
-    return time + label;
+    return time + label + "前";
   }
   return time + label + "前";
 }

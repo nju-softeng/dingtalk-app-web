@@ -6,7 +6,9 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <el-avatar class="avatar" shape="square" :size="60" :src="avatar"></el-avatar>
+        <el-avatar class="avatar" shape="square" :size="60" :src="avatar">{{
+          user.name
+        }}</el-avatar>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
@@ -34,19 +36,19 @@
         </div>
         <div class="user-bio-section-body">
           <div class="progress-item">
-            <span>Vue</span>
+            <span>placeholder</span>
             <el-progress :percentage="70" />
           </div>
           <div class="progress-item">
-            <span>JavaScript</span>
+            <span>placeholder</span>
             <el-progress :percentage="18" />
           </div>
           <div class="progress-item">
-            <span>Css</span>
+            <span>placeholder</span>
             <el-progress :percentage="12" />
           </div>
           <div class="progress-item">
-            <span>ESLint</span>
+            <span>placeholder</span>
             <el-progress :percentage="100" status="success" />
           </div>
         </div>
@@ -80,6 +82,10 @@ export default {
 .box-center {
   margin: 0 auto;
   display: table;
+}
+
+.avatar {
+  background-color: #409eff;
 }
 
 .text-muted {

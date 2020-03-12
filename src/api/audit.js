@@ -1,13 +1,5 @@
 import axios from "@/utils/request";
 
-// 批量获取周报
-export function getReportList() {
-  return axios({
-    url: "/getreportlist",
-    method: "get"
-  });
-}
-
 // 获取单个周报
 export function fetchReport(uid, date) {
   return axios({
@@ -17,6 +9,7 @@ export function fetchReport(uid, date) {
   });
 }
 
+// 提交审核结果
 export function submitAudit(data) {
   return axios({
     url: "/audit",
@@ -25,6 +18,7 @@ export function submitAudit(data) {
   });
 }
 
+// 更新审核结果
 export function updateAudit(data) {
   return axios({
     url: "/updateAudit",
@@ -49,10 +43,10 @@ export function getToChecked() {
   });
 }
 
-export function getReport(data) {
+// 审核人待审核申请数
+export function getUnCheckCnt() {
   return axios({
-    url: "report",
-    method: "post",
-    data
+    url: "/audit/uncheckcnt",
+    method: "get"
   });
 }

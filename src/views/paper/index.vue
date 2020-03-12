@@ -454,7 +454,7 @@ export default {
       let val = item.paperDetails;
       if (
         this.role == "admin" ||
-        this.role == "auditor" ||
+        this.role == "doctor" ||
         val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
       ) {
         this.resultDialog = true;
@@ -494,7 +494,7 @@ export default {
       let val = item.paperDetails;
       if (
         this.role == "admin" ||
-        this.role == "auditor" ||
+        this.role == "doctor" ||
         val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
       ) {
         this.dialog = true;
@@ -516,7 +516,7 @@ export default {
       let val = item.paperDetails;
       if (
         this.role == "admin" ||
-        this.role == "auditor" ||
+        this.role == "doctor" ||
         val.map(item => item.user.id).indexOf(eval(this.uid)) != -1
       ) {
         this.$confirm(
@@ -617,6 +617,7 @@ export default {
     justify-content: space-between;
 
     .left-content {
+      font-size: 13px;
       padding-left: 10px;
       display: flex;
       flex-direction: column;

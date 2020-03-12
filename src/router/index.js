@@ -76,7 +76,7 @@ export const constantRoutes = [
         path: "index",
         component: () => import("@/views/profile/index"),
         name: "Profile",
-        meta: { title: "Profile", icon: "user", noCache: true }
+        meta: { title: "个人中心", icon: "user", noCache: true }
       }
     ]
   }
@@ -137,7 +137,7 @@ export const asyncRoutes = [
       {
         path: "index",
         name: "Task",
-        component: () => import("@/views/task/index"),
+        component: () => import("@/views/task/myproject"),
         meta: {
           title: "我的迭代",
           icon: "table",
@@ -185,7 +185,7 @@ export const asyncRoutes = [
     meta: {
       title: "系统设置",
       icon: "setting",
-      roles: ["admin", "doctor", "postgraduate"]
+      roles: ["admin", "doctor"]
     },
     children: [
       {
@@ -193,29 +193,14 @@ export const asyncRoutes = [
         name: "UserMan",
         component: () => import("@/views/sysMan/userMan/index"),
         meta: { title: "用户管理", icon: "user" },
-        roles: ["admin", "doctor", "postgraduate"]
+        roles: ["admin", "doctor"]
       },
       {
         path: "configMan",
         name: "ConfigMan",
         component: () => import("@/views/sysMan/configMan/index"),
         meta: { title: "参数管理", icon: "skill" },
-        roles: ["admin", "doctor", "postgraduate"]
-      }
-    ]
-  },
-  {
-    path: "/test",
-    component: Layout,
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/test/index"),
-        name: "test",
-        meta: {
-          title: "Test",
-          icon: "tab"
-        }
+        roles: ["admin", "doctor"]
       }
     ]
   },

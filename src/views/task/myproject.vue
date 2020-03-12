@@ -2,12 +2,10 @@
   <div class="app-container">
     <div class="box">
       <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="任务分配">
-          <assign />
-        </el-tab-pane>
+        <el-tab-pane label="迭代任务"> </el-tab-pane>
         <el-tab-pane>
           <span slot="label">
-            <i class="el-icon-message">bug管理</i>
+            <i class="el-icon-message">我的bug</i>
             <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
 
@@ -19,11 +17,11 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      unfinish: true
+    };
   },
-  components: {
-    assign: () => import("./components/assign")
-  },
+  components: {},
   created() {},
   methods: {}
 };
@@ -40,8 +38,9 @@ export default {
 }
 
 .app-container {
+  padding: 10px;
   background-color: #f5f5f5;
-  height: 92vh;
+  //height: 92vh;
   border-radius: 0;
 }
 .box {

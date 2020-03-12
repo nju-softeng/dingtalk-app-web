@@ -5,6 +5,9 @@
         <el-tab-pane label="任务分配">
           <assign />
         </el-tab-pane>
+        <el-tab-pane label="已完成">
+          <finished />
+        </el-tab-pane>
         <el-tab-pane>
           <span slot="label">
             <i class="el-icon-message">bug管理</i>
@@ -22,7 +25,8 @@ export default {
     return {};
   },
   components: {
-    assign: () => import("./components/assign")
+    assign: () => import("./components/assign"),
+    finished: () => import("./components/finished")
   },
   created() {},
   methods: {}
@@ -42,7 +46,7 @@ export default {
 .app-container {
   padding: 10px;
   background-color: #f5f5f5;
-  height: 92vh;
+  //height: 92vh;
   border-radius: 0;
 }
 .box {

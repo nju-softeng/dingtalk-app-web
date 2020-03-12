@@ -41,3 +41,43 @@ export function deleteProject(id) {
     method: "get"
   });
 }
+
+// 获取项目期间的dc
+export function getProjectDc(pid, date) {
+  return request({
+    url: "/project/dc/" + pid,
+    method: "post",
+    data: {
+      finishdate: date
+    }
+  });
+}
+
+// 获取项目期间的ac
+export function computeProjectAc(pid, date) {
+  return request({
+    url: "/project/computeac/" + pid,
+    method: "post",
+    data: {
+      finishdate: date
+    }
+  });
+}
+
+export function autoSetAc(pid, date) {
+  return request({
+    url: "/project/autosetac/" + pid,
+    method: "post",
+    data: {
+      finishdate: date
+    }
+  });
+}
+
+export function manualSetAc(pid, data) {
+  return request({
+    url: "/project/manualsetac/" + pid,
+    method: "post",
+    data
+  });
+}

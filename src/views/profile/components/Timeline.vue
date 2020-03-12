@@ -2,8 +2,8 @@
   <div class="block">
     <el-timeline>
       <el-timeline-item v-for="(item, index) of list" :key="index" :timestamp="item.create_time" placement="top">
-        <el-card>
-          <h4>{{ item.reason }}</h4>
+        <el-card shadow="never">
+          <p>{{ item.reason }}</p>
           <p>
             <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
             <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>

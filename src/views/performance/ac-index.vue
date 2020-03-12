@@ -16,8 +16,8 @@
         <el-timeline>
           <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
             <div class="test">
-              <el-card class="ac-card">
-                <h4>{{ item.reason }}</h4>
+              <el-card shadow="never" class="ac-card">
+                <p>{{ item.reason }}</p>
                 <p>
                   <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
                   <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>

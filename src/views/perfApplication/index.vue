@@ -113,7 +113,7 @@
     </div>
 
     <div style="text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
     </div>
   </div>

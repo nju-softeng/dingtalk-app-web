@@ -1,17 +1,9 @@
 <template>
   <div class="project">
-    <div class="action" style="margin-bottom:10px">
-      <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代任务</el-button>
-      <!-- <el-select v-model="unfinish" @change="changeStatus" style="width:100px;float:right;margin-right:10px">
-        <el-option label="进行中" :value="true"> </el-option>
-        <el-option label="已结束" :value="false"> </el-option>
-      </el-select> -->
-    </div>
-
     <div class="list" v-loading="loading">
       <div v-if="list.length == 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
-        <svg-icon icon-class="null" style="font-size:50px" />
-        <!-- <div style="height:20px">无数据</div> -->
+        <svg-icon icon-class="null" style="font-size:40px" />
+        <div style="height:20px">无数据</div>
       </div>
       <el-card class="item" v-for="(item, index) in list" :key="index" shadow="hover">
         <div>
@@ -21,7 +13,6 @@
                 <el-button type="text"><i class="el-icon-more "></i></el-button>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="modify(item)" icon="el-icon-edit">修改任务</el-dropdown-item>
                 <el-dropdown-item @click.native="deleteProject(item.id)" icon="el-icon-error">删除任务</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -34,52 +25,16 @@
         </div>
         <p style="font-size:12.5px">
           <span>时间: {{ item.beginTime }} ~ {{ item.endTime }}</span>
+          <span style="padding:15px; color:#67C23A" v-if="getRemainDay(item.endTime) >= 0">
+            按时完成</span>
+          <span style="padding:15px; color:#F56C6C" v-else> 延期完成</span>
         </p>
-        <p style="font-size:12.5px">
-          <span style="color:#67C23A" v-if="getRemainDay(item.endTime) >= 0">
-            剩余: {{ getRemainDay(item.endTime) }} 天</span>
-          <span style="padding:15px; color:#F56C6C" v-else>
-            延期: {{ -getRemainDay(item.endTime) }} 天</span>
-          <span style="padding:10px; font-size:12.5px; color:#409EFF">预期AC：{{ item.expectedAC }}</span>
-        </p>
-
-        <el-tag style="margin-right:5px" size="small" v-for="(pd, index) in item.projectDetails" :key="index">{{ pd.user.name }}</el-tag>
-        <el-button style="float:right" @click="detail(item)" size="mini">确认完成</el-button>
+        <div>
+          <el-tag style="margin-right:5px" size="small" v-for="(pd, index) in item.projectDetails" :key="index">{{ pd.user.name }} : + {{ pd.ac }}</el-tag>
+          <el-button style="float:right" @click="detail(item)" size="mini">修改</el-button>
+        </div>
       </el-card>
     </div>
-
-    <el-dialog :visible.sync="dialog" @close="clearProjectForm" width="65%">
-      <div slot="title">
-        <span class="title-age">迭代任务 </span>
-      </div>
-
-      <el-form v-loading="loading" ref="projectform" :rules="rules" :model="projectform">
-        <el-form-item prop="name">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 迭代名称: </span>
-          <el-input v-model="projectform.name" style="width:350px" placeholder="请输入内容"></el-input>
-        </el-form-item>
-        <el-form-item prop="dates">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 起止时间: </span>
-          <el-date-picker value-format="yyyy-MM-dd" v-model="projectform.dates" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item prop="dingIds">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag size="medium" closable style="margin: 0 2px" v-for="(u, index) in userlist" :key="index" @close="closeTag(u)">{{ u.name }}</el-tag>
-          <el-button style="margin-left:2px" size="mini" @click="choose()">
-            <i>
-              <svg-icon icon-class="addperson" /> </i> 添加</el-button>
-        </el-form-item>
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
-      </div>
-    </el-dialog>
 
     <el-dialog :visible.sync="detailDialog" width="70%">
       <div slot="title">
@@ -234,7 +189,7 @@ export default {
   },
   created() {
     this.uid = sessionStorage.getItem("uid");
-    listUnfinishProject(this.uid).then(res => {
+    listfinishProject(this.uid).then(res => {
       this.list = res.data;
     });
   },
@@ -364,7 +319,7 @@ export default {
       });
     },
     deleteProject(id) {
-      this.$confirm("此操作将删除开发任务, 是否继续?", "提示", {
+      this.$confirm("相关的绩效也会被删除, 请谨慎操作！", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -372,7 +327,7 @@ export default {
       })
         .then(() => {
           deleteProject(id).then(() => {
-            listUnfinishProject(this.uid).then(res => {
+            listfinishProject(this.uid).then(res => {
               this.list = res.data;
             });
             this.$message({
@@ -419,6 +374,10 @@ export default {
   padding-top: 5px;
 }
 
+.project /deep/ .el-card__body {
+  padding: 15px;
+}
+
 .list {
   display: flex;
   flex-wrap: wrap;
@@ -428,7 +387,7 @@ export default {
 
 .item {
   margin: 5px 5px 5px 0;
-  height: 145px;
+  height: 120px;
   width: 49%;
 }
 

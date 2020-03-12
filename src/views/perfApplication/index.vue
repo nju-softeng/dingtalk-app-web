@@ -57,7 +57,7 @@
                 <span v-if="props.row.acItems.length == 0"> 无 </span>
                 <div v-else>
                   <li v-for="(item, index) in props.row.acItems" :key="index">
-                    申请值: {{ item.ac }} - 申请理由：{{ item.reason }}
+                    申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
                   </li>
                 </div>
               </el-form-item>

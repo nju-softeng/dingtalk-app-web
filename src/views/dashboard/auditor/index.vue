@@ -31,9 +31,7 @@
                     </div>
                   </div>
 
-                  <span slot="reference" class="content">{{
-                    perf.dcTotal
-                  }}</span>
+                  <div slot="reference" class="content">{{ perf.dcTotal }}</div>
                 </el-popover>
               </div>
               <div class="rank">
@@ -59,28 +57,38 @@
               </div>
             </el-card>
           </div>
+          <!-- 消息面板 -->
           <el-card class="box-card" shadow="never">
+            <!-- 消息卡片头 -->
             <div slot="header" class="clearfix">
               <span>动态</span>
               <router-link to="/profile/index">
                 <el-button style="float: right;padding:0" type="text">查看更多</el-button>
               </router-link>
             </div>
-
-            <div class="message" v-for="(msg, index) in messages" :key="index">
-              <div class="title">{{ msg.title }}</div>
-              <div style="display:flex">
-                <div class="content">
-                  <span>{{ msg.content }}</span>
-                </div>
-                <div class="time">
-                  <span>{{ new Date(msg.createTime) | timeAgo }}</span>
+            <!-- 消息内容 -->
+            <template v-if="messages.length != 0">
+              <div class="message" v-for="(msg, index) in messages" :key="index">
+                <div class="title">{{ msg.title }}</div>
+                <div style="display:flex">
+                  <div class="content">
+                    <span>{{ msg.content }}</span>
+                  </div>
+                  <div class="time">
+                    <span>{{ new Date(msg.createTime) | timeAgo }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
+            <template>
+              <div style="height:200px;text-align:center;padding-top:50px;">
+                <svg-icon icon-class="null" style="font-size:32px" />
+              </div>
+            </template>
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="8" :lg="8">
+          <!-- 快捷导航 -->
           <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
             <div slot="header" class="clearfix">
               <span>快捷导航</span>
@@ -119,6 +127,7 @@
             </div>
           </el-card>
 
+          <!-- AC变动公告 -->
           <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
               <span>AC变动公告</span>
@@ -236,10 +245,12 @@ export default {
   .title {
     padding: 6px 0px;
     font-size: 14px;
+
     color: rgba(0, 0, 0, 0.45);
   }
   .content {
     font-size: 25px;
+    text-align: center;
     color: rgba(0, 0, 0, 0.85);
   }
   .rank {

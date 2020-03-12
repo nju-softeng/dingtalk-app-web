@@ -10,8 +10,8 @@
             <i class="el-icon-message">我的bug</i>
             <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
-
-          bug管理</el-tab-pane>
+          <userbug />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -24,7 +24,8 @@ export default {
     };
   },
   components: {
-    devlist: () => import("./components/devlist")
+    devlist: () => import("./components/devlist"),
+    userbug: () => import("./components/userbug")
   },
   created() {},
   methods: {}

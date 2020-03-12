@@ -1,8 +1,5 @@
 <template>
   <div class="app-container">
-    <div class="action" @click="dialog = true" style="margin-bottom:10px">
-      <el-button type="primary" icon="el-icon-plus">报告bug</el-button>
-    </div>
     <div>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="address" label="日期"> </el-table-column>

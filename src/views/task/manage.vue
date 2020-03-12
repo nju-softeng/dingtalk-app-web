@@ -13,8 +13,8 @@
             <i class="el-icon-message">bug管理</i>
             <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
-
-          bug管理</el-tab-pane>
+          <auditbug />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -26,7 +26,8 @@ export default {
   },
   components: {
     assign: () => import("./components/assign"),
-    finished: () => import("./components/finished")
+    finished: () => import("./components/finished"),
+    auditbug: () => import("./components/auditbug")
   },
   created() {},
   methods: {}

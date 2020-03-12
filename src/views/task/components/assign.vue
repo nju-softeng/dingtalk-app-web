@@ -1,5 +1,6 @@
 <template>
   <div class="project">
+    <!-- 添加button  -->
     <div class="action" style="margin-bottom:10px">
       <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代任务</el-button>
       <!-- <el-select v-model="unfinish" @change="changeStatus" style="width:100px;float:right;margin-right:10px">
@@ -8,7 +9,9 @@
       </el-select> -->
     </div>
 
+    <!-- 迭代卡片 -->
     <div class="list" v-loading="loading">
+      <!-- 无数据提示  -->
       <div v-if="list.length == 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
         <svg-icon icon-class="null" style="font-size:50px" />
         <!-- <div style="height:20px">无数据</div> -->
@@ -38,7 +41,7 @@
         <p style="font-size:12.5px">
           <span style="color:#67C23A" v-if="getRemainDay(item.endTime) >= 0">
             剩余: {{ getRemainDay(item.endTime) }} 天</span>
-          <span style="padding:15px; color:#F56C6C" v-else>
+          <span style="color:#F56C6C" v-else>
             延期: {{ -getRemainDay(item.endTime) }} 天</span>
           <span style="padding:10px; font-size:12.5px; color:#409EFF">预期AC：{{ item.expectedAC }}</span>
         </p>
@@ -48,6 +51,7 @@
       </el-card>
     </div>
 
+    <!-- 添加迭代任务dialog -->
     <el-dialog :visible.sync="dialog" @close="clearProjectForm" width="65%">
       <div slot="title">
         <span class="title-age">迭代任务 </span>
@@ -81,6 +85,7 @@
       </div>
     </el-dialog>
 
+    <!-- 确认完成dialog -->
     <el-dialog :visible.sync="detailDialog" width="70%">
       <div slot="title">
         <span class="title-age">{{ tmp.name }} </span>
@@ -339,6 +344,7 @@ export default {
       this.$refs.projectform.validate(valid => {
         if (valid) {
           this.loading = true;
+          console.log(this.projectform);
           addProject(this.projectform)
             .then(() => {
               this.dialog = false;

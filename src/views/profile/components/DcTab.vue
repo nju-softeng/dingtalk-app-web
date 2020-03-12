@@ -6,8 +6,32 @@
       </div>
     </template>
     <div class="post" v-for="(dc, index) in list" :key="index">
-      {{ dc.yearmonth | formatWeek(dc.week) }}
-      {{ dc }}
+      <span style="padding-right:15px;">{{
+        dc.yearmonth | formatWeek(dc.week)
+      }}</span>
+      <el-tag effect="plain" v-if="dc.status"> 待审核</el-tag>
+      <span style="padding:10px">审核人:{{ dc.auditor.name }}</span>
+      <br />
+
+      <div style="padding-top:5px; padding-bottom:5px">
+        <span>申请D值: {{ dc.dvalue }}</span>
+        <template v-if="dc.status">
+          <span style="padding:10px;"> 审核C值: {{ dc.cvalue }}</span>
+          <span style="padding:10px;">DC值: dc.dc</span>
+        </template>
+      </div>
+      <template v-if="dc.status">
+        <span>申请AC:</span>
+        <li v-for="(o, index) in dc.acItems" :key="index">
+          {{ o.reason }} ~> AC: {{ o.ac }}
+        </li>
+      </template>
+      <template v-else>
+        <span>AC审核结果:</span>
+        <li v-for="(o, index) in dc.acItems" :key="index">
+          {{ o.reason }} ~> AC: {{ o.ac }}
+        </li>
+      </template>
     </div>
     <div style="text-align:center">
       <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="singlePage" small layout="prev, pager, next" :total="total" :page-size="10">

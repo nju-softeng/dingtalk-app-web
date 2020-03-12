@@ -2,7 +2,9 @@
   <div class="app-container">
     <div class="box">
       <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="迭代任务"> </el-tab-pane>
+        <el-tab-pane label="迭代任务">
+          <devlist />
+        </el-tab-pane>
         <el-tab-pane>
           <span slot="label">
             <i class="el-icon-message">我的bug</i>
@@ -21,7 +23,9 @@ export default {
       unfinish: true
     };
   },
-  components: {},
+  components: {
+    devlist: () => import("./components/devlist")
+  },
   created() {},
   methods: {}
 };

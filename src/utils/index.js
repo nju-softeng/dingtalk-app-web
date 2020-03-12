@@ -114,7 +114,12 @@ export function formatTime(time, option) {
 }
 
 export function formatWeek(yearmonth, week) {
-  return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
+  console.log(yearmonth.toString()[4] + "??????????");
+  if (yearmonth.toString()[4] === 0) {
+    return yearmonth.toString().slice(5, 7) + " 月 第 " + week + " 周";
+  } else {
+    return yearmonth.toString().slice(4, 7) + " 月 第 " + week + " 周";
+  }
 }
 
 /**

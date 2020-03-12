@@ -1,6 +1,7 @@
 <template>
   <div class="user-activity">
     <div class="post" v-for="(dc, index) in list" :key="index">
+      {{ dc.yearmonth | formatWeek(dc.week) }}
       {{ dc }}
     </div>
     <div style="text-align:center">

@@ -81,3 +81,10 @@ export function manualSetAc(pid, data) {
     data
   });
 }
+
+export function listDevProject() {
+  return request({
+    url: "/project/dev",
+    method: "get"
+  });
+}

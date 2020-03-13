@@ -240,9 +240,6 @@ export default {
             this.$notify({
               title: "成功",
               message:
-                this.form.id +
-                "  this->" +
-                this.form.id +
                 this.temp.name +
                 "  DC值：" +
                 this.form.dc +

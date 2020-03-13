@@ -34,7 +34,7 @@
       </template>
     </div>
     <div style="text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="singlePage" small layout="prev, pager, next" :total="total" :page-size="10">
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
     </div>
   </div>
@@ -58,11 +58,7 @@ export default {
       console.log(this.list);
     });
   },
-  computed: {
-    singlePage() {
-      return this.total < 10;
-    }
-  },
+
   methods: {
     // 分页获取数据
     handleCurrentChange(val) {

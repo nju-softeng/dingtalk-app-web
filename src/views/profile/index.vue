@@ -15,7 +15,7 @@
               <el-tab-pane label="AC日志" name="actab">
                 <actab />
               </el-tab-pane>
-              <el-tab-pane label="消息记录" name="account">
+              <el-tab-pane label="消息记录" name="msg">
                 <Message />
               </el-tab-pane>
             </el-tabs>
@@ -49,6 +49,7 @@ export default {
   },
   created() {
     this.getUser();
+    this.activeTab = this.$route.query.tab;
   },
   methods: {
     getUser() {

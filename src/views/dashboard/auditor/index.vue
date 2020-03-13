@@ -39,7 +39,7 @@
                 排名:
               </div>
             </el-card>
-            <el-card shadow="never" class="head">
+            <el-card @click.native="goAc" shadow="never" class="head" style="cursor:pointer;">
               <div class="title">累计AC</div>
               <div class="content">
                 {{ perf.acTotal }}
@@ -63,12 +63,12 @@
             <!-- 消息卡片头 -->
             <div slot="header" class="clearfix">
               <span>动态</span>
-              <router-link to="/profile/index">
+              <router-link :to="{ path: '/profile/index', query: { tab: 'msg' } }">
                 <el-button style="float: right;padding:0" type="text">查看更多</el-button>
               </router-link>
             </div>
             <!-- 消息内容 -->
-            <template v-if="messages.length != 0">
+            <div v-if="messages.length != 0" style="min-height:200px">
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
                 <div style="display:flex">
@@ -80,8 +80,8 @@
                   </div>
                 </div>
               </div>
-            </template>
-            <template>
+            </div>
+            <template v-else>
               <div style="height:200px;text-align:center;padding-top:50px;">
                 <svg-icon icon-class="null" style="font-size:32px" />
               </div>
@@ -167,7 +167,6 @@
 </template>
 
 <script>
-import { showHelloTime } from "@/utils/index";
 import { getMessages } from "@/api/message";
 import { lastAc, getPerformance } from "@/api/performance";
 import { getUnCheckCnt } from "@/api/audit";
@@ -195,15 +194,19 @@ export default {
   created() {
     this.avatar = sessionStorage.getItem("avatar");
     this.name = sessionStorage.getItem("name");
-    getMessages(0).then(res => {
+    // 消息
+    getMessages(0, 5).then(res => {
       this.messages = res.data.content;
     });
+    // 实验室最近AC变更
     lastAc().then(res => {
       this.lastAcs = res.data;
     });
+    // 绩效
     getPerformance().then(res => {
       this.perf = res.data;
     });
+    // 审核人未审核数
     getUnCheckCnt().then(res => {
       this.unCheckCnt = res.data;
     });
@@ -212,6 +215,14 @@ export default {
   methods: {
     goAuditor() {
       this.$router.push({ path: "/performance/perfAudit" });
+    },
+    goAc() {
+      this.$router.push({
+        path: "/profile/index",
+        query: {
+          tab: "actab"
+        }
+      });
     }
   }
 };

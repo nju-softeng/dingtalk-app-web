@@ -2,7 +2,7 @@
   <div class="project">
     <!-- 添加button  -->
     <div class="action" style="margin-bottom:10px">
-      <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建迭代任务</el-button>
+      <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建项目</el-button>
       <!-- <el-select v-model="unfinish" @change="changeStatus" style="width:100px;float:right;margin-right:10px">
         <el-option label="进行中" :value="true"> </el-option>
         <el-option label="已结束" :value="false"> </el-option>

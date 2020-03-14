@@ -6,31 +6,36 @@
       </div>
     </template>
     <div class="post" v-for="(dc, index) in list" :key="index">
-      <span style="padding-right:15px;">{{
+      <span style="padding-right:15px;color: #1890ff;">{{
         dc.yearmonth | formatWeek(dc.week)
       }}</span>
-      <el-tag effect="plain" v-if="dc.status"> 待审核</el-tag>
-      <span style="padding:10px">审核人:{{ dc.auditor.name }}</span>
+      <el-tag effect="plain" v-if="!dc.status"> 待审核</el-tag>
+      <span style="padding:10px;color: rgba(0, 0, 0, 0.45);">审核人:{{ dc.auditor.name }}</span>
+      <span> {{ dc.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
       <br />
 
-      <div style="padding-top:5px; padding-bottom:5px">
+      <div style="padding-top:10px; padding-bottom:5px">
         <span>申请D值: {{ dc.dvalue }}</span>
         <template v-if="dc.status">
           <span style="padding:10px;"> 审核C值: {{ dc.cvalue }}</span>
-          <span style="padding:10px;">DC值: dc.dc</span>
+          <span style="padding:10px;">DC值: {{ dc.dc }}</span>
         </template>
       </div>
-      <template v-if="dc.status">
-        <span>申请AC:</span>
-        <li v-for="(o, index) in dc.acItems" :key="index">
-          {{ o.reason }} ~> AC: {{ o.ac }}
-        </li>
+      <template v-if="!dc.status">
+        <template v-if="dc.acItems.length != 0">
+          <span>申请AC:</span>
+          <li v-for="(o, index) in dc.acItems" :key="index">
+            {{ o.reason }} ~> AC: {{ o.ac }}
+          </li>
+        </template>
       </template>
       <template v-else>
-        <span>AC审核结果:</span>
-        <li v-for="(o, index) in dc.acItems" :key="index">
-          {{ o.reason }} ~> AC: {{ o.ac }}
-        </li>
+        <template v-if="dc.acItems.length != 0">
+          <span>AC审核结果:</span>
+          <li v-for="(o, index) in dc.acItems" :key="index">
+            {{ o.reason }} ~> AC: {{ o.ac }}
+          </li>
+        </template>
       </template>
     </div>
     <div style="text-align:center">
@@ -114,7 +119,7 @@ export default {
 
   .post {
     font-size: 14px;
-    border-bottom: 1px solid #d2d6de;
+    border-bottom: 0.5px solid #d2d6de;
     margin-bottom: 15px;
     padding-bottom: 15px;
     color: #666;

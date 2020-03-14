@@ -3,6 +3,7 @@
     <div class="dashboard-container">
       <el-row :gutter="5">
         <el-col :xs="24" :sm="16" :lg="16">
+          <!-- 四位展示板 -->
           <div style="height:107.67px; margin-bottom: 5px; display:flex">
             <el-card shadow="never" class="head">
               <div class="title">本月DC值</div>
@@ -38,16 +39,16 @@
                 排名:
               </div>
             </el-card>
-            <el-card shadow="never" class="head">
+            <el-card @click.native="goAc" shadow="never" class="head" style="cursor:pointer;">
               <div class="title">累计AC</div>
               <div class="content">
                 {{ perf.acTotal }}
               </div>
             </el-card>
-            <el-card shadow="never" class="head">
+            <el-card shadow="never" class="head" style="cursor:pointer;">
               <div class="title">连续按时交付</div>
               <div class="content">
-                0
+                {{ unCheckCnt }}
               </div>
             </el-card>
             <el-card shadow="never" class="head">
@@ -62,12 +63,12 @@
             <!-- 消息卡片头 -->
             <div slot="header" class="clearfix">
               <span>动态</span>
-              <router-link to="/profile/index">
+              <router-link :to="{ path: '/profile/index', query: { tab: 'msg' } }">
                 <el-button style="float: right;padding:0" type="text">查看更多</el-button>
               </router-link>
             </div>
             <!-- 消息内容 -->
-            <template v-if="messages.length != 0">
+            <div v-if="messages.length != 0" style="min-height:200px">
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
                 <div style="display:flex">
@@ -79,8 +80,8 @@
                   </div>
                 </div>
               </div>
-            </template>
-            <template>
+            </div>
+            <template v-else>
               <div style="height:200px;text-align:center;padding-top:50px;">
                 <svg-icon icon-class="null" style="font-size:32px" />
               </div>
@@ -166,15 +167,16 @@
 </template>
 
 <script>
-import { showHelloTime } from "@/utils/index";
 import { getMessages } from "@/api/message";
 import { lastAc, getPerformance } from "@/api/performance";
+import { getUnCheckCnt } from "@/api/audit";
 
 export default {
   data() {
     return {
       messages: [],
       lastAcs: [],
+      unCheckCnt: 0,
       perf: {
         dcTotal: "",
         acTotal: "",
@@ -192,26 +194,32 @@ export default {
   created() {
     this.avatar = sessionStorage.getItem("avatar");
     this.name = sessionStorage.getItem("name");
-    getMessages(0).then(res => {
+    // 消息
+    getMessages(0, 5).then(res => {
       this.messages = res.data.content;
     });
+    // 实验室最近AC变更
     lastAc().then(res => {
       this.lastAcs = res.data;
-      console.log(this.lastAcs);
     });
+    // 绩效
     getPerformance().then(res => {
       this.perf = res.data;
-      console.log(this.perf);
+    });
+    // 审核人未审核数
+    getUnCheckCnt().then(res => {
+      this.unCheckCnt = res.data;
     });
   },
-  computed: {
-    helloTime() {
-      return showHelloTime();
-    }
-  },
+  computed: {},
   methods: {
-    load() {
-      this.count += 2;
+    goAc() {
+      this.$router.push({
+        path: "/profile/index",
+        query: {
+          tab: "actab"
+        }
+      });
     }
   }
 };

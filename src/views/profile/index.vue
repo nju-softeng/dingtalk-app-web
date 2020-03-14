@@ -49,7 +49,8 @@ export default {
   },
   created() {
     this.getUser();
-    this.activeTab = this.$route.query.tab;
+    console.log(this.$route.query.tab);
+    this.activeTab = this.$route.query.tab || "dctab";
   },
   methods: {
     getUser() {

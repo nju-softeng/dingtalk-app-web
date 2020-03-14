@@ -105,6 +105,16 @@
             <el-tag v-for="(item, index) in row.acItems" :key="index" style="margin:0px 5px">{{ item.reason }} : {{ item.ac }}</el-tag>
           </template>
         </el-table-column>
+        <template slot="empty">
+          <div style="height:300px;">
+            <div style="margin-top:100px;">
+              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+            </div>
+            <div style="line-height: 10px;">
+              <span>待审核申请为空</span>
+            </div>
+          </div>
+        </template>
       </el-table>
     </div>
   </div>

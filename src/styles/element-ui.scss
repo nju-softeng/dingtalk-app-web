@@ -83,6 +83,7 @@
   box-sizing: content-box;
 }
 
-.el-table__header {
-  color: blue;
+.el-table thead th {
+  font-weight: normal;
+  // background: #f4f4f4;
 }

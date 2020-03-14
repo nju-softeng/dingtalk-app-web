@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
-    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="45%">
+    <!-- 周绩效申请 drawer -->
+    <el-drawer title="绩效申请" :visible.sync="drawer" :modal="false" :direction="direction" @closed="emptyForm" size="380px">
       <div class="drawer-content">
+        <!-- dc表单 -->
         <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
           <el-form-item prop="auditorid">
             <span slot="label">
@@ -24,7 +26,7 @@
             </el-tag>
           </el-form-item>
         </el-form>
-
+        <!-- ac申请 -->
         <div>
           <el-button type="text" @click="addAcItem">
             <i class="el-icon-plus"></i>
@@ -45,9 +47,9 @@
         <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
       </div>
     </el-drawer>
-
+    <!-- 申请按钮 -->
     <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
-
+    <!-- 已提的交申请 -->
     <div style="height:430px">
       <el-table :data="list" border fit highlight-current-row style="width: 100%">
         <el-table-column width="30px" label="#" type="expand">
@@ -109,9 +111,19 @@
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>
         </el-table-column>
+        <template slot="empty">
+          <div style="height:300px;">
+            <div style="margin-top:100px;">
+              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+            </div>
+            <div style="line-height: 10px;">
+              <span>没有已申请内容</span>
+            </div>
+          </div>
+        </template>
       </el-table>
     </div>
-
+    <!-- 分页 -->
     <div style="text-align:center">
       <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
@@ -172,6 +184,7 @@ export default {
   },
   computed: {},
   methods: {
+    // 清空表单
     emptyForm() {
       this.$refs["form"].resetFields();
       this.form.acItems = [];
@@ -182,21 +195,25 @@ export default {
         this.list = res.data.list;
       });
     },
+    // 上一页
     handlePrev(val) {
       getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
       });
     },
+    // 下一页
     handleNext(val) {
       getUserApplication(val - 1).then(res => {
         this.list = res.data.list;
       });
     },
+    // 点击添加后调用
     addApply() {
       this.apply = true;
       this.direction = "ltr";
       this.drawer = true;
     },
+    // 点击修改后调用
     addModify(row) {
       this.apply = false;
       this.direction = "rtl";
@@ -212,6 +229,7 @@ export default {
           row.yearmonth.toString().slice(4, 7) + " 月 第 " + row.week + " 周";
       });
     },
+    // 修改时间选择器的日期
     getDate() {
       let date = new Date(this.form.date);
       this.form.date = new Date(date.setDate(date.getDate() + 2));
@@ -225,7 +243,6 @@ export default {
     closeTag() {
       this.form.date = "";
     },
-
     // 提交申请
     submit() {
       this.$refs.form.validate(valid => {

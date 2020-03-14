@@ -3,7 +3,7 @@ import axios from "@/utils/request";
 // 获取单个周报
 export function fetchReport(uid, date) {
   return axios({
-    url: "/getreport/" + uid,
+    url: "/audit/report/" + uid,
     method: "post",
     data: { date: date }
   });
@@ -21,7 +21,7 @@ export function submitAudit(data) {
 // 更新审核结果
 export function updateAudit(data) {
   return axios({
-    url: "/updateAudit",
+    url: "/audit/update",
     method: "post",
     data
   });
@@ -30,15 +30,26 @@ export function updateAudit(data) {
 // 审核人获取已经审核的申请记录
 export function getChecked() {
   return axios({
-    url: "/checked",
+    url: "/audit/checked",
     method: "get"
+  });
+}
+
+// 更具时间筛选数据
+export function getCheckedByDate(date) {
+  return axios({
+    url: "/audit/checked/date",
+    method: "post",
+    data: {
+      date: date
+    }
   });
 }
 
 // 审核人获取已经审核的申请记录
 export function getToChecked() {
   return axios({
-    url: "/pending_audit",
+    url: "/audit/pending",
     method: "get"
   });
 }

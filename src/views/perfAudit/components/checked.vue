@@ -1,5 +1,6 @@
 <template>
   <div class="checked">
+    <!-- 详细信息 drawe -->
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
       <div class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
@@ -86,14 +87,19 @@
         </el-card>
       </div>
     </el-drawer>
+    <!-- 筛选 -->
+    <div style="margin-bottom:5px">
+      <el-date-picker v-model="date" @change="getDate" value-format="yyyy-MM-dd" type="week" format="yyyy 第 WW 周" style="width:150px" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }">
+      </el-date-picker>
+      <el-button @click="filterData" type="primary" size="mini" icon="el-icon-search" style="margin-left:5px">
+        筛选
+      </el-button>
+      <el-button @click="refresh" type="primary" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
+        重置
+      </el-button>
+    </div>
 
-    <el-date-picker v-model="date" type="week" format="yyyy 第 WW 周" style="width:150px" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }">
-    </el-date-picker>
-
-    <el-button type="primary" icon="el-icon-search" style="margin-left:5px">
-      筛选
-    </el-button>
-
+    <!-- 审核过的数据 -->
     <el-table :data="list" style="width: 100%;">
       <el-table-column width="30px" type="expand">
         <template slot-scope="props">
@@ -127,16 +133,31 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="{ row, $index }">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="modify(row, $index)">
+          <el-button type="text" size="mini" icon="el-icon-edit" @click="modify(row, $index)">
             修改
           </el-button>
         </template>
       </el-table-column>
+      <template slot="empty">
+        <div style="height:300px;">
+          <div style="margin-top:100px;">
+            <svg-icon icon-class="null" style="font-size:32px" /> <br />
+          </div>
+          <div style="line-height: 10px;">
+            <span>没有已审核内容</span>
+          </div>
+        </div>
+      </template>
     </el-table>
   </div>
 </template>
 <script>
-import { getChecked, fetchReport, updateAudit } from "@/api/audit";
+import {
+  getChecked,
+  fetchReport,
+  updateAudit,
+  getCheckedByDate
+} from "@/api/audit";
 export default {
   data() {
     return {
@@ -182,6 +203,7 @@ export default {
     });
   },
   methods: {
+    // 提交修改
     submit() {
       if (this.temp.cvalue) {
         this.form.id = this.temp.id;
@@ -213,6 +235,7 @@ export default {
         });
       }
     },
+    // 取消编辑ac
     cancelEdit(row) {
       row.ac = row.originalAc;
       row.edit = false;
@@ -221,6 +244,7 @@ export default {
         type: "warning"
       });
     },
+    // 确认编辑ac
     confirmEdit(row) {
       row.edit = false;
       row.ac *= 1;
@@ -233,6 +257,15 @@ export default {
         type: "success"
       });
     },
+    // 拒绝ac
+    rejectAcRow(row) {
+      row.reject = !row.reject;
+      row.status = !row.status;
+      this.temp.ac = this.temp.acItems
+        .filter(item => item.status === true)
+        .reduce((sum, item) => sum + item.ac, 0);
+    },
+    // 点击列表中某行，触发
     modify(row, index) {
       this.index = index;
       this.loading = true;
@@ -251,12 +284,26 @@ export default {
         this.loading = false;
       });
     },
-    rejectAcRow(row) {
-      row.reject = !row.reject;
-      row.status = !row.status;
-      this.temp.ac = this.temp.acItems
-        .filter(item => item.status === true)
-        .reduce((sum, item) => sum + item.ac, 0);
+    // 将日期选择器的时间+2天
+    getDate() {
+      let date = new Date(this.date);
+      this.date = new Date(date.setDate(date.getDate() + 2));
+    },
+    // 筛选数据
+    filterData() {
+      if (this.date == null) {
+        this.$message.error("错了哦，日期不能为空");
+      } else {
+        getCheckedByDate(this.date).then(res => {
+          this.list = res.data;
+        });
+      }
+    },
+    // 刷新
+    refresh() {
+      getChecked().then(res => {
+        this.list = res.data;
+      });
     }
   }
 };

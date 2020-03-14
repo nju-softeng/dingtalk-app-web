@@ -34,8 +34,10 @@
         </el-timeline>
       </el-scrollbar>
       <div class="null" v-else>
-        <svg-icon icon-class="null" style="font-size:40px" />
-        <div style="height:20px;color:rgba(0, 0, 0, 0.45);">无AC数据</div>
+        <svg-icon icon-class="null" style="font-size:32px" />
+        <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
+          无AC数据
+        </div>
       </div>
     </div>
   </div>

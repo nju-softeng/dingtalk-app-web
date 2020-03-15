@@ -5,98 +5,107 @@
         <div class="action" style="margin-bottom:10px">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
         </div>
-        <div class="bar" style="border-width: 0 0 1px 0;border-style: solid;border-color: #f6f6f6;">
-          <div style="width:390px;padding-left: 10px;">论文信息</div>
-          <div style="width:200px; padding-left:40px">论文作者</div>
-          <div style="width:100px;">投票结果</div>
-          <div style="width:180px;">投稿结果</div>
-          <div style="width:120px;">操作</div>
-        </div>
-        <div v-for="(item, index) in list" :key="index">
-          <div class="paper-item">
-            <div class="content">
-              <div class="left-content">
-                <div class="title">
-                  <el-tooltip class="item" effect="dark" :content="item.title" placement="top-start">
-                    <router-link :to="'/paper/detail/' + item.id" class="link-type">
-                      <svg-icon icon-class="paper" /> {{ item.title }}
-                    </router-link>
-                  </el-tooltip>
-                </div>
-                <div style="display:flex" class="detail">
-                  <div class="journal">
-                    <svg-icon icon-class="school" /> {{ item.journal }}
+        <el-table :data="list" style="width: 100%">
+          <el-table-column label="论文信息" width="335">
+            <template slot-scope="scope">
+              <div class="paper-item">
+                <div class="left-content">
+                  <div class="title">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">
+                      <router-link :to="'/paper/detail/' + scope.row.id" class="link-type">
+                        <svg-icon icon-class="paper" /> {{ scope.row.title }}
+                      </router-link>
+                    </el-tooltip>
                   </div>
-                  <div class="time">
-                    <svg-icon icon-class="date" />
-                    结果日期： {{ item.issueDate }}
+                  <div class="detail">
+                    <div class="journal">
+                      <svg-icon icon-class="school" /> {{ scope.row.journal }}
+                    </div>
+                    <el-tooltip class="item" effect="dark" content="出刊时间" placement="top-start">
+                      <div class="time">
+                        <svg-icon icon-class="date" />
+                        {{ scope.row.issueDate }}
+                      </div>
+                    </el-tooltip>
                   </div>
                 </div>
               </div>
-
+            </template>
+          </el-table-column>
+          <el-table-column label="论文作者" align="center">
+            <template slot-scope="scope">
               <div class="info-item">
-                <el-tooltip :disabled="item.paperDetails.length <= 3" class="item" effect="dark" placement="top-start">
+                <el-tooltip :disabled="scope.row.paperDetails.length <= 3" class="item" effect="dark" placement="top-start">
                   <div slot="content">
-                    <span style="padding:5px;" v-for="(o, index) in item.paperDetails" :key="index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.paperDetails" :key="index">{{ o.user.name }}</span>
                   </div>
                   <div class="namelist">
-                    <span style="padding:5px;" v-for="(o, index) in item.paperDetails" :key="index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.paperDetails" :key="index">{{ o.user.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
-
+            </template>
+          </el-table-column>
+          <el-table-column label="投票结果" align="center" width="100">
+            <template slot-scope="scope">
               <div class="info-item" style="width:100px;">
-                <div style="margin-top:7px">
-                  <el-link v-if="item.vote == undefined" type="primary" @click="newVote(item)">
-                    发起投票</el-link>
+                <el-link v-if="scope.row.vote == undefined" type="primary" @click="newVote(scope.row)">
+                  发起投票</el-link>
 
-                  <router-link v-else-if="item.vote.status == false" :to="'/paper/vote/' + item.id" class="link-type">
-                    <el-link type="success"> 前往投票</el-link>
-                  </router-link>
-
-                  <router-link v-else-if="item.vote.status == true" :to="'/paper/vote/' + item.id" class="link-type">
-                    <el-tag type="success" v-if="item.vote.result == true">ACCEPT</el-tag>
-                    <el-tag type="danger" v-else>REJECT</el-tag>
-                  </router-link>
-                </div>
+                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                  <el-link type="success"> 前往投票</el-link>
+                </router-link>
+                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                  <el-tag class="paper-tag" type="success" v-if="scope.row.vote.result == true">ACCEPT</el-tag>
+                  <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>
+                </router-link>
               </div>
+            </template>
+          </el-table-column>
 
-              <div class="info-item" style="width:120px;">
-                <div style="margin-top:7px">
-                  <el-tag class="paper-tag" v-if="item.vote == undefined || item.vote.status == false">待内部投票</el-tag>
-                  <el-tag class="paper-tag" type="danger" v-else-if="item.vote.result == false">未提交</el-tag>
-                  <el-tag class="paper-tag" type="info" v-else-if="item.result == undefined">审稿中</el-tag>
-                  <el-tag class="paper-tag" v-else-if="item.result == true" type="success">ACCEPT</el-tag>
-                  <el-tag class="paper-tag" v-else type="danger">REJECT</el-tag>
-                </div>
+          <el-table-column label="投稿结果" align="center" width="100">
+            <template slot-scope="scope">
+              <div class="info-item">
+                <el-tag class="paper-tag" v-if="
+                    scope.row.vote == undefined ||
+                      scope.row.vote.status == false
+                  ">待内部投票</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.vote.result == false">未提交</el-tag>
+                <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == undefined">审稿中</el-tag>
+                <el-tag class="paper-tag" v-else-if="scope.row.result == true" type="success">ACCEPT</el-tag>
+                <el-tag class="paper-tag" v-else type="danger">REJECT</el-tag>
               </div>
+            </template>
+          </el-table-column>
 
-              <div class="info-item" style="width:180px; padding-left:40px">
+          <el-table-column label="操作" align="center" fixed="right" width="180">
+            <template slot-scope="scope">
+              <div class="info-item" style="width:150px; padding-left:40px">
                 <div style="font-size:14px">
                   <el-tooltip effect="dark" content="评审投票" placement="top">
-                    <svg-icon @click="newVote(item)" icon-class="vote" />
+                    <svg-icon @click="newVote(scope.row)" icon-class="vote" />
                   </el-tooltip>
 
                   <el-divider direction="vertical"></el-divider>
 
                   <el-tooltip effect="dark" content="投稿结果" placement="top">
-                    <svg-icon @click="updatePaperResult(item)" icon-class="review" />
+                    <svg-icon @click="updatePaperResult(scope.row)" icon-class="review" />
                   </el-tooltip>
 
                   <el-divider direction="vertical"></el-divider>
                   <el-tooltip effect="dark" content="编辑" placement="top">
-                    <svg-icon @click="modifyPaper(item)" icon-class="edit" />
+                    <svg-icon @click="modifyPaper(scope.row)" icon-class="edit" />
                   </el-tooltip>
 
                   <el-divider direction="vertical"></el-divider>
                   <el-tooltip effect="dark" content="删除" placement="top">
-                    <svg-icon @click="removePaper(item)" icon-class="remove" />
+                    <svg-icon @click="removePaper(scope.row)" icon-class="remove" />
                   </el-tooltip>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </div>
     <div style="margin-top:5px;display:flex; justify-content:center">
@@ -404,7 +413,7 @@ export default {
               });
             })
             .catch(() => {
-              this.loading = false;
+              this.loading = f8lse;
             });
         } else {
           this.$notify({
@@ -606,53 +615,45 @@ export default {
 }
 
 .paper-item {
-  background: #fff;
-  padding: 12px 12px 12px 0;
+  padding: 3px 12px 3px 0;
   border-width: 0 0 1px 0;
-  border-style: solid;
-  border-color: #f6f6f6;
 
-  .content {
+  .left-content {
+    font-size: 13px;
     display: flex;
-    justify-content: space-between;
-
-    .left-content {
-      font-size: 13px;
-      padding-left: 10px;
-      display: flex;
-      flex-direction: column;
-      .title {
-        a {
-          color: #409eff;
-        }
+    flex-direction: column;
+    .title {
+      a {
         color: #409eff;
-        font-weight: 500;
-        margin-bottom: 5px;
-        width: 380px;
+      }
+      color: #409eff;
+      font-weight: 500;
+      margin-bottom: 5px;
+      width: 330px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .detail {
+      display: flex;
+      color: gray;
+      font-size: 13px;
+      padding-top: 7px;
+      .journal {
+        width: 180px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .detail {
-        color: gray;
-        font-size: 13px;
-        padding-top: 7px;
-        .journal {
-          width: 180px;
-          overflow: hidden; /*超出部分隐藏*/
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        .time {
-          padding-left: 5px;
-        }
+      .time {
+        padding-left: 5px;
       }
     }
   }
+
   .namelist {
     width: 160px;
     padding: 0 20px;
-
     overflow: hidden; /*超出部分隐藏*/
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -661,7 +662,6 @@ export default {
     color: gray;
     display: flex;
     justify-content: flex-start;
-    // padding-left: 15px;
     font-size: 13px;
     align-items: center;
   }

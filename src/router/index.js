@@ -123,21 +123,21 @@ export const asyncRoutes = [
   },
 
   {
-    path: "/task",
+    path: "/project",
     component: Layout,
-    name: "Task",
+    name: "Project",
     meta: { title: "迭代绩效", icon: "component" },
     children: [
       {
         path: "manage",
         name: "Manage",
-        component: () => import("@/views/task/manage"),
+        component: () => import("@/views/project/manage"),
         meta: { title: "迭代分配", icon: "table", roles: ["admin", "doctor"] }
       },
       {
         path: "index",
         name: "Task",
-        component: () => import("@/views/task/myproject"),
+        component: () => import("@/views/project/myproject"),
         meta: {
           title: "我的迭代",
           icon: "table",
@@ -145,9 +145,20 @@ export const asyncRoutes = [
         }
       },
       {
+        path: "detail/:id",
+        name: "Detail",
+        component: () => import("@/views/project/components/detail"),
+        meta: {
+          title: "项目迭代",
+          icon: "table",
+          roles: ["admin", "doctor"]
+        },
+        hidden: true
+      },
+      {
         path: "bug",
         name: "Bug",
-        component: () => import("@/views/task/bug"),
+        component: () => import("@/views/project/bug"),
         meta: { title: "bug报告", icon: "bug" }
       }
     ]

@@ -24,7 +24,6 @@ export default {
   },
   components: {
     assign: () => import("./components/assign"),
-    finished: () => import("./components/finished"),
     auditbug: () => import("./components/auditbug")
   },
   created() {},

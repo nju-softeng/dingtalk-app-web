@@ -1,6 +1,10 @@
 <template>
   <div class="app-container">
-    <el-page-header @back="goBack"> </el-page-header>
+    <el-page-header @back="goBack">
+      <span slot="title" style="font-size:12.5px">
+        返回
+      </span>
+    </el-page-header>
 
     <div class="box">
       <div class="test">

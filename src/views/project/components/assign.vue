@@ -33,17 +33,20 @@
                 item.title
               }}</el-link>
             </router-link>
+            <el-tag style="margin-left:10px;" v-if="item.cnt != 0" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
           </div>
         </div>
+        <!-- 无迭代时提示信息 -->
         <template v-if="item.cnt == 0">
           <p style="font-size:12.5px">请新建迭代</p>
           <el-button style="float:right" v-if="item.cnt == 0 || item.status" @click="newIterate(item.id)" size="mini">新建迭代</el-button>
         </template>
+        <!-- 项目迭代信息 -->
         <template v-else>
-          <p style="font-size:12.5px">
-            <span>第 {{ item.cnt }} 次迭代</span>
-            <span style="padding-left:10px">
-              {{ item.begin_time }} ~ {{ item.end_time }}</span>
+          <p>
+            <span class="date">
+              预计周期： {{ item.begin_time }} ~ {{ item.end_time }}</span>
+            <span style="padding-left:15px">按时交付: {{ item.success_cnt }} 次</span>
           </p>
           <div style="font-size:12.5px; ">
             <span style="color:#67C23A" v-if="getRemainDay(item.end_time) >= 0">
@@ -93,7 +96,7 @@
         <el-button type="primary" @click="submitIterate()">确 定</el-button>
       </div>
     </el-dialog>
-    {{ iterateform }}
+    <!-- {{ iterateform }} -->
   </div>
 </template>
 <script>
@@ -255,13 +258,12 @@ export default {
         } else {
           this.$notify({
             title: "提交失败",
-            message: "请填写项目名称",
+            message: "请填写必要信息",
             type: "warning"
           });
         }
       });
     },
-
     //钉钉选人
     choose() {
       this.projectform.updateDingIds = true;
@@ -271,6 +273,14 @@ export default {
           this.userlist = res;
           this.iterateform.dingIds = res.map(x => x.userid);
         }
+      );
+    },
+    closeTag(u) {
+      this.iterateform.updateDingIds = true;
+      this.userlist.splice(this.userlist.indexOf(u), 1);
+      this.iterateform.dingIds.splice(
+        this.iterateform.dingIds.indexOf(u.userid),
+        1
       );
     }
     // manualAc(pid, data) {
@@ -384,15 +394,6 @@ export default {
     //       });
     //     });
     // },
-
-    // closeTag(u) {
-    //   this.projectform.updateDingIds = true;
-    //   this.userlist.splice(this.userlist.indexOf(u), 1);
-    //   this.projectform.dingIds.splice(
-    //     this.projectform.dingIds.indexOf(u.userid),
-    //     1
-    //   );
-    // },
   }
 };
 </script>
@@ -402,8 +403,6 @@ export default {
   padding-bottom: 0px;
 }
 .project /deep/ .el-dialog__title {
-  // padding-top: 5px;
-  // padding-bottom: 5px;
   font-size: 14px;
 }
 .list /deep/ .el-card__body {
@@ -421,6 +420,10 @@ export default {
   margin: 5px 5px 5px 0;
   height: 125px;
   width: 49%;
+}
+
+p {
+  font-size: 12.5px;
 }
 
 .app-container {
@@ -445,11 +448,6 @@ export default {
   /deep/ .el-card__body {
     padding-top: 10px;
     padding-bottom: 10px;
-  }
-}
-.acinput {
-  /deep/ .el-form-item {
-    margin-bottom: 5px;
   }
 }
 </style>

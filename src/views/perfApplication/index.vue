@@ -313,7 +313,7 @@ export default {
 };
 </script>
 
-<style>
+<style scope>
 .el-table__expanded-cell[class*="cell"] {
   padding: 10px 50px;
 }

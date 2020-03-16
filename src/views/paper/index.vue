@@ -5,7 +5,7 @@
         <div class="action" style="margin-bottom:10px">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
         </div>
-        <el-table :data="list">
+        <el-table :data="list" class="tableClass">
           <el-table-column label="论文信息" width="335">
             <template slot-scope="scope">
               <div class="paper-item">
@@ -80,7 +80,7 @@
 
           <el-table-column label="操作" align="center" fixed="right" width="180">
             <template slot-scope="scope">
-              <div class="info-item" style="width:150px; padding-left:40px">
+              <div class="info-item">
                 <div style="font-size:14px">
                   <el-tooltip effect="dark" content="评审投票" placement="top">
                     <svg-icon @click="newVote(scope.row)" icon-class="vote" />
@@ -113,6 +113,7 @@
       </el-pagination>
     </div>
 
+    <!-- 投稿结果  dialog -->
     <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
       <div v-loading="loading">
         <el-form>
@@ -132,7 +133,7 @@
         </div>
       </div>
     </el-dialog>
-
+    <!-- 发起投票  dialog -->
     <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
       <div v-loading="loading">
         <el-form ref="voteform" :model="voteform">
@@ -155,7 +156,7 @@
         </span>
       </div>
     </el-dialog>
-
+    <!-- 添加评审记录  dialog -->
     <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="75%" center>
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
@@ -567,6 +568,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tableClass {
+  /deep/ .el-table__fixed-right {
+    height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
+  }
+  /deep/ .el-table__fixed-right::before {
+    height: 0px !important; //设置高优先，以覆盖内联样式
+  }
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
@@ -598,7 +608,7 @@ export default {
   border-radius: 0;
 }
 .box {
-  min-width: 940px;
+  // min-width: 900px;
   min-height: 60px;
   background: #fff;
   padding: 20px 20px 0 20px;

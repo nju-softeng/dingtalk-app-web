@@ -49,7 +49,7 @@
     <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
     <!-- 已提的交申请 -->
     <div style="height:430px">
-      <el-table :data="list" border fit highlight-current-row style="width: 100%">
+      <el-table :data="list" fit highlight-current-row style="width: 100%">
         <el-table-column width="30px" label="#" type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline>
@@ -104,7 +104,7 @@
 
         <el-table-column align="center" label="操作">
           <template slot-scope="{ row }">
-            <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改申请</el-button>
+            <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改</el-button>
             <el-tag v-else type="info">已审核</el-tag>
             <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
           </template>

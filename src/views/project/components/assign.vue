@@ -52,13 +52,14 @@
               <i class="el-icon-time"></i> : {{ item.begin_time }} ~
               {{ item.end_time }}</span>
             <span style="color:#67C23A" v-if="getRemainDay(item.end_time) >= 0">
-              剩余: {{ getRemainDay(item.end_time) }} 天</span>
+              剩余:
+              {{ getRemainDay(item.end_time) }} 天</span>
             <span style="color:#F56C6C" v-else>
               延期: {{ -getRemainDay(item.end_time) }} 天</span>
           </p>
-          <div style="font-size:12.5px;color:#586069;line-height:28px;">
-            <span style="padding-right:10px; ">预期AC：{{ item.expectedac }}</span>
-            <span>按时交付: {{ item.success_cnt }} 次</span>
+          <div style="font-size:12px;color:#bfbfbf;line-height:28px;">
+            <span style="padding-right:15px; ">预期AC：{{ item.expectedac }}</span>
+            <!-- <span>按时交付: {{ item.success_cnt }} 次</span> -->
 
             <el-button style="float:right" @click="detail(item)" size="mini">确认完成</el-button>
           </div>

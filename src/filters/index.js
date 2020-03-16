@@ -24,7 +24,13 @@ export function timeAgo(time) {
   } else if (between < 86400) {
     return pluralize(~~(between / 3600), " 小时");
   } else {
-    return pluralize(~~(between / 86400), " 天");
+    return (
+      "「" +
+      time.toISOString().slice(5, 10) +
+      " " +
+      time.toISOString().slice(11, 16) +
+      "」"
+    );
   }
 }
 

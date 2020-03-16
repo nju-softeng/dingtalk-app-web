@@ -3,7 +3,7 @@
     <div style="height:540px">
       <div class="box">
         <div class="action" style="margin-bottom:10px">
-          <el-button type="primary" @click="dialog = true" icon="el-icon-plus">创建评审记录</el-button>
+          <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
         <el-table :data="list" class="tableClass">
           <el-table-column label="论文信息" width="335">

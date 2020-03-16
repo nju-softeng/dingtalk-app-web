@@ -94,7 +94,7 @@
       <el-button @click="filterData" type="primary" size="mini" icon="el-icon-search" style="margin-left:5px">
         筛选
       </el-button>
-      <el-button @click="refresh" type="primary" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
+      <el-button @click="refresh" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
         重置
       </el-button>
     </div>

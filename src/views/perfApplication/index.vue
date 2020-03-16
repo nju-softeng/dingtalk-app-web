@@ -8,19 +8,19 @@
           <el-form-item prop="auditorid">
             <span slot="label">
               <svg-icon icon-class="people" /> 审核人</span>
-            <el-select style="width:200px" v-model="form.auditorid" placeholder="请选择审核人">
+            <el-select style="width:210px" v-model="form.auditorid" placeholder="请选择审核人">
               <el-option v-for="(item, index) in auditors" :key="index" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="dvalue">
             <span slot="label">
               <svg-icon icon-class="dvalue" /> D值</span>
-            <el-input v-model="form.dvalue" style="width:200px"></el-input>
+            <el-input v-model="form.dvalue" style="width:210px"></el-input>
           </el-form-item>
           <el-form-item prop="date">
             <span slot="label">
               <svg-icon icon-class="week" /> 申请周</span>
-            <el-date-picker v-show="!form.date" v-model="form.date" style="width:200px" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
+            <el-date-picker v-show="!form.date" v-model="form.date" style="width:210px" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
             <el-tag v-show="form.date" closable @close="closeTag" effect="plain" size="medium" style="font-size:12px;">
               {{ monthWeek }}
             </el-tag>
@@ -28,16 +28,14 @@
         </el-form>
         <!-- ac申请 -->
         <div>
-          <el-button type="text" @click="addAcItem">
-            <i class="el-icon-plus"></i>
-            添加AC申请
-          </el-button>
           <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index" style="margin : 5px 0px 5px 0px;display:flex">
-            <el-input v-model="item.reason" style="border-radius: 0px; !important" placeholder="申请原因"></el-input>
-            <el-input v-model="item.ac" style="width:18%" placeholder="AC"></el-input>
+            <el-input v-model="item.reason" style="margin-right:3px;" placeholder="申请原因"></el-input>
+            <el-input v-model="item.ac" style="width:20%" placeholder="AC"></el-input>
 
-            <el-button style="border: 0px" icon="el-icon-close" @click.prevent="rmAcItem(item)" />
+            <el-button style="border: 0px" icon="el-icon-delete" @click.prevent="rmAcItem(item)" />
           </div>
+          <el-button @click="addAcItem" style="border-style:dashed; width:298px; "><i class="el-icon-plus"></i> 添加AC申请</el-button>
+
           <br />
         </div>
       </div>

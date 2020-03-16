@@ -3,6 +3,10 @@
     <!-- 添加button  -->
     <div class="action" style="margin-bottom:10px">
       <el-button type="primary" @click="projectDialog = true" icon="el-icon-plus">创建项目</el-button>
+      <el-select v-model="unfinish" @change="changeStatus" style="width:100px;float:right;margin-right:10px">
+        <el-option label="进行中" :value="true"> </el-option>
+        <el-option label="已结束" :value="false"> </el-option>
+      </el-select>
     </div>
 
     <!-- 项目列表 -->
@@ -27,13 +31,13 @@
             </el-dropdown>
           </div>
           <!-- 标题 -->
-          <div>
+          <div style="margin-bottom:17px">
             <router-link :to="'/project/detail/' + item.id" class="link-type">
               <el-link :underline="false" type="primary">{{
                 item.title
               }}</el-link>
+              <el-tag type="info" style="margin-left:10px;" v-if="item.cnt != 0" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
             </router-link>
-            <el-tag style="margin-left:10px;" v-if="item.cnt != 0" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
           </div>
         </div>
         <!-- 无迭代时提示信息 -->
@@ -45,13 +49,14 @@
         <template v-else>
           <p style="color: #586069">
             <span class="date" style="padding-right:15px;">
-              工期: {{ item.begin_time }} ~ {{ item.end_time }}</span>
+              <i class="el-icon-time"></i> : {{ item.begin_time }} ~
+              {{ item.end_time }}</span>
             <span style="color:#67C23A" v-if="getRemainDay(item.end_time) >= 0">
               剩余: {{ getRemainDay(item.end_time) }} 天</span>
             <span style="color:#F56C6C" v-else>
               延期: {{ -getRemainDay(item.end_time) }} 天</span>
           </p>
-          <div style="font-size:12.5px;color:#586069;">
+          <div style="font-size:12.5px;color:#586069;line-height:28px;">
             <span style="padding-right:10px; ">预期AC：{{ item.expectedac }}</span>
             <span>按时交付: {{ item.success_cnt }} 次</span>
 

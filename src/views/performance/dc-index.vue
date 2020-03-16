@@ -37,9 +37,17 @@ export default {
   },
   methods: {
     filtrate() {
-      getDcSummary(this.date).then(res => {
-        this.list = res.data;
-      });
+      if (this.date != undefined) {
+        getDcSummary(this.date).then(res => {
+          this.list = res.data;
+        });
+      } else {
+        this.$message({
+          showClose: true,
+          message: "请选择月份",
+          type: "warning"
+        });
+      }
     },
     next() {
       if (typeof this.date == "string") {

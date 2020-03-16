@@ -217,6 +217,7 @@ export default {
         updateAudit(this.form).then(() => {
           this.$notify({
             title: "成功",
+            showClose: true,
             message:
               this.temp.name +
               "  DC值：" +
@@ -233,6 +234,7 @@ export default {
       } else {
         this.$notify({
           title: "失败",
+          showClose: true,
           message: "C值不能为空",
           type: "warning"
         });

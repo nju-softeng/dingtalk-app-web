@@ -38,22 +38,23 @@
         </div>
         <!-- 无迭代时提示信息 -->
         <template v-if="item.cnt == 0">
-          <p style="font-size:12.5px">请新建迭代</p>
+          <p style="font-size:12.5px;color: #586069">请新建迭代</p>
           <el-button style="float:right" v-if="item.cnt == 0 || item.status" @click="newIterate(item.id)" size="mini">新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else>
-          <p>
-            <span class="date">
-              预计周期： {{ item.begin_time }} ~ {{ item.end_time }}</span>
-            <span style="padding-left:15px">按时交付: {{ item.success_cnt }} 次</span>
-          </p>
-          <div style="font-size:12.5px; ">
+          <p style="color: #586069">
+            <span class="date" style="padding-right:15px;">
+              工期: {{ item.begin_time }} ~ {{ item.end_time }}</span>
             <span style="color:#67C23A" v-if="getRemainDay(item.end_time) >= 0">
               剩余: {{ getRemainDay(item.end_time) }} 天</span>
             <span style="color:#F56C6C" v-else>
               延期: {{ -getRemainDay(item.end_time) }} 天</span>
-            <span style="padding:10px; font-size:12.5px; color:#409EFF">预期AC：{{ item.expectedac }}</span>
+          </p>
+          <div style="font-size:12.5px;color:#586069;">
+            <span style="padding-right:10px; ">预期AC：{{ item.expectedac }}</span>
+            <span>按时交付: {{ item.success_cnt }} 次</span>
+
             <el-button style="float:right" @click="detail(item)" size="mini">确认完成</el-button>
           </div>
         </template>

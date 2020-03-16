@@ -58,12 +58,14 @@ export default {
     & .sidebar-logo {
       font-size: 16px;
       vertical-align: middle;
-
-      margin-right: 12px;
+      float: left;
+      margin-top: 13px;
+      margin-left: 20px;
     }
 
     & .sidebar-title {
       display: inline-block;
+      float: left;
       margin: 0;
       color: #409eff;
       font-weight: 600;

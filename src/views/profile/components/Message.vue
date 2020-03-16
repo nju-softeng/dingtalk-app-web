@@ -3,7 +3,7 @@
     <div v-if="messages.length != 0" style="min-height:200px">
       <div class="message" v-for="(msg, index) in messages" :key="index">
         <div class="title">{{ msg.title }}</div>
-        <div style="display:flex">
+        <div style="display:flex; justify-content:space-between;">
           <div class="content">
             <span>{{ msg.content }}</span>
           </div>

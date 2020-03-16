@@ -126,7 +126,7 @@ export const asyncRoutes = [
     path: "/project",
     component: Layout,
     name: "Project",
-    meta: { title: "迭代绩效", icon: "component" },
+    meta: { title: "开发管理", icon: "component" },
     children: [
       {
         path: "manage",

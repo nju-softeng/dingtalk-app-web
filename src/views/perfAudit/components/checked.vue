@@ -1,6 +1,6 @@
 <template>
   <div class="checked">
-    <!-- 详细信息 drawe -->
+    <!-- 详细信息 drawer -->
     <el-drawer :visible.sync="drawer" :modal="false" :with-header="false" size="50%">
       <div class="drawer-container" v-loading="loading">
         <div class="drawer-bar">
@@ -103,11 +103,14 @@
     <el-table :data="list" style="width: 100%;">
       <el-table-column width="30px" type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="详细信息">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-          </el-form>
+          <div>
+            <span v-if="props.row.acItems.length == 0">无AC申请数据</span>
+            <template v-else>
+              <li v-for="(o, index) in props.row.acItems" :key="index">
+                {{ o.reason }}, ac值: {{ o.ac }}
+              </li>
+            </template>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="申请时间">
@@ -125,7 +128,7 @@
           {{ row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="审核结果">
+      <el-table-column label="审核结果" align="center">
         <template slot-scope="{ row }">
           <el-tag style="margin-right:10px">DC值：{{ row.dc }} </el-tag>
           <el-tag>AC值：{{ row.ac }} </el-tag>
@@ -303,6 +306,7 @@ export default {
     refresh() {
       getChecked().then(res => {
         this.list = res.data;
+        this.date = "";
       });
     }
   }

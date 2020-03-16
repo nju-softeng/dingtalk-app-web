@@ -71,7 +71,7 @@
             <div v-if="messages.length != 0" style="min-height:200px">
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
-                <div style="display:flex">
+                <div style="display:flex;justify-content:space-between;">
                   <div class="content">
                     <span>{{ msg.content }}</span>
                   </div>
@@ -90,7 +90,7 @@
         </el-col>
         <el-col :xs="24" :sm="8" :lg="8">
           <!-- 快捷导航 -->
-          <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+          <!-- <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
             <div slot="header" class="clearfix">
               <span>快捷导航</span>
             </div>
@@ -126,7 +126,7 @@
                 </router-link>
               </div>
             </div>
-          </el-card>
+          </el-card> -->
 
           <!-- AC变动公告 -->
           <el-card class="box-card" shadow="never">

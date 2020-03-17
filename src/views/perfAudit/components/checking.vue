@@ -87,7 +87,7 @@
 
     <div>
       <el-table :data="list" style="width: 100%" :row-style="{ height: '37.67px' }" :row-class-name="addIndex" @row-click="onRowClick">
-        <el-table-column label="申请时间" width="150" align="center">
+        <el-table-column label="提交时间" width="150" align="center">
           <template slot-scope="{ row }">
             {{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
           </template>
@@ -97,7 +97,7 @@
             row.yearmonth | formatWeek(row.week)
           }}</template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" width="100" />
+        <el-table-column prop="name" label="提交人" align="center" width="100" />
         <el-table-column prop="dvalue" label="申请D值" align="center" width="80" />
         <el-table-column label="  AC申请">
           <template slot-scope="{ row }">

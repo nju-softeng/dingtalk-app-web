@@ -12,7 +12,7 @@ export function createProject(data) {
 // 删除项目
 export function rmProject(pid) {
   return request({
-    url: "/project/delete/" + pid,
+    url: "/project/" + pid + "/delete",
     method: "get"
   });
 }
@@ -21,6 +21,14 @@ export function rmProject(pid) {
 export function listProject() {
   return request({
     url: "/project",
+    method: "get"
+  });
+}
+
+// 查询项目详情
+export function getProjectDetail(pid) {
+  return request({
+    url: "project/" + pid + "/detail",
     method: "get"
   });
 }

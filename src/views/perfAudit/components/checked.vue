@@ -113,7 +113,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="申请时间">
+      <el-table-column label="提交时间">
         <template slot-scope="{ row }">{{
           row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
         }}</template>
@@ -123,7 +123,7 @@
           {{ row.yearmonth | formatWeek(row.week) }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名">
+      <el-table-column label="提交人">
         <template slot-scope="{ row }">
           {{ row.name }}
         </template>

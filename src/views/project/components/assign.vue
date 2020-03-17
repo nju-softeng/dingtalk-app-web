@@ -43,7 +43,7 @@
         <!-- 无迭代时提示信息 -->
         <template v-if="item.cnt == 0">
           <p style="font-size:12.5px;color: #586069">请新建迭代</p>
-          <el-button style="float:right" v-if="item.cnt == 0 || item.status" @click="newIterate(item.id)" size="mini">新建迭代</el-button>
+          <el-button style="float:right" v-if="item.cnt == 0 || item.status" @click="newIterate(item)" size="mini">新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else>
@@ -80,29 +80,8 @@
     </el-dialog>
 
     <!-- 添加迭代dialog -->
-    <el-dialog title="迭代任务" :visible.sync="iterateDiaog" width="60%">
-      <el-form v-loading="loading" style="width:100%" ref="iterateform" :rules="rules" :model="iterateform">
-        <el-form-item prop="dates">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 起止时间: </span>
-          <el-date-picker value-format="yyyy-MM-dd" v-model="iterateform.dates" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item prop="dingIds">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag size="medium" closable style="margin: 0 2px" v-for="(u, index) in userlist" :key="index" @close="closeTag(u)">{{ u.name }}</el-tag>
-          <el-button style="margin-left:2px" size="mini" @click="choose()">
-            <i>
-              <svg-icon icon-class="addperson" /> </i> 添加</el-button>
-        </el-form-item>
-      </el-form>
+    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="show" />
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitIterate()">确 定</el-button>
-      </div>
-    </el-dialog>
     <!-- {{ iterateform }} -->
   </div>
 </template>
@@ -110,7 +89,6 @@
 import {
   createProject,
   listProject,
-  createIteration,
   rmProject
   // addProject,
   // listUnfinishProject,
@@ -121,14 +99,16 @@ import {
   // autoSetAc,
   // manualSetAc
 } from "@/api/project.js";
-import { contactChoose } from "@/utils/dingtalk";
 
+import IterateDialog from "./iterateDialog";
 export default {
   data() {
     return {
       projectDialog: false,
       iterateDiaog: false,
       pid: "",
+      title: "",
+      cnt: "",
       userlist: [],
       list: [],
       loading: false,
@@ -156,13 +136,10 @@ export default {
       }
     };
   },
-  created() {
-    listProject().then(res => {
-      this.list = res.data;
-      console.log(this.list);
-    });
-  },
   computed: {
+    isUpdate() {
+      return this.$store.state.project.iteration;
+    },
     getRemainDay() {
       return endtime => {
         let day =
@@ -172,7 +149,27 @@ export default {
       };
     }
   },
+  watch: {
+    isUpdate() {
+      if (this.isUpdate == true) {
+        this.$store.commit("project/FINISH_UPDATE");
+        this.fetchProjects();
+      }
+    }
+  },
+  components: { IterateDialog },
+  created() {
+    this.fetchProjects();
+  },
+
   methods: {
+    // 更新数据
+    fetchProjects() {
+      listProject().then(res => {
+        this.list = res.data;
+        console.log(this.list);
+      });
+    },
     // 创建或更新项目
     submitProject() {
       this.$refs.projectform.validate(valid => {
@@ -238,169 +235,12 @@ export default {
       this.projectform.id = "";
     },
     //新建一个迭代
-    newIterate(id) {
-      this.iterateDiaog = true;
-      this.pid = id;
-    },
-    // 创建或更新项目
-    submitIterate() {
-      this.$refs.iterateform.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          createIteration(this.pid, this.iterateform)
-            .then(() => {
-              this.iterateDiaog = false;
-              this.$notify({
-                title: "成功",
-                message: "创建迭代成功",
-                type: "success"
-              });
-              listProject().then(res => {
-                this.list = res.data;
-              });
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        } else {
-          this.$notify({
-            title: "提交失败",
-            message: "请填写必要信息",
-            type: "warning"
-          });
-        }
-      });
-    },
-    //钉钉选人
-    choose() {
-      this.projectform.updateDingIds = true;
-      contactChoose(window.location.href, this.projectform.dingIds).then(
-        res => {
-          console.log(res);
-          this.userlist = res;
-          this.iterateform.dingIds = res.map(x => x.userid);
-        }
-      );
-    },
-    closeTag(u) {
-      this.iterateform.updateDingIds = true;
-      this.userlist.splice(this.userlist.indexOf(u), 1);
-      this.iterateform.dingIds.splice(
-        this.iterateform.dingIds.indexOf(u.userid),
-        1
-      );
+    newIterate(item) {
+      this.title = item.title;
+      this.pid = item.id;
+      this.cnt = item.cnt;
+      this.$store.commit("project/TOGGLE_SHOW");
     }
-    // manualAc(pid, data) {
-    //   manualSetAc(pid, data).then(() => {
-    //     this.$notify({
-    //       title: "成功",
-    //       message: "修改项目状态成功",
-    //       type: "success"
-    //     });
-    //     listUnfinishProject(this.uid).then(res => {
-    //       this.list = res.data;
-    //     });
-    //   });
-    // },
-    // SetAc(pid) {
-    //   autoSetAc(pid, this.finishtime).then(() => {
-    //     this.$notify({
-    //       title: "成功",
-    //       message: "修改项目状态成功",
-    //       type: "success"
-    //     });
-    //     listUnfinishProject(this.uid).then(res => {
-    //       this.list = res.data;
-    //     });
-    //   });
-    // },
-    // changeftime() {
-    //   if (this.finishtime) {
-    //     getProjectDc(this.tmp.id, this.finishtime).then(res => {
-    //       console.log(res.data);
-    //       this.dclist = res.data;
-    //     });
-    //     computeProjectAc(this.tmp.id, this.finishtime).then(res => {
-    //       console.log(res.data);
-    //       this.projectAc = res.data;
-    //     });
-    //   }
-    // },
-    // detail(item) {
-    //   this.finishtime = new Date().toISOString().slice(0, 10);
-    //   this.detailDialog = true;
-    //   this.tmp = item;
-    //   getProjectDc(item.id, this.finishtime).then(res => {
-    //     console.log(res.data);
-    //     this.dclist = res.data;
-    //   });
-    //   computeProjectAc(item.id, this.finishtime).then(res => {
-    //     console.log(res.data);
-    //     this.projectAc = res.data;
-    //   });
-    // },
-    // changeStatus(val) {
-    //   this.loading = true;
-    //   if (val) {
-    //     listUnfinishProject(this.uid).then(res => {
-    //       this.list = res.data;
-    //       this.loading = false;
-    //     });
-    //   } else {
-    //     listfinishProject(this.uid).then(res => {
-    //       this.list = res.data;
-    //       this.loading = false;
-    //     });
-    //   }
-    // },
-    // modify(item) {
-    //   console.log(item);
-    //   this.dialog = true;
-    //   this.$nextTick(() => {
-    //     console.log(item);
-    //     this.projectform.name = item.name;
-    //     this.projectform.id = item.id;
-    //     this.projectform.dates.push(item.beginTime);
-    //     this.projectform.dates.push(item.endTime);
-    //     this.userlist = item.projectDetails.map(x => {
-    //       return x.user;
-    //     });
-    //     this.projectform.dingIds = item.projectDetails.map(x => {
-    //       return x.user.userid;
-    //     });
-    //   });
-    // },
-    // clearProjectForm() {
-    //   console.log("close");
-    //   this.$refs.projectform.resetFields();
-    //   this.userlist = [];
-    // },
-
-    // deleteProject(id) {
-    //   this.$confirm("此操作将删除开发任务, 是否继续?", "提示", {
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     type: "warning",
-    //     center: true
-    //   })
-    //     .then(() => {
-    //       deleteProject(id).then(() => {
-    //         listUnfinishProject(this.uid).then(res => {
-    //           this.list = res.data;
-    //         });
-    //         this.$message({
-    //           type: "success",
-    //           message: "删除成功!"
-    //         });
-    //       });
-    //     })
-    //     .catch(() => {
-    //       this.$message({
-    //         type: "info",
-    //         message: "已取消删除"
-    //       });
-    //     });
-    // },
   }
 };
 </script>

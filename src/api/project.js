@@ -42,6 +42,14 @@ export function createIteration(pid, data) {
   });
 }
 
+// 删除迭代
+export function rmIteration(itid) {
+  return request({
+    url: "project/iteration/" + itid + "/delete",
+    method: "get"
+  });
+}
+
 // // 更新项目
 // export function updateProject(data) {
 //   return request({

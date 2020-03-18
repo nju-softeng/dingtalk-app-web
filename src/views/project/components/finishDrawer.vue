@@ -1,36 +1,41 @@
 <template>
-  <div class="dialog">
-    <!-- 添加迭代dialog -->
-    <el-dialog @open="toOpen" :visible.sync="dialog" width="60%" @close="handleClose">
-      <div slot="title">{{ title }} - 第 {{ cnt + 1 }} 次迭代</div>
-      <!-- 表单 -->
-      <el-form v-loading="loading" style="width:100%" ref="iterateform" :rules="rules" :model="iterateform">
-        <el-form-item prop="dates">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 起止时间: </span>
-          <el-date-picker value-format="yyyy-MM-dd" v-model="iterateform.dates" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item prop="dingIds">
-          <span slot="label">
-            <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag size="medium" closable style="margin: 0 2px" v-for="(u, index) in userlist" :key="index" @close="closeTag(u)">{{ u.name }}</el-tag>
-          <el-button style="margin-left:2px" size="mini" @click="choose()">
-            <i>
-              <svg-icon icon-class="addperson" /> </i> 添加</el-button>
-        </el-form-item>
-      </el-form>
-      <!-- 确认按钮 -->
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitIterate()">确 定</el-button>
+  <div class="drawer">
+    <!-- 添加迭代drawer -->
+    <el-drawer size="90%" :visible.sync="drawer" direction="btt">
+      <div slot="title">
+        项目标题 2020-02-12 ~ 2020-03-12
       </div>
-    </el-dialog>
+      <div class="content">
+        <template>
+          <el-card shadow="never" style="width:360px;margin-left: auto;margin-right:auto;height:70vh">
+            <span style="font-size:14px">完成时间</span>
+            <el-date-picker type="date" placeholder="选择日期">
+            </el-date-picker>
+          </el-card>
+        </template>
+        <!-- <div>
+          <el-steps :active="active" finish-status="success">
+            <el-step title="步骤 1"></el-step>
+            <el-step title="步骤 2"></el-step>
+            <el-step title="步骤 3"></el-step>
+          </el-steps>   
+        </div>
+        <el-table :data="tableData" border show-summary style="width: 100%">
+          <el-table-column prop="id" label="ID" width="180"> </el-table-column>
+          <el-table-column prop="name" label="姓名"> </el-table-column>
+          <el-table-column prop="amount1" sortable label="数值 1">
+          </el-table-column>
+          <el-table-column prop="amount2" sortable label="数值 2">
+          </el-table-column>
+          <el-table-column prop="amount3" sortable label="数值 3">
+          </el-table-column>
+        </el-table> -->
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
 import { createIteration } from "@/api/project.js";
-import { contactChoose } from "@/utils/dingtalk";
 
 export default {
   props: ["show", "pid", "title", "cnt", "edit"],
@@ -59,12 +64,12 @@ export default {
   },
 
   computed: {
-    dialog: {
+    drawer: {
       get() {
-        return this.$store.state.project.show;
+        return this.$store.state.project.finishdrawer;
       },
       set(value) {
-        this.$store.commit("project/UPDATE_SHOW", value);
+        this.$store.commit("project/UPDATE_DRAWER", value);
       }
     }
   },
@@ -112,17 +117,7 @@ export default {
         }
       });
     },
-    // 钉钉选人
-    choose() {
-      this.iterateform.updateDingIds = true;
-      contactChoose(window.location.href, this.iterateform.dingIds).then(
-        res => {
-          console.log(res);
-          this.userlist = res;
-          this.iterateform.dingIds = res.map(x => x.userid);
-        }
-      );
-    },
+
     // 取消选中的用户
     closeTag(u) {
       this.iterateform.updateDingIds = true;
@@ -142,11 +137,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.dialog /deep/ .el-dialog__body {
-  padding-top: 10px;
-  padding-bottom: 0px;
+.drawer .el-drawer > header > span:focus {
+  outline-color: white;
 }
-.dialog /deep/ .el-dialog__title {
-  font-size: 13px;
+.drawer .el-drawer > header > button:focus {
+  outline-color: white;
+}
+.drawer .el-drawer > header > button:hover {
+  color: rgb(64, 158, 255);
+}
+
+.content {
+  padding: 20px;
+  height: 100%;
 }
 </style>

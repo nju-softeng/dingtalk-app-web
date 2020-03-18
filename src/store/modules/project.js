@@ -1,6 +1,7 @@
 const state = {
   show: false,
-  iteration: "false"
+  iteration: false,
+  finishdrawer: false
 };
 
 const mutations = {
@@ -15,6 +16,12 @@ const mutations = {
   },
   UPDATE_SHOW: (state, val) => {
     state.show = val;
+  },
+  UPDATE_DRAWER: (state, val) => {
+    state.finishdrawer = val;
+  },
+  TOGGLE_DRAWER: state => {
+    state.finishdrawer = !state.finishdrawer;
   }
 };
 

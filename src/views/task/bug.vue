@@ -12,6 +12,16 @@
         </el-table-column>
         <el-table-column prop="address" label="状态"> </el-table-column>
         <el-table-column prop="address" label="等级"> </el-table-column>
+        <template slot="empty">
+          <div style="height:300px;">
+            <div style="margin-top:100px;">
+              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+            </div>
+            <div style="line-height: 10px;">
+              <span>没有bug记录</span>
+            </div>
+          </div>
+        </template>
       </el-table>
     </div>
     <el-dialog :visible.sync="dialog" @close="clearProjectForm" width="55%">

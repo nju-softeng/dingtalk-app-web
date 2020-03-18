@@ -105,6 +105,16 @@
               </div>
             </template>
           </el-table-column>
+          <template slot="empty">
+            <div style="height:300px;">
+              <div style="margin-top:100px;">
+                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              </div>
+              <div style="line-height: 10px;">
+                <span>没有论文记录</span>
+              </div>
+            </div>
+          </template>
         </el-table>
       </div>
     </div>
@@ -133,6 +143,7 @@
         </div>
       </div>
     </el-dialog>
+
     <!-- 发起投票  dialog -->
     <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
       <div v-loading="loading">
@@ -180,7 +191,7 @@
               <el-form-item prop="level">
                 <span slot="label">
                   <svg-icon icon-class="grade" /> 论文分类</span>
-                <el-select v-model="paperform.level" placeholder="请选择">
+                <el-select style="width:193px" v-model="paperform.level" placeholder="请选择">
                   <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -202,7 +213,7 @@
                   <svg-icon icon-class="people" /> 论文作者
                   {{ index + 1 }}</span>
 
-                <el-select v-model="author.user.id" filterable placeholder="请选择">
+                <el-select style="width:193px" v-model="author.user.id" filterable placeholder="请选择">
                   <el-option v-for="(item, index) in userlist" :key="index" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>

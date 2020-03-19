@@ -45,7 +45,7 @@ export function createIteration(pid, data) {
 // 删除迭代
 export function rmIteration(itid) {
   return request({
-    url: "project/iteration/" + itid + "/delete",
+    url: "/project/iteration/" + itid + "/delete",
     method: "get"
   });
 }
@@ -61,6 +61,7 @@ export function computeIterateAc(itid, date) {
   });
 }
 
+// 系统计算迭代AC
 export function autoSetAc(itid, date) {
   return request({
     url: "/project/autosetac/" + itid,
@@ -71,11 +72,20 @@ export function autoSetAc(itid, date) {
   });
 }
 
+// 手动设置迭代AC
 export function manualSetAc(itid, data) {
   return request({
     url: "/project/manualsetac/" + itid,
     method: "post",
     data
+  });
+}
+
+// 获取迭代
+export function getIteration(id) {
+  return request({
+    url: "/project/iteration/" + id,
+    method: "get"
   });
 }
 

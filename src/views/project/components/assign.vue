@@ -3,10 +3,10 @@
     <!-- 添加button  -->
     <div class="action" style="margin-bottom:10px">
       <el-button type="primary" @click="projectDialog = true" icon="el-icon-plus">创建项目</el-button>
-      <el-select v-model="unfinish" @change="changeStatus" style="width:100px;float:right;margin-right:10px">
-        <el-option label="进行中" :value="true"> </el-option>
-        <el-option label="已结束" :value="false"> </el-option>
-      </el-select>
+      <!-- <el-select style="width:100px;float:right;margin-right:10px">
+        <el-option label="进行中" value="true"> </el-option>
+        <el-option label="已结束" value="false"> </el-option>
+      </el-select> -->
     </div>
 
     <!-- 项目列表 -->
@@ -43,10 +43,10 @@
         <!-- 无迭代时提示信息 -->
         <template v-if="item.cnt == 0">
           <p style="font-size:12.5px;color: #586069">请新建迭代</p>
-          <el-button style="float:right" v-if="item.cnt == 0 || item.status" @click="newIterate(item)" size="mini">新建迭代</el-button>
+          <el-button style="float:right" v-if="item.cnt == 0" @click="newIterate(item)" size="mini">新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
-        <template v-else>
+        <template v-else-if="!item.status">
           <p style="color: #586069">
             <span class="date" style="padding-right:15px;">
               <i class="el-icon-time"></i> : {{ item.begin_time }} ~
@@ -61,7 +61,27 @@
             <span style="padding-right:15px; ">预期AC：{{ item.expectedac }}</span>
             <!-- <span>按时交付: {{ item.success_cnt }} 次</span> -->
 
-            <el-button style="float:right" @click="detail(item)" size="mini">确认完成</el-button>
+            <el-button style="float:right" @click="finishIterate(item)" size="mini">确认完成</el-button>
+          </div>
+        </template>
+        <template v-else>
+          <p style="color: #586069">
+            <span class="date" style="padding-right:15px;">
+              <i class="el-icon-time"></i> : {{ item.begin_time }} ~
+              {{ item.end_time }}</span>
+            <span style="color:#67C23A" v-if="compareTime(item.end_time, item.finish_time)">
+              按时完成
+            </span>
+            <span v-else style="color:#F56C6C"> 延期完成</span>
+          </p>
+          <div style="font-size:12px;color:#bfbfbf;line-height:28px;">
+            <span style="padding-right:15px; color:#bfbfbf;">
+              <router-link :to="'/project/detail/' + item.id" class="link-type">
+                查看详情
+              </router-link>
+            </span>
+
+            <el-button style="float:right" @click="newIterate(item)" size="mini">新建迭代</el-button>
           </div>
         </template>
       </el-card>
@@ -80,55 +100,35 @@
     </el-dialog>
 
     <!-- 添加迭代dialog -->
-    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="show" />
-
-    <!-- {{ iterateform }} -->
+    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" />
+    <!-- 完成迭代dialog -->
+    <finish-drawer :iterate="tmp" :title="title" :serial="serial" />
   </div>
 </template>
 <script>
 import {
   createProject,
   listProject,
-  rmProject
-  // addProject,
-  // listUnfinishProject,
-  // listfinishProject,
-  // deleteProject,
-  // getProjectDc,
-  // computeProjectAc,
-  // autoSetAc,
-  // manualSetAc
+  rmProject,
+  getIteration
 } from "@/api/project.js";
-
+import FinishDrawer from "./finishDrawer";
 import IterateDialog from "./iterateDialog";
 export default {
   data() {
     return {
       projectDialog: false,
-      iterateDiaog: false,
       pid: "",
       title: "",
       cnt: "",
-      userlist: [],
       list: [],
+      serial: "",
       loading: false,
-      projectAc: {},
       projectform: {
         id: "",
         title: ""
       },
-      iterateform: {
-        id: "",
-        cnt: "",
-        dates: [],
-        dingIds: [],
-        updateDingIds: false
-      },
-      tmp: {
-        name: "",
-        dates: ["", ""]
-      },
-      dclist: [],
+      tmp: {},
       rules: {
         title: [{ required: true, message: "请输入项目名称", trigger: "blur" }],
         dates: [{ required: true, message: "请选择时间", trigger: "blur" }],
@@ -136,6 +136,7 @@ export default {
       }
     };
   },
+  components: { IterateDialog, FinishDrawer },
   computed: {
     isUpdate() {
       return this.$store.state.project.iteration;
@@ -157,12 +158,19 @@ export default {
       }
     }
   },
-  components: { IterateDialog },
+
   created() {
     this.fetchProjects();
   },
 
   methods: {
+    compareTime(ddl, finish) {
+      let d1 = new Date(ddl);
+      let d2 = new Date(finish);
+      console.log(d1.getTime());
+      console.log(d2.getTime());
+      return d1.getTime() > d2.getTime() ? true : false;
+    },
     // 更新数据
     fetchProjects() {
       listProject().then(res => {
@@ -240,6 +248,16 @@ export default {
       this.pid = item.id;
       this.cnt = item.cnt;
       this.$store.commit("project/TOGGLE_SHOW");
+    },
+    finishIterate(item) {
+      console.log(item);
+      getIteration(item.itid).then(res => {
+        console.log(res.data);
+        this.tmp = res.data;
+        this.title = item.title;
+        this.serial = item.cnt;
+        this.$store.commit("project/TOGGLE_DRAWER");
+      });
     }
   }
 };

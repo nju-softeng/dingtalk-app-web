@@ -6,7 +6,7 @@
         返回
       </span>
       <span slot="content" style="font-size:12.5px">
-        项目迭代
+        {{ title }}
       </span>
     </el-page-header>
     <!-- 项目概要 -->
@@ -97,7 +97,7 @@
       </el-table>
     </div>
     <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="show" :edit="tmp" />
-    <finish-drawer :iterate="finishtmp" :modify="modifyAC" />
+    <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" />
   </div>
 </template>
 <script>
@@ -113,6 +113,7 @@ export default {
       theader: false,
       title: "",
       pid: "",
+      serial: "",
       ilist: [],
       cnt: "--",
       success: "--",
@@ -135,7 +136,6 @@ export default {
       }
     }
   },
-
   created() {
     this.pid = this.$route.params.id;
     this.fetchProjectDetail();
@@ -143,11 +143,13 @@ export default {
   methods: {
     finishIterate(index, row) {
       this.modifyAC = false;
+      this.serial = row.cnt;
       this.finishtmp = row;
       this.$store.commit("project/TOGGLE_DRAWER");
     },
     modifyIterate(index, row) {
       this.modifyAC = true;
+      this.serial = row.cnt;
       this.finishtmp = row;
       this.$store.commit("project/TOGGLE_DRAWER");
     },
@@ -157,7 +159,7 @@ export default {
         this.cnt = res.data.icnt;
         this.success = res.data.success;
         this.title = res.data.title;
-        console.log(this.ilist);
+        console.log(res.data);
       });
     },
     newIteration() {

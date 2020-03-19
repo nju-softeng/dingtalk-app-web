@@ -1,8 +1,8 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer @open="handleOpen" size="80%" :visible.sync="drawer" direction="btt">
-      <div slot="title">项目标题</div>
+    <el-drawer @open="handleOpen" @close="handleClose" size="82%" :visible.sync="drawer" direction="btt">
+      <div slot="title">{{ title }} - 第{{ serial }}次迭代</div>
       <div class="content">
         <el-card shadow="never" style="width:360px;margin-right:5px;">
           <div style="font-size:14px">
@@ -26,67 +26,76 @@
 
         <el-card v-if="finishdate != undefined" shadow="never" style="width:100%">
           <div style="font-size:14px">
+            <!-- radio-group -->
             <div style="margin-bottom: 20px">
               <el-radio-group v-model="radio" @change="tabChange" size="mini">
                 <el-radio-button label="true"> 默认方案</el-radio-button>
                 <el-radio-button label="false">自定义</el-radio-button>
               </el-radio-group>
             </div>
+            <!-- 自动计算 -->
             <div v-show="scheme">
-              <div>
-                <p>迭代所跨周: {{ tmp.period }}</p>
-                <p style="white-space: pre;">其中: {{ tmp.info }}</p>
-              </div>
-              <div>
-                <div style="display:flex;">
-                  <div style="width:80px;">
-                    <table width="100%">
-                      <tr>
-                        <td class="black_title">#</td>
-                      </tr>
-                      <tr>
-                        <td class="left_title bottom_border">周平均DC</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div v-for="(item, index) in tmp.iterateInfos" :key="index" style="width: 80px ;">
-                    <table width="100%">
-                      <tr>
-                        <td class="black_title">{{ item.name }}</td>
-                      </tr>
-                      <tr>
-                        <td class="left_title bottom_border">
-                          {{ item.dc.toFixed(3) }}
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div style="width:80px;">
-                    <table width="100%">
-                      <tr>
-                        <td class="black_title">平均DC和</td>
-                      </tr>
-                      <tr>
-                        <td class="left_title bottom_border">
-                          {{ tmp.dcSum.toFixed(3) }}
-                        </td>
-                      </tr>
-                    </table>
+              <div v-if="tmp.status">
+                <div>
+                  <p>迭代所跨周: {{ tmp.period }}</p>
+                  <p style="white-space: pre;">其中: {{ tmp.info }}</p>
+                </div>
+                <div>
+                  <div style="display:flex;">
+                    <div style="width:80px;">
+                      <table width="100%">
+                        <tr>
+                          <td class="black_title">#</td>
+                        </tr>
+                        <tr>
+                          <td class="left_title bottom_border">周平均DC</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div v-for="(item, index) in tmp.iterateInfos" :key="index" style="width: 80px ;">
+                      <table width="100%">
+                        <tr>
+                          <td class="black_title">{{ item.name }}</td>
+                        </tr>
+                        <tr>
+                          <td class="left_title bottom_border">
+                            {{ item.dc.toFixed(3) }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div style="width:80px;">
+                      <table width="100%">
+                        <tr>
+                          <td class="black_title">平均DC和</td>
+                        </tr>
+                        <tr>
+                          <td class="left_title bottom_border">
+                            {{ tmp.dcSum.toFixed(3) }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <p>最终个人AC</p>
-                <div style="display:flex">
-                  <el-card v-for="(item, index) in tmp.iterateInfos" :key="index" shadow="never" style="width:160px; margin-right:5px">
-                    {{ item.name }} : {{ item.ac.toFixed(3) }}
-                  </el-card>
+                <div>
+                  <p>最终个人AC</p>
+                  <div style="display:flex">
+                    <el-card v-for="(item, index) in tmp.iterateInfos" :key="index" shadow="never" style="width:160px; margin-right:5px">
+                      {{ item.name }} : {{ item.ac.toFixed(3) }}
+                    </el-card>
+                  </div>
+                </div>
+                <div style="margin-top:20px">
+                  <el-button @click="setIterationAC">确定提交</el-button>
                 </div>
               </div>
-              <div style="margin-top:20px">
-                <el-button @click="setIterationAC">确定提交</el-button>
+              <div v-else>
+                <el-alert title="开发者的DC和为0，公式无法计算，请手动分配" type="error">
+                </el-alert>
               </div>
             </div>
+            <!-- 手动分配 -->
             <div v-show="!scheme">
               <el-card shadow="never">
                 <el-form label-width="70px" label-position="right">
@@ -118,7 +127,6 @@
           </div>
         </el-card>
       </div>
-      {{ iterate }}
     </el-drawer>
   </div>
 </template>
@@ -126,7 +134,21 @@
 import { computeIterateAc, autoSetAc, manualSetAc } from "@/api/project.js";
 
 export default {
-  props: ["iterate", "modify"],
+  props: {
+    iterate: {
+      type: Object
+    },
+    modify: {
+      type: Boolean,
+      default: false
+    },
+    title: {
+      type: String
+    },
+    serial: {
+      type: Number
+    }
+  },
   data() {
     return {
       radio: true,
@@ -156,6 +178,7 @@ export default {
   methods: {
     changeFinishTime() {
       if (this.finishdate != undefined) {
+        console.log(this.iterate.id, this.finishdate);
         computeIterateAc(this.iterate.id, this.finishdate).then(res => {
           console.log(res.data);
           this.tmp = res.data;
@@ -164,7 +187,12 @@ export default {
     },
     setIterationAC() {
       autoSetAc(this.iterate.id, this.finishdate).then(res => {
-        console.log(res);
+        this.$message({
+          message: "提交成功",
+          type: "success"
+        });
+        this.$store.commit("project/TO_UPDATE");
+        this.drawer = false;
       });
     },
     manualAc() {
@@ -174,10 +202,12 @@ export default {
       };
       console.log(data);
       manualSetAc(this.iterate.id, data).then(() => {
-        this.$notify({
-          title: "成功",
+        this.$message({
+          message: "提交成功",
           type: "success"
         });
+        this.$store.commit("project/TO_UPDATE");
+        this.drawer = false;
       });
     },
     tabChange() {
@@ -187,14 +217,26 @@ export default {
       this.finishdate = null;
       this.radio = true;
       this.scheme = true;
-    }
 
-    // handleClose() {
-    //   this.$refs.iterateform.resetFields();
-    //   this.userlist = [];
-    //   this.iterateform.updateDingIds = false;
-    //   this.iterateform.id = null;
-    // }
+      if (this.modify) {
+        this.finishdate = this.iterate.finishTime;
+        computeIterateAc(this.iterate.id, this.finishdate).then(res => {
+          this.tmp = res.data;
+          console.log(this.tmp);
+        });
+      }
+    },
+
+    handleClose() {
+      this.tmp = {
+        AcActual: 0,
+        AcReduce: 0,
+        AcAward: 0,
+        totalAc: 0,
+        dcSum: 0,
+        iterateInfos: []
+      };
+    }
   }
 };
 </script>
@@ -207,7 +249,7 @@ export default {
 }
 
 .drawer /deep/ .el-drawer__header {
-  margin-bottom: 0px;
+  margin-bottom: 15px;
 }
 .drawer /deep/ .el-drawer > header > button:focus {
   outline-color: white;

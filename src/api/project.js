@@ -50,6 +50,35 @@ export function rmIteration(itid) {
   });
 }
 
+// 查询迭代绩效
+export function computeIterateAc(itid, date) {
+  return request({
+    url: "/project/iteration/" + itid + "/computeac",
+    method: "post",
+    data: {
+      finishdate: date
+    }
+  });
+}
+
+export function autoSetAc(itid, date) {
+  return request({
+    url: "/project/autosetac/" + itid,
+    method: "post",
+    data: {
+      finishdate: date
+    }
+  });
+}
+
+export function manualSetAc(itid, data) {
+  return request({
+    url: "/project/manualsetac/" + itid,
+    method: "post",
+    data
+  });
+}
+
 // // 更新项目
 // export function updateProject(data) {
 //   return request({
@@ -98,16 +127,6 @@ export function rmIteration(itid) {
 // export function computeProjectAc(pid, date) {
 //   return request({
 //     url: "/project/computeac/" + pid,
-//     method: "post",
-//     data: {
-//       finishdate: date
-//     }
-//   });
-// }
-
-// export function autoSetAc(pid, date) {
-//   return request({
-//     url: "/project/autosetac/" + pid,
 //     method: "post",
 //     data: {
 //       finishdate: date

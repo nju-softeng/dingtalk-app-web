@@ -672,13 +672,6 @@ export default {
     }
   }
 
-  .namelist {
-    width: 160px;
-    padding: 0 20px;
-    overflow: hidden; /*超出部分隐藏*/
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
   .info-item {
     color: gray;
     display: flex;
@@ -687,6 +680,14 @@ export default {
     align-items: center;
   }
 }
+
+.namelist {
+  min-width: 100px;
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .content {
   height: 50px;
   display: flex;

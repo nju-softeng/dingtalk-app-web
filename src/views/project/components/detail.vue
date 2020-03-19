@@ -37,62 +37,67 @@
         </el-radio-group>
       </div>
       <!-- 迭代表格 -->
-
       <el-table :show-header="theader" :data="ilist" style="width: 100%;margin-top:40px; border-top: 0.5px solid #f0f0f0">
-        <el-table-column width="180">
+        <el-table-column width="200">
           <template slot-scope="scope">
             <div>第{{ scope.row.cnt }}次迭代</div>
 
-            <div>
-              预期AC: 2.67
-            </div>
+            <div>预期AC: {{ scope.row.expectedAC }}</div>
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ scope.row.beginTime }} ~ {{ scope.row.endTime }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="日期" align="center" width="150">
+        <el-table-column align="center" width="180">
           <template slot-scope="scope">
             <div>
               完成时间
             </div>
-            <template v-if="scope.row.finishTime == undefined">
+            <template v-if="scope.row.status == false">
               <el-tag type="info">进行中</el-tag>
             </template>
             <template v-else>
               <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.finishTime }}</span>
+              <span style="margin:0 10px">{{ scope.row.finishTime }}</span>
+              <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">按时完成</el-tag>
+              <el-tag v-else type="danger"> 延期完成 </el-tag>
             </template>
           </template>
         </el-table-column>
         <el-table-column align="center">
           <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
-              <p>姓名: {{ scope.row.name }}</p>
-              <p>住址: {{ scope.row.address }}</p>
-              <div slot="reference">
-                <div>开发者</div>
-                <div style="min-width:300px;">
-                  <el-tag style="margin:0 2px" v-for="(o, index) in scope.row.iterationDetails" :key="index" size="small">{{ o.user.name }} AC+ 0.123</el-tag>
-                </div>
+            <div>
+              <div>开发者</div>
+              <div style="min-width:300px;">
+                <template v-if="scope.row.status == false">
+                  <el-tag style="margin:0 4px" v-for="(o, index) in scope.row.iterationDetails" :key="index" effect="plain" size="small">{{ o.user.name }}</el-tag>
+                </template>
+                <template v-else>
+                  <el-tag style="margin:0 4px" v-for="(o, index) in scope.row.iterationDetails" :key="index" effect="plain" size="small">{{ o.user.name }} AC: {{ o.ac }}</el-tag>
+                </template>
               </div>
-            </el-popover>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope" v-if="scope.$index == 0">
-            <el-button type="text" @click="finishIterate">完成</el-button>
-            <el-button type="text" @click="handleEdit(scope.$index, scope.row)" style="margin-right:10px;">编辑</el-button>
+            <template v-if="scope.row.status == false">
+              <el-button type="text" @click="finishIterate(scope.$index, scope.row)">完成</el-button>
+              <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            </template>
+            <template v-else>
+              <el-button type="text" @click="modifyIterate(scope.$index, scope.row)">修改</el-button>
+            </template>
 
             <el-popconfirm @onConfirm="handledDelete(scope.$index, scope.row)" confirmButtonType="danger" confirmButtonText="删除" cancelButtonText="取消" icon="el-icon-info" iconColor="red" title="AC记录也会被删除,谨慎操作">
-              <el-button slot="reference" type="text">删除</el-button>
+              <el-button style="margin-left:10px;" slot="reference" type="text">删除</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="show" :edit="tmp" />
-    <finish-drawer />
+    <finish-drawer :iterate="finishtmp" :modify="modifyAC" />
   </div>
 </template>
 <script>
@@ -111,7 +116,9 @@ export default {
       ilist: [],
       cnt: "--",
       success: "--",
-      tmp: {}
+      tmp: {},
+      finishtmp: {},
+      modifyAC: "false"
     };
   },
   components: { IterateDialog, FinishDrawer },
@@ -134,7 +141,14 @@ export default {
     this.fetchProjectDetail();
   },
   methods: {
-    finishIterate() {
+    finishIterate(index, row) {
+      this.modifyAC = false;
+      this.finishtmp = row;
+      this.$store.commit("project/TOGGLE_DRAWER");
+    },
+    modifyIterate(index, row) {
+      this.modifyAC = true;
+      this.finishtmp = row;
       this.$store.commit("project/TOGGLE_DRAWER");
     },
     fetchProjectDetail() {
@@ -183,7 +197,7 @@ export default {
 .app-container {
   padding: 10px;
   background-color: #f5f5f5;
-  height: 92vh;
+  //height: 92vh;
   border-radius: 0;
 }
 

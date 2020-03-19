@@ -312,10 +312,6 @@ export default {
 </script>
 
 <style scope>
-.el-table__expanded-cell[class*="cell"] {
-  padding: 10px 50px;
-}
-
 .el-drawer > header > span:focus {
   outline-color: white;
 }
@@ -347,12 +343,6 @@ export default {
   display: flex;
 }
 
-.el-table td {
-  padding: 4px 0px;
-}
-.el-table tr {
-  height: 10px;
-}
 .el-form-item__label {
   font-weight: normal;
   font-size: 14px;

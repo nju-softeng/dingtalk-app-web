@@ -1,68 +1,148 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer size="90%" :visible.sync="drawer" direction="btt">
-      <div slot="title">
-        项目标题 2020-02-12 ~ 2020-03-12
-      </div>
+    <el-drawer @open="handleOpen" size="80%" :visible.sync="drawer" direction="btt">
+      <div slot="title">项目标题</div>
       <div class="content">
-        <template>
-          <el-card shadow="never" style="width:360px;margin-left: auto;margin-right:auto;height:70vh">
-            <span style="font-size:14px">完成时间</span>
-            <el-date-picker type="date" placeholder="选择日期">
+        <el-card shadow="never" style="width:360px;margin-right:5px;">
+          <div style="font-size:14px">
+            <p style="margin-bottom:10px; margin-top:0px">完成时间</p>
+            <el-date-picker type="date" style="width:200px" v-model="finishdate" @change="changeFinishTime" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期">
             </el-date-picker>
-          </el-card>
-        </template>
-        <!-- <div>
-          <el-steps :active="active" finish-status="success">
-            <el-step title="步骤 1"></el-step>
-            <el-step title="步骤 2"></el-step>
-            <el-step title="步骤 3"></el-step>
-          </el-steps>   
-        </div>
-        <el-table :data="tableData" border show-summary style="width: 100%">
-          <el-table-column prop="id" label="ID" width="180"> </el-table-column>
-          <el-table-column prop="name" label="姓名"> </el-table-column>
-          <el-table-column prop="amount1" sortable label="数值 1">
-          </el-table-column>
-          <el-table-column prop="amount2" sortable label="数值 2">
-          </el-table-column>
-          <el-table-column prop="amount3" sortable label="数值 3">
-          </el-table-column>
-        </el-table> -->
+            <p>
+              预计周期:
+              <span style="font-size:12px">{{ iterate.beginTime }} ~ {{ iterate.endTime }}</span>
+            </p>
+            <el-divider></el-divider>
+            <div v-if="finishdate != undefined">
+              <p>实际团队AC: {{ tmp.AcActual.toFixed(3) }}</p>
+              <p>延误扣除AC: {{ tmp.AcReduce.toFixed(3) }}</p>
+              <p>交付奖励AC: {{ tmp.AcAward.toFixed(3) }}</p>
+              <p>最终团队AC: {{ tmp.totalAc.toFixed(3) }}</p>
+            </div>
+            <div v-else style="padding:10px;padding-top:20px;background-color:#f5f5f5;height:120px;"></div>
+          </div>
+        </el-card>
+
+        <el-card v-if="finishdate != undefined" shadow="never" style="width:100%">
+          <div style="font-size:14px">
+            <div style="margin-bottom: 20px">
+              <el-radio-group v-model="radio" @change="tabChange" size="mini">
+                <el-radio-button label="true"> 默认方案</el-radio-button>
+                <el-radio-button label="false">自定义</el-radio-button>
+              </el-radio-group>
+            </div>
+            <div v-show="scheme">
+              <div>
+                <p>迭代所跨周: {{ tmp.period }}</p>
+                <p style="white-space: pre;">其中: {{ tmp.info }}</p>
+              </div>
+              <div>
+                <div style="display:flex;">
+                  <div style="width:80px;">
+                    <table width="100%">
+                      <tr>
+                        <td class="black_title">#</td>
+                      </tr>
+                      <tr>
+                        <td class="left_title bottom_border">周平均DC</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div v-for="(item, index) in tmp.iterateInfos" :key="index" style="width: 80px ;">
+                    <table width="100%">
+                      <tr>
+                        <td class="black_title">{{ item.name }}</td>
+                      </tr>
+                      <tr>
+                        <td class="left_title bottom_border">
+                          {{ item.dc.toFixed(3) }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div style="width:80px;">
+                    <table width="100%">
+                      <tr>
+                        <td class="black_title">平均DC和</td>
+                      </tr>
+                      <tr>
+                        <td class="left_title bottom_border">
+                          {{ tmp.dcSum.toFixed(3) }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p>最终个人AC</p>
+                <div style="display:flex">
+                  <el-card v-for="(item, index) in tmp.iterateInfos" :key="index" shadow="never" style="width:160px; margin-right:5px">
+                    {{ item.name }} : {{ item.ac.toFixed(3) }}
+                  </el-card>
+                </div>
+              </div>
+              <div style="margin-top:20px">
+                <el-button @click="setIterationAC">确定提交</el-button>
+              </div>
+            </div>
+            <div v-show="!scheme">
+              <el-card shadow="never">
+                <el-form label-width="70px" label-position="right">
+                  <el-form-item v-for="(o, index) in iterate.iterationDetails" :key="index" :label="o.user.name">
+                    <el-input v-model="o.ac" style="width:100px"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div style="margin-top:20px">
+                  <el-button @click="manualAc">确定提交</el-button>
+                </div>
+              </el-card>
+            </div>
+          </div>
+        </el-card>
+        <!-- 未确定完成时间的空提示 -->
+        <el-card v-show="finishdate == undefined" shadow="never" style="width:100%; display:flex; justify-content: center;            
+        align-items: center; ">
+          <div style="padding:10px;text-align:center;">
+            暂无迭代绩效数据
+          </div>
+          <div style="height:180px; width:500px; background-color:#f5f5f5; font-size:14px;display:flex; justify-content: center;align-items: center; ">
+            <div>
+              <span style="padding-right:10px">完成时间</span>
+
+              <el-date-picker @change="changeFinishTime" v-model="finishdate" type="date" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期">
+              </el-date-picker>
+              <p>请在周日审核完DC后,再结算</p>
+            </div>
+          </div>
+        </el-card>
       </div>
+      {{ iterate }}
     </el-drawer>
   </div>
 </template>
 <script>
-import { createIteration } from "@/api/project.js";
+import { computeIterateAc, autoSetAc, manualSetAc } from "@/api/project.js";
 
 export default {
-  props: ["show", "pid", "title", "cnt", "edit"],
+  props: ["iterate", "modify"],
   data() {
     return {
-      userlist: [],
+      radio: true,
+      scheme: true,
+      finishdate: null,
       list: [],
-      loading: false,
-      iterateform: {
-        id: "",
-        cnt: "",
-        dates: [],
-        dingIds: [],
-        updateDingIds: false
-      },
       tmp: {
-        name: "",
-        dates: ["", ""]
-      },
-      dclist: [],
-      rules: {
-        dates: [{ required: true, message: "请选择时间", trigger: "blur" }],
-        dingIds: [{ required: true, message: "请分配任务", trigger: "blur" }]
+        AcActual: 0,
+        AcReduce: 0,
+        AcAward: 0,
+        totalAc: 0,
+        dcSum: 0,
+        iterateInfos: []
       }
     };
   },
-
   computed: {
     drawer: {
       get() {
@@ -74,81 +154,82 @@ export default {
     }
   },
   methods: {
-    // dialog 打开前渲染编辑数据
-    toOpen() {
-      if (this.edit != null) {
-        this.$nextTick(() => {
-          this.iterateform.dates.push(this.edit.beginTime);
-          this.iterateform.dates.push(this.edit.endTime);
-          this.userlist = this.edit.iterationDetails.map(x => {
-            return x.user;
-          });
-          this.iterateform.dingIds = this.edit.iterationDetails.map(x => {
-            return x.user.userid;
-          });
-          this.iterateform.id = this.edit.id;
+    changeFinishTime() {
+      if (this.finishdate != undefined) {
+        computeIterateAc(this.iterate.id, this.finishdate).then(res => {
+          console.log(res.data);
+          this.tmp = res.data;
         });
       }
     },
-    // 创建或更新项目
-    submitIterate() {
-      this.$refs.iterateform.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          createIteration(this.pid, this.iterateform)
-            .then(() => {
-              this.dialog = false;
-              this.$store.commit("project/TO_UPDATE");
-              this.$notify({
-                title: "成功",
-                message: "提交成功",
-                type: "success"
-              });
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        } else {
-          this.$notify({
-            title: "提交失败",
-            message: "请填写必要信息",
-            type: "warning"
-          });
-        }
+    setIterationAC() {
+      autoSetAc(this.iterate.id, this.finishdate).then(res => {
+        console.log(res);
       });
     },
-
-    // 取消选中的用户
-    closeTag(u) {
-      this.iterateform.updateDingIds = true;
-      this.userlist.splice(this.userlist.indexOf(u), 1);
-      this.iterateform.dingIds.splice(
-        this.iterateform.dingIds.indexOf(u.userid),
-        1
-      );
+    manualAc() {
+      var data = {
+        finishdate: this.finishdate,
+        iterationDetails: this.iterate.iterationDetails
+      };
+      console.log(data);
+      manualSetAc(this.iterate.id, data).then(() => {
+        this.$notify({
+          title: "成功",
+          type: "success"
+        });
+      });
     },
-    handleClose() {
-      this.$refs.iterateform.resetFields();
-      this.userlist = [];
-      this.iterateform.updateDingIds = false;
-      this.iterateform.id = null;
+    tabChange() {
+      this.scheme = !this.scheme;
+    },
+    handleOpen() {
+      this.finishdate = null;
+      this.radio = true;
+      this.scheme = true;
     }
+
+    // handleClose() {
+    //   this.$refs.iterateform.resetFields();
+    //   this.userlist = [];
+    //   this.iterateform.updateDingIds = false;
+    //   this.iterateform.id = null;
+    // }
   }
 };
 </script>
 <style lang="scss" scoped>
-.drawer .el-drawer > header > span:focus {
+.drawer /deep/ .el-drawer > header > span:focus {
   outline-color: white;
 }
-.drawer .el-drawer > header > button:focus {
+.drawer /deep/ .el-drawer__title {
+  margin-bottom: 0px;
+}
+
+.drawer /deep/ .el-drawer__header {
+  margin-bottom: 0px;
+}
+.drawer /deep/ .el-drawer > header > button:focus {
   outline-color: white;
 }
-.drawer .el-drawer > header > button:hover {
-  color: rgb(64, 158, 255);
+.drawer /deep/ .el-drawer > header > button:hover {
+  outline-color: white;
 }
 
 .content {
-  padding: 20px;
+  padding: 0 20px;
   height: 100%;
+  display: flex;
+}
+
+table,
+table tr th,
+table tr td {
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+table {
+  border-collapse: collapse;
 }
 </style>

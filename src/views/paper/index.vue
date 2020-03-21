@@ -21,7 +21,7 @@
                     <div class="journal">
                       <svg-icon icon-class="school" /> {{ scope.row.journal }}
                     </div>
-                    <el-tooltip class="item" effect="dark" content="出刊时间" placement="top-start">
+                    <el-tooltip class="item" effect="dark" content="会议/出刊时间" placement="top-start">
                       <div class="time">
                         <svg-icon icon-class="date" />
                         {{ scope.row.issueDate }}

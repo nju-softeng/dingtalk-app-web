@@ -132,7 +132,7 @@ export const asyncRoutes = [
         path: "manage",
         name: "Manage",
         component: () => import("@/views/project/manage"),
-        meta: { title: "迭代分配", icon: "table", roles: ["admin", "doctor"] }
+        meta: { title: "开发管理", icon: "table", roles: ["admin", "doctor"] }
       },
       {
         path: "index",
@@ -149,17 +149,11 @@ export const asyncRoutes = [
         name: "Detail",
         component: () => import("@/views/project/components/detail"),
         meta: {
-          title: "项目迭代",
+          title: "项目详情",
           icon: "table",
-          roles: ["admin", "doctor"]
+          roles: ["admin", "doctor", "postgraduate"]
         },
         hidden: true
-      },
-      {
-        path: "bug",
-        name: "Bug",
-        component: () => import("@/views/project/bug"),
-        meta: { title: "bug报告", icon: "bug" }
       }
     ]
   },

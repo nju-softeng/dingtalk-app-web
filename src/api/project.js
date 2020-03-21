@@ -17,10 +17,18 @@ export function rmProject(pid) {
   });
 }
 
-// 查询项目
+// 查询审核人创建的项目
 export function listProject() {
   return request({
     url: "/project",
+    method: "get"
+  });
+}
+
+// 查询实验室所有项目
+export function listAllProject() {
+  return request({
+    url: "/project/all",
     method: "get"
   });
 }

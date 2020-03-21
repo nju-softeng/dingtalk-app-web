@@ -93,3 +93,19 @@
   margin-top: 10px;
   margin-bottom: 5px;
 }
+
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+  background-color: white;
+  color: #597ef7;
+  border-color: #597ef7;
+}
+
+.el-dialog__title {
+  line-height: 22px;
+  font-size: 14px;
+  color: #303133;
+}
+
+.el-dialog__body {
+  padding-top: 10px;
+}

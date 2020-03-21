@@ -12,6 +12,9 @@
           </span>
           <userbug />
         </el-tab-pane>
+        <el-tab-pane label="所有项目">
+          <devlist />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>

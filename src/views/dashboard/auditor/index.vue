@@ -68,7 +68,7 @@
               </router-link>
             </div>
             <!-- 消息内容 -->
-            <div v-if="messages.length != 0" style="min-height:200px">
+            <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
                 <div style="display:flex;justify-content:space-between;">
@@ -147,13 +147,13 @@
                       <span>{{ item.ac }}</span>
                     </div>
                   </div>
-                  <div class="reason">
+                  <div class="reason" style="font-size:13px">
                     <span>变更原因：{{ item.reason }}</span>
                   </div>
-                  <div class="auditor" v-if="item.auditorname != undefined">
+                  <div class="auditor" style="font-size:13px" v-if="item.auditorname != undefined">
                     <span>审核人: {{ item.auditorname }}</span>
                   </div>
-                  <div style="padding-top:15px">
+                  <div style="padding-top:15px;font-size:13px">
                     时间: {{ item.create_time }}
                   </div>
                 </div>

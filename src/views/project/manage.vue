@@ -13,6 +13,9 @@
           </span>
           <auditbug />
         </el-tab-pane>
+        <el-tab-pane label="所有项目">
+          <devlist />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -24,7 +27,8 @@ export default {
   },
   components: {
     assign: () => import("./components/assign"),
-    auditbug: () => import("./components/auditbug")
+    auditbug: () => import("./components/auditbug"),
+    devlist: () => import("./components/devlist")
   },
   created() {},
   methods: {}

@@ -41,3 +41,14 @@ export function timeAgo(time) {
 export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function formatDate(date) {
+  if (!date) {
+    return;
+  }
+  if (date.length <= 10) {
+    return date.replace(/\-/g, "/");
+  } else {
+    return date.slice(0, 10).replace(/\-/g, "/");
+  }
+}

@@ -39,7 +39,7 @@
       </div>
       <!-- 迭代表格 -->
       <div v-if="radio == '迭代'">
-        <el-table :show-header="theader" :data="ilist" style=" border-top: 0.5px solid #f0f0f0">
+        <el-table key="iteration" :show-header="theader" :data="ilist" style=" border-top: 0.5px solid #f0f0f0">
           <el-table-column width="200">
             <template slot-scope="scope">
               <div>
@@ -49,7 +49,8 @@
                 <span>预期AC: {{ scope.row.expectedAC }}</span>
               </div>
               <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.beginTime }} ~ {{ scope.row.endTime }}</span>
+              <span style="margin-left: 10px">{{ scope.row.beginTime | formatDate }} ~
+                {{ scope.row.endTime | formatDate }}</span>
             </template>
           </el-table-column>
 
@@ -62,10 +63,12 @@
                 <el-tag type="info">进行中</el-tag>
               </template>
               <template v-else>
-                <i class="el-icon-time"></i>
-                <span style="margin:0 10px">{{ scope.row.finishTime }}</span>
-                <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">按时完成</el-tag>
-                <el-tag v-else type="danger"> 延期完成 </el-tag>
+                <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">
+                  <i class="el-icon-time"></i>
+                  {{ scope.row.finishTime }} 按时完成</el-tag>
+                <el-tag v-else type="danger">
+                  {{ scope.row.finishTime }} 延期完成
+                </el-tag>
               </template>
             </template>
           </el-table-column>
@@ -114,19 +117,45 @@
           </template>
         </el-table>
       </div>
+
       <!-- bug表格 -->
       <div v-else>
-        <el-table :data="buglist" style="width: 100%">
-          <el-table-column prop="insertTime" label="日期">
+        <el-table key="bug" :data="buglist" :show-header="theader">
+          <el-table-column>
             <template slot-scope="scope">
-              <div>
-                <span> </span>
-              </div>
-              {{ scope.row.insertTime }}
+              <p>
+                <el-popover placement="top-start" title="标题" width="358" trigger="hover">
+                  <div>
+                    <p>{{ scope.row.description }}</p>
+                  </div>
+                  <span slot="reference">
+                    {{ scope.row.title }}
+                  </span>
+                </el-popover>
+              </p>
+
+              <p>
+                <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
+                <span style="padding-left:8px">
+                  状态： <el-tag> 待确认</el-tag>
+                </span>
+                <span>
+                  bug责任人：
+                  <el-tag style="margin:0 8px"> 花花</el-tag>
+                  <el-tag> 花花</el-tag>
+                  <el-tag> 花花</el-tag>
+                </span>
+              </p>
             </template>
           </el-table-column>
 
-          <el-table-column prop="address" label="bug责任人"> </el-table-column>
+          <el-table-column label="tttt" fixed="right" width="60px">
+            <el-button type="text" size="small" icon="el-icon-edit">
+            </el-button>
+            <el-button type="text" size="small" icon="el-icon-delete">
+            </el-button>
+          </el-table-column>
+
           <template slot="empty">
             <div style="height:200px;">
               <div style="margin-top:100px;">
@@ -145,15 +174,19 @@
     <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" />
 
     <el-dialog title="报告bug" :visible.sync="bugDialog">
-      <div v-loading="loading" style="width:90%">
-        <el-form label-position="top" :data="buglist" ref="bugform" :model="bugform">
-          <el-form-item label="bug描述">
-            <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="bugform.description">
+      <div v-loading="loading" style="width:100%">
+        <el-form :data="buglist" :rules="rules" ref="bugform" :model="bugform">
+          <el-form-item prop="title">
+            <el-input v-model="bugform.title" placeholder="标题"></el-input>
+          </el-form-item>
+          <el-form-item prop="description">
+            <el-input type="textarea" :rows="4" placeholder="描述" v-model="bugform.description">
             </el-input>
           </el-form-item>
         </el-form>
         <div>
           {{ bugform }}
+          <el-divider></el-divider>
         </div>
       </div>
 
@@ -192,8 +225,17 @@ export default {
       authorid: "",
       loading: false,
       bugform: {
-        projectId: "",
+        title: "",
+        project: {
+          id: ""
+        },
         description: ""
+      },
+      rules: {
+        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        description: [
+          { required: true, message: "请输入内容", trigger: "blur" }
+        ]
       }
     };
   },
@@ -284,14 +326,23 @@ export default {
     handleClose() {},
     submitBug() {
       this.loading = true;
-      this.bugform.projectId = this.pid;
-      if (this.bugform.description) {
-        addBug(this.bugform).then(() => {
-          this.loading = false;
-          this.fetchProjectBug();
-          this.bugDialog = false;
-        });
-      }
+      this.bugform.project.id = this.pid;
+
+      this.$refs.bugform.validate(valid => {
+        if (valid) {
+          addBug(this.bugform).then(() => {
+            this.loading = false;
+            this.fetchProjectBug();
+            this.bugDialog = false;
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: "请填写必要信息",
+            type: "error"
+          });
+        }
+      });
     }
   }
 };

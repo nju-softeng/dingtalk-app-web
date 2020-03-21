@@ -122,7 +122,7 @@ export default {
       title: "",
       cnt: "",
       list: [],
-      serial: "",
+      serial: 0,
       loading: false,
       projectform: {
         id: "",
@@ -167,8 +167,6 @@ export default {
     compareTime(ddl, finish) {
       let d1 = new Date(ddl);
       let d2 = new Date(finish);
-      console.log(d1.getTime());
-      console.log(d2.getTime());
       return d1.getTime() > d2.getTime() ? true : false;
     },
     // 更新数据

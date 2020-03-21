@@ -9,9 +9,18 @@ export function addBug(data) {
   });
 }
 
+// 查询指定项目的bug
 export function listProjectBug(pid) {
   return request({
     url: "/bug/project/" + pid,
+    method: "get"
+  });
+}
+
+// 查询审核人创建项目的bug
+export function listAuditorBug(aid) {
+  return request({
+    url: "/bug/auditor/" + aid,
     method: "get"
   });
 }

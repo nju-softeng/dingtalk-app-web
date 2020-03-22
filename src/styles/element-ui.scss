@@ -122,3 +122,7 @@
     outline-color: white;
   }
 }
+
+.el-drawer__body {
+  overflow-y: auto;
+}

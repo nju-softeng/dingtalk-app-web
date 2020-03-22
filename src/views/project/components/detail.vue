@@ -124,27 +124,29 @@
           <el-table-column>
             <template slot-scope="scope">
               <p>
-                <el-popover placement="top-start" title="标题" width="358" trigger="hover">
+                <el-popover placement="bottom" title="标题" width="358" trigger="hover">
                   <div>
-                    <p>{{ scope.row.description }}</p>
+                    <p>
+                      {{ scope.row.description }}
+                    </p>
                   </div>
                   <span slot="reference">
-                    {{ scope.row.title }}
+                    <span>{{ scope.row.title }}</span>
                   </span>
                 </el-popover>
               </p>
 
               <p>
                 <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
-                <span style="padding-left:8px">
+                <span style="margin: 0 8px">
                   状态：
                   <el-tag v-if="scope.row.status == undefined"> 待确认</el-tag>
+                  <el-tag v-else-if="scope.row.status">bug成立</el-tag>
+                  <el-tag v-else>bug不成立</el-tag>
                 </span>
-                <span v-if="scope.row.status != undefined">
+                <span v-if="scope.row.status">
                   bug责任人：
-                  <el-tag style="margin:0 8px"> 小花</el-tag>
-                  <el-tag style="margin:0 8px"> 小花</el-tag>
-                  <el-tag style="margin:0 8px"> 小花</el-tag>
+                  <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
                 </span>
               </p>
             </template>
@@ -332,11 +334,9 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    handleClose() {},
     submitBug() {
       this.loading = true;
       this.bugform.project.id = this.pid;
-
       this.$refs.bugform.validate(valid => {
         if (valid) {
           addBug(this.bugform).then(() => {

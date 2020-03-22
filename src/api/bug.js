@@ -24,3 +24,12 @@ export function listAuditorBug(aid) {
     method: "get"
   });
 }
+
+// 确认bug 状态
+export function checkBug(data) {
+  return request({
+    url: "/bug/check",
+    method: "post",
+    data
+  });
+}

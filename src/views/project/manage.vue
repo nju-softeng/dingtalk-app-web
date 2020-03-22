@@ -9,6 +9,7 @@
         <el-tab-pane label="bug管理">
           <auditbug />
         </el-tab-pane>
+
         <el-tab-pane label="实验室所有项目">
           <devlist />
         </el-tab-pane>

@@ -1,7 +1,7 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer @open="handleOpen" @close="handleClose" size="82%" :visible.sync="drawer" direction="btt">
+    <el-drawer @open="handleOpen" @close="handleClose" size="82%" :modal="false" :visible.sync="drawer" direction="btt">
       <div slot="title">{{ title }} - 第{{ serial }}次迭代</div>
       <div class="content">
         <el-card shadow="never" style="width:360px;margin-right:5px;">

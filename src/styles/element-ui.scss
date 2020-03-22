@@ -109,3 +109,16 @@
 .el-dialog__body {
   padding-top: 10px;
 }
+
+.el-drawer__header {
+  margin-bottom: 22px;
+  > button:focus {
+    outline-color: white;
+  }
+  > button:hover {
+    outline-color: white;
+  }
+  > span:focus {
+    outline-color: white;
+  }
+}

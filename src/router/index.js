@@ -141,7 +141,7 @@ export const asyncRoutes = [
         meta: {
           title: "我的迭代",
           icon: "table",
-          roles: ["admin", "postgraduate"]
+          roles: ["postgraduate"]
         }
       },
       {

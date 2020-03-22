@@ -39,7 +39,7 @@
       </div>
       <!-- 迭代表格 -->
       <div v-if="radio == '迭代'">
-        <el-table key="iteration" :show-header="theader" :data="ilist" style=" border-top: 0.5px solid #f0f0f0">
+        <el-table key="iteration" :show-header="theader" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
           <el-table-column width="200">
             <template slot-scope="scope">
               <div>
@@ -137,23 +137,31 @@
               <p>
                 <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
                 <span style="padding-left:8px">
-                  状态： <el-tag> 待确认</el-tag>
+                  状态：
+                  <el-tag v-if="scope.row.status == undefined"> 待确认</el-tag>
                 </span>
-                <span>
+                <span v-if="scope.row.status != undefined">
                   bug责任人：
-                  <el-tag style="margin:0 8px"> 花花</el-tag>
-                  <el-tag> 花花</el-tag>
-                  <el-tag> 花花</el-tag>
+                  <el-tag style="margin:0 8px"> 小花</el-tag>
+                  <el-tag style="margin:0 8px"> 小花</el-tag>
+                  <el-tag style="margin:0 8px"> 小花</el-tag>
                 </span>
               </p>
             </template>
           </el-table-column>
 
-          <el-table-column label="tttt" fixed="right" width="60px">
-            <el-button type="text" size="small" icon="el-icon-edit">
-            </el-button>
-            <el-button type="text" size="small" icon="el-icon-delete">
-            </el-button>
+          <el-table-column label="tttt" fixed="right" width="100px">
+            <template slot-scope="scope">
+              <template v-if="uid == scope.row.reporterid">
+                <el-button type="text" size="small" icon="el-icon-edit">
+                </el-button>
+                <el-button type="text" size="small" icon="el-icon-delete">
+                </el-button>
+              </template>
+              <template v-else>
+                <span>已处理无法删除</span>
+              </template>
+            </template>
           </el-table-column>
 
           <template slot="empty">
@@ -264,6 +272,7 @@ export default {
     }
     this.fetchProjectDetail();
     this.fetchProjectBug();
+    this.bugform.project.id = this.pid;
   },
   methods: {
     finishIterate(index, row) {

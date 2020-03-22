@@ -3,7 +3,7 @@
     <div class="box">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="迭代任务">
-          <devlist />
+          <my-iteration />
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label">
@@ -27,8 +27,9 @@ export default {
     };
   },
   components: {
-    devlist: () => import("./components/devlist"),
-    userbug: () => import("./components/userbug")
+    myIteration: () => import("./components/myIteration"),
+    userbug: () => import("./components/userbug"),
+    devlist: () => import("./components/devlist")
   },
   created() {},
   methods: {}

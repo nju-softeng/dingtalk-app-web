@@ -6,14 +6,10 @@
           <assign />
         </el-tab-pane>
 
-        <el-tab-pane>
-          <span slot="label">
-            <i class="el-icon-message">bug管理</i>
-            <el-badge :value="1" size="mini" class="badge"></el-badge>
-          </span>
+        <el-tab-pane label="bug管理">
           <auditbug />
         </el-tab-pane>
-        <el-tab-pane label="所有项目">
+        <el-tab-pane label="实验室所有项目">
           <devlist />
         </el-tab-pane>
       </el-tabs>

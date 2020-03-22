@@ -41,6 +41,14 @@ export function getProjectDetail(pid) {
   });
 }
 
+// 查询项目所包含的迭代
+export function listProjectIteration(pid) {
+  return request({
+    url: "project/" + pid + "/iteration",
+    method: "get"
+  });
+}
+
 // 创建迭代
 export function createIteration(pid, data) {
   return request({

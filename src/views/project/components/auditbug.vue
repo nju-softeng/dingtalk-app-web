@@ -39,7 +39,7 @@
               </span>
               <span v-if="scope.row.status">
                 bug责任人：
-                <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                <el-tag effect="plain" v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
               </span>
             </p>
           </template>
@@ -153,7 +153,9 @@ export default {
         this.alllist = res.data;
         this.checklist = res.data.filter(item => item.status != undefined);
         this.unchecklist = res.data.filter(item => item.status == undefined);
-        if (this.radio == "待处理") {
+        if (this.radio == "全部") {
+          this.list = this.alllist;
+        } else if (this.radio == "待处理") {
           this.list = this.unchecklist;
         } else {
           this.list = this.checklist;

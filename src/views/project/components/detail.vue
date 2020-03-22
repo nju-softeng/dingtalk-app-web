@@ -146,7 +146,7 @@
                 </span>
                 <span v-if="scope.row.status">
                   bug责任人：
-                  <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                  <el-tag effect="plain" v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
                 </span>
               </p>
             </template>
@@ -154,14 +154,16 @@
 
           <el-table-column label="tttt" fixed="right" width="100px">
             <template slot-scope="scope">
-              <template v-if="uid == scope.row.reporterid">
-                <el-button type="text" size="small" icon="el-icon-edit">
-                </el-button>
-                <el-button type="text" size="small" icon="el-icon-delete">
-                </el-button>
+              <template v-if="scope.row.status == undefined">
+                <template v-if="uid == scope.row.reporterid">
+                  <el-button type="text" @click="editBug(scope.row)" size="small" icon="el-icon-edit">
+                  </el-button>
+                  <el-button type="text" @click="deleteBug(scope.row.id)" size="small" icon="el-icon-delete">
+                  </el-button>
+                </template>
               </template>
               <template v-else>
-                <span>已处理无法删除</span>
+                <span>已处理</span>
               </template>
             </template>
           </el-table-column>
@@ -183,7 +185,7 @@
 
     <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" />
 
-    <el-dialog title="报告bug" :visible.sync="bugDialog">
+    <el-dialog title="报告bug" :visible.sync="bugDialog" @close="handleClose">
       <div v-loading="loading" style="width:100%">
         <el-form :data="buglist" :rules="rules" ref="bugform" :model="bugform">
           <el-form-item prop="title">
@@ -208,7 +210,7 @@
   </div>
 </template>
 <script>
-import { addBug, listProjectBug } from "@/api/bug.js";
+import { addBug, listProjectBug, rmBug } from "@/api/bug.js";
 import { getProjectDetail, rmIteration } from "@/api/project.js";
 import IterateDialog from "./iterateDialog";
 import FinishDrawer from "./finishDrawer";
@@ -235,6 +237,7 @@ export default {
       authorid: "",
       loading: false,
       bugform: {
+        id: "",
         title: "",
         project: {
           id: ""
@@ -352,6 +355,23 @@ export default {
           });
         }
       });
+    },
+    editBug(val) {
+      this.bugDialog = true;
+      this.$nextTick(() => {
+        this.bugform.id = val.id;
+        this.bugform.title = val.title;
+        this.bugform.description = val.description;
+      });
+    },
+    deleteBug(id) {
+      rmBug(id).finally(() => {
+        this.fetchProjectBug();
+      });
+    },
+    handleClose() {
+      this.$refs.bugform.resetFields();
+      this.bugform.id = "";
     }
   }
 };

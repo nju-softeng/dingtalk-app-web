@@ -33,3 +33,11 @@ export function checkBug(data) {
     data
   });
 }
+
+// 删除bug报告
+export function rmBug(id) {
+  return request({
+    url: "/bug/" + id + "/rm",
+    method: "get"
+  });
+}

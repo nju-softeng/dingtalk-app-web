@@ -42,15 +42,17 @@
         <el-table key="iteration" :show-header="false" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
           <el-table-column width="200">
             <template slot-scope="scope">
-              <div>
-                <el-tag>第{{ scope.row.cnt }}次迭代</el-tag>
+              <div style="height:80px;display:flex; justify-content: center; flex-direction:column;">
+                <div>
+                  <el-tag>第{{ scope.row.cnt }}次迭代</el-tag>
+                  <span style="margin-left:16px">预期AC: {{ scope.row.expectedAC }}</span>
+                </div>
+                <div>
+                  <i class="el-icon-time"></i>
+                  <span style="margin-left: 10px">{{ scope.row.beginTime | formatDate }} ~
+                    {{ scope.row.endTime | formatDate }}</span>
+                </div>
               </div>
-              <div>
-                <span>预期AC: {{ scope.row.expectedAC }}</span>
-              </div>
-              <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.beginTime | formatDate }} ~
-                {{ scope.row.endTime | formatDate }}</span>
             </template>
           </el-table-column>
 

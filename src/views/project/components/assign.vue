@@ -32,10 +32,9 @@
           </div>
           <!-- 标题 -->
           <div style="margin-bottom:17px">
+            <svg-icon icon-class="git" style="font-size:16px; color:#586069" />
             <router-link :to="'/project/detail/' + item.id" class="link-type">
-              <el-link :underline="false" type="primary">{{
-                item.title
-              }}</el-link>
+              <a> {{ item.title }}</a>
               <el-tag type="info" style="margin-left:10px;" v-if="item.cnt != 0" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
             </router-link>
           </div>
@@ -272,17 +271,31 @@ export default {
   padding-right: 15px;
 }
 
+a {
+  font-size: 14px;
+  color: #0366d6;
+  font-weight: 500;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   min-width: 750px;
+  /deep/ .el-card {
+  }
 }
 
 .item {
   margin: 5px 5px 5px 0;
   height: 125px;
   width: 49%;
+  background-color: #fff;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
 }
 
 p {

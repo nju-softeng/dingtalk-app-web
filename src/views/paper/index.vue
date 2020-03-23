@@ -48,7 +48,7 @@
           </el-table-column>
           <el-table-column label="投票结果" align="center" width="100">
             <template slot-scope="scope">
-              <div class="info-item" style="width:100px;">
+              <div class="info-item">
                 <el-link v-if="scope.row.vote == undefined" type="primary" @click="newVote(scope.row)">
                   发起投票</el-link>
 
@@ -309,7 +309,6 @@ export default {
         paperid: "",
         result: ""
       },
-
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
         level: [
@@ -321,12 +320,10 @@ export default {
   created() {
     getUserList().then(res => {
       this.userlist = res.data;
-      console.log(this.userlist);
     });
     listPaper(0).then(res => {
       this.list = res.data.content;
       this.total = res.data.total;
-      console.log(res.data);
     });
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
@@ -425,7 +422,7 @@ export default {
               });
             })
             .catch(() => {
-              this.loading = f8lse;
+              this.loading = false;
             });
         } else {
           this.$notify({
@@ -598,11 +595,9 @@ export default {
 }
 .paper-form {
   display: flex;
-  // background-color: yellow;
 }
 
 .dialog-content {
-  // background-color: aquamarine;
   display: flex;
   justify-content: center;
 }
@@ -619,20 +614,9 @@ export default {
   border-radius: 0;
 }
 .box {
-  // min-width: 900px;
   min-height: 60px;
   background: #fff;
   padding: 20px 20px 0 20px;
-}
-
-.bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  height: 28px;
-  color: gray;
-  font-size: 13px;
 }
 
 .paper-item {

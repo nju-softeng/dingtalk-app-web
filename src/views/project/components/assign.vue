@@ -16,7 +16,7 @@
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>
       <!-- 项目卡片 -->
-      <el-card class="item" v-for="(item, index) in list" :key="index" shadow="hover">
+      <el-card class="item" v-for="(item, index) in list" :key="index" shadow="never">
         <div>
           <!-- 下拉菜单 -->
           <div style="float:right">

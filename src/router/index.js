@@ -139,7 +139,7 @@ export const asyncRoutes = [
         name: "Task",
         component: () => import("@/views/project/myproject"),
         meta: {
-          title: "我的迭代",
+          title: "开发任务",
           icon: "table",
           roles: ["postgraduate"]
         }

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="top" style="height: 200px;">
+      <el-tabs tab-position="top">
         <el-tab-pane label="任务分配">
           <assign />
         </el-tab-pane>

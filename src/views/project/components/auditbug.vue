@@ -147,7 +147,6 @@ export default {
     this.fetchAuditorBug();
   },
   methods: {
-    submit() {},
     fetchAuditorBug() {
       listAuditorBug(this.uid).then(res => {
         this.alllist = res.data;
@@ -184,14 +183,28 @@ export default {
 
       if (this.checkform.status == false) {
         checkBug(this.checkform).then(() => {
-          this.fetchAuditorBug();
+          this.fetchAuditorBug().then(() => {
+            this.$message({
+              message: "提交成功",
+              type: "success"
+            });
+          });
         });
       } else {
         if (this.iteration && this.principalradio) {
           this.checkform.iterationId = this.iteration.id;
           this.checkform.uid = this.principalradio;
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
           checkBug(this.checkform).then(() => {
-            this.fetchAuditorBug();
+            this.fetchAuditorBug().then(() => {
+              this.$message({
+                message: "提交成功",
+                type: "success"
+              });
+            });
           });
         } else {
           this.$message({

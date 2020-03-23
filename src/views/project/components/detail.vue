@@ -39,7 +39,7 @@
       </div>
       <!-- 迭代表格 -->
       <div v-if="radio == '迭代'">
-        <el-table key="iteration" :show-header="theader" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
+        <el-table key="iteration" :show-header="false" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
           <el-table-column width="200">
             <template slot-scope="scope">
               <div>
@@ -120,7 +120,7 @@
 
       <!-- bug表格 -->
       <div v-else>
-        <el-table key="bug" :data="buglist" :show-header="theader">
+        <el-table key="bug" :data="buglist" :show-header="false">
           <el-table-column>
             <template slot-scope="scope">
               <p>
@@ -222,7 +222,6 @@ export default {
       show: false,
       drawer: false,
       dialog: false,
-      theader: false,
       title: "",
       pid: "",
       serial: 0,
@@ -305,7 +304,6 @@ export default {
     fetchProjectBug() {
       listProjectBug(this.pid).then(res => {
         this.buglist = res.data;
-        console.log(res.data);
       });
     },
     newIteration() {
@@ -364,9 +362,12 @@ export default {
         this.bugform.description = val.description;
       });
     },
-    deleteBug(id) {
-      rmBug(id).finally(() => {
-        this.fetchProjectBug();
+    async deleteBug(id) {
+      await rmBug(id);
+      await this.fetchProjectBug();
+      this.$message({
+        message: "删除成功",
+        type: "success"
       });
     },
     handleClose() {

@@ -105,6 +105,14 @@ export function getIteration(id) {
   });
 }
 
+// 查询用户参与的迭代
+export function listUserIteration() {
+  return request({
+    url: "/project/iteration/user",
+    method: "get"
+  });
+}
+
 // // 更新项目
 // export function updateProject(data) {
 //   return request({

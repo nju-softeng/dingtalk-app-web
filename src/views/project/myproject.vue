@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="迭代任务">
+      <el-tabs tab-position="top">
+        <el-tab-pane label="我参与的">
           <my-iteration />
         </el-tab-pane>
         <el-tab-pane>
@@ -49,12 +49,12 @@ export default {
 .app-container {
   padding: 10px;
   background-color: #f5f5f5;
-  //height: 92vh;
+  min-height: 92vh;
   border-radius: 0;
 }
 .box {
-  height: 800px;
   background: #fff;
-  padding: 5px 20px 0 20px;
+  padding: 5px 20px;
+  min-height: 89vh;
 }
 </style>

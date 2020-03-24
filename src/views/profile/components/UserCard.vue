@@ -34,24 +34,7 @@
         <div class="user-bio-section-header">
           <svg-icon icon-class="skill" /><span>--</span>
         </div>
-        <div class="user-bio-section-body">
-          <div class="progress-item">
-            <span>--</span>
-            <el-progress :percentage="70" />
-          </div>
-          <div class="progress-item">
-            <span>--</span>
-            <el-progress :percentage="18" />
-          </div>
-          <div class="progress-item">
-            <span>--</span>
-            <el-progress :percentage="12" />
-          </div>
-          <div class="progress-item">
-            <span>--</span>
-            <el-progress :percentage="100" status="success" />
-          </div>
-        </div>
+        <div class="user-bio-section-body"></div>
       </div>
     </div>
   </el-card>

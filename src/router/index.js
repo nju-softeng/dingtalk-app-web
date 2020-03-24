@@ -89,13 +89,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: "/performance/perfApplication",
     name: "Performance",
-    meta: { title: "绩效管理", icon: "example" },
+    meta: { title: "绩效管理", icon: "perf" },
     children: [
       {
         path: "perfApplication",
         name: "PerfApplication",
         component: () => import("@/views/perfApplication/index"),
-        meta: { title: "绩效申请", icon: "table" }
+        meta: { title: "绩效申请", icon: "apply" }
       },
       {
         path: "perfAudit",
@@ -103,7 +103,7 @@ export const asyncRoutes = [
         component: () => import("@/views/perfAudit/index"),
         meta: {
           title: "绩效审核",
-          icon: "table",
+          icon: "audit",
           roles: ["admin", "doctor"]
         }
       },
@@ -111,13 +111,13 @@ export const asyncRoutes = [
         path: "performance_dc",
         name: "Performance_dc",
         component: () => import("@/views/performance/dc-index"),
-        meta: { title: "绩效汇总", icon: "tree" }
+        meta: { title: "绩效汇总", icon: "gather" }
       },
       {
         path: "performance_ac",
         name: "Performance_ac",
         component: () => import("@/views/performance/ac-index"),
-        meta: { title: "AC汇总", icon: "tree" }
+        meta: { title: "AC汇总", icon: "rank" }
       }
     ]
   },
@@ -126,13 +126,13 @@ export const asyncRoutes = [
     path: "/project",
     component: Layout,
     name: "Project",
-    meta: { title: "开发管理", icon: "component" },
+    meta: { title: "开发管理", icon: "dev" },
     children: [
       {
         path: "manage",
         name: "Manage",
         component: () => import("@/views/project/manage"),
-        meta: { title: "开发管理", icon: "table", roles: ["admin", "doctor"] }
+        meta: { title: "开发管理", icon: "dev", roles: ["admin", "doctor"] }
       },
       {
         path: "index",
@@ -140,7 +140,7 @@ export const asyncRoutes = [
         component: () => import("@/views/project/myproject"),
         meta: {
           title: "开发任务",
-          icon: "table",
+          icon: "dev",
           roles: ["postgraduate"]
         }
       },
@@ -165,7 +165,7 @@ export const asyncRoutes = [
         path: "index",
         name: "Paper",
         component: () => import("@/views/paper/index"),
-        meta: { title: "论文管理", icon: "form" }
+        meta: { title: "论文管理", icon: "paper" }
       },
       {
         path: "detail/:id",

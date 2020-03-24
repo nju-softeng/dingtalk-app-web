@@ -58,7 +58,7 @@ export default {
     //   });
 
     // 获取钉钉临时授权码
-    getAuthCode("dingeff939842ad9207f35c2f4657eb6378f").then(res => {
+    getAuthCode(process.env.VUE_APP_CORPID).then(res => {
       this.code.authcode = res.code; // 获取authcode
       this.$store
         .dispatch("user/_login", this.code)

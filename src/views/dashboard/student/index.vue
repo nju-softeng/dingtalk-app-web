@@ -111,7 +111,7 @@
                 </router-link>
               </div>
               <div class="item">
-                <router-link to="/task/index">
+                <router-link to="/project/index">
                   <el-link type="primary">迭代任务 </el-link>
                 </router-link>
               </div>

@@ -23,9 +23,9 @@ export default {
     return {};
   },
   components: {
-    assign: () => import("./components/assign"),
-    auditbug: () => import("./components/auditbug"),
-    devlist: () => import("./components/devlist")
+    assign: () => import("../components/assign"),
+    auditbug: () => import("../components/auditbug"),
+    devlist: () => import("../components/devlist")
   },
   created() {},
   methods: {}

@@ -26,9 +26,9 @@ export default {
     };
   },
   components: {
-    myIteration: () => import("./components/myIteration"),
-    userbug: () => import("./components/userbug"),
-    devlist: () => import("./components/devlist")
+    myIteration: () => import("../components/myIteration"),
+    userbug: () => import("../components/userbug"),
+    devlist: () => import("../components/devlist")
   },
   created() {},
   methods: {}

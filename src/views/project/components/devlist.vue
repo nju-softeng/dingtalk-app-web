@@ -10,8 +10,9 @@
       <el-card class="item" v-for="(item, index) in list" :key="index" shadow="never">
         <div>
           <!-- 标题 -->
-          <div style="margin-bottom:17px">
+          <div style="margin-bottom:17px; ">
             <router-link :to="'/project/detail/' + item.id" class="link-type">
+              <svg-icon icon-class="git" style="font-size:16px; color:#586069; margin-right:5px" />
               <el-link :underline="false" type="primary">{{
                 item.title
               }}</el-link>

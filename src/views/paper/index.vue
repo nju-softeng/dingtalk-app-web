@@ -602,12 +602,6 @@ export default {
   justify-content: center;
 }
 
-.paper-form >>> .el-input__inner {
-  width: 220px;
-
-  border-end-end-radius: 0;
-  /*outline: medium;*/
-}
 .app-container {
   background-color: #f5f5f5;
 

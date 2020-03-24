@@ -41,3 +41,11 @@ export function rmBug(id) {
     method: "get"
   });
 }
+
+// 查询用户的bug
+export function listUserBug() {
+  return request({
+    url: "/bug/user",
+    method: "get"
+  });
+}

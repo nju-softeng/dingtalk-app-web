@@ -115,11 +115,7 @@
                   <el-link type="primary">迭代任务 </el-link>
                 </router-link>
               </div>
-              <div class="item">
-                <router-link to="/task/bug">
-                  <el-link type="primary">bug报告</el-link>
-                </router-link>
-              </div>
+
               <div class="item">
                 <router-link to="/paper/index">
                   <el-link type="primary">论文管理</el-link>

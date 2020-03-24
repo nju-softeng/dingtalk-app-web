@@ -8,7 +8,6 @@
         <el-tab-pane>
           <span slot="label">
             <i class="el-icon-message">我的bug</i>
-            <el-badge :value="1" size="mini" class="badge"></el-badge>
           </span>
           <userbug />
         </el-tab-pane>

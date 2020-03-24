@@ -1,15 +1,8 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-
+    <div style="width:400px"></div>
+    ????
     <div class="right-menu">
-      <!-- <template v-if="device !== 'mobile'">
-        <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template> -->
       <div></div>
       <el-dropdown class="right-menu-item ">
         <span class=" el-dropdown-link" style="color:#409EFF">
@@ -44,12 +37,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
+
 import Hamburger from "@/components/Hamburger";
 
 export default {
   components: {
-    Breadcrumb,
     Hamburger
   },
   computed: {

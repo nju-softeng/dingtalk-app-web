@@ -1,12 +1,12 @@
 <template>
-  <div v-if="!item.hidden" style="display:inline-block;">
+  <div class="container" v-if="!item.hidden" style="display:inline-block;">
     <template v-if="
         hasOneShowingChild(item.children, item) &&
           (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
           !item.alwaysShow
       ">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }" class="menu-item">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" class="menu-item">
           <item :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
@@ -96,15 +96,19 @@ export default {
 <style lang="scss" scoped>
 .menu-item {
   text-align: center;
-  width: 128px;
+
   height: 50px;
   line-height: 50px;
-  & .el-menu--horizontal > .el-menu-item.is-active {
-    border-bottom: 2px solid #409eff;
-    color: #303133;
-  }
 }
 .svg-icon {
-  margin-right: 8px;
+  margin-right: 5px;
+}
+
+.container /deep/ .el-menu-item.is-active {
+  border-bottom: 2px solid #409eff !important;
+}
+
+.container /deep/ .el-submenu.is-active {
+  border-bottom: 2px solid #409eff !important;
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div style="display:flex">
-    <div style="display:flex; justify-content: center; align-items: center;">
-      <svg-icon icon-class="devops" style="margin-left:16px" />
+  <div class="menu" style="display:flex">
+    <div @click="go" class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;">
+      <svg-icon icon-class="devops" style="margin:0 8px;" />
+      <div>DevOps</div>
     </div>
 
-    <el-menu :default-active="activeMenu" :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
+    <el-menu :default-active="activeMenu" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
       <sidebar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
     </el-menu>
   </div>
@@ -31,6 +32,18 @@ export default {
     variables() {
       return variables;
     }
+  },
+  methods: {
+    go() {
+      this.$router.push({
+        path: "/"
+      });
+    }
   }
 };
 </script>
+<style lang="scss" scoped>
+.logo:hover {
+  cursor: pointer;
+}
+</style>

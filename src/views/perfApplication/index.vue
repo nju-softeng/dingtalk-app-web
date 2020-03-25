@@ -45,86 +45,91 @@
         <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
       </div>
     </el-drawer>
-    <!-- 申请按钮 -->
-    <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
-    <!-- 已提的交申请 -->
-    <div style="height:430px">
-      <el-table :data="list" fit highlight-current-row style="width: 100%">
-        <el-table-column width="30px" label="#" type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline>
-              <el-form-item label="AC申请：">
-                <span v-if="props.row.acItems.length == 0"> 无 </span>
-                <div v-else>
-                  <li v-for="(item, index) in props.row.acItems" :key="index">
-                    申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
-                  </li>
-                </div>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
 
-        <el-table-column width="140px" align="center" label="提交日期">
-          <template slot-scope="{ row }">
-            <span>{{ row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="140px" align="center" label="报表月周">
-          <template slot-scope="{ row }">
-            <span>{{ row.yearmonth | formatWeek(row.week) }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="90px" align="center" label="审核人">
-          <template slot-scope="{ row }">
-            <span>{{ row.auditor.name }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="80px" label="D值">
-          <template slot-scope="{ row }">
-            <span>{{ row.dvalue }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column min-width="200px" label="审核结果">
-          <template slot-scope="{ row }">
-            <template v-if="row.status">
-              <el-tag style="margin-right:5px">C值: {{ row.cvalue }}</el-tag>
-              <el-tag style="margin-right:5px">DC值: {{ row.dc }}</el-tag>
-              <el-tag>AC值: {{ row.ac }}</el-tag>
+    <div class="box">
+      <!-- 申请按钮 -->
+      <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
+      <!-- 已提的交申请 -->
+      <div style="height:430px">
+        <el-table :data="list" fit highlight-current-row style="width: 100%">
+          <el-table-column width="30px" label="#" type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline>
+                <el-form-item label="AC申请：">
+                  <span v-if="props.row.acItems.length == 0"> 无 </span>
+                  <div v-else>
+                    <li v-for="(item, index) in props.row.acItems" :key="index">
+                      申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
+                    </li>
+                  </div>
+                </el-form-item>
+              </el-form>
             </template>
-            <template v-else>
-              <el-tag type="warning">待审核</el-tag>
-            </template>
-          </template>
-        </el-table-column>
+          </el-table-column>
 
-        <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改</el-button>
-            <el-tag v-else type="info">已审核</el-tag>
-            <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
+          <el-table-column width="140px" align="center" label="提交日期">
+            <template slot-scope="{ row }">
+              <span>{{
+                row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
+              }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="140px" align="center" label="报表月周">
+            <template slot-scope="{ row }">
+              <span>{{ row.yearmonth | formatWeek(row.week) }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="90px" align="center" label="审核人">
+            <template slot-scope="{ row }">
+              <span>{{ row.auditor.name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="80px" label="D值">
+            <template slot-scope="{ row }">
+              <span>{{ row.dvalue }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column min-width="200px" label="审核结果">
+            <template slot-scope="{ row }">
+              <template v-if="row.status">
+                <el-tag style="margin-right:5px">C值: {{ row.cvalue }}</el-tag>
+                <el-tag style="margin-right:5px">DC值: {{ row.dc }}</el-tag>
+                <el-tag>AC值: {{ row.ac }}</el-tag>
+              </template>
+              <template v-else>
+                <el-tag type="warning">待审核</el-tag>
+              </template>
+            </template>
+          </el-table-column>
+
+          <el-table-column align="center" label="操作">
+            <template slot-scope="{ row }">
+              <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改</el-button>
+              <el-tag v-else type="info">已审核</el-tag>
+              <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
+            </template>
+          </el-table-column>
+          <template slot="empty">
+            <div style="height:280px;">
+              <div style="margin-top:100px;">
+                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              </div>
+              <div style="line-height: 10px;">
+                <span>没有已申请内容</span>
+              </div>
+            </div>
           </template>
-        </el-table-column>
-        <template slot="empty">
-          <div style="height:300px;">
-            <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
-            </div>
-            <div style="line-height: 10px;">
-              <span>没有已申请内容</span>
-            </div>
-          </div>
-        </template>
-      </el-table>
-    </div>
-    <!-- 分页 -->
-    <div style="text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
-      </el-pagination>
+        </el-table>
+      </div>
+      <!-- 分页 -->
+      <div style="text-align:center">
+        <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -351,5 +356,18 @@ export default {
 .box-card {
   width: 100%;
   margin-bottom: 10px;
+}
+
+.app-container {
+  padding: 12px;
+  background-color: #f5f5f5;
+  min-height: 92vh;
+  border-radius: 0;
+}
+
+.box {
+  background: #fff;
+  padding: 10px 15px;
+  min-height: 89vh;
 }
 </style>

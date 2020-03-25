@@ -80,7 +80,7 @@ export default {
 }
 
 .app-container {
-  padding: 10px;
+  padding: 12px;
   background-color: #f5f5f5;
   min-height: 92vh;
   border-radius: 0;

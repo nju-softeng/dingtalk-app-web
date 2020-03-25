@@ -2,22 +2,22 @@
   <div class="menu" style="display:flex">
     <div @click="go" class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;">
       <svg-icon icon-class="devops" style="margin:0 8px;" />
-      <div>DevOps</div>
+      <div>DevOps+</div>
     </div>
 
     <el-menu :default-active="activeMenu" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
-      <sidebar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
+      <topbar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
     </el-menu>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import SidebarItem from "./SidebarItem";
+import TopbarItem from "./TopbarItem";
 import variables from "@/styles/variables.scss";
 
 export default {
-  components: { SidebarItem },
+  components: { TopbarItem },
   computed: {
     ...mapGetters(["permission_routes", "sidebar"]),
     activeMenu() {

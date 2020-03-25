@@ -143,13 +143,13 @@
                       <span>{{ item.ac }}</span>
                     </div>
                   </div>
-                  <div class="reason" style="font-size:13px">
+                  <div class="reason" style="font-size:12.5px">
                     <span>变更原因：{{ item.reason }}</span>
                   </div>
-                  <div class="auditor" style="font-size:13px" v-if="item.auditorname != undefined">
+                  <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
                     <span>审核人: {{ item.auditorname }}</span>
                   </div>
-                  <div style="padding-top:15px;font-size:13px">
+                  <div style="padding-top:15px;font-size:12.5px">
                     时间: {{ item.create_time }}
                   </div>
                 </div>

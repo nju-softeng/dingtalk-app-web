@@ -22,7 +22,6 @@ export default {
   components: {
     AppMain,
     Navbar,
-
     Sidebar,
     TagsView
   },

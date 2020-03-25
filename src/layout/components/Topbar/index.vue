@@ -1,36 +1,35 @@
 <template>
   <div style="display:flex">
-    <div style="display:flex">
-      <router-link to="/">
-        <div>
-          <svg-icon icon-class="devops" class="sidebar-logo" />
-        </div>
-        <div>
-          devops
-        </div>
-      </router-link>
-    </div>
+    <logo style="width:150px" />
 
-    <el-menu class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">我的工作台</template>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-        <el-menu-item index="2-3">选项3</el-menu-item>
-        <el-submenu index="2-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="2-4-1">选项1</el-menu-item>
-          <el-menu-item index="2-4-2">选项2</el-menu-item>
-          <el-menu-item index="2-4-3">选项3</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="3" disabled>消息中心</el-menu-item>
-      <el-menu-item index="4">订单管理</el-menu-item>
+    <el-menu :default-active="activeMenu" :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
+      <sidebar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
     </el-menu>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+import Logo from "./Logo";
+import SidebarItem from "./SidebarItem";
+import variables from "@/styles/variables.scss";
+
+export default {
+  components: { SidebarItem, Logo },
+  computed: {
+    ...mapGetters(["permission_routes", "sidebar"]),
+    activeMenu() {
+      const route = this.$route;
+      const { meta, path } = route;
+      // if set path, the sidebar will highlight the path you set
+      if (meta.activeMenu) {
+        return meta.activeMenu;
+      }
+      return path;
+    },
+    variables() {
+      return variables;
+    }
+  }
+};
 </script>

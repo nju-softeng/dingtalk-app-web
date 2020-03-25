@@ -60,7 +60,8 @@ export default {
       vertical-align: middle;
       float: left;
       margin-top: 13px;
-      margin-left: 20px;
+      margin-left: 16px;
+      margin-right: 4px;
     }
 
     & .sidebar-title {

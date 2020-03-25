@@ -1,24 +1,22 @@
 <template>
-  <div v-if="!item.hidden" style="display:inline-block;">
+  <div v-if="!item.hidden">
     <template v-if="
         hasOneShowingChild(item.children, item) &&
           (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
           !item.alwaysShow
       ">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }" class="menu-item">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
           <item :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="menu-item">
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
-        <!-- 增加固定宽度解决箭头被遮挡的问题-->
-        <div style="display: inline-block; width:16px;"></div>
       </template>
-      <vertical-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
+      <sidebar-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
   </div>
 </template>
@@ -29,11 +27,10 @@ import { isExternal } from "@/utils/index";
 import Item from "./Item";
 import AppLink from "./Link";
 import FixiOSBug from "./FixiOSBug";
-import verticalItem from "./verticalItem";
 
 export default {
   name: "SidebarItem",
-  components: { Item, AppLink, verticalItem },
+  components: { Item, AppLink },
   mixins: [FixiOSBug],
   props: {
     // route object
@@ -94,16 +91,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.menu-item {
-  text-align: center;
-  width: 128px;
-  height: 50px;
-  line-height: 50px;
-  & .el-menu--horizontal > .el-menu-item.is-active {
-    border-bottom: 2px solid #409eff;
-    color: #303133;
-  }
-}
 .svg-icon {
   margin-right: 8px;
 }

@@ -28,13 +28,12 @@ import path from "path";
 import { isExternal } from "@/utils/index";
 import Item from "./Item";
 import AppLink from "./Link";
-import FixiOSBug from "./FixiOSBug";
+
 import verticalItem from "./verticalItem";
 
 export default {
   name: "SidebarItem",
   components: { Item, AppLink, verticalItem },
-  mixins: [FixiOSBug],
   props: {
     // route object
     item: {

@@ -1,97 +1,98 @@
 <template>
   <div class="app-container">
-    <el-page-header @back="goBack"> </el-page-header>
-
-    <div class="box">
-      <div class="test">
-        <el-form>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 论文名称</span>
-            {{ paper.title }}
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="grade" /> 论文分类</span>
-            {{ getlevel(paper.level) }}
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="people" /> 论文作者
-            </span>
-            <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="date" /> 投票截止</span>
-            {{ getddl(startTime, endtime) }}
-            <span v-if="isEnd"> [已结束]</span>
-            <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
-              <span style="margin-left:8px">
-                <svg-icon icon-class="hint" /></span>
-            </el-tooltip>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="chart" v-loading="loading">
-        <div v-if="!showAns" style="width:50%">
-          <el-popconfirm title="确定要接收吗？" @onConfirm="addpoll(true)">
-            <el-button slot="reference" type="primary">Accept</el-button>
-          </el-popconfirm>
-
-          <el-popconfirm @onConfirm="addpoll(false)" style="margin-left:50px" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
-            <el-button slot="reference" type="danger">Reject</el-button>
-          </el-popconfirm>
-        </div>
-        <div v-if="showAns">
+    <div class="content">
+      <el-page-header @back="goBack"> </el-page-header>
+      <div class="box">
+        <div class="test">
           <el-form>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
-              <span> {{ getNum(accept, total) }}% </span>
-              <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
-              <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
+                <svg-icon icon-class="paper" /> 论文名称</span>
+              {{ paper.title }}
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
-              {{ getNum(reject, total) }}%
-              <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
-              <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
+                <svg-icon icon-class="grade" /> 论文分类</span>
+              {{ getlevel(paper.level) }}
             </el-form-item>
             <el-form-item>
               <span slot="label">
-                <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
-              <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+                <svg-icon icon-class="people" /> 论文作者
               </span>
-              <el-link type="primary" :underline="false" @click="dialog = true">详情
-              </el-link>
+              <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
+            </el-form-item>
+            <el-form-item>
+              <span slot="label">
+                <svg-icon icon-class="date" /> 投票截止</span>
+              {{ getddl(startTime, endtime) }}
+              <span v-if="isEnd"> [已结束]</span>
+              <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
+                <span style="margin-left:8px">
+                  <svg-icon icon-class="hint" /></span>
+              </el-tooltip>
             </el-form-item>
           </el-form>
         </div>
+        <div class="chart" v-loading="loading">
+          <div v-if="!showAns" style="width:50%">
+            <el-popconfirm title="确定要接收吗？" @onConfirm="addpoll(true)">
+              <el-button slot="reference" type="primary">Accept</el-button>
+            </el-popconfirm>
+
+            <el-popconfirm @onConfirm="addpoll(false)" style="margin-left:50px" icon="el-icon-info" iconColor="red" title="确定要拒绝吗？">
+              <el-button slot="reference" type="danger">Reject</el-button>
+            </el-popconfirm>
+          </div>
+          <div v-if="showAns">
+            <el-form>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
+                <span> {{ getNum(accept, total) }}% </span>
+                <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
+                <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
+                {{ getNum(reject, total) }}%
+                <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
+                <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
+                <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+                </span>
+                <el-link type="primary" :underline="false" @click="dialog = true">详情
+                </el-link>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+
+        <el-dialog title="投票详情" :visible.sync="dialog" width="55%">
+          <el-form>
+            <el-form-item>
+              <span slot="label">
+                <svg-icon icon-class="paper" /> 接收{{ accept }}票:
+              </span>
+
+              <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
+            </el-form-item>
+            <el-form-item>
+              <span slot="label">
+                <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
+              </span>
+
+              <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialog = false">确 定</el-button>
+          </span>
+        </el-dialog>
       </div>
-
-      <el-dialog title="投票详情" :visible.sync="dialog" width="55%">
-        <el-form>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 接收{{ accept }}票:
-            </span>
-
-            <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
-          </el-form-item>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
-            </span>
-
-            <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialog = false">确 定</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>

@@ -1,16 +1,16 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-model="activeTab">
     <div class="box">
-      <el-tabs tab-position="top">
-        <el-tab-pane label="任务分配">
+      <el-tabs tab-position="top" v-model="activeTab">
+        <el-tab-pane label="任务分配" name="project">
           <assign />
         </el-tab-pane>
 
-        <el-tab-pane label="bug管理">
+        <el-tab-pane label="bug管理" name="bug">
           <auditbug />
         </el-tab-pane>
 
-        <el-tab-pane label="实验室所有项目">
+        <el-tab-pane label="实验室所有项目" name="allproject">
           <devlist />
         </el-tab-pane>
       </el-tabs>
@@ -20,14 +20,18 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      activeTab: "project"
+    };
   },
   components: {
     assign: () => import("../components/assign"),
     auditbug: () => import("../components/auditbug"),
     devlist: () => import("../components/devlist")
   },
-  created() {},
+  created() {
+    this.activeTab = this.$route.query.tab || "project";
+  },
   methods: {}
 };
 </script>

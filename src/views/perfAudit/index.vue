@@ -1,18 +1,20 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activetab" @tab-click="handleClick">
-      <el-tab-pane label="待审核" name="first">
-        <span slot="label"><i class="el-icon-s-claim"></i> 待审核</span>
-        <div style="height:74vh">
-          <checking v-if="firstTab" />
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="已审核" name="second" lazy>
-        <div style="height:74vh">
-          <checked v-if="secondTab" />
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="box">
+      <el-tabs v-model="activetab" @tab-click="handleClick">
+        <el-tab-pane label="待审核" name="first">
+          <span slot="label"><i class="el-icon-s-claim"></i> 待审核</span>
+          <div style="height:74vh">
+            <checking v-if="firstTab" />
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="已审核" name="second" lazy>
+          <div style="height:74vh">
+            <checked v-if="secondTab" />
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script>
@@ -44,6 +46,15 @@ export default {
 
 <style scoped>
 .app-container {
-  padding-top: 10px;
+  padding: 10px 12px;
+  background-color: #f5f5f5;
+  min-height: 92vh;
+  border-radius: 0;
+}
+
+.box {
+  background: #fff;
+  padding: 10px 15px;
+  min-height: 89vh;
 }
 </style>

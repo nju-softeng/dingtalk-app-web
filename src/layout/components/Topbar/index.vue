@@ -2,7 +2,7 @@
   <div class="menu" style="display:flex">
     <div @click="go" class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;">
       <svg-icon icon-class="devops" style="margin:0 8px;" />
-      <div>DevOps+</div>
+      <div style="font-size:12.5px">DevOps+</div>
     </div>
 
     <el-menu :default-active="activeMenu" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">

@@ -1,24 +1,39 @@
 <template>
   <div class="container" v-if="!item.hidden" style="display:inline-block;">
-    <template v-if="
+    <template
+      v-if="
         hasOneShowingChild(item.children, item) &&
           (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
           !item.alwaysShow
-      ">
+      "
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" class="menu-item">
-          <item :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <item :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="menu-item">
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      popper-append-to-body
+      class="menu-item"
+    >
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <item v-if="item.meta" :title="item.meta.title" />
         <!-- 增加固定宽度解决箭头被遮挡的问题-->
         <div style="display: inline-block; width:16px;"></div>
       </template>
-      <vertical-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
+      <vertical-item
+        v-for="child in item.children"
+        :key="child.path"
+        :is-nest="true"
+        :item="child"
+        :base-path="resolvePath(child.path)"
+        class="nest-menu"
+      />
     </el-submenu>
   </div>
 </template>

@@ -5,8 +5,6 @@
         <el-button type="primary">拉取钉钉用户</el-button>
       </el-tooltip>
 
-
-
       <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
       <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
         {{ item.name }}
@@ -15,27 +13,35 @@
         未设置
       </el-tag>
 
-      <div style="width:800px">
-        <el-table :data="list" style="margin-top:10px;" border>
+      <div>
+        <el-table :data="list" style="margin-top:10px;">
           <el-table-column align="center" label="姓名">
             <template slot-scope="scope">
               <div style="display:flex;padding-left:10px">
-                <el-avatar :size="28" style="background-color: #409eff">{{
-                  scope.row.name
-                }}</el-avatar>
+                <el-avatar :size="28" style="background-color: #409eff; font-size:11px">{{ scope.row.name }}</el-avatar>
                 <div style="padding-left:10px;text-align: center;">
                   <span>{{ scope.row.name }}</span>
                 </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="职位">
+          <el-table-column align="center" label="所属">
+            <template slot-scope="scope">
+              <div style="display:flex;padding-left:10px">
+                <el-avatar :size="28" style="background-color: #409eff; font-size:11px">{{ scope.row.name }}</el-avatar>
+                <div style="padding-left:10px;text-align: center;">
+                  <span>{{ scope.row.name }}</span>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="在读学位">
             <template slot-scope="scope">
               {{ scope.row.position }}
               <span v-if="scope.row.position == undefined">未设置</span>
             </template>
           </el-table-column>
-          <el-table-column prop="role" align="center" label="审核人权限">
+          <el-table-column prop="role" align="center" label="角色">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.authority" active-text="审核权限" @change="modRole(scope.row)" :active-value="1" :inactive-value="0">
               </el-switch>
@@ -103,3 +109,15 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.app-container {
+  padding: 10px;
+  min-height: 92vh;
+  border-radius: 0;
+}
+.box {
+  background: #fff;
+  padding: 5px 20px;
+  min-height: 89vh;
+}
+</style>

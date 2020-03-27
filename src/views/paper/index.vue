@@ -106,7 +106,7 @@
             </template>
           </el-table-column>
           <template slot="empty">
-            <div style="height:300px;">
+            <div style="height:200px;">
               <div style="margin-top:100px;">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br />
               </div>
@@ -119,7 +119,7 @@
       </div>
     </div>
     <div style="margin-top:5px;display:flex; justify-content:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :current-page.sync="currentPage" :hide-on-single-page="total > 6" small layout="prev, pager, next" :total="total" :page-size="6">
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :current-page.sync="currentPage" :hide-on-single-page="total < 6 ? true : false" small layout="prev, pager, next" :total="total" :page-size="6">
       </el-pagination>
     </div>
 

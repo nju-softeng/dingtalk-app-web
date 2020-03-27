@@ -1,7 +1,7 @@
 <template>
   <div class="menu" style="display:flex">
     <div @click="go" class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;">
-      <svg-icon icon-class="devops" style="margin:0 8px;" />
+      <svg-icon icon-class="devops" style="margin:0 16px;" />
       <div style="font-size:12.5px">DevOps+</div>
     </div>
 

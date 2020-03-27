@@ -1,17 +1,33 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tooltip class="item" effect="dark" content="用户进入应用时会自动导入，权限默认为普通用户" placement="right">
-        <el-button type="primary">拉取钉钉用户</el-button>
-      </el-tooltip>
-
-      <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
-      <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
-        {{ item.name }}
-      </el-tag>
-      <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
-        未设置
-      </el-tag>
+      <div>
+        <el-tooltip class="item" effect="dark" content="用户进入应用时会自动导入，权限默认为普通用户" placement="right">
+          <el-button type="primary">拉取钉钉用户</el-button>
+        </el-tooltip>
+        <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
+        <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
+          {{ item.name }}
+        </el-tag>
+        <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
+          未设置
+        </el-tag>
+        <div style="float:right;color:#8c8c8c;font-size:14px;">
+          系统可用人数：
+        </div>
+      </div>
+      <el-divider></el-divider>
+      <div class="filtrate">
+        <el-select v-model="value" style=" width:160px" clearable placeholder="在读学位">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <el-select style="margin-left:5px; width:160px" v-model="value" clearable placeholder="部门">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <el-button style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
+      </div>
 
       <div>
         <el-table :data="list" style="margin-top:10px;">
@@ -107,7 +123,11 @@ export default {
 }
 .box {
   background: #fff;
-  padding: 5px 20px;
+  padding: 15px 20px;
   min-height: 89vh;
+}
+
+.filtrate {
+  padding-top: 10px;
 }
 </style>

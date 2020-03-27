@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="left" style="height: 200px;">
-        <el-tab-pane label="用户管理">用户管理</el-tab-pane>
+      <el-tabs tab-position="left">
+        <el-tab-pane label="用户管理">
+          <user-man />
+        </el-tab-pane>
         <el-tab-pane label="配置管理">配置管理</el-tab-pane>
         <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-        <el-tab-pane label="xx管理">定时任务补偿</el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -24,6 +25,9 @@ export default {
     activeName(val) {
       this.$router.push(`${this.$route.path}?tab=${val}`);
     }
+  },
+  components: {
+    userMan: () => import("./components/userMan")
   },
   created() {
     // init the default selected tab
@@ -48,7 +52,8 @@ export default {
 }
 .box {
   background: #fff;
-  padding: 5px 20px;
+  padding-top: 20px;
+  padding-left: 10px;
   min-height: 89vh;
 }
 </style>

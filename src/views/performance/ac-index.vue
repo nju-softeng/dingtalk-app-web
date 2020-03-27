@@ -1,42 +1,44 @@
 <template>
   <div class="app-container">
-    <!-- AC排名 -->
-    <el-card shadow="never" class="box-card" style="width: 35%;">
-      <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
-        <el-table-column type="index"> </el-table-column>
-        <el-table-column prop="name" label="姓名"> </el-table-column>
-        <el-table-column prop="total" label="总AC"> </el-table-column>
-      </el-table>
-    </el-card>
-    <!-- 详细AC -->
-    <div class="box-card" v-loading="loading" style="width: 65%;">
-      <!-- 标题 -->
-      <div class="title">
-        <span style="padding-right:20px">{{ name }} 的AC日志</span>
-        <el-tag size="small">总AC: {{ ac }}</el-tag>
-      </div>
+    <div class="box">
+      <!-- AC排名 -->
+      <el-card shadow="never" class="box-card" style="width: 35%;">
+        <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="name" label="姓名"> </el-table-column>
+          <el-table-column prop="total" label="总AC"> </el-table-column>
+        </el-table>
+      </el-card>
       <!-- 详细AC -->
-      <el-scrollbar style="height: 95%;" v-if="aclist.length != 0">
-        <el-timeline>
-          <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
-            <div class="test">
-              <el-card shadow="never" class="ac-card">
-                <p>{{ item.reason }}</p>
-                <p>
-                  <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
-                  <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
-                  <span v-if="item.classify == 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
-                  <el-tag>{{ getClassify(item.classify) }}</el-tag>
-                </p>
-              </el-card>
-            </div>
-          </el-timeline-item>
-        </el-timeline>
-      </el-scrollbar>
-      <div class="null" v-else>
-        <svg-icon icon-class="null" style="font-size:32px" />
-        <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
-          无AC数据
+      <div class="box-card" v-loading="loading" style="width: 65%;">
+        <!-- 标题 -->
+        <div class="title">
+          <span style="padding-right:20px">{{ name }} 的AC日志</span>
+          <el-tag size="small">总AC: {{ ac }}</el-tag>
+        </div>
+        <!-- 详细AC -->
+        <el-scrollbar style="height: 95%;" v-if="aclist.length != 0">
+          <el-timeline>
+            <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
+              <div class="test">
+                <el-card shadow="never" class="ac-card">
+                  <p>{{ item.reason }}</p>
+                  <p>
+                    <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
+                    <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
+                    <span v-if="item.classify == 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+                    <el-tag>{{ getClassify(item.classify) }}</el-tag>
+                  </p>
+                </el-card>
+              </div>
+            </el-timeline-item>
+          </el-timeline>
+        </el-scrollbar>
+        <div class="null" v-else>
+          <svg-icon icon-class="null" style="font-size:32px" />
+          <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
+            无AC数据
+          </div>
         </div>
       </div>
     </div>
@@ -101,6 +103,8 @@ export default {
   margin-bottom: 5px;
 }
 .app-container {
+}
+.box {
   display: flex;
   justify-content: space-between;
 }

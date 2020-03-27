@@ -1,23 +1,25 @@
 <template>
   <div class="app-container">
-    <el-date-picker size="small" v-model="date" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月">
-    </el-date-picker>
-    <el-button-group style="margin-left:5px">
-      <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
-      <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-    </el-button-group>
-    <el-table class="table" :data="list" border style="margin-top:10px;" height="77.5vh">
-      <el-table-column fixed prop="name" label="姓名"> </el-table-column>
-      <el-table-column prop="salary" label="助研金"> </el-table-column>
-      <el-table-column prop="week1" label="第一周DC"> </el-table-column>
-      <el-table-column prop="week2" label="第二周DC"> </el-table-column>
-      <el-table-column prop="week3" label="第三周DC"> </el-table-column>
-      <el-table-column prop="week4" label="第四周DC"> </el-table-column>
-      <el-table-column prop="week5" label="第五周DC"> </el-table-column>
-      <el-table-column prop="total" label="本月总DC"> </el-table-column>
-      <el-table-column prop="ac" label="当前AC值"> </el-table-column>
-      <el-table-column prop="topup" label="Topup"> </el-table-column>
-    </el-table>
+    <div class="box">
+      <el-date-picker size="small" v-model="date" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月">
+      </el-date-picker>
+      <el-button-group style="margin-left:5px">
+        <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
+        <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      </el-button-group>
+      <el-table class="table" :data="list" border style="margin-top:10px;" height="77.5vh">
+        <el-table-column fixed prop="name" label="姓名"> </el-table-column>
+        <el-table-column prop="salary" label="助研金"> </el-table-column>
+        <el-table-column prop="week1" label="第一周DC"> </el-table-column>
+        <el-table-column prop="week2" label="第二周DC"> </el-table-column>
+        <el-table-column prop="week3" label="第三周DC"> </el-table-column>
+        <el-table-column prop="week4" label="第四周DC"> </el-table-column>
+        <el-table-column prop="week5" label="第五周DC"> </el-table-column>
+        <el-table-column prop="total" label="本月总DC"> </el-table-column>
+        <el-table-column prop="ac" label="当前AC值"> </el-table-column>
+        <el-table-column prop="topup" label="Topup"> </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -76,7 +78,17 @@ export default {
 .app-container >>> .el-table th.gutter {
   display: table-cell !important;
 }
+
 .app-container {
-  padding-top: 10px;
+  padding: 12px;
+  background-color: #f5f5f5;
+  min-height: 92vh;
+  border-radius: 0;
+}
+
+.box {
+  background: #fff;
+  padding: 10px 15px;
+  min-height: 89vh;
 }
 </style>

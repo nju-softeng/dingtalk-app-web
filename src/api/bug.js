@@ -49,3 +49,11 @@ export function listUserBug() {
     method: "get"
   });
 }
+
+// 查询审核人待审核bug数
+export function getAuditorBugCnt() {
+  return request({
+    url: "/bug/aduitor/cnt",
+    method: "get"
+  });
+}

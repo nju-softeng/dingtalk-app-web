@@ -61,6 +61,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       login(authcode)
         .then(response => {
+          console.log("login!!!!");
+          console.log(response.data);
+          console.log(response.headers);
           if (response.headers["token"] != null) {
             commit("SET_TOKEN", response.headers.token);
             commit("SET_UID", response.headers.uid);

@@ -129,19 +129,12 @@ export const asyncRoutes = [
     meta: { title: "开发管理", icon: "dev" },
     children: [
       {
-        path: "manage",
-        name: "Manage",
-        component: () => import("@/views/project/manage"),
-        meta: { title: "开发管理", icon: "dev", roles: ["admin", "doctor"] }
-      },
-      {
         path: "index",
         name: "Task",
-        component: () => import("@/views/project/myproject"),
+        component: () => import("@/views/project/index"),
         meta: {
           title: "开发任务",
-          icon: "dev",
-          roles: ["postgraduate"]
+          icon: "dev"
         }
       },
       {
@@ -165,7 +158,7 @@ export const asyncRoutes = [
         path: "index",
         name: "Paper",
         component: () => import("@/views/paper/index"),
-        meta: { title: "论文管理", icon: "paper" }
+        meta: { title: "论文管理", icon: "thesis" }
       },
       {
         path: "detail/:id",
@@ -204,7 +197,7 @@ export const asyncRoutes = [
         path: "configMan",
         name: "ConfigMan",
         component: () => import("@/views/sysMan/configMan/index"),
-        meta: { title: "参数管理", icon: "skill" },
+        meta: { title: "参数管理", icon: "args" },
         roles: ["admin", "doctor"]
       }
     ]

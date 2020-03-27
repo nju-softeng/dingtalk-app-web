@@ -381,7 +381,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app-container {
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #f5f5f5;
   border-radius: 0;
 }

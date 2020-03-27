@@ -1,10 +1,13 @@
 <template>
-  <div class="tab-container">
-    <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
-      <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.key">
-        <keep-alive> </keep-alive>
-      </el-tab-pane>
-    </el-tabs>
+  <div class="app-container">
+    <div class="box">
+      <el-tabs tab-position="left" style="height: 200px;">
+        <el-tab-pane label="用户管理">用户管理</el-tab-pane>
+        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+        <el-tab-pane label="xx管理">定时任务补偿</el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -13,10 +16,6 @@ export default {
   name: "Tab",
   data() {
     return {
-      tabMapOptions: [
-        { label: "数据初始化", key: "CN" },
-        { label: "参数配置", key: "US" }
-      ],
       activeName: "CN",
       createdTimes: 0
     };
@@ -42,7 +41,14 @@ export default {
 </script>
 
 <style scoped>
-.tab-container {
-  margin: 30px;
+.app-container {
+  padding: 10px;
+  min-height: 92vh;
+  border-radius: 0;
+}
+.box {
+  background: #fff;
+  padding: 5px 20px;
+  min-height: 89vh;
 }
 </style>

@@ -45,16 +45,16 @@
                 {{ perf.acTotal }}
               </div>
             </el-card>
-            <el-card @click.native="goAuditor" shadow="never" class="head" style="cursor:pointer;">
+            <el-card @click.native="goAuditor" shadow="never" class="head" style="cursor:pointer">
               <div class="title">待审核申请</div>
               <div class="content">
                 {{ unCheckCnt }}
               </div>
             </el-card>
-            <el-card shadow="never" class="head">
-              <div class="title">defect voucher</div>
+            <el-card @click.native="goBug" shadow="never" class="head" style="cursor: pointer">
+              <div class="title">待审核bug</div>
               <div class="content">
-                0
+                {{ bugCnt }}
               </div>
             </el-card>
           </div>
@@ -90,14 +90,14 @@
         </el-col>
         <el-col :xs="24" :sm="8" :lg="8">
           <!-- 快捷导航 -->
-          <!-- <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+          <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
             <div slot="header" class="clearfix">
               <span>快捷导航</span>
             </div>
             <div class="shortcut">
               <div class="item">
-                <router-link to="/performance/perfApplication">
-                  <el-link type="primary">绩效申请</el-link>
+                <router-link to="/performance/perfAudit">
+                  <el-link type="primary">绩效审核</el-link>
                 </router-link>
               </div>
               <div class="item">
@@ -122,13 +122,13 @@
                 </router-link>
               </div>
             </div>
-          </el-card> -->
+          </el-card>
 
           <!-- AC变动公告 -->
           <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
               <span>AC变动公告</span>
-              <el-button style="float: right; padding:0" type="text">查看详情</el-button>
+              <!-- <el-button style="float: right; padding:0" type="text">查看详情</el-button> -->
             </div>
             <el-carousel indicator-position="none" trigger="click" height="150px">
               <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
@@ -143,13 +143,13 @@
                       <span>{{ item.ac }}</span>
                     </div>
                   </div>
-                  <div class="reason" style="font-size:13px">
+                  <div class="reason" style="font-size:12.5px">
                     <span>变更原因：{{ item.reason }}</span>
                   </div>
-                  <div class="auditor" style="font-size:13px" v-if="item.auditorname != undefined">
+                  <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
                     <span>审核人: {{ item.auditorname }}</span>
                   </div>
-                  <div style="padding-top:15px;font-size:13px">
+                  <div style="padding-top:15px;font-size:12.5px">
                     时间: {{ item.create_time }}
                   </div>
                 </div>
@@ -166,6 +166,7 @@
 import { getMessages } from "@/api/message";
 import { lastAc, getPerformance } from "@/api/performance";
 import { getUnCheckCnt } from "@/api/audit";
+import { getAuditorBugCnt } from "@/api/bug";
 
 export default {
   data() {
@@ -184,7 +185,8 @@ export default {
       },
       name: "",
       avatar: null,
-      count: 0
+      count: 0,
+      bugCnt: 0
     };
   },
   created() {
@@ -206,6 +208,10 @@ export default {
     getUnCheckCnt().then(res => {
       this.unCheckCnt = res.data;
     });
+    // 查询待审核bug
+    getAuditorBugCnt().then(res => {
+      this.bugCnt = res.data;
+    });
   },
   computed: {},
   methods: {
@@ -217,6 +223,14 @@ export default {
         path: "/profile/index",
         query: {
           tab: "actab"
+        }
+      });
+    },
+    goBug() {
+      this.$router.push({
+        path: "/project/index",
+        query: {
+          tab: "bug"
         }
       });
     }
@@ -271,7 +285,7 @@ export default {
 
 .dashboard-container {
   padding: 12px;
-  min-height: 580px;
+  min-height: 90vh;
   background-color: rgb(240, 242, 245);
 
   .chart-wrapper {

@@ -126,3 +126,12 @@
 .el-drawer__body {
   overflow-y: auto;
 }
+
+.el-menu--horizontal > .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+}
+
+.el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: 2px solid #409eff !important;
+}

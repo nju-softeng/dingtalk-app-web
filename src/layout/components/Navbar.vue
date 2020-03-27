@@ -1,8 +1,13 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <template v-if="device === 'mobile'">
+      <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    </template>
+    <template v-else>
+      <topbar class="breadcrumb-container" />
+    </template>
 
     <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'">
@@ -10,7 +15,7 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
       </template> -->
-      <div></div>
+
       <el-dropdown class="right-menu-item ">
         <span class=" el-dropdown-link" style="color:#409EFF">
           <i class="el-icon-circle-plus el-icon--right"></i>
@@ -46,11 +51,13 @@
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
+import Topbar from "./Topbar";
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    Topbar
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device", "name"])
@@ -76,14 +83,14 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 45px;
+  height: 50px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    line-height: 46px;
+    line-height: 50px;
     height: 100%;
     float: left;
     cursor: pointer;

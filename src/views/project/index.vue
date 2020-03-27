@@ -1,19 +1,19 @@
 <template>
-  <div class="dashboard-container">
+  <div>
     <component :is="currentRole" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import auditorDashboard from "./auditor";
-import studentDashboard from "./student";
+import auditordev from "./auditor";
+import studentdev from "./student";
 export default {
   name: "Dashboard",
-  components: { auditorDashboard, studentDashboard },
+  components: { auditordev, studentdev },
   data() {
     return {
-      currentRole: "studentDashboard"
+      currentRole: "studentdev"
     };
   },
   computed: {
@@ -21,7 +21,7 @@ export default {
   },
   created() {
     if (!this.roles.includes("postgraduate")) {
-      this.currentRole = "auditorDashboard";
+      this.currentRole = "auditordev";
     }
   }
 };

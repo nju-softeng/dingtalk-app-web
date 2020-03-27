@@ -15,17 +15,7 @@
 
       <div>
         <el-table :data="list" style="margin-top:10px;">
-          <el-table-column align="center" label="姓名">
-            <template slot-scope="scope">
-              <div style="display:flex;padding-left:10px">
-                <el-avatar :size="28" style="background-color: #409eff; font-size:11px">{{ scope.row.name }}</el-avatar>
-                <div style="padding-left:10px;text-align: center;">
-                  <span>{{ scope.row.name }}</span>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="所属">
+          <el-table-column label="姓名">
             <template slot-scope="scope">
               <div style="display:flex;padding-left:10px">
                 <el-avatar :size="28" style="background-color: #409eff; font-size:11px">{{ scope.row.name }}</el-avatar>
@@ -47,7 +37,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column width="100px" align="center" label="操作">
+          <el-table-column width="200px" align="center" label="操作">
             <template slot-scope="scope">
               <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="scope.row.visible">
                 <div style="text-align: right; margin: 0">

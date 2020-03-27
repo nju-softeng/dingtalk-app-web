@@ -197,7 +197,7 @@ export const asyncRoutes = [
         path: "configMan",
         name: "ConfigMan",
         component: () => import("@/views/sysMan/configMan/index"),
-        meta: { title: "参数管理", icon: "skill" },
+        meta: { title: "参数管理", icon: "args" },
         roles: ["admin", "doctor"]
       }
     ]

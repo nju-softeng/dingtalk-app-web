@@ -18,15 +18,16 @@
       </div>
       <el-divider></el-divider>
       <div class="filtrate">
-        <el-select v-model="value" style=" width:160px" clearable placeholder="在读学位">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-        <el-select style="margin-left:5px; width:160px" v-model="value" clearable placeholder="部门">
+        <el-input placeholder="姓名" v-model="input" style="width:160px" clearable>
+        </el-input>
+        <el-select style="margin-left:5px; width:160px" v-model="value" clearable placeholder="在读学历">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <el-button style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
+        <el-button size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
+          重置
+        </el-button>
       </div>
 
       <div>
@@ -70,17 +71,23 @@
   </div>
 </template>
 <script>
-import { listUserRole, updateUserRole } from "@/api/user";
+import { queryUser, updateUserRole } from "@/api/user";
 import { listAuditors } from "@/api/user";
 export default {
   data() {
     return {
       auditors: [],
-      list: []
+      list: [],
+      queryForm: {
+        name: "",
+        position: ""
+      },
+      options: ["本科生", "硕士生", "博士生", "未设置"]
     };
   },
   created() {
-    listUserRole().then(res => {
+    queryUser(this.queryForm).then(res => {
+      console.log(res.data);
       this.list = res.data;
     });
     listAuditors().then(res => {

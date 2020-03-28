@@ -1,5 +1,6 @@
 import axios from "@/utils/request";
 
+// 查询系统中所有可用用户
 export function getUserList() {
   return axios({
     url: "/userlist",

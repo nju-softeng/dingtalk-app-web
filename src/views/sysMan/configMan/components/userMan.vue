@@ -23,7 +23,7 @@
         </el-option>
       </el-select>
       <el-button style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
-      <el-button @click="refresh" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
+      <el-button size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
         重置
       </el-button>
     </div>

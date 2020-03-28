@@ -58,9 +58,9 @@ export function updateUserRole(data) {
   });
 }
 
-export function queryUser(data) {
+export function queryUser(data, page) {
   return axios({
-    url: "/user/query",
+    url: "/user/query/" + page,
     method: "post",
     data
   });

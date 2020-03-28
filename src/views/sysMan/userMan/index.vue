@@ -18,16 +18,20 @@
       </div>
       <el-divider></el-divider>
       <div class="filtrate">
-        <el-input placeholder="姓名" v-model="input" style="width:160px" clearable>
+        <el-input @change="search" placeholder="姓名" v-model="queryForm.name" style="width:160px" clearable>
         </el-input>
-        <el-select style="margin-left:5px; width:160px" v-model="value" clearable placeholder="在读学历">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <el-select style="margin-left:5px; width:160px" v-model="queryForm.position" clearable placeholder="在读学历">
+          <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item">
           </el-option>
         </el-select>
-        <el-button style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
-        <el-button size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
+        <el-button @click="search" style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
+        <el-button @click="refresh" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
           重置
         </el-button>
+        <el-radio-group v-model="radio" style="float:right; margin:0 20px" size="mini">
+          <el-radio-button label="可用用户"></el-radio-button>
+          <el-radio-button label="已禁用"></el-radio-button>
+        </el-radio-group>
       </div>
 
       <div>
@@ -65,7 +69,22 @@
               </el-popover>
             </template>
           </el-table-column>
+          <template slot="empty">
+            <div style="height:200px;">
+              <div style="margin-top:100px;">
+                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              </div>
+              <div style="line-height: 10px;">
+                <span>无记录</span>
+              </div>
+            </div>
+          </template>
         </el-table>
+
+        <div style="margin-top:5px;display:flex; justify-content:center">
+          <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :hide-on-single-page="total < 10 ? true : false" small background layout="prev, pager, next" :total="total" :page-size="10">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -76,25 +95,44 @@ import { listAuditors } from "@/api/user";
 export default {
   data() {
     return {
+      total: 0,
       auditors: [],
       list: [],
       queryForm: {
         name: "",
         position: ""
       },
+      page: null,
       options: ["本科生", "硕士生", "博士生", "未设置"]
     };
   },
   created() {
-    queryUser(this.queryForm).then(res => {
-      console.log(res.data);
-      this.list = res.data;
-    });
+    this.fetchUserList(0);
     listAuditors().then(res => {
       this.auditors = res.data.auditorlist;
     });
   },
   methods: {
+    // 分页获取数据
+    handleCurrentChange(val) {
+      this.fetchUserList(val - 1);
+    },
+    handlePrev(val) {
+      this.fetchUserList(val - 1);
+    },
+    handleNext(val) {
+      this.fetchUserList(val - 1);
+    },
+    fetchUserList(page) {
+      if (page == undefined) {
+        page = 0;
+      }
+      queryUser(this.queryForm, page).then(res => {
+        console.log(res.data);
+        this.list = res.data.content;
+        this.total = res.data.total;
+      });
+    },
     modRole(row) {
       updateUserRole({
         uid: row.id,
@@ -118,6 +156,16 @@ export default {
           });
         });
       console.log(row);
+    },
+    search() {
+      this.fetchUserList(0);
+    },
+    refresh() {
+      this.queryForm = {
+        name: "",
+        position: ""
+      };
+      this.fetchUserList(0);
     }
   }
 };

@@ -133,7 +133,7 @@ export const asyncRoutes = [
         name: "Task",
         component: () => import("@/views/project/index"),
         meta: {
-          title: "开发任务",
+          title: "开发管理",
           icon: "dev"
         }
       },
@@ -179,26 +179,13 @@ export const asyncRoutes = [
   {
     path: "/system",
     component: Layout,
-    name: "System",
-    meta: {
-      title: "系统设置",
-      icon: "setting",
-      roles: ["admin", "doctor"]
-    },
+    redirect: "/system",
     children: [
       {
-        path: "userMan",
-        name: "UserMan",
-        component: () => import("@/views/sysMan/userMan/index"),
-        meta: { title: "用户管理", icon: "user" },
-        roles: ["admin", "doctor"]
-      },
-      {
-        path: "configMan",
-        name: "ConfigMan",
-        component: () => import("@/views/sysMan/configMan/index"),
-        meta: { title: "参数管理", icon: "args" },
-        roles: ["admin", "doctor"]
+        path: "index",
+        name: "System",
+        component: () => import("@/views/sysMan/index"),
+        meta: { title: "系统设置", icon: "setting", roles: ["admin", "doctor"] }
       }
     ]
   },

@@ -1,19 +1,14 @@
 <template>
-  <div class="app-container" v-model="activeTab">
+  <div class="app-container">
     <div class="box">
       <el-tabs tab-position="top" v-model="activeTab">
-        <el-tab-pane label="任务分配" name="project">
-          <assign />
-        </el-tab-pane>
+        <el-tab-pane label="任务分配" name="assign"> </el-tab-pane>
 
-        <el-tab-pane label="bug管理" name="bug">
-          <auditbug />
-        </el-tab-pane>
+        <el-tab-pane label="bug管理" name="auditbug"> </el-tab-pane>
 
-        <el-tab-pane label="实验室所有项目" name="allproject">
-          <devlist />
-        </el-tab-pane>
+        <el-tab-pane label="实验室所有项目" name="devlist"> </el-tab-pane>
       </el-tabs>
+      <component :is="activeTab" />
     </div>
   </div>
 </template>
@@ -21,7 +16,7 @@
 export default {
   data() {
     return {
-      activeTab: "project"
+      activeTab: "assign"
     };
   },
   components: {
@@ -30,7 +25,7 @@ export default {
     devlist: () => import("../components/devlist")
   },
   created() {
-    this.activeTab = this.$route.query.tab || "project";
+    this.activeTab = this.$route.query.tab || "assign";
   },
   methods: {}
 };

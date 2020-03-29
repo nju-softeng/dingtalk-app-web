@@ -41,14 +41,6 @@ export function getReport() {
   });
 }
 
-// // 查询用户权限
-// export function listUserRole() {
-//   return axios({
-//     url: "/listrole",
-//     method: "get"
-//   });
-// }
-
 // 更新用户权限
 export function updateUserRole(data) {
   return axios({
@@ -63,5 +55,13 @@ export function queryUser(data, page) {
     url: "/user/query/" + page,
     method: "post",
     data
+  });
+}
+
+// 查询用户详细
+export function getUserDetail() {
+  return axios({
+    url: "/user/detail",
+    method: "get"
   });
 }

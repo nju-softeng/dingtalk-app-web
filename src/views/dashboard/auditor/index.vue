@@ -35,9 +35,9 @@
                   <div slot="reference" class="content">{{ perf.dcTotal }}</div>
                 </el-popover>
               </div>
-              <div class="rank">
+              <!-- <div class="rank">
                 排名:
-              </div>
+              </div> -->
             </el-card>
             <el-card @click.native="goAc" shadow="never" class="head" style="cursor:pointer;">
               <div class="title">累计AC</div>
@@ -230,7 +230,7 @@ export default {
       this.$router.push({
         path: "/project/index",
         query: {
-          tab: "bug"
+          tab: "auditbug"
         }
       });
     }

@@ -4,3 +4,10 @@
 [0303/131152.796:ERROR:crash_report_exception_handler.cc(122)] TryMiniDumpWriteDumpWithCrashpadInfo failed
 [0303/131152.798:ERROR:process_info.cc(359)] UncheckedAllocate
 [0303/131152.828:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\zhanyeye\AppData\Local\Microsoft\Edge Beta\User Data\Crashpad\reports\d516cb2b-c911-4453-bf12-396eadfa747f.dmp: 另一个程序正在使用此文件，进程无法访问。 (0x20)
+[0329/181017.659:ERROR:minidumpwritedump_with_crashpad_info.cc(435)] Failed to call MiniDumpWriteDump: 页面文件太小，无法完成操作。 (0x800705AF)
+[0329/181017.660:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
+[0329/181017.660:ERROR:crash_report_exception_handler.cc(122)] TryMiniDumpWriteDumpWithCrashpadInfo failed
+[0329/181017.660:ERROR:minidumpwritedump_with_crashpad_info.cc(435)] Failed to call MiniDumpWriteDump: 页面文件太小，无法完成操作。 (0x800705AF)
+[0329/181017.660:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
+[0329/181017.660:ERROR:crash_report_exception_handler.cc(122)] TryMiniDumpWriteDumpWithCrashpadInfo failed
+[0329/181017.670:ERROR:process_info.cc(359)] UncheckedAllocate

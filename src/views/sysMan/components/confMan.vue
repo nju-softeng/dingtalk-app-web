@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="box">
+    基准津贴
     <el-divider></el-divider>
   </div>
 </template>

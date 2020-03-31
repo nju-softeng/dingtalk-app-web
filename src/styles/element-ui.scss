@@ -135,3 +135,8 @@
 .el-menu--horizontal > .el-menu-item.is-active {
   border-bottom: 2px solid #409eff !important;
 }
+
+.el-drawer {
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2),
+    0 6px 6px 4px rgba(0, 0, 0, 0.12);
+}

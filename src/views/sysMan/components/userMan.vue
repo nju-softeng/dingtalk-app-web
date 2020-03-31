@@ -2,7 +2,7 @@
   <div>
     <div>
       <el-tooltip class="item" effect="dark" content="用户进入应用时会自动导入，权限默认为普通用户" placement="right">
-        <el-button type="primary">拉取钉钉用户</el-button>
+        <el-button @click="refreshUser" type="primary">拉取钉钉用户</el-button>
       </el-tooltip>
       <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
       <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
@@ -11,8 +11,8 @@
       <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
         未设置
       </el-tag>
-      <div style="float:right;color:#8c8c8c;font-size:14px;">
-        系统可用人数：
+      <div style="float:right;color:#8c8c8c;font-size:14px;margin-right:16px">
+        系统可用人数：{{ total }}
       </div>
     </div>
     <el-divider></el-divider>
@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import { queryUser, updateUserRole } from "@/api/user";
+import { queryUser, updateUserRole, fetchAllUser } from "@/api/user";
 import { listAuditors } from "@/api/user";
 export default {
   data() {
@@ -164,6 +164,15 @@ export default {
         position: ""
       };
       this.fetchUserList(0);
+    },
+    refreshUser() {
+      fetchAllUser().then(() => {
+        this.$message({
+          message: "拉取成功",
+          type: "success"
+        });
+        this.fetchUserList(0);
+      });
     }
   }
 };

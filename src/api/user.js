@@ -65,3 +65,11 @@ export function getUserDetail() {
     method: "get"
   });
 }
+
+// 查询用户
+export function fetchAllUser() {
+  return axios({
+    url: "/user/fetch",
+    method: "get"
+  });
+}

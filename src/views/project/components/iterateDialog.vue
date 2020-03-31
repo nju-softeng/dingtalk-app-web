@@ -117,7 +117,6 @@ export default {
       this.iterateform.updateDingIds = true;
       contactChoose(window.location.href, this.iterateform.dingIds).then(
         res => {
-          console.log(res);
           this.userlist = res;
           this.iterateform.dingIds = res.map(x => x.userid);
         }

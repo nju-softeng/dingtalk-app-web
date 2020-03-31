@@ -9,16 +9,11 @@
         <el-col :span="18" :xs="24">
           <el-card shadow="never">
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="周绩效日志" name="dctab">
-                <dctab />
-              </el-tab-pane>
-              <el-tab-pane label="AC日志" name="actab">
-                <actab />
-              </el-tab-pane>
-              <el-tab-pane label="消息记录" name="msg">
-                <Message />
-              </el-tab-pane>
+              <el-tab-pane label="周绩效日志" name="dctab"> </el-tab-pane>
+              <el-tab-pane label="AC日志" name="actab"> </el-tab-pane>
+              <el-tab-pane label="消息记录" name="msg"> </el-tab-pane>
             </el-tabs>
+            <component :is="activeTab" />
           </el-card>
         </el-col>
       </el-row>
@@ -34,9 +29,9 @@ export default {
   name: "Profile",
   components: {
     UserCard,
-    Dctab: () => import("./components/DcTab"),
-    Actab: () => import("./components/AcTab"),
-    Message: () => import("./components/Message")
+    dctab: () => import("./components/DcTab"),
+    actab: () => import("./components/AcTab"),
+    msg: () => import("./components/Message")
   },
   data() {
     return {

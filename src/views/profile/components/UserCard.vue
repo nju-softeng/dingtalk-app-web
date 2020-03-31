@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="never" style="margin-bottom:20px;">
     <div slot="header" class="clearfix">
-      <span>About me</span>
+      <span>个人中心</span>
     </div>
 
     <div class="user-profile">
@@ -21,42 +21,37 @@
     <div class="user-bio">
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header">
-          <svg-icon icon-class="education" /><span>--</span>
+          <svg-icon icon-class="education" />
+          <el-tag>
+            {{ user.position }}
+          </el-tag>
         </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">
-            -- -- -- -- -- -- -- --
-          </div>
+          <div class="text-muted"></div>
         </div>
-      </div>
-
-      <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header">
-          <svg-icon icon-class="skill" /><span>--</span>
-        </div>
-        <div class="user-bio-section-body"></div>
       </div>
     </div>
   </el-card>
 </template>
 
 <script>
+import { getUserDetail } from "@/api/user";
 export default {
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          name: "",
-          email: "",
-          avatar: "",
-          roles: ""
-        };
+  data() {
+    return {
+      user: {
+        name: "",
+        avatar: "",
+        position: ""
       }
-    }
+    };
   },
   created() {
     this.avatar = sessionStorage.getItem("avatar");
+    getUserDetail().then(res => {
+      console.log(res.data);
+      this.user = res.data;
+    });
   }
 };
 </script>

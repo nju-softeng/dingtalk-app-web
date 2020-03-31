@@ -7,7 +7,7 @@
         <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
         <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
       </el-button-group>
-      <el-table class="table" :data="list" border style="margin-top:10px;" height="77.5vh">
+      <el-table class="table" stripe :data="list" border style="margin-top:10px;" height="77.5vh">
         <el-table-column fixed prop="name" label="姓名"> </el-table-column>
         <el-table-column prop="salary" label="助研金"> </el-table-column>
         <el-table-column prop="week1" label="第一周DC"> </el-table-column>

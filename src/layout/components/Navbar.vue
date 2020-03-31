@@ -16,7 +16,7 @@
         </el-tooltip>
       </template> -->
 
-      <el-dropdown class="right-menu-item ">
+      <!-- <el-dropdown class="right-menu-item ">
         <span class=" el-dropdown-link" style="color:#409EFF">
           <i class="el-icon-circle-plus el-icon--right"></i>
         </span>
@@ -25,7 +25,7 @@
           <el-dropdown-item>选项2</el-dropdown-item>
           <el-dropdown-item>选项3</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">

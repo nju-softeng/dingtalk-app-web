@@ -1,20 +1,13 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="top">
-        <el-tab-pane label="我参与的">
-          <my-iteration />
-        </el-tab-pane>
-        <el-tab-pane>
-          <span slot="label">
-            <i class="el-icon-message">我的bug</i>
-          </span>
-          <userbug />
-        </el-tab-pane>
-        <el-tab-pane label="所有项目">
-          <devlist />
-        </el-tab-pane>
+      <el-tabs tab-position="top" v-model="activeTab">
+        <el-tab-pane label="我参与的" name="myIteration"> </el-tab-pane>
+        <el-tab-pane label="我的bug" name="userbug"> </el-tab-pane>
+        <el-tab-pane label="所有项目" name="devlist"> </el-tab-pane>
       </el-tabs>
+
+      <component :is="activeTab" />
     </div>
   </div>
 </template>
@@ -22,7 +15,8 @@
 export default {
   data() {
     return {
-      unfinish: true
+      unfinish: true,
+      activeTab: "myIteration"
     };
   },
   components: {

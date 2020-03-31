@@ -316,7 +316,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style lang="scss" scope>
 .el-drawer > header > span:focus {
   outline-color: white;
 }
@@ -330,9 +330,7 @@ export default {
   padding: 20px;
   flex-direction: column;
   display: flex;
-
   overflow-y: auto;
-  /* background-color: chartreuse; */
 }
 
 .drawer-content {

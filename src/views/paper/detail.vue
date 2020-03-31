@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <el-page-header @back="goBack">
       <span slot="title" style="font-size:12.5px">
         返回

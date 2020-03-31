@@ -41,19 +41,35 @@ export function getReport() {
   });
 }
 
-// 查询用户权限
-export function listUserRole() {
-  return axios({
-    url: "/listrole",
-    method: "get"
-  });
-}
-
 // 更新用户权限
 export function updateUserRole(data) {
   return axios({
     url: "/updaterole",
     method: "post",
     data
+  });
+}
+
+export function queryUser(data, page) {
+  return axios({
+    url: "/user/query/" + page,
+    method: "post",
+    data
+  });
+}
+
+// 查询用户详细
+export function getUserDetail() {
+  return axios({
+    url: "/user/detail",
+    method: "get"
+  });
+}
+
+// 查询用户
+export function fetchAllUser() {
+  return axios({
+    url: "/user/fetch",
+    method: "get"
   });
 }

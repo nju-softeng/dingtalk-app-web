@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <div style="height:540px">
-      <div class="box">
+    <div class="box">
+      <div class="list">
         <div class="action" style="margin-bottom:10px">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
@@ -106,7 +106,7 @@
             </template>
           </el-table-column>
           <template slot="empty">
-            <div style="height:300px;">
+            <div style="height:200px;">
               <div style="margin-top:100px;">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br />
               </div>
@@ -117,10 +117,10 @@
           </template>
         </el-table>
       </div>
-    </div>
-    <div style="margin-top:5px;display:flex; justify-content:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :current-page.sync="currentPage" :hide-on-single-page="total > 6" small layout="prev, pager, next" :total="total" :page-size="6">
-      </el-pagination>
+      <div style="margin-top:5px;display:flex; justify-content:center">
+        <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :current-page.sync="currentPage" :hide-on-single-page="total < 6 ? true : false" small layout="prev, pager, next" :total="total" :page-size="6">
+        </el-pagination>
+      </div>
     </div>
 
     <!-- 投稿结果  dialog -->
@@ -606,10 +606,13 @@ export default {
 
 .app-container {
   background-color: #f5f5f5;
-
-  border-radius: 0;
 }
+
 .box {
+  min-height: 90vh;
+}
+
+.list {
   min-height: 60px;
   background: #fff;
   padding: 20px 20px 0 20px;

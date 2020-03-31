@@ -326,4 +326,10 @@ p {
     padding-bottom: 10px;
   }
 }
+
+.ac-card {
+  padding-bottom: 5px;
+  font-size: 13px;
+  width: 100%;
+}
 </style>

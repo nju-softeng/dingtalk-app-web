@@ -18,7 +18,7 @@
               <li>{{ item.key }}</li>
               <p style="white-space: pre-line">{{ item.value }}</p>
             </div>
-            <div v-if="report == null" class="report_null">
+            <div v-if="report == null" class="center">
               <div style="margin:16px 0;">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br />
               </div>
@@ -71,21 +71,28 @@
                   </template>
                 </template>
               </el-table-column>
+              <template slot="empty">
+                <div style="height:100px;">
+                  <div style="margin-top:10px;">
+                    <svg-icon icon-class="null" style="font-size:32px" />
+                  </div>
+                  <div style="line-height: 10px;">
+                    <span>没有AC申请</span>
+                  </div>
+                </div>
+              </template>
             </el-table>
-            <div style="margin:12px 0 4px 8px;font-size:12px">
-              <span style="color:red">累计AC值：{{ form.ac || "--" }}</span>
-            </div>
           </div>
         </div>
 
         <div style="height:78px;"></div>
 
         <div class="drawer_foot">
-          <div style="padding:8px 8px;font-size:12.5px">
+          <div style="padding:12px 8px 4px;font-size:12.5px">
             <span style="margin-right:8px">{{ temp.name }} </span>
             <span>D值: {{ temp.dvalue }}</span>
             <span style="padding-left:20px">DC值: {{ form.dc || "--" }}</span>
-            <span style="padding-left:20px">AC值: {{ form.ac || "--" }}</span>
+            <span style="padding-left:20px;color:red">累计AC值: {{ form.ac || "--" }}</span>
           </div>
 
           <div style="padding:8px 8px;font-size:12.5px">
@@ -119,19 +126,30 @@
             </div>
           </div>
 
-          <div style="width:60%; min-height:100px; background-color:#fafafa;padding:10px; font-size:12.5px">
-            <span> 通过的ac申请</span>
-            <ol>
+          <div style="width:60%; min-height:100px; background-color:#fafafa;padding:10px; font-size:12px; line-height:20px">
+            <div v-if="activeAcItems.length != 0">
+              <span> 通过的ac申请:</span>
+
               <li v-for="(item, index) in activeAcItems" :key="index">
-                {{ item.reason }} ---- {{ item.ac }}
+                {{ item.reason }} - - - - {{ item.ac }}
               </li>
-            </ol>
+            </div>
+            <div v-else>
+              <div style="height:100px;" class="center">
+                <div style="margin-top:10px; ">
+                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                </div>
+                <div style="line-height: 10px;">
+                  <span>无AC申请</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="drawer_foot" style="height:48px">
           <div style="padding:8px 8px;font-size:12.5px">
-            <el-button @click="next" type="primary" style="width:64%" size="mini">下一条</el-button>
+            <el-button @click="submit" type="primary" style="width:64%" size="mini">下一条</el-button>
             <el-button @click="check = !check" style="width:33%" size="mini">编辑</el-button>
           </div>
         </div>
@@ -207,19 +225,11 @@ export default {
         return;
       }
       submitAudit(this.form).then(() => {
-        this.$notify({
-          title: "成功",
-          message:
-            this.temp.name +
-            "  DC值：" +
-            this.form.dc +
-            "  AC值：" +
-            this.form.ac,
-          type: "success"
-        });
         this.check = false;
-        // this.$emit("drawer-event", "submit");
       });
+    },
+    submit() {
+      this.$emit("drawer-event", "submit");
     },
     next() {
       this.$emit("drawer-event", "next");
@@ -282,6 +292,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ac-card /deep/ .el-table__row > td {
+  border: none;
+}
+
 .submitted {
   display: flex;
 
@@ -300,7 +314,7 @@ export default {
   padding: 20px;
 }
 
-.report_null {
+.center {
   display: flex;
   flex-direction: column;
   justify-content: center;

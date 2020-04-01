@@ -28,7 +28,7 @@ export default {
 <style scoped>
 .app-container {
   padding: 10px 12px;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
   min-height: 92vh;
   border-radius: 0;
 }

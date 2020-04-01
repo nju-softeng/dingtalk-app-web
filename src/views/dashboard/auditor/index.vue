@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="dashboard-container">
+  <div class="dashboard-container">
+    <div class="wrap">
       <el-row :gutter="5">
         <el-col :xs="24" :sm="16" :lg="16">
           <!-- 四位展示板 -->
@@ -293,6 +293,12 @@ export default {
     padding: 16px 16px 0;
     margin-bottom: 32px;
   }
+}
+
+.wrap {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 1024px) {

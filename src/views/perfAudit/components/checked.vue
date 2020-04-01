@@ -66,7 +66,7 @@
       </template>
     </el-table>
     <div style="text-align:center;margin-top:8px">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :hide-on-single-page="total < 10 ? true : false" small background layout="prev, pager, next" :total="total" :page-size="10">
+      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :hide-on-single-page="total < 10 ? true : false" small background layout="prev, pager, next" :total="total" :page-size="10" :current-page.sync="currentPage">
       </el-pagination>
     </div>
 
@@ -85,6 +85,7 @@ export default {
       loading: false,
       date: null,
       index: null,
+      currentPage: 1,
       temp: {
         name: "",
         ac: "",
@@ -139,7 +140,7 @@ export default {
           this.temp = this.list[this.index];
         }
       } else if (val == "submit") {
-        this.fetchChecked(0);
+        this.fetchChecked(this.currentPage - 1);
       }
       setTimeout(() => {
         this.loading = false;
@@ -162,10 +163,7 @@ export default {
     },
     // 刷新
     refresh() {
-      getChecked().then(res => {
-        this.list = res.data;
-        this.date = "";
-      });
+      this.fetchChecked(0);
     }
   }
 };

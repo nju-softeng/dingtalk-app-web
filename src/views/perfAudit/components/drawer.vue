@@ -15,14 +15,16 @@
           <!-- 周报 -->
           <div class="report">
             <div v-for="(item, index) in report" :key="index" class="item">
-              <li>{{ item.key }}</li>
-              <p style="white-space: pre-line">{{ item.value }}</p>
+              <h6>{{ item.key }}</h6>
+              <p style="white-space: pre-line; font-size:14px">
+                {{ item.value }}
+              </p>
             </div>
             <div v-if="report == null" class="center">
-              <div style="margin:16px 0;">
+              <div style="margin:8px 0px ">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br />
               </div>
-              <div style="color:#8c8c8c;font-size:12px;line-height:20px">
+              <div style="margin-bottom:32px;color:#8c8c8c;font-size:12px;line-height:20px">
                 未获取到周报内容,可能原因：
                 <li>bug</li>
                 <li>申请人未在指定时间提交周报</li>
@@ -100,7 +102,7 @@
 
             <el-input @input="valChange" v-model="form.cvalue" style="width:100px; margin-right:10px" placeholder="请输入内容"></el-input>
 
-            <el-button @click="sendAudit" type="primary" size="mini">确认提交</el-button>
+            <el-button @click="submit" type="primary" size="mini">确认提交</el-button>
             <el-button @click="prev" size="mini">上一条</el-button>
             <el-button @click="next" size="mini">下一条</el-button>
           </div>
@@ -149,7 +151,7 @@
 
         <div class="drawer_foot" style="height:48px">
           <div style="padding:8px 8px;font-size:12.5px">
-            <el-button @click="submit" type="primary" style="width:64%" size="mini">下一条</el-button>
+            <el-button @click="carryOn" type="primary" style="width:64%" size="mini">下一条</el-button>
             <el-button @click="check = !check" style="width:33%" size="mini">编辑</el-button>
           </div>
         </div>
@@ -199,9 +201,6 @@ export default {
     temp() {
       this.initData();
       this.check = true;
-    },
-    "form.cvalue"() {
-      console.log(this.form.dc);
     }
   },
   computed: {
@@ -213,7 +212,7 @@ export default {
     valChange() {
       this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
     },
-    sendAudit() {
+    submit() {
       console.log(this.form);
       var regPos = /^\d+(\.\d+)?$/; // 正则表达式，是否为数字
       if (!regPos.test(this.form.cvalue)) {
@@ -226,10 +225,11 @@ export default {
       }
       submitAudit(this.form).then(() => {
         this.check = false;
+        this.$emit("drawer-event", "submit");
       });
     },
-    submit() {
-      this.$emit("drawer-event", "submit");
+    carryOn() {
+      this.$emit("drawer-event", "continue");
     },
     next() {
       this.$emit("drawer-event", "next");
@@ -239,6 +239,7 @@ export default {
     },
     initData() {
       this.form.cvalue = this.temp.cvalue;
+      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
       this.form.id = this.temp.id;
       // 深拷贝
       let tmp = JSON.parse(JSON.stringify(this.temp.acItems));
@@ -311,7 +312,7 @@ export default {
 }
 
 .report {
-  padding: 20px;
+  padding: 0px 20px 10px;
 }
 
 .center {
@@ -340,8 +341,21 @@ export default {
   width: 0px;
 }
 
+h6 {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: normal;
+  margin: 4px 0 2px 0;
+}
+
 p {
+  line-height: 1.74;
+  font-size: 14px;
+  color: #262626;
+  letter-spacing: 0.05em;
   word-wrap: break-word;
+  display: block;
+  margin: 0;
 }
 
 .item {

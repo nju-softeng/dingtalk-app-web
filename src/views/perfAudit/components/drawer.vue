@@ -15,14 +15,16 @@
           <!-- 周报 -->
           <div class="report">
             <div v-for="(item, index) in report" :key="index" class="item">
-              <li>{{ item.key }}</li>
-              <p style="white-space: pre-line">{{ item.value }}</p>
+              <h6>{{ item.key }}</h6>
+              <p style="white-space: pre-line; font-size:14px">
+                {{ item.value }}
+              </p>
             </div>
-            <div v-if="report == null" class="report_null">
-              <div style="margin:16px 0;">
+            <div v-if="report == null" class="center">
+              <div style="margin:8px 0px ">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br />
               </div>
-              <div style="color:#8c8c8c;font-size:12px;line-height:20px">
+              <div style="margin-bottom:32px;color:#8c8c8c;font-size:12px;line-height:20px">
                 未获取到周报内容,可能原因：
                 <li>bug</li>
                 <li>申请人未在指定时间提交周报</li>
@@ -71,21 +73,28 @@
                   </template>
                 </template>
               </el-table-column>
+              <template slot="empty">
+                <div style="height:100px;">
+                  <div style="margin-top:10px;">
+                    <svg-icon icon-class="null" style="font-size:32px" />
+                  </div>
+                  <div style="line-height: 10px;">
+                    <span>没有AC申请</span>
+                  </div>
+                </div>
+              </template>
             </el-table>
-            <div style="margin:12px 0 4px 8px;font-size:12px">
-              <span style="color:red">累计AC值：{{ form.ac || "--" }}</span>
-            </div>
           </div>
         </div>
 
         <div style="height:78px;"></div>
 
         <div class="drawer_foot">
-          <div style="padding:8px 8px;font-size:12.5px">
+          <div style="padding:12px 8px 4px;font-size:12.5px">
             <span style="margin-right:8px">{{ temp.name }} </span>
             <span>D值: {{ temp.dvalue }}</span>
             <span style="padding-left:20px">DC值: {{ form.dc || "--" }}</span>
-            <span style="padding-left:20px">AC值: {{ form.ac || "--" }}</span>
+            <span style="padding-left:20px;color:red">累计AC值: {{ form.ac || "--" }}</span>
           </div>
 
           <div style="padding:8px 8px;font-size:12.5px">
@@ -93,7 +102,7 @@
 
             <el-input @input="valChange" v-model="form.cvalue" style="width:100px; margin-right:10px" placeholder="请输入内容"></el-input>
 
-            <el-button @click="sendAudit" type="primary" size="mini">确认提交</el-button>
+            <el-button @click="submit" type="primary" size="mini">确认提交</el-button>
             <el-button @click="prev" size="mini">上一条</el-button>
             <el-button @click="next" size="mini">下一条</el-button>
           </div>
@@ -119,19 +128,30 @@
             </div>
           </div>
 
-          <div style="width:60%; min-height:100px; background-color:#fafafa;padding:10px; font-size:12.5px">
-            <span> 通过的ac申请</span>
-            <ol>
+          <div style="width:60%; min-height:100px; background-color:#fafafa;padding:10px; font-size:12px; line-height:20px">
+            <div v-if="activeAcItems.length != 0">
+              <span> 通过的ac申请:</span>
+
               <li v-for="(item, index) in activeAcItems" :key="index">
-                {{ item.reason }} ---- {{ item.ac }}
+                {{ item.reason }} - - - - {{ item.ac }}
               </li>
-            </ol>
+            </div>
+            <div v-else>
+              <div style="height:100px;" class="center">
+                <div style="margin-top:10px; ">
+                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                </div>
+                <div style="line-height: 10px;">
+                  <span>无AC申请</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="drawer_foot" style="height:48px">
           <div style="padding:8px 8px;font-size:12.5px">
-            <el-button @click="next" type="primary" style="width:64%" size="mini">下一条</el-button>
+            <el-button @click="carryOn" type="primary" style="width:64%" size="mini">下一条</el-button>
             <el-button @click="check = !check" style="width:33%" size="mini">编辑</el-button>
           </div>
         </div>
@@ -181,9 +201,6 @@ export default {
     temp() {
       this.initData();
       this.check = true;
-    },
-    "form.cvalue"() {
-      console.log(this.form.dc);
     }
   },
   computed: {
@@ -195,7 +212,7 @@ export default {
     valChange() {
       this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
     },
-    sendAudit() {
+    submit() {
       console.log(this.form);
       var regPos = /^\d+(\.\d+)?$/; // 正则表达式，是否为数字
       if (!regPos.test(this.form.cvalue)) {
@@ -207,19 +224,12 @@ export default {
         return;
       }
       submitAudit(this.form).then(() => {
-        this.$notify({
-          title: "成功",
-          message:
-            this.temp.name +
-            "  DC值：" +
-            this.form.dc +
-            "  AC值：" +
-            this.form.ac,
-          type: "success"
-        });
         this.check = false;
-        // this.$emit("drawer-event", "submit");
+        this.$emit("drawer-event", "submit");
       });
+    },
+    carryOn() {
+      this.$emit("drawer-event", "continue");
     },
     next() {
       this.$emit("drawer-event", "next");
@@ -229,6 +239,7 @@ export default {
     },
     initData() {
       this.form.cvalue = this.temp.cvalue;
+      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
       this.form.id = this.temp.id;
       // 深拷贝
       let tmp = JSON.parse(JSON.stringify(this.temp.acItems));
@@ -282,6 +293,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ac-card /deep/ .el-table__row > td {
+  border: none;
+}
+
 .submitted {
   display: flex;
 
@@ -297,10 +312,10 @@ export default {
 }
 
 .report {
-  padding: 20px;
+  padding: 0px 20px 10px;
 }
 
-.report_null {
+.center {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -326,8 +341,21 @@ export default {
   width: 0px;
 }
 
+h6 {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: normal;
+  margin: 4px 0 2px 0;
+}
+
 p {
+  line-height: 1.74;
+  font-size: 14px;
+  color: #262626;
+  letter-spacing: 0.05em;
   word-wrap: break-word;
+  display: block;
+  margin: 0;
 }
 
 .item {

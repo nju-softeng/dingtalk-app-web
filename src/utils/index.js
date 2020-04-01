@@ -114,6 +114,9 @@ export function formatTime(time, option) {
 }
 
 export function formatWeek(yearmonth, week) {
+  if (yearmonth == undefined || week == undefined) {
+    return;
+  }
   if (yearmonth.toString()[4] == 0) {
     return yearmonth.toString().slice(5, 7) + " 月 第 " + week + " 周";
   } else {

@@ -32,9 +32,8 @@
         </template>
       </el-table>
     </div>
-    {{ show }}
-    <!-- drawer -->
 
+    <!-- drawer -->
     <tdrawer :temp="temp" :show.sync="show" @drawer-event="handleDrawer" :load="loading" />
   </div>
 </template>
@@ -64,20 +63,19 @@ export default {
         //下一个
         if (this.index !== this.list.length - 1) {
           this.index++;
-          console.log(this.list[this.index].id);
           this.temp = this.list[this.index];
         }
       } else if (val == "prev") {
         //上一个
         if (this.index !== 0) {
           this.index--;
-          console.log(this.list[this.index].id);
           this.temp = this.list[this.index];
         }
-      } else if (val == "submit") {
+      } else if (val == "continue") {
         //提交
         if (this.index == 0 && this.list.length == 1) {
           this.list.splice(this.index, 1);
+          this.show = false;
         } else if (this.index == this.list.length - 1) {
           this.index--;
           this.temp = this.list[this.index];
@@ -89,7 +87,7 @@ export default {
       }
       setTimeout(() => {
         this.loading = false;
-      }, 250);
+      }, 300);
     },
     onRowClick(row) {
       this.temp = row;
@@ -102,5 +100,3 @@ export default {
   }
 };
 </script>
-
-<style scoped></style>

@@ -9,7 +9,7 @@ export function fetchReport(uid, date) {
   });
 }
 
-// 提交审核结果
+// 提交/更新 审核结果
 export function submitAudit(data) {
   return axios({
     url: "/audit",
@@ -18,19 +18,10 @@ export function submitAudit(data) {
   });
 }
 
-// 更新审核结果
-export function updateAudit(data) {
-  return axios({
-    url: "/audit/update",
-    method: "post",
-    data
-  });
-}
-
 // 审核人获取已经审核的申请记录
-export function getChecked() {
+export function getChecked(page) {
   return axios({
-    url: "/audit/checked",
+    url: "/audit/checked/page/" + page,
     method: "get"
   });
 }

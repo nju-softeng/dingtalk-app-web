@@ -99,7 +99,7 @@
     </el-dialog>
 
     <!-- 添加迭代dialog -->
-    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" />
+    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="iteationDialog" @submitted="handleSubmit" />
     <!-- 完成迭代dialog -->
     <finish-drawer :iterate="tmp" :title="title" :serial="serial" />
   </div>
@@ -116,6 +116,7 @@ import IterateDialog from "./iterateDialog";
 export default {
   data() {
     return {
+      iteationDialog: false,
       projectDialog: false,
       pid: "",
       title: "",
@@ -149,15 +150,6 @@ export default {
       };
     }
   },
-  watch: {
-    isUpdate() {
-      if (this.isUpdate == true) {
-        this.$store.commit("project/FINISH_UPDATE");
-        this.fetchProjects();
-      }
-    }
-  },
-
   created() {
     this.fetchProjects();
   },
@@ -244,7 +236,10 @@ export default {
       this.title = item.title;
       this.pid = item.id;
       this.cnt = item.cnt;
-      this.$store.commit("project/TOGGLE_SHOW");
+      this.iteationDialog = true;
+    },
+    handleSubmit() {
+      this.fetchProjects();
     },
     finishIterate(item) {
       console.log(item);

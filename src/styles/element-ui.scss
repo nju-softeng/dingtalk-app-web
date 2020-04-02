@@ -140,3 +140,7 @@
   box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2),
     0 6px 6px 4px rgba(0, 0, 0, 0.12);
 }
+
+.el-tabs__nav-wrap::after {
+  height: 1px;
+}

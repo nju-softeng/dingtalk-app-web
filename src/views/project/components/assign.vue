@@ -99,9 +99,9 @@
     </el-dialog>
 
     <!-- 添加迭代dialog -->
-    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" />
+    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="iteationDialog" @submitted="handleSubmit" />
     <!-- 完成迭代dialog -->
-    <finish-drawer :iterate="tmp" :title="title" :serial="serial" />
+    <finish-drawer :iterate="tmp" :show.sync="bdrawer_show" :title="title" :serial="serial" @submitted="handleSubmit" />
   </div>
 </template>
 <script>
@@ -116,6 +116,8 @@ import IterateDialog from "./iterateDialog";
 export default {
   data() {
     return {
+      bdrawer_show: false,
+      iteationDialog: false,
       projectDialog: false,
       pid: "",
       title: "",
@@ -137,9 +139,6 @@ export default {
   },
   components: { IterateDialog, FinishDrawer },
   computed: {
-    isUpdate() {
-      return this.$store.state.project.iteration;
-    },
     getRemainDay() {
       return endtime => {
         let day =
@@ -149,15 +148,6 @@ export default {
       };
     }
   },
-  watch: {
-    isUpdate() {
-      if (this.isUpdate == true) {
-        this.$store.commit("project/FINISH_UPDATE");
-        this.fetchProjects();
-      }
-    }
-  },
-
   created() {
     this.fetchProjects();
   },
@@ -244,7 +234,10 @@ export default {
       this.title = item.title;
       this.pid = item.id;
       this.cnt = item.cnt;
-      this.$store.commit("project/TOGGLE_SHOW");
+      this.iteationDialog = true;
+    },
+    handleSubmit() {
+      this.fetchProjects();
     },
     finishIterate(item) {
       console.log(item);
@@ -253,7 +246,7 @@ export default {
         this.tmp = res.data;
         this.title = item.title;
         this.serial = item.cnt;
-        this.$store.commit("project/TOGGLE_DRAWER");
+        this.bdrawer_show = true;
       });
     }
   }
@@ -285,8 +278,6 @@ a {
   flex-wrap: wrap;
   justify-content: space-between;
   min-width: 750px;
-  /deep/ .el-card {
-  }
 }
 
 .item {
@@ -294,42 +285,10 @@ a {
   height: 125px;
   width: 49%;
   background-color: #fff;
-  border: 1px solid #d1d5da;
   border-radius: 3px;
 }
 
 p {
   font-size: 12.5px;
-}
-
-.app-container {
-  background-color: #f5f5f5;
-  height: 92vh;
-  border-radius: 0;
-}
-.box {
-  min-height: 60px;
-  background: #fff;
-  padding: 10px 20px 0 20px;
-}
-
-.projectdc {
-  display: flex;
-  padding-top: 5px;
-  padding-bottom: 10px;
-  .dcitem {
-    width: 150px;
-    margin-right: 5px;
-  }
-  /deep/ .el-card__body {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-}
-
-.ac-card {
-  padding-bottom: 5px;
-  font-size: 13px;
-  width: 100%;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="dialog">
     <!-- 添加迭代dialog -->
-    <el-dialog @open="toOpen" :visible.sync="dialog" width="60%" @close="handleClose">
+    <el-dialog @open="toOpen" :visible.sync="visible" @close="$emit('update:show', false)" width="60%" @closed="handleClosed">
       <div slot="title">{{ title }} - 第 {{ cnt + 1 }} 次迭代</div>
       <!-- 表单 -->
       <el-form v-loading="loading" style="width:100%" ref="iterateform" :rules="rules" :model="iterateform">
@@ -22,7 +22,7 @@
       </el-form>
       <!-- 确认按钮 -->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
+        <el-button @click="visible = false">取 消</el-button>
         <el-button type="primary" @click="submitIterate()">确 定</el-button>
       </div>
     </el-dialog>
@@ -38,6 +38,7 @@ export default {
     return {
       userlist: [],
       list: [],
+      visible: this.show,
       loading: false,
       iterateform: {
         id: "",
@@ -57,15 +58,9 @@ export default {
       }
     };
   },
-
-  computed: {
-    dialog: {
-      get() {
-        return this.$store.state.project.show;
-      },
-      set(value) {
-        this.$store.commit("project/UPDATE_SHOW", value);
-      }
+  watch: {
+    show() {
+      this.visible = this.show;
     }
   },
   methods: {
@@ -92,8 +87,8 @@ export default {
           this.loading = true;
           createIteration(this.pid, this.iterateform)
             .then(() => {
-              this.dialog = false;
-              this.$store.commit("project/TO_UPDATE");
+              this.$emit("submitted", true);
+              this.visible = false;
               this.$notify({
                 title: "成功",
                 message: "提交成功",
@@ -131,7 +126,7 @@ export default {
         1
       );
     },
-    handleClose() {
+    handleClosed() {
       this.$refs.iterateform.resetFields();
       this.userlist = [];
       this.iterateform.updateDingIds = false;

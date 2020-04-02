@@ -28,12 +28,15 @@ export default {
 <style scoped>
 .app-container {
   padding: 10px 12px;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
   min-height: 92vh;
   border-radius: 0;
 }
 
 .box {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   padding: 10px 15px;
   min-height: 89vh;

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="dashboard-container">
+  <div class="dashboard-container">
+    <div class="  <div>">
       <el-row :gutter="5">
         <el-col :xs="24" :sm="16" :lg="16">
           <!-- 四位展示板 -->
@@ -264,6 +264,12 @@ export default {
     color: rgba(0, 0, 0, 0.45);
     font-size: 12px;
   }
+}
+
+.wrap {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .dashboard-container {

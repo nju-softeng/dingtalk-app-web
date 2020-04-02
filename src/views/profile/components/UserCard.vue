@@ -1,37 +1,37 @@
 <template>
-  <el-card shadow="never" style="margin-bottom:20px;">
-    <div slot="header" class="clearfix">
-      <span>个人中心</span>
-    </div>
+  <div>
+    <div class="card">
+      <div class="user-profile">
+        <div class="box-center">
+          <el-avatar class="avatar" shape="square" :size="60" :src="avatar">{{
+            user.name
+          }}</el-avatar>
+        </div>
+        <div class="box-center" style="height:100px">
+          <div class="user-name text-center">{{ user.name }}</div>
+          <div class="user-role text-center text-muted">
+            <el-tag>xxxxxx</el-tag>
+          </div>
+        </div>
+      </div>
 
-    <div class="user-profile">
-      <div class="box-center">
-        <el-avatar class="avatar" shape="square" :size="60" :src="avatar">{{
-          user.name
-        }}</el-avatar>
-      </div>
-      <div class="box-center">
-        <div class="user-name text-center">{{ user.name }}</div>
-        <div class="user-role text-center text-muted">
-          {{ user.role }}
-        </div>
-      </div>
-    </div>
+      <el-divider></el-divider>
 
-    <div class="user-bio">
-      <div class="user-education user-bio-section">
-        <div class="user-bio-section-header">
-          <svg-icon icon-class="education" />
-          <el-tag>
-            {{ user.position }}
-          </el-tag>
-        </div>
-        <div class="user-bio-section-body">
-          <div class="text-muted"></div>
+      <div class="user-bio">
+        <div class="user-education user-bio-section">
+          <div class="user-bio-section-header">
+            <svg-icon icon-class="education" />
+            <el-tag>
+              {{ user.position }}
+            </el-tag>
+          </div>
+          <div class="user-bio-section-body">
+            <div class="text-muted"></div>
+          </div>
         </div>
       </div>
     </div>
-  </el-card>
+  </div>
 </template>
 
 <script>
@@ -57,6 +57,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card {
+  padding: 2px 0px;
+  border: 1px solid #e8e8e8;
+  border-radius: 2px;
+  background-color: white;
+}
+
 .box-center {
   margin: 0 auto;
   display: table;
@@ -71,8 +78,11 @@ export default {
 }
 
 .user-profile {
+  padding-top: 32px;
+  padding-bottom: 32px;
   .user-name {
-    font-weight: bold;
+    font-size: 16px;
+    color: #262626;
   }
 
   .box-center {

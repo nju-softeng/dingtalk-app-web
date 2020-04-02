@@ -9,7 +9,6 @@ import { mapGetters } from "vuex";
 import auditordev from "./auditor";
 import studentdev from "./student";
 export default {
-  name: "Dashboard",
   components: { auditordev, studentdev },
   data() {
     return {

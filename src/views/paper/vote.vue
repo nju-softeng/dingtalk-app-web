@@ -283,4 +283,17 @@ export default {
   border: 1px;
   // border-style: solid;
 }
+
+.app-container {
+  min-height: 95vh;
+}
+
+.content {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 86vh;
+  background: #fff;
+  padding: 15px;
+}
 </style>

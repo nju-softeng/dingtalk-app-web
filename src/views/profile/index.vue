@@ -1,20 +1,20 @@
 <template>
   <div class="app-container">
-    <div v-if="user">
-      <el-row :gutter="6">
-        <el-col :span="6" :xs="24">
+    <div class="content">
+      <el-row :gutter="8">
+        <el-col :span="7" :xs="24">
           <user-card :user="user" />
         </el-col>
 
-        <el-col :span="18" :xs="24">
-          <el-card shadow="never">
+        <el-col :span="17" :xs="24">
+          <div class="card">
             <el-tabs v-model="activeTab">
               <el-tab-pane label="周绩效日志" name="dctab"> </el-tab-pane>
               <el-tab-pane label="AC日志" name="actab"> </el-tab-pane>
               <el-tab-pane label="消息记录" name="msg"> </el-tab-pane>
             </el-tabs>
             <component :is="activeTab" />
-          </el-card>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -60,3 +60,22 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.card {
+  padding: 2px 20px;
+  border: 1px solid #e8e8e8;
+  border-radius: 2px;
+  background-color: white;
+}
+.app-container {
+  background-color: #fafafa;
+  min-height: 92vh;
+}
+
+.content {
+  margin-top: 8px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

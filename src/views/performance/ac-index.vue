@@ -17,7 +17,7 @@
           <el-tag size="small">总AC: {{ ac }}</el-tag>
         </div>
         <!-- 详细AC -->
-        <el-scrollbar style="height: 95%;" v-if="aclist.length != 0">
+        <el-scrollbar style="height: 93%;" v-if="aclist.length != 0">
           <el-timeline>
             <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
               <div class="test">
@@ -64,6 +64,7 @@ export default {
         if (val == 0) return "周报申请";
         else if (val == 1) return "项目AC";
         else if (val == 2) return "论文AC";
+        else if (val == 4) return "bug";
         else return "投票AC";
       };
     }
@@ -102,19 +103,19 @@ export default {
   padding: 5px 40px;
   margin-bottom: 5px;
 }
-.app-container {
-}
+
 .box {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   justify-content: space-between;
 }
 .box-card {
   border-radius: 4px;
   border: 1px solid #ebeef5;
-
   height: 85vh;
   padding: 10px 0px;
-  // overflow: auto;
 }
 .ac-card {
   width: 90%;

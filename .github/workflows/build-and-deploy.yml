@@ -31,8 +31,14 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/www
-          ls
+          cd dingtalk-vue
+          git pull origin master
+          npm install
+          rm -r dist
+          npm run build
+          
+          
+          
 
     # Runs a single command using the runners shell
     - name: Run a one-line script

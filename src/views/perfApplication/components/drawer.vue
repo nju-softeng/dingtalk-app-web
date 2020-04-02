@@ -40,7 +40,10 @@
           <br />
         </div>
       </div>
-
+      <div>{{ tmp }}</div>
+      <div>
+        {{ form }}
+      </div>
       <div class="drawer-footer">
         <el-button style="width:50%" @click="visible = false">取 消</el-button>
         <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
@@ -115,7 +118,9 @@ export default {
     emptyForm() {
       this.$refs["form"].resetFields();
       this.form.acItems = [];
-      this.title = "更新绩效";
+      this.form.id = null;
+      this.title = "申请绩效";
+      this.tmp = null;
     },
     // 添加一个ac申请项
     addAcItem() {

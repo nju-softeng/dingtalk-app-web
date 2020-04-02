@@ -609,6 +609,9 @@ export default {
 }
 
 .box {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
   min-height: 90vh;
 }
 

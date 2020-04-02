@@ -29,12 +29,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-form {
-  width: 618px;
-}
-
 .dialog-content {
-  // background-color: aquamarine;
   display: flex;
   justify-content: center;
 }
@@ -43,9 +38,12 @@ export default {
   padding: 10px;
   background-color: #f5f5f5;
   min-height: 92vh;
-  border-radius: 0;
 }
+
 .box {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   padding: 5px 20px;
   min-height: 89vh;

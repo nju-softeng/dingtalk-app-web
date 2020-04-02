@@ -1,7 +1,7 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer @open="handleOpen" @close="handleClose" size="82%" :visible.sync="drawer" direction="btt">
+    <el-drawer @open="handleOpen" @closed="handleClosed" size="82%" :visible.sync="visible" @close="$emit('update:show', false)" direction="btt">
       <div slot="title">{{ title }} - 第{{ serial }}次迭代</div>
       <div class="content">
         <el-card shadow="never" style="width:360px;margin-right:5px;">
@@ -135,6 +135,10 @@ import { computeIterateAc, autoSetAc, manualSetAc } from "@/api/project.js";
 
 export default {
   props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
     iterate: {
       type: Object
     },
@@ -151,6 +155,7 @@ export default {
   },
   data() {
     return {
+      visible: this.show,
       radio: true,
       scheme: true,
       finishdate: null,
@@ -165,14 +170,9 @@ export default {
       }
     };
   },
-  computed: {
-    drawer: {
-      get() {
-        return this.$store.state.project.finishdrawer;
-      },
-      set(value) {
-        this.$store.commit("project/UPDATE_DRAWER", value);
-      }
+  watch: {
+    show() {
+      this.visible = this.show;
     }
   },
   methods: {
@@ -191,7 +191,7 @@ export default {
           message: "提交成功",
           type: "success"
         });
-        this.$store.commit("project/TO_UPDATE");
+        this.$emit("submitted", true);
         this.drawer = false;
       });
     },
@@ -206,7 +206,7 @@ export default {
           message: "提交成功",
           type: "success"
         });
-        this.$store.commit("project/TO_UPDATE");
+        this.$emit("submitted", true);
         this.drawer = false;
       });
     },
@@ -227,7 +227,7 @@ export default {
       }
     },
 
-    handleClose() {
+    handleClosed() {
       this.tmp = {
         AcActual: 0,
         AcReduce: 0,

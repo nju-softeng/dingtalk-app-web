@@ -82,10 +82,4 @@ export default {
 label {
   color: #72767b;
 }
-
-.drawer-footer {
-  /* background-color: beige; */
-  margin: 16px 0;
-  display: flex;
-}
 </style>

@@ -189,7 +189,7 @@
 
     <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="idialog_show" :edit="tmp" @submitted="handleSubmitted" />
 
-    <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" />
+    <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" :show.sync="bdrawer_show" @submitted="handleSubmitted" />
 
     <el-dialog title="报告bug" :visible.sync="bugDialog" @close="handleClose">
       <div v-loading="loading" style="width:100%">
@@ -223,6 +223,7 @@ import FinishDrawer from "./finishDrawer";
 export default {
   data() {
     return {
+      bdrawer_show: false,
       idialog_show: false,
       bugDialog: false,
       radio: "迭代",
@@ -260,9 +261,6 @@ export default {
   },
   components: { IterateDialog, FinishDrawer },
   computed: {
-    isUpdate() {
-      return this.$store.state.project.iteration;
-    },
     permission() {
       return this.authorid == this.uid ? true : false;
     }
@@ -285,13 +283,13 @@ export default {
       this.modifyAC = false;
       this.serial = row.cnt;
       this.finishtmp = row;
-      this.$store.commit("project/TOGGLE_DRAWER");
+      this.bdrawer_show = true;
     },
     modifyIterate(index, row) {
       this.modifyAC = true;
       this.serial = row.cnt;
       this.finishtmp = row;
-      this.$store.commit("project/TOGGLE_DRAWER");
+      this.bdrawer_show = true;
     },
     fetchProjectDetail() {
       getProjectDetail(this.pid).then(res => {

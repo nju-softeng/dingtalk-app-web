@@ -87,6 +87,9 @@ export default {
 }
 
 .box {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   padding: 10px 15px;
   min-height: 89vh;

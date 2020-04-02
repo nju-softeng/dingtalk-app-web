@@ -299,7 +299,6 @@ export default {
 
 .submitted {
   display: flex;
-
   align-items: center;
   flex-direction: column;
 }

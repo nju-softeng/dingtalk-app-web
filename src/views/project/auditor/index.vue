@@ -2,11 +2,9 @@
   <div class="app-container">
     <div class="box">
       <el-tabs tab-position="top" v-model="activeTab">
-        <el-tab-pane label="任务分配" name="assign"> </el-tab-pane>
-
-        <el-tab-pane label="bug管理" name="auditbug"> </el-tab-pane>
-
-        <el-tab-pane label="实验室所有项目" name="devlist"> </el-tab-pane>
+        <el-tab-pane label="任务分配" name="assign" />
+        <el-tab-pane label="bug管理" name="auditbug" />
+        <el-tab-pane label="实验室所有项目" name="devlist" />
       </el-tabs>
       <component :is="activeTab" />
     </div>
@@ -31,24 +29,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-form {
-  width: 618px;
-}
-
 .dialog-content {
-  // background-color: aquamarine;
   display: flex;
   justify-content: center;
 }
 
 .app-container {
-  padding: 10px;
+  padding: 16px;
   background-color: #f5f5f5;
-
-  border-radius: 0;
+  min-height: 95vh;
 }
+
 .box {
-  height: 800px;
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 86vh;
   background: #fff;
   padding: 5px 20px 0 20px;
 }

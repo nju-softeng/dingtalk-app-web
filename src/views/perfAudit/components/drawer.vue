@@ -1,5 +1,5 @@
 <template>
-  <div class="drawer">
+  <div class="audit">
     <el-drawer :visible.sync="visible" size="50%" :modal="false" @close="$emit('update:show', false)">
       <!-- 标题 -->
       <div slot="title">
@@ -304,7 +304,7 @@ export default {
   flex-direction: column;
 }
 
-.drawer /deep/ .el-drawer__header {
+.audit /deep/ .el-drawer__header {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 10px;
@@ -323,6 +323,7 @@ export default {
 }
 
 .drawer_foot {
+  box-shadow: 0px -1px 2px #fafafa;
   border-top: solid 0.5px #d9d9d9;
   height: 78px;
   background-color: white;
@@ -330,6 +331,7 @@ export default {
   bottom: 0;
   width: 100%;
   padding-left: 8px;
+  z-index: 100;
 }
 
 .text_span {
@@ -337,7 +339,7 @@ export default {
   color: #d9d9d9;
 }
 
-::-webkit-scrollbar {
+/deep/ ::-webkit-scrollbar {
   width: 0px;
 }
 

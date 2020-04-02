@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="apply">
     <el-drawer :direction="direction" :visible.sync="visible" @close="$emit('update:show', false)" @closed="emptyForm" size="380px">
       <div slot="title" style="font-size:14px">{{ title }}</div>
 
@@ -40,10 +40,7 @@
           <br />
         </div>
       </div>
-      <div>{{ tmp }}</div>
-      <div>
-        {{ form }}
-      </div>
+
       <div class="drawer-footer">
         <el-button style="width:50%" @click="visible = false">取 消</el-button>
         <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
@@ -204,16 +201,7 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-.el-drawer > header > span:focus {
-  outline-color: white;
-}
-.el-drawer > header > button:focus {
-  outline-color: white;
-}
-.el-drawer > header > button:hover {
-  color: rgb(64, 158, 255);
-}
-.el-drawer__body {
+.apply /deep/ .el-drawer__body {
   padding: 20px;
   flex-direction: column;
   display: flex;

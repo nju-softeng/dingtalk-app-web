@@ -30,7 +30,9 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: whoami
+        script: |
+          cd /var/www
+          ls
 
     # Runs a single command using the runners shell
     - name: Run a one-line script

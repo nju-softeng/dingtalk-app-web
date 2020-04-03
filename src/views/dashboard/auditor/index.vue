@@ -296,7 +296,7 @@ export default {
 }
 
 .wrap {
-  max-width: 1056px;
+  max-width: 1072px;
   margin-left: auto;
   margin-right: auto;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <div class="box">
       <el-tabs tab-position="left">
         <el-tab-pane label="用户管理">
@@ -47,10 +47,21 @@ export default {
 </script>
 
 <style scoped>
+.app-container {
+  padding: 12px;
+  background-color: #f5f5f5;
+  min-height: 92vh;
+  border-radius: 0;
+}
+
 .box {
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   padding-top: 16px;
   padding-left: 10px;
+  padding-right: 20px;
   min-height: 89vh;
 }
 </style>

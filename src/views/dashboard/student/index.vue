@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="  <div>">
+    <div class="wrap">
       <el-row :gutter="5">
         <el-col :xs="24" :sm="16" :lg="16">
           <!-- 四位展示板 -->
@@ -267,7 +267,7 @@ export default {
 }
 
 .wrap {
-  max-width: 1024px;
+  max-width: 1072px;
   margin-left: auto;
   margin-right: auto;
 }

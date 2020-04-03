@@ -78,8 +78,8 @@ export default {
 }
 
 .user-profile {
-  padding-top: 32px;
-  padding-bottom: 32px;
+  padding-top: 48px;
+  padding-bottom: 24px;
   .user-name {
     font-size: 16px;
     color: #262626;

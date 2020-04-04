@@ -6,55 +6,62 @@
           返回
         </span>
       </el-page-header>
-      <div class="content">
-        <div class="test">
-          <el-form>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="paper" /> 论文名称</span>
-              {{ paper.title }}
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="school" /> 投稿地点</span>
-              {{ paper.journal }}
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="grade" /> 论文分类</span>
-              {{ getlevel(paper.level) }}
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="people" /> 论文作者
-              </span>
-              <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div style="width:50%">
-          <el-form>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="vote" /> 投票结果</span>
-              <el-tag v-if="paper.vote == undefined" size="small">投票未发起</el-tag>
-              <el-tag type="success" size="small" v-else-if="paper.vote.result == true">ACCEPT</el-tag>
-              <el-tag type="danger" size="small" v-else-if="paper.vote.result == false">REJECT</el-tag>
-              <el-tag v-else size="small">等待投票结果</el-tag>
-            </el-form-item>
-            <el-form-item>
-              <span slot="label">
-                <svg-icon icon-class="paper" /> 最终结果</span>
+      <el-row>
+        <el-col :xs="24" :sm="12" :lg="12">
+          <div class="test">
+            <el-form>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 论文名称</span>
+                {{ paper.title }}
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 投稿地点</span>
+                {{ paper.journal }}
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="grade" /> 论文分类</span>
+                {{ getlevel(paper.level) }}
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="people" /> 论文作者
+                </span>
+                <span style="margin:10px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="12" :lg="12">
+          <div class="test">
+            <el-form>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="vote" /> 投票结果</span>
+                <el-tag v-if="paper.vote == undefined" size="small">投票未发起</el-tag>
+                <el-tag type="success" size="small" v-else-if="paper.vote.result == true">ACCEPT</el-tag>
+                <el-tag type="danger" size="small" v-else-if="paper.vote.result == false">REJECT</el-tag>
+                <el-tag v-else size="small">等待投票结果</el-tag>
+              </el-form-item>
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 最终结果</span>
 
-              <el-tag type="success" size="small" v-if="paper.result == true">ACCEPT</el-tag>
-              <el-tag type="danger" size="small" v-else-if="paper.result == false">REJECT</el-tag>
-              <el-tag size="small" v-else-if="paper.vote == undefined || paper.vote.result == null">论文尚未投稿</el-tag>
-              <el-tag size="small" type="danger" v-else-if="paper.vote.result == false">内审未通过</el-tag>
-              <el-tag size="small" v-else>等待中</el-tag>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
+                <el-tag type="success" size="small" v-if="paper.result == true">ACCEPT</el-tag>
+                <el-tag type="danger" size="small" v-else-if="paper.result == false">REJECT</el-tag>
+                <el-tag size="small" v-else-if="
+                    paper.vote == undefined || paper.vote.result == null
+                  ">论文尚未投稿</el-tag>
+                <el-tag size="small" type="danger" v-else-if="paper.vote.result == false">内审未通过</el-tag>
+                <el-tag size="small" v-else>等待中</el-tag>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+      </el-row>
+
       <el-divider></el-divider>
       <el-alert v-if="paper.result == undefined" title="论文投稿结果尚未确定，无AC变化显示" type="warning">
       </el-alert>
@@ -164,7 +171,7 @@ export default {
 }
 .test {
   padding-left: 20px;
-  width: 60%;
+
   border: 1px;
 }
 .ac {

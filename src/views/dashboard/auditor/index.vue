@@ -10,7 +10,7 @@
               </div>
               <div class="hello-text">
                 {{ helloTime }}{{ name }}，祝你开心每一天！<br />
-                <div class="day-text">
+                <div class="day-text hiden-xs">
                   『 {{ yiyan.hitokoto }}』 —— 《{{ yiyan.from }}》
                   <a @click="getYiYan">
                     <el-button type="text" icon="el-icon-refresh"></el-button>
@@ -24,7 +24,11 @@
               <div class="card">
                 <div class="title">本月DC</div>
                 <div>
-                  <el-popover placement="right-start" width="400" trigger="hover">
+                  <el-popover
+                    placement="right-start"
+                    width="400"
+                    trigger="hover"
+                  >
                     <div class="popover">
                       <div class="item">
                         <div>第一周</div>
@@ -88,13 +92,24 @@
               <!-- 消息卡片头 -->
               <div slot="header" class="clearfix">
                 <span>动态</span>
-                <router-link :to="{ path: '/profile/index', query: { tab: 'msg' } }">
-                  <el-button style="float: right;padding:0" type="text">查看更多</el-button>
+                <router-link
+                  :to="{ path: '/profile/index', query: { tab: 'msg' } }"
+                >
+                  <el-button style="float: right;padding:0" type="text"
+                    >查看更多</el-button
+                  >
                 </router-link>
               </div>
               <!-- 消息内容 -->
-              <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
-                <div class="message" v-for="(msg, index) in messages" :key="index">
+              <div
+                v-if="messages.length != 0"
+                style="min-height:200px;font-size:14px;"
+              >
+                <div
+                  class="message"
+                  v-for="(msg, index) in messages"
+                  :key="index"
+                >
                   <div class="title">{{ msg.title }}</div>
                   <div style="display:flex;justify-content:space-between;">
                     <div class="detail">
@@ -115,7 +130,11 @@
           </el-col>
           <el-col :xs="24" :sm="8" :lg="8">
             <!-- 快捷导航 -->
-            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+            <el-card
+              class="box-card"
+              shadow="never"
+              style="margin-bottom: 5px;"
+            >
               <div slot="header" class="clearfix">
                 <span>快捷导航</span>
               </div>
@@ -154,7 +173,11 @@
               <div slot="header" class="clearfix">
                 <span>AC变动公告</span>
               </div>
-              <el-carousel indicator-position="none" trigger="click" height="150px">
+              <el-carousel
+                indicator-position="none"
+                trigger="click"
+                height="150px"
+              >
                 <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
                   <div class="ac-card">
                     <div class="ac-head">
@@ -168,7 +191,11 @@
                     <div class="reason" style="font-size:12.5px">
                       <span>变更原因：{{ item.reason }}</span>
                     </div>
-                    <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
+                    <div
+                      class="auditor"
+                      style="font-size:12.5px"
+                      v-if="item.auditorname != undefined"
+                    >
                       <span>审核人: {{ item.auditorname }}</span>
                     </div>
                     <div style="padding-top:15px;font-size:12.5px">
@@ -206,13 +233,13 @@ export default {
         w2: "",
         w3: "",
         w4: "",
-        w5: ""
+        w5: "",
       },
       name: "",
       avatar: null,
       count: 0,
       bugCnt: 0,
-      yiyan: {}
+      yiyan: {},
     };
   },
   created() {
@@ -220,34 +247,34 @@ export default {
     this.name = sessionStorage.getItem("name");
     this.getYiYan();
     // 消息
-    getMessages(0, 5).then(res => {
+    getMessages(0, 5).then((res) => {
       this.messages = res.data.content;
     });
     // 实验室最近AC变更
-    lastAc().then(res => {
+    lastAc().then((res) => {
       this.lastAcs = res.data;
     });
     // 绩效
-    getPerformance().then(res => {
+    getPerformance().then((res) => {
       this.perf = res.data;
     });
     // 审核人未审核数
-    getUnCheckCnt().then(res => {
+    getUnCheckCnt().then((res) => {
       this.unCheckCnt = res.data;
     });
     // 查询待审核bug
-    getAuditorBugCnt().then(res => {
+    getAuditorBugCnt().then((res) => {
       this.bugCnt = res.data;
     });
   },
   computed: {
     helloTime() {
       return showHelloTime();
-    }
+    },
   },
   methods: {
     getYiYan() {
-      getYiYan().then(res => {
+      getYiYan().then((res) => {
         this.yiyan = res.data;
       });
     },
@@ -259,19 +286,19 @@ export default {
       this.$router.push({
         path: "/profile/index",
         query: {
-          tab: "actab"
-        }
+          tab: "actab",
+        },
       });
     },
     goBug() {
       this.$router.push({
         path: "/project/index",
         query: {
-          tab: "auditbug"
-        }
+          tab: "userbug",
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -290,13 +317,14 @@ export default {
     height: 90px;
     padding-left: 20px;
     .hello-text {
+      padding-top: 16px;
       margin-left: 16px;
       font-size: 16px;
       color: #333;
       .day-text {
-        padding-top: 4px;
+        padding-top: 8px;
         font-size: 10px;
-        color: rgb(116, 116, 116);
+        color: #8c8c8c;
       }
     }
   }
@@ -330,6 +358,9 @@ export default {
 @media only screen and (max-width: 767px) {
   .auto {
     border-top: 1px solid #e8e8e8;
+  }
+  .hiden-xs {
+    display: none !important;
   }
 }
 

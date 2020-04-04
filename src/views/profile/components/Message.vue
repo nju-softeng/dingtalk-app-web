@@ -4,7 +4,7 @@
       <div class="message" v-for="(msg, index) in messages" :key="index">
         <div class="title">{{ msg.title }}</div>
         <div style="display:flex; justify-content:space-between;">
-          <div class="content">
+          <div class="detail">
             <span>{{ msg.content }}</span>
           </div>
           <div class="time">
@@ -64,10 +64,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .message {
+  height: 72px;
+  padding-top: 7px;
+  padding-bottom: 10px;
   font-size: 14px;
   border-bottom: 0.5px solid #d2d6de;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 4px;
 
   .title {
     color: #1890ff;
@@ -76,11 +78,13 @@ export default {
     font-size: 14px;
     display: inline-block;
   }
-  .content {
+  .detail {
+    font-size: 12px;
     padding-top: 6px;
     white-space: pre;
   }
   .time {
+    font-size: 12px;
     color: rgba(0, 0, 0, 0.45);
     padding-top: 6px;
     padding-left: 15px;

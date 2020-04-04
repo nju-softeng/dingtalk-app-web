@@ -10,7 +10,9 @@
         <div class="box-center" style="height:100px">
           <div class="user-name text-center">{{ user.name }}</div>
           <div class="user-role text-center text-muted">
-            <el-tag>xxxxxx</el-tag>
+            <el-tag>
+              {{ user.position }}
+            </el-tag>
           </div>
         </div>
       </div>
@@ -21,9 +23,6 @@
         <div class="user-education user-bio-section">
           <div class="user-bio-section-header">
             <svg-icon icon-class="education" />
-            <el-tag>
-              {{ user.position }}
-            </el-tag>
           </div>
           <div class="user-bio-section-body">
             <div class="text-muted"></div>

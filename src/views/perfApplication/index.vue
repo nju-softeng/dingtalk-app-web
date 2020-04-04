@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="wrap">
+    <div class="wrap1">
       <!-- 周绩效申请 drawer -->
       <drawer :show.sync="show" :direction="direction" :tmp="tmp" :auditors="auditors" @submitted="submitted" />
       <div class="box">
@@ -159,7 +159,7 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.wrap {
+.wrap1 {
   border: 1px solid #e8e8e8;
   border-radius: 2px;
   max-width: 1056px;

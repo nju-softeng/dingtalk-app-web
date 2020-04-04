@@ -72,7 +72,7 @@
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
                 <div style="display:flex;justify-content:space-between;">
-                  <div class="content">
+                  <div class="detail">
                     <span>{{ msg.content }}</span>
                   </div>
                   <div class="time">
@@ -97,28 +97,28 @@
             <div class="shortcut">
               <div class="item">
                 <router-link to="/performance/perfAudit">
-                  <el-link type="primary">绩效审核</el-link>
+                  <el-button plain class="btn">绩效审核</el-button>
                 </router-link>
               </div>
               <div class="item">
                 <router-link to="/performance/performance_dc">
-                  <el-link type="primary">绩效汇总</el-link>
+                  <el-button plain class="btn">绩效汇总</el-button>
                 </router-link>
               </div>
               <div class="item">
                 <router-link to="/performance/performance_ac">
-                  <el-link type="primary">AC汇总</el-link>
+                  <el-button plain class="btn">AC汇总</el-button>
                 </router-link>
               </div>
               <div class="item">
                 <router-link to="/project/index">
-                  <el-link type="primary">迭代管理 </el-link>
+                  <el-button plain class="btn">迭代管理</el-button>
                 </router-link>
               </div>
 
               <div class="item">
                 <router-link to="/paper/index">
-                  <el-link type="primary">论文管理</el-link>
+                  <el-button plain class="btn">论文管理</el-button>
                 </router-link>
               </div>
             </div>
@@ -245,8 +245,7 @@ export default {
 }
 
 .dashboard-container /deep/ .el-card__body {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 20px 5px;
   font-size: 14px;
 }
 
@@ -266,7 +265,6 @@ export default {
   .title {
     padding: 6px 0px;
     font-size: 14px;
-
     color: rgba(0, 0, 0, 0.45);
   }
   .content {
@@ -285,7 +283,7 @@ export default {
 
 .dashboard-container {
   padding: 12px;
-  min-height: 90vh;
+  min-height: 92vh;
   background-color: rgb(240, 242, 245);
 
   .chart-wrapper {
@@ -312,14 +310,21 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   .item {
-    padding: 5px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+  }
+  .btn {
+    width: 82px;
   }
 }
 .message {
+  height: 72px;
+  padding-top: 7px;
+  padding-bottom: 10px;
   font-size: 14px;
   border-bottom: 0.5px solid #d2d6de;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 4px;
 
   .title {
     color: #1890ff;
@@ -328,11 +333,13 @@ export default {
     font-size: 14px;
     display: inline-block;
   }
-  .content {
+  .detail {
+    font-size: 12px;
     padding-top: 6px;
     white-space: pre;
   }
   .time {
+    font-size: 12px;
     color: rgba(0, 0, 0, 0.45);
     padding-top: 6px;
     padding-left: 15px;

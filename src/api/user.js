@@ -50,6 +50,7 @@ export function updateUserRole(data) {
   });
 }
 
+// 查询系统中所有用户
 export function queryUser(data, page) {
   return axios({
     url: "/user/query/" + page,

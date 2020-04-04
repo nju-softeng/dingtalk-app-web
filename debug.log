@@ -11,3 +11,4 @@
 [0329/181017.660:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
 [0329/181017.660:ERROR:crash_report_exception_handler.cc(122)] TryMiniDumpWriteDumpWithCrashpadInfo failed
 [0329/181017.670:ERROR:process_info.cc(359)] UncheckedAllocate
+[0404/210733.015:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value 5daecc0d-6e29-48e6-888a-d35c3a8e798d

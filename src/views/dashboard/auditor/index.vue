@@ -1,62 +1,28 @@
-<style lang="scss" scoped>
-.headboard {
-  width: 100%;
-  min-height: 120px;
-  background-color: white;
-  border-bottom: 1px solid #e8e8e8;
-  position: relative;
-}
-.nav {
-  position: absolute;
-  bottom: 0;
-}
-.headboard /deep/ .el-menu.el-menu--horizontal {
-  border-bottom: solid 0px #e6e6e6;
-}
-.test {
-  // background-color: gainsboro;
-  padding: 0 10px;
-  height: 100%;
-  display: flex;
-}
-
-.head {
-  padding: 20px 5px;
-  width: 100px;
-  cursor: pointer;
-  .title {
-    text-align: center;
-    padding: 6px 0px;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
-  }
-  .content {
-    font-size: 25px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.85);
-  }
-  .rank {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: #d2d6de 0.5px solid;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 12px;
-  }
-}
-</style>
-
 <template>
   <div>
     <div class="headboard">
       <div class="wrap">
         <el-row>
-          <el-col :xs="24" :sm="12" :lg="12">
-            <div style="background-color: gainsboro;height:50px;width:500px"></div>
+          <el-col :xs="24" :sm="14" :lg="14">
+            <div class="hello">
+              <div>
+                <el-avatar :icon="avatar" :src="avatar">{{ name }}</el-avatar>
+              </div>
+              <div class="hello-text">
+                {{ helloTime }}{{ name }}，祝你开心每一天！<br />
+                <div class="day-text">
+                  『 {{ yiyan.hitokoto }}』 —— 《{{ yiyan.from }}》
+                  <a @click="getYiYan">
+                    <el-button type="text" icon="el-icon-refresh"></el-button>
+                  </a>
+                </div>
+              </div>
+            </div>
           </el-col>
-          <el-col :xs="24" :sm="12" :lg="12">
-            <div style="display:flex;justify-content:flex-end">
-              <div shadow="never" class="head">
-                <div class="title">本月DC值</div>
+          <el-col :xs="24" :sm="10" :lg="10">
+            <div class="info">
+              <div class="card">
+                <div class="title">本月DC</div>
                 <div>
                   <el-popover placement="right-start" width="400" trigger="hover">
                     <div class="popover">
@@ -86,41 +52,36 @@
                     </div>
                   </el-popover>
                 </div>
-                <!-- <div class="rank">
-                排名:
-              </div> -->
               </div>
 
-              <div @click="goAc" shadow="never" class="head" style="">
+              <div @click="goAc" class="card">
                 <div class="title">累计AC</div>
                 <div class="content">
                   {{ perf.acTotal }}
                 </div>
               </div>
-              <div @click="goAuditor" shadow="never" class="head" style="cursor:pointer">
-                <div class="title">待审核申请</div>
+              <div @click="goAuditor" class="card">
+                <div class="title">待审申请</div>
                 <div class="content">
                   {{ unCheckCnt }}
                 </div>
               </div>
-              <div @click="goBug" shadow="never" class="head" style="cursor: pointer">
-                <div class="title" style="">待审核bug</div>
+              <div @click="goBug" class="card">
+                <div class="title" style="">待审bug</div>
                 <div class="content">{{ bugCnt }}</div>
               </div>
             </div>
           </el-col>
         </el-row>
-        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1">处理中心</el-menu-item>
-          <el-menu-item index="2">消息中心</el-menu-item>
-          <el-menu-item index="3">订单管理</el-menu-item>
+        <el-menu class="auto" default-active="1" mode="horizontal">
+          <el-menu-item index="1">消息</el-menu-item>
         </el-menu>
       </div>
     </div>
 
     <div class="dashboard-container">
       <div class="wrap">
-        <el-row :gutter="5">
+        <el-row :gutter="6">
           <el-col :xs="24" :sm="16" :lg="16">
             <!-- 消息面板 -->
             <el-card class="box-card" shadow="never">
@@ -192,15 +153,12 @@
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>AC变动公告</span>
-                <!-- <el-button style="float: right; padding:0" type="text">查看详情</el-button> -->
               </div>
               <el-carousel indicator-position="none" trigger="click" height="150px">
                 <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
                   <div class="ac-card">
                     <div class="ac-head">
-                      <el-avatar :size="35" class="avatar">{{
-                        item.username
-                      }}</el-avatar>
+                      <el-avatar :size="35">{{ item.username }}</el-avatar>
                       <div class="title">
                         <span>{{ item.username }} AC值</span>
                         <span v-if="item.ac > 0"> + </span>
@@ -232,6 +190,8 @@ import { getMessages } from "@/api/message";
 import { lastAc, getPerformance } from "@/api/performance";
 import { getUnCheckCnt } from "@/api/audit";
 import { getAuditorBugCnt } from "@/api/bug";
+import { showHelloTime } from "@/utils/index";
+import { getYiYan } from "@/api/common";
 
 export default {
   data() {
@@ -251,12 +211,14 @@ export default {
       name: "",
       avatar: null,
       count: 0,
-      bugCnt: 0
+      bugCnt: 0,
+      yiyan: {}
     };
   },
   created() {
     this.avatar = sessionStorage.getItem("avatar");
     this.name = sessionStorage.getItem("name");
+    this.getYiYan();
     // 消息
     getMessages(0, 5).then(res => {
       this.messages = res.data.content;
@@ -278,8 +240,18 @@ export default {
       this.bugCnt = res.data;
     });
   },
-  computed: {},
+  computed: {
+    helloTime() {
+      return showHelloTime();
+    }
+  },
   methods: {
+    getYiYan() {
+      getYiYan().then(res => {
+        this.yiyan = res.data;
+      });
+    },
+
     goAuditor() {
       this.$router.push({ path: "/performance/perfAudit" });
     },
@@ -304,14 +276,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container /deep/ .el-card__header {
-  padding: 12px 20px;
-  font-size: 14px;
+.headboard {
+  padding: 0 20px;
+  width: 100%;
+  min-height: 120px;
+  background-color: white;
+  border-bottom: 1px solid #e8e8e8;
+  position: relative;
+
+  .hello {
+    display: flex;
+    align-items: center;
+    height: 90px;
+    padding-left: 20px;
+    .hello-text {
+      margin-left: 16px;
+      font-size: 16px;
+      color: #333;
+      .day-text {
+        padding-top: 4px;
+        font-size: 10px;
+        color: rgb(116, 116, 116);
+      }
+    }
+  }
+
+  .info {
+    display: flex;
+    justify-content: flex-end;
+    .card {
+      padding: 20px 5px;
+      width: 100px;
+      cursor: pointer;
+      .title {
+        text-align: center;
+        padding: 6px 0px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.45);
+      }
+      .content {
+        font-size: 24px;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
+  }
+
+  /deep/ .el-menu.el-menu--horizontal {
+    border-bottom: solid 0px #e6e6e6;
+  }
 }
 
-.dashboard-container /deep/ .el-card__body {
-  padding: 5px 20px 5px;
-  font-size: 14px;
+@media only screen and (max-width: 767px) {
+  .auto {
+    border-top: 1px solid #e8e8e8;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .auto {
+    position: absolute;
+    bottom: 0;
+  }
 }
 
 .popover {
@@ -330,10 +356,14 @@ export default {
   min-height: 92vh;
   background-color: #fafafa;
 
-  .chart-wrapper {
-    background: #fff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
+  /deep/ .el-card__header {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  /deep/ .el-card__body {
+    padding: 5px 20px 5px;
+    font-size: 14px;
   }
 }
 
@@ -341,12 +371,6 @@ export default {
   max-width: 1072px;
   margin-left: auto;
   margin-right: auto;
-}
-
-@media (max-width: 1024px) {
-  .chart-wrapper {
-    padding: 8px;
-  }
 }
 
 .shortcut {
@@ -362,6 +386,7 @@ export default {
     width: 82px;
   }
 }
+
 .message {
   height: 72px;
   padding-top: 7px;
@@ -369,7 +394,6 @@ export default {
   font-size: 14px;
   border-bottom: 0.5px solid #d2d6de;
   margin-bottom: 4px;
-
   .title {
     color: #1890ff;
     line-height: 24px;
@@ -389,13 +413,12 @@ export default {
     padding-left: 15px;
   }
 }
+
 .ac-card {
   .ac-head {
     padding-top: 9px;
     display: flex;
-    .avatar {
-      background-color: #409eff;
-    }
+
     .title {
       padding: 10px;
     }

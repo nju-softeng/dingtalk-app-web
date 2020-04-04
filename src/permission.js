@@ -4,9 +4,9 @@ import { Message } from "element-ui";
 import NProgress from "nprogress"; // 进度条
 import "nprogress/nprogress.css"; // 进度条样式
 
-NProgress.configure({ showSpinner: false }); // NProgress Configuration
+NProgress.configure({ showSpinner: false });
 
-const whiteList = ["/login"]; // no redirect whitelist
+const whiteList = ["/login"];
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
@@ -55,6 +55,5 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(() => {
-  // finish progress bar
   NProgress.done();
 });

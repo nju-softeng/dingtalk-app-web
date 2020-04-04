@@ -4,7 +4,6 @@ import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import "element-ui/lib/theme-chalk/display.css";
 import "@/styles/index.scss"; // global css
 import "@/icons"; // icon
 import "@/permission"; // permission control

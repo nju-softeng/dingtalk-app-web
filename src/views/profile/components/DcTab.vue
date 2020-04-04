@@ -1,44 +1,37 @@
 <template>
   <div class="user-activity">
+    <!-- 列表为null提示 -->
     <template v-if="list.length == 0">
       <div style="height:200px;text-align:center;padding-top:70px;">
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>
     </template>
-    <div class="post" v-for="(dc, index) in list" :key="index">
-      <span style="padding-right:15px;color: #1890ff;">{{
-        dc.yearmonth | formatWeek(dc.week)
-      }}</span>
-      <el-tag effect="plain" v-if="!dc.status"> 待审核</el-tag>
-      <span style="padding:10px;color: rgba(0, 0, 0, 0.45);">审核人:{{ dc.auditor.name }}</span>
-      <span> {{ dc.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
-      <br />
 
-      <div style="padding-top:10px; padding-bottom:5px">
-        <span>申请D值: {{ dc.dvalue }}</span>
-        <template v-if="dc.status">
-          <span style="padding:10px;"> 审核C值: {{ dc.cvalue }}</span>
-          <span style="padding:10px;">DC值: {{ dc.dc }}</span>
-        </template>
+    <!-- 内容列表 -->
+    <div class="post" v-for="(dc, index) in list" :key="index" style="display:flex; justify-content:space-between">
+      <div>
+        <span style="padding-right:15px;color: #1890ff;">{{
+          dc.yearmonth | formatWeek(dc.week)
+        }}</span>
+        <span style="padding:10px;color: rgba(0, 0, 0, 0.45);">审核人:{{ dc.auditor.name }}</span>
+
+        <div v-if="!dc.status" style="padding-top:10px">
+          <span style="padding-right:10px">&bull; D值: {{ dc.dvalue }}</span>
+          <el-tag effect="plain"> 待审核</el-tag>
+        </div>
+        <div v-else style="padding-top:10px">
+          <span style="padding-right:10px;">&bull; DC值: {{ dc.dc }}</span>
+          <span style="padding:10px;">&bull; AC值: {{ dc.ac }}</span>
+        </div>
       </div>
-      <template v-if="!dc.status">
-        <template v-if="dc.acItems.length != 0">
-          <span>申请AC:</span>
-          <li v-for="(o, index) in dc.acItems" :key="index">
-            {{ o.reason }} ~> AC: {{ o.ac }}
-          </li>
-        </template>
-      </template>
-      <template v-else>
-        <template v-if="dc.acItems.length != 0">
-          <span>AC审核结果:</span>
-          <li v-for="(o, index) in dc.acItems" :key="index">
-            {{ o.reason }} ~> AC: {{ o.ac }}
-          </li>
-        </template>
-      </template>
+      <div style="padding-top:32px;font-size:12px">
+        <span>申请时间：
+          {{ dc.insertTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
+      </div>
     </div>
-    <div style="text-align:center">
+
+    <!-- 分页按钮 -->
+    <div style=" text-align:center">
       <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next" :total="total" :page-size="10">
       </el-pagination>
     </div>

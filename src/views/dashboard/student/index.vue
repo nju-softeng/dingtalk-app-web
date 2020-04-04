@@ -72,7 +72,7 @@
               <div class="message" v-for="(msg, index) in messages" :key="index">
                 <div class="title">{{ msg.title }}</div>
                 <div style="display:flex; justify-content:space-between;">
-                  <div class="content">
+                  <div class="detail">
                     <span>{{ msg.content }}</span>
                   </div>
                   <div class="time">
@@ -311,7 +311,7 @@ export default {
     font-size: 14px;
     display: inline-block;
   }
-  .content {
+  .detail {
     padding-top: 6px;
     white-space: pre;
   }

@@ -35,6 +35,7 @@ export default {
         if (val == 0) return "周报申请";
         else if (val == 1) return "项目AC";
         else if (val == 2) return "论文AC";
+        else if (val == 4) return "bug 扣除AC";
         else return "投票AC";
       };
     }

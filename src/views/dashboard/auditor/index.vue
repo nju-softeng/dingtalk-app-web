@@ -1,163 +1,228 @@
-<template>
-  <div class="dashboard-container">
-    <div class="wrap">
-      <el-row :gutter="5">
-        <el-col :xs="24" :sm="16" :lg="16">
-          <!-- 四位展示板 -->
-          <div style="height:107.67px; margin-bottom: 5px; display:flex">
-            <el-card shadow="never" class="head">
-              <div class="title">本月DC值</div>
-              <div>
-                <el-popover placement="right-start" width="400" trigger="hover">
-                  <div class="popover">
-                    <div class="item">
-                      <div>第一周</div>
-                      <div class="dc">{{ perf.w1 }}</div>
-                    </div>
-                    <div class="item">
-                      <div>第二周</div>
-                      <div class="dc">{{ perf.w2 }}</div>
-                    </div>
-                    <div class="item">
-                      <div>第三周</div>
-                      <div class="dc">{{ perf.w3 }}</div>
-                    </div>
-                    <div class="item">
-                      <div>第四周</div>
-                      <div class="dc">{{ perf.w4 }}</div>
-                    </div>
-                    <div class="item">
-                      <div>第五周</div>
-                      <div class="dc">{{ perf.w5 }}</div>
-                    </div>
-                  </div>
+<style lang="scss" scoped>
+.headboard {
+  width: 100%;
+  min-height: 120px;
+  background-color: white;
+  border-bottom: 1px solid #e8e8e8;
+  position: relative;
+}
+.nav {
+  position: absolute;
+  bottom: 0;
+}
+.headboard /deep/ .el-menu.el-menu--horizontal {
+  border-bottom: solid 0px #e6e6e6;
+}
+.test {
+  // background-color: gainsboro;
+  padding: 0 10px;
+  height: 100%;
+  display: flex;
+}
 
-                  <div slot="reference" class="content">{{ perf.dcTotal }}</div>
-                </el-popover>
-              </div>
-              <!-- <div class="rank">
+.head {
+  padding: 20px 5px;
+  width: 100px;
+  cursor: pointer;
+  .title {
+    text-align: center;
+    padding: 6px 0px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  .content {
+    font-size: 25px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  .rank {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: #d2d6de 0.5px solid;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 12px;
+  }
+}
+</style>
+
+<template>
+  <div>
+    <div class="headboard">
+      <div class="wrap">
+        <el-row>
+          <el-col :xs="24" :sm="12" :lg="12">
+            <div style="background-color: gainsboro;height:50px;width:500px"></div>
+          </el-col>
+          <el-col :xs="24" :sm="12" :lg="12">
+            <div style="display:flex;justify-content:flex-end">
+              <div shadow="never" class="head">
+                <div class="title">本月DC值</div>
+                <div>
+                  <el-popover placement="right-start" width="400" trigger="hover">
+                    <div class="popover">
+                      <div class="item">
+                        <div>第一周</div>
+                        <div class="dc">{{ perf.w1 }}</div>
+                      </div>
+                      <div class="item">
+                        <div>第二周</div>
+                        <div class="dc">{{ perf.w2 }}</div>
+                      </div>
+                      <div class="item">
+                        <div>第三周</div>
+                        <div class="dc">{{ perf.w3 }}</div>
+                      </div>
+                      <div class="item">
+                        <div>第四周</div>
+                        <div class="dc">{{ perf.w4 }}</div>
+                      </div>
+                      <div class="item">
+                        <div>第五周</div>
+                        <div class="dc">{{ perf.w5 }}</div>
+                      </div>
+                    </div>
+                    <div slot="reference" class="content">
+                      {{ perf.dcTotal }}
+                    </div>
+                  </el-popover>
+                </div>
+                <!-- <div class="rank">
                 排名:
               </div> -->
-            </el-card>
-            <el-card @click.native="goAc" shadow="never" class="head" style="cursor:pointer;">
-              <div class="title">累计AC</div>
-              <div class="content">
-                {{ perf.acTotal }}
               </div>
-            </el-card>
-            <el-card @click.native="goAuditor" shadow="never" class="head" style="cursor:pointer">
-              <div class="title">待审核申请</div>
-              <div class="content">
-                {{ unCheckCnt }}
-              </div>
-            </el-card>
-            <el-card @click.native="goBug" shadow="never" class="head" style="cursor: pointer">
-              <div class="title">待审核bug</div>
-              <div class="content">
-                {{ bugCnt }}
-              </div>
-            </el-card>
-          </div>
-          <!-- 消息面板 -->
-          <el-card class="box-card" shadow="never">
-            <!-- 消息卡片头 -->
-            <div slot="header" class="clearfix">
-              <span>动态</span>
-              <router-link :to="{ path: '/profile/index', query: { tab: 'msg' } }">
-                <el-button style="float: right;padding:0" type="text">查看更多</el-button>
-              </router-link>
-            </div>
-            <!-- 消息内容 -->
-            <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
-              <div class="message" v-for="(msg, index) in messages" :key="index">
-                <div class="title">{{ msg.title }}</div>
-                <div style="display:flex;justify-content:space-between;">
-                  <div class="detail">
-                    <span>{{ msg.content }}</span>
-                  </div>
-                  <div class="time">
-                    <span>{{ new Date(msg.createTime) | timeAgo }}</span>
-                  </div>
+
+              <div @click="goAc" shadow="never" class="head" style="">
+                <div class="title">累计AC</div>
+                <div class="content">
+                  {{ perf.acTotal }}
                 </div>
               </div>
+              <div @click="goAuditor" shadow="never" class="head" style="cursor:pointer">
+                <div class="title">待审核申请</div>
+                <div class="content">
+                  {{ unCheckCnt }}
+                </div>
+              </div>
+              <div @click="goBug" shadow="never" class="head" style="cursor: pointer">
+                <div class="title" style="">待审核bug</div>
+                <div class="content">{{ bugCnt }}</div>
+              </div>
             </div>
-            <template v-else>
-              <div style="height:200px;text-align:center;padding-top:50px;">
-                <svg-icon icon-class="null" style="font-size:32px" />
-              </div>
-            </template>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="8" :lg="8">
-          <!-- 快捷导航 -->
-          <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
-            <div slot="header" class="clearfix">
-              <span>快捷导航</span>
-            </div>
-            <div class="shortcut">
-              <div class="item">
-                <router-link to="/performance/perfAudit">
-                  <el-button plain class="btn">绩效审核</el-button>
-                </router-link>
-              </div>
-              <div class="item">
-                <router-link to="/performance/performance_dc">
-                  <el-button plain class="btn">绩效汇总</el-button>
-                </router-link>
-              </div>
-              <div class="item">
-                <router-link to="/performance/performance_ac">
-                  <el-button plain class="btn">AC汇总</el-button>
-                </router-link>
-              </div>
-              <div class="item">
-                <router-link to="/project/index">
-                  <el-button plain class="btn">迭代管理</el-button>
-                </router-link>
-              </div>
+          </el-col>
+        </el-row>
+        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1">处理中心</el-menu-item>
+          <el-menu-item index="2">消息中心</el-menu-item>
+          <el-menu-item index="3">订单管理</el-menu-item>
+        </el-menu>
+      </div>
+    </div>
 
-              <div class="item">
-                <router-link to="/paper/index">
-                  <el-button plain class="btn">论文管理</el-button>
+    <div class="dashboard-container">
+      <div class="wrap">
+        <el-row :gutter="5">
+          <el-col :xs="24" :sm="16" :lg="16">
+            <!-- 消息面板 -->
+            <el-card class="box-card" shadow="never">
+              <!-- 消息卡片头 -->
+              <div slot="header" class="clearfix">
+                <span>动态</span>
+                <router-link :to="{ path: '/profile/index', query: { tab: 'msg' } }">
+                  <el-button style="float: right;padding:0" type="text">查看更多</el-button>
                 </router-link>
               </div>
-            </div>
-          </el-card>
-
-          <!-- AC变动公告 -->
-          <el-card class="box-card" shadow="never">
-            <div slot="header" class="clearfix">
-              <span>AC变动公告</span>
-              <!-- <el-button style="float: right; padding:0" type="text">查看详情</el-button> -->
-            </div>
-            <el-carousel indicator-position="none" trigger="click" height="150px">
-              <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
-                <div class="ac-card">
-                  <div class="ac-head">
-                    <el-avatar :size="35" class="avatar">{{
-                      item.username
-                    }}</el-avatar>
-                    <div class="title">
-                      <span>{{ item.username }} AC值</span>
-                      <span v-if="item.ac > 0"> + </span>
-                      <span>{{ item.ac }}</span>
+              <!-- 消息内容 -->
+              <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
+                <div class="message" v-for="(msg, index) in messages" :key="index">
+                  <div class="title">{{ msg.title }}</div>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div class="detail">
+                      <span>{{ msg.content }}</span>
+                    </div>
+                    <div class="time">
+                      <span>{{ new Date(msg.createTime) | timeAgo }}</span>
                     </div>
                   </div>
-                  <div class="reason" style="font-size:12.5px">
-                    <span>变更原因：{{ item.reason }}</span>
-                  </div>
-                  <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
-                    <span>审核人: {{ item.auditorname }}</span>
-                  </div>
-                  <div style="padding-top:15px;font-size:12.5px">
-                    时间: {{ item.create_time }}
-                  </div>
                 </div>
-              </el-carousel-item>
-            </el-carousel>
-          </el-card>
-        </el-col>
-      </el-row>
+              </div>
+              <template v-else>
+                <div style="height:200px;text-align:center;padding-top:50px;">
+                  <svg-icon icon-class="null" style="font-size:32px" />
+                </div>
+              </template>
+            </el-card>
+          </el-col>
+          <el-col :xs="24" :sm="8" :lg="8">
+            <!-- 快捷导航 -->
+            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+              <div slot="header" class="clearfix">
+                <span>快捷导航</span>
+              </div>
+              <div class="shortcut">
+                <div class="item">
+                  <router-link to="/performance/perfAudit">
+                    <el-button plain class="btn">绩效审核</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/performance/performance_dc">
+                    <el-button plain class="btn">绩效汇总</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/performance/performance_ac">
+                    <el-button plain class="btn">AC汇总</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/project/index">
+                    <el-button plain class="btn">迭代管理</el-button>
+                  </router-link>
+                </div>
+
+                <div class="item">
+                  <router-link to="/paper/index">
+                    <el-button plain class="btn">论文管理</el-button>
+                  </router-link>
+                </div>
+              </div>
+            </el-card>
+
+            <!-- AC变动公告 -->
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clearfix">
+                <span>AC变动公告</span>
+                <!-- <el-button style="float: right; padding:0" type="text">查看详情</el-button> -->
+              </div>
+              <el-carousel indicator-position="none" trigger="click" height="150px">
+                <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
+                  <div class="ac-card">
+                    <div class="ac-head">
+                      <el-avatar :size="35" class="avatar">{{
+                        item.username
+                      }}</el-avatar>
+                      <div class="title">
+                        <span>{{ item.username }} AC值</span>
+                        <span v-if="item.ac > 0"> + </span>
+                        <span>{{ item.ac }}</span>
+                      </div>
+                    </div>
+                    <div class="reason" style="font-size:12.5px">
+                      <span>变更原因：{{ item.reason }}</span>
+                    </div>
+                    <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
+                      <span>审核人: {{ item.auditorname }}</span>
+                    </div>
+                    <div style="padding-top:15px;font-size:12.5px">
+                      时间: {{ item.create_time }}
+                    </div>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
@@ -257,27 +322,6 @@ export default {
   }
   .dc {
     text-align: center;
-  }
-}
-
-.head {
-  width: 25%;
-  .title {
-    padding: 6px 0px;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
-  }
-  .content {
-    font-size: 25px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.85);
-  }
-  .rank {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: #d2d6de 0.5px solid;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 12px;
   }
 }
 

@@ -1,22 +1,17 @@
 <template>
   <div class="navbar">
-    <template v-if="device === 'mobile'">
-      <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <div class="navbar_wrap">
+      <template v-if="device === 'mobile'">
+        <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    </template>
-    <template v-else>
-      <topbar class="breadcrumb-container" />
-    </template>
+        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+      </template>
+      <template v-else>
+        <topbar class="breadcrumb-container" />
+      </template>
 
-    <div class="right-menu">
-      <!-- <template v-if="device !== 'mobile'">
-        <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template> -->
-
-      <!-- <el-dropdown class="right-menu-item ">
+      <div class="right-menu">
+        <!-- <el-dropdown class="right-menu-item ">
         <span class=" el-dropdown-link" style="color:#409EFF">
           <i class="el-icon-circle-plus el-icon--right"></i>
         </span>
@@ -27,22 +22,23 @@
         </el-dropdown-menu>
       </el-dropdown> -->
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
-            {{ name }}
-          </el-avatar>
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/index">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-          </router-link>
-          <router-link to="/">
-            <el-dropdown-item>首页</el-dropdown-item>
-          </router-link>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+          <div class="avatar-wrapper">
+            <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
+              {{ name }}
+            </el-avatar>
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <router-link to="/profile/index">
+              <el-dropdown-item>个人中心</el-dropdown-item>
+            </router-link>
+            <router-link to="/">
+              <el-dropdown-item>首页</el-dropdown-item>
+            </router-link>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -87,7 +83,12 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  .navbar_wrap {
+    max-width: 1072px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   .hamburger-container {
     line-height: 50px;

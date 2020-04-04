@@ -9,6 +9,7 @@ export function addPaper(data) {
   });
 }
 
+// 分页查询论文
 export function listPaper(page) {
   return axios({
     url: "/paper/page/" + page,
@@ -24,6 +25,7 @@ export function getPaper(id) {
   });
 }
 
+// 创建投票
 export function createVote(data) {
   return axios({
     url: "/vote",
@@ -32,6 +34,7 @@ export function createVote(data) {
   });
 }
 
+// 查询投票详情
 export function getVoteDetail(pid) {
   return axios({
     url: "/vote/" + pid + "/detail",

@@ -10,7 +10,11 @@
         <h1>Welcome</h1>
       </el-col>
       <el-col :span="24">
-        <div class="grid-content" v-loading="loading" element-loading-text="登录中"></div>
+        <div
+          class="grid-content"
+          v-loading="loading"
+          element-loading-text="登录中"
+        ></div>
       </el-col>
     </el-row>
   </div>
@@ -23,10 +27,10 @@ export default {
   data: () => ({
     loading: true,
     code: {
-      authcode: null
+      authcode: null,
     },
     redirect: undefined,
-    otherQuery: {}
+    otherQuery: {},
   }),
   watch: {
     $route: {
@@ -37,36 +41,36 @@ export default {
           this.otherQuery = this.getOtherQuery(query);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     //配置测试状态无需钉钉登陆;
-    // this.$store
-    //   .dispatch("user/test_login", 1)
-    //   .then(res => {
-    //     this.$router.push({
-    //       path: this.redirect || "/",
-    //       query: this.otherQuery
-    //     });
-    //     Message.success("测试状态，跳过钉钉登陆");
-    //     console.log(res);
-    //   })
-    //   .catch(() => {
-    //     this.loading = false;
-    //     Message.error("登录失败");
-    //   });
+    this.$store
+      .dispatch("user/test_login", 5)
+      .then((res) => {
+        this.$router.push({
+          path: this.redirect || "/",
+          query: this.otherQuery,
+        });
+        Message.success("测试状态，跳过钉钉登陆");
+        console.log(res);
+      })
+      .catch(() => {
+        this.loading = false;
+        Message.error("登录失败");
+      });
 
     // 获取钉钉临时授权码
     getAuthCode(process.env.VUE_APP_CORPID)
-      .then(res => {
+      .then((res) => {
         this.code.authcode = res.code; // 获取authcode
         this.$store
           .dispatch("user/_login", this.code)
           .then(() => {
             this.$router.push({
               path: this.redirect || "/",
-              query: this.otherQuery
+              query: this.otherQuery,
             });
           })
           .catch(() => {
@@ -79,7 +83,7 @@ export default {
           showClose: true,
           message: "dingtalk API 只在钉钉容器中生效,请在工作台打开",
           type: "error",
-          duration: "5000"
+          duration: "5000",
         });
       });
   },
@@ -91,8 +95,8 @@ export default {
         }
         return acc;
       }, {});
-    }
-  }
+    },
+  },
 };
 </script>
 

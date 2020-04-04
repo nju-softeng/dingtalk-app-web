@@ -4,7 +4,7 @@ import axios from "@/utils/request";
 export function getUserList() {
   return axios({
     url: "/userlist",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -14,7 +14,15 @@ export function authenticate(url) {
     url: "/jsapi_signature",
     method: "post",
     data: {
-      url: url
-    }
+      url: url,
+    },
+  });
+}
+
+// 从一言 API 获取句子
+export function getYiYan() {
+  return axios({
+    url: "https://v1.hitokoto.cn/?c=k&c=f&c=i&encode=json",
+    method: "get",
   });
 }

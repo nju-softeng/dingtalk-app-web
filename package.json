@@ -13,7 +13,6 @@
     "core-js": "^3.4.4",
     "dingtalk-jsapi": "^2.9.10",
     "element-ui": "^2.13.0",
-    "identicon.js": "^2.3.3",
     "nprogress": "^0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "^2.6.10",

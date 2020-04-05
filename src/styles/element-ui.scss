@@ -148,3 +148,7 @@
 .el-avatar {
   background: #409eff;
 }
+
+.el-table::before {
+  height: 0px;
+}

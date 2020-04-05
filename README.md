@@ -3,6 +3,9 @@
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
 
+###### 2020.04.05
+更新ui，确定ui风格
+
 ###### 2020.04.02
 使用 Github Actions 持续集成服务 [参考](https://segmentfault.com/a/1190000021914414)
 

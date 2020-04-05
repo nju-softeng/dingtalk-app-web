@@ -16,18 +16,18 @@ export default {
   data() {
     return {
       unfinish: true,
-      activeTab: "myIteration",
+      activeTab: "myIteration"
     };
   },
   components: {
     myIteration: () => import("../components/myIteration"),
     userbug: () => import("../components/userbug"),
-    devlist: () => import("../components/devlist"),
+    devlist: () => import("../components/devlist")
   },
   created() {
     this.activeTab = this.$route.query.tab || "myIteration";
   },
-  methods: {},
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -48,6 +48,6 @@ export default {
   margin-right: auto;
   background: #fff;
   padding: 5px 20px;
-  min-height: 89vh;
+  min-height: 87vh;
 }
 </style>

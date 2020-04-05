@@ -17,7 +17,7 @@
             <div v-for="(item, index) in report" :key="index" class="item">
               <h6>{{ item.key }}</h6>
               <p style="white-space: pre-line; font-size:14px">
-                {{ item.value }}
+                <span v-html="formathtml(item.value)"></span>
               </p>
             </div>
             <div v-if="report == null" class="center">
@@ -209,6 +209,9 @@ export default {
     }
   },
   methods: {
+    formathtml(str) {
+      return str.replace(/\r\n\r\n/g, "<br/>");
+    },
     valChange() {
       this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
     },

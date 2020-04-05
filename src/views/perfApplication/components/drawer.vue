@@ -1,6 +1,6 @@
 <template>
   <div class="apply">
-    <el-drawer :direction="direction" :visible.sync="visible" @close="$emit('update:show', false)" @closed="emptyForm" size="380px">
+    <el-drawer :direction="direction" :modal="false" :visible.sync="visible" @close="$emit('update:show', false)" @closed="emptyForm" size="380px">
       <div slot="title" style="font-size:14px">{{ title }}</div>
 
       <div class="drawer-content">

@@ -22,7 +22,7 @@ export function authenticate(url) {
 // 从一言 API 获取句子
 export function getYiYan() {
   return axios({
-    url: "https://v1.hitokoto.cn/?c=k&c=f&c=i&encode=json",
+    url: "https://v1.hitokoto.cn/?c=k&c=i&encode=json",
     method: "get",
   });
 }

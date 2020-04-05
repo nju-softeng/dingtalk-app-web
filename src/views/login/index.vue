@@ -41,21 +41,21 @@ export default {
     }
   },
   created() {
-    //配置测试状态无需钉钉登陆;
-    // this.$store
-    //   .dispatch("user/test_login", 1)
-    //   .then(res => {
-    //     this.$router.push({
-    //       path: this.redirect || "/",
-    //       query: this.otherQuery
-    //     });
-    //     Message.success("测试状态，跳过钉钉登陆");
-    //     console.log(res);
-    //   })
-    //   .catch(() => {
-    //     this.loading = false;
-    //     Message.error("登录失败");
-    //   });
+    // 配置测试状态无需钉钉登陆;
+    this.$store
+      .dispatch("user/test_login", 1)
+      .then(res => {
+        this.$router.push({
+          path: this.redirect || "/",
+          query: this.otherQuery
+        });
+        Message.success("测试状态，跳过钉钉登陆");
+        console.log(res);
+      })
+      .catch(() => {
+        this.loading = false;
+        Message.error("登录失败");
+      });
 
     // 获取钉钉临时授权码
     getAuthCode(process.env.VUE_APP_CORPID)

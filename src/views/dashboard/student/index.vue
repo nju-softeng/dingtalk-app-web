@@ -329,6 +329,9 @@ export default {
   .hiden-xs {
     display: none !important;
   }
+  .hello-text {
+    padding-top: 0px !important;
+  }
 }
 
 @media only screen and (min-width: 768px) {

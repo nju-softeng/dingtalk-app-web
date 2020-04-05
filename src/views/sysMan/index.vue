@@ -1,14 +1,29 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="left">
-        <el-tab-pane label="用户管理">
-          <user-man />
-        </el-tab-pane>
-        <el-tab-pane label="配置管理">
-          <conf-man />
-        </el-tab-pane>
-      </el-tabs>
+      <el-row>
+        <el-col :span="5">
+          <div>
+            <el-menu default-active="2" class="menu" @select="handleSelect">
+              <el-submenu index="1">
+                <template slot="title">
+                  <i class="el-icon-location"></i>
+                  <span>用户管理</span>
+                </template>
+                <el-menu-item index="1-1">选项1</el-menu-item>
+                <el-menu-item index="1-2">选项2</el-menu-item>
+              </el-submenu>
+              <el-menu-item index="2">
+                <i class="el-icon-menu"></i>
+                <span slot="title">参数设置</span>
+              </el-menu-item>
+            </el-menu>
+          </div>
+        </el-col>
+        <el-col>
+          <component v-bind:is="userMan"></component>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -31,22 +46,30 @@ export default {
     userMan: () => import("./components/userMan"),
     confMan: () => import("./components/confMan")
   },
-  created() {
-    // init the default selected tab
-    const tab = this.$route.query.tab;
-    if (tab) {
-      this.activeName = tab;
-    }
-  },
+  created() {},
   methods: {
-    showCreatedTimes() {
-      this.createdTimes = this.createdTimes + 1;
+    handleSelect(val) {
+      console.log(val);
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.menu {
+  width: 190px;
+  min-height: 400px;
+  /deep/ .el-submenu .el-menu-item,
+  .el-submenu__title {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 45px;
+    min-width: 190px;
+  }
+}
+
+// .box
+
 .app-container {
   padding: 12px;
   background-color: #f5f5f5;
@@ -60,7 +83,7 @@ export default {
   margin-right: auto;
   background: #fff;
   padding-top: 16px;
-  padding-left: 10px;
+  padding-left: 0px;
   padding-right: 20px;
   min-height: 89vh;
 }

@@ -11,9 +11,9 @@
       <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
         未设置
       </el-tag>
-      <div style="float:right;color:#8c8c8c;font-size:14px;margin-right:16px">
+      <!-- <div style="float:right;color:#8c8c8c;font-size:14px;margin-right:16px">
         系统可用人数：{{ total }}
-      </div>
+      </div> -->
     </div>
     <el-divider></el-divider>
     <div class="filtrate">

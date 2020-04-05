@@ -2,26 +2,26 @@
   <div class="app-container">
     <div class="box">
       <el-row>
-        <el-col :span="5">
+        <el-col :span="4">
           <div>
-            <el-menu default-active="2" class="menu" @select="handleSelect">
-              <el-submenu index="1">
+            <el-menu default-active="userMan" class="menu" @select="handleSelect">
+              <el-submenu>
                 <template slot="title">
                   <i class="el-icon-location"></i>
                   <span>用户管理</span>
                 </template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
+                <el-menu-item index="userMan">所有用户</el-menu-item>
+                <!-- <el-menu-item index="userMan">选项2</el-menu-item> -->
               </el-submenu>
-              <el-menu-item index="2">
+              <el-menu-item index="confMan">
                 <i class="el-icon-menu"></i>
                 <span slot="title">参数设置</span>
               </el-menu-item>
             </el-menu>
           </div>
         </el-col>
-        <el-col>
-          <component v-bind:is="userMan"></component>
+        <el-col :span="20">
+          <component v-bind:is="activeName"></component>
         </el-col>
       </el-row>
     </div>
@@ -33,15 +33,10 @@ export default {
   name: "Tab",
   data() {
     return {
-      activeName: "CN",
-      createdTimes: 0
+      activeName: "userMan"
     };
   },
-  watch: {
-    activeName(val) {
-      this.$router.push(`${this.$route.path}?tab=${val}`);
-    }
-  },
+
   components: {
     userMan: () => import("./components/userMan"),
     confMan: () => import("./components/confMan")
@@ -49,7 +44,7 @@ export default {
   created() {},
   methods: {
     handleSelect(val) {
-      console.log(val);
+      this.activeName = val;
     }
   }
 };
@@ -57,14 +52,16 @@ export default {
 
 <style lang="scss" scoped>
 .menu {
-  width: 190px;
+  width: 165px;
   min-height: 400px;
   /deep/ .el-submenu .el-menu-item,
   .el-submenu__title {
-    height: 40px;
-    line-height: 40px;
-    padding: 0 45px;
-    min-width: 190px;
+    min-width: 165px;
+  }
+  /deep/ .el-menu-item,
+  .el-submenu__title {
+    height: 50px;
+    line-height: 50px;
   }
 }
 
@@ -78,7 +75,7 @@ export default {
 }
 
 .box {
-  max-width: 1056px;
+  max-width: 1072px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;

@@ -37,3 +37,4 @@ jobs:
           rm -r dist
           npm run build
           sudo service nginx reload
+          exit

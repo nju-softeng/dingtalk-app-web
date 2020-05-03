@@ -5,7 +5,7 @@ export function fetchReport(uid, date) {
   return axios({
     url: "/audit/report/" + uid,
     method: "post",
-    data: { date: date }
+    data: { date: date },
   });
 }
 
@@ -14,7 +14,7 @@ export function submitAudit(data) {
   return axios({
     url: "/audit",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -22,7 +22,7 @@ export function submitAudit(data) {
 export function getChecked(page) {
   return axios({
     url: "/audit/checked/page/" + page,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -32,16 +32,16 @@ export function getCheckedByDate(date) {
     url: "/audit/checked/date",
     method: "post",
     data: {
-      date: date
-    }
+      date: date,
+    },
   });
 }
 
-// 审核人获取已经审核的申请记录
+// 审核人获取待审核的申请记录
 export function getToChecked() {
   return axios({
     url: "/audit/pending",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -49,6 +49,6 @@ export function getToChecked() {
 export function getUnCheckCnt() {
   return axios({
     url: "/audit/uncheckcnt",
-    method: "get"
+    method: "get",
   });
 }

@@ -202,10 +202,10 @@
             </el-input>
           </el-form-item>
         </el-form>
-        <div>
+        <!-- <div>
           {{ bugform }}
           <el-divider></el-divider>
-        </div>
+        </div> -->
       </div>
 
       <div slot="footer" class="dialog-footer">

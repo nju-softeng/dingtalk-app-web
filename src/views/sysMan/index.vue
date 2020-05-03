@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="box">
       <el-row>
-        <el-col :span="4">
+        <el-col :sm="5" :md="4" :lg="4">
           <div>
             <el-menu default-active="userMan" class="menu" @select="handleSelect">
               <el-submenu>
@@ -20,8 +20,10 @@
             </el-menu>
           </div>
         </el-col>
-        <el-col :span="20">
-          <component v-bind:is="activeName"></component>
+        <el-col :sm="19" :md="20" :lg="20">
+          <div>
+            <component v-bind:is="activeName"></component>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -64,8 +66,6 @@ export default {
     line-height: 50px;
   }
 }
-
-// .box
 
 .app-container {
   padding: 12px;

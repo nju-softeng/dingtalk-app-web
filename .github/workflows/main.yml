@@ -1,0 +1,47 @@
+# 一个workflow，名为 Auto-deployment
+name: Auto-deployment
+
+# 此CI/CD触发时的事件
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# 一个 CI/CD 的工作流有许多 jobs 组成，比如最典型的 job 是 lint，test，build。
+jobs:
+  # Job的名称是 "build"
+  build:
+    # 跑workflow的服务器系统
+    runs-on: ubuntu-latest
+    # job的一系列动作
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: check out master
+      uses: actions/checkout@master
+    
+    # 安装使用 node 环境
+    - name: use node.js 10
+      uses: actions/setup-node@v1
+      with:
+          node-version: 10
+      
+    # 运行命令 npm install && npm run build
+    - name: npm install and build
+      run: |
+        npm install
+        npm run build
+
+    # 部署到云服务器
+    - name: deploy to server
+      uses: easingthemes/ssh-deploy@v2.0.7
+      env:
+        REMOTE_HOST: ${{ secrets.HOST }}
+        SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+        REMOTE_USER: ${{ secrets.USERNAME }}
+        # 复制操作的参数。"-avzr --delete"意味部署时清空服务器目标目录下的文件
+        ARGS: "-avzr --delete" 
+        # 源目录，相对于$GITHUB_WORKSPACE根目录的路径
+        SOURCE: "dist/"   
+        # 目标目录
+        TARGET: "~/dingtalk-vue" 

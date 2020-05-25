@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="box">
+    <div class="content">
       <!-- 页首 -->
       <el-page-header @back="goBack">
         <span slot="title" style="font-size:12.5px">
@@ -384,7 +384,7 @@ export default {
   min-height: 92vh;
 }
 
-.box {
+.content {
   max-width: 1056px;
   margin-left: auto;
   margin-right: auto;

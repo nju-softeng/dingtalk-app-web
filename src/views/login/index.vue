@@ -57,33 +57,33 @@ export default {
           this.loading = false;
           Message.error("登录失败");
         });
-    }
-
-    // 获取钉钉临时授权码
-    getAuthCode(process.env.VUE_APP_CORPID)
-      .then(res => {
-        this.code.authcode = res.code; // 获取authcode
-        this.$store
-          .dispatch("user/_login", this.code)
-          .then(() => {
-            this.$router.push({
-              path: this.redirect || "/",
-              query: this.otherQuery
+    } else {
+      // 获取钉钉临时授权码
+      getAuthCode(process.env.VUE_APP_CORPID)
+        .then(res => {
+          this.code.authcode = res.code; // 获取authcode
+          this.$store
+            .dispatch("user/_login", this.code)
+            .then(() => {
+              this.$router.push({
+                path: this.redirect || "/",
+                query: this.otherQuery
+              });
+            })
+            .catch(() => {
+              this.loading = false;
+              Message.error("登录失败");
             });
-          })
-          .catch(() => {
-            this.loading = false;
-            Message.error("登录失败");
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            message: "dingtalk API 只在钉钉容器中生效,请在工作台打开???",
+            type: "error",
+            duration: "5000"
           });
-      })
-      .catch(() => {
-        this.$message({
-          showClose: true,
-          message: "dingtalk API 只在钉钉容器中生效,请在工作台打开",
-          type: "error",
-          duration: "5000"
         });
-      });
+    }
   },
   methods: {
     getOtherQuery(query) {

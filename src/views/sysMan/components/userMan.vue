@@ -88,7 +88,8 @@
   </div>
 </template>
 <script>
-import { queryUser, updateUserRole, fetchAllUser } from "@/api/user";
+import { updateUserRole } from "@/api/user";
+import { queryUser, fetchAllUser } from "@/api/system";
 import { listAuditors } from "@/api/user";
 export default {
   data() {

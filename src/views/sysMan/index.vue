@@ -1,27 +1,24 @@
 <template>
   <div class="app-container">
-    <div class="box">
-      <el-container>
-        <el-aside width="175px" style="background-color:#fff; padding:0px">
-          <el-menu default-active="userMan" class="menu" @select="handleSelect">
-            <el-menu-item index="userMan">
-              <i class="el-icon-location"></i>
-              <span slot="title">用户管理</span>
-            </el-menu-item>
+    <el-container class="box">
+      <el-aside width="180px" style="background-color:#fff; padding:0px">
+        <el-menu default-active="userMan" class="menu" @select="handleSelect">
+          <el-menu-item index="userMan">
+            <i class="el-icon-user"></i>
+            <span slot="title">用户管理</span>
+          </el-menu-item>
 
-            <el-menu-item index="confMan">
-              <i class="el-icon-menu"></i>
-              <span slot="title">参数设置</span>
-            </el-menu-item>
-          </el-menu>
-        </el-aside>
-        <el-main style="padding-top:0px">
-          <div>
-            <component v-bind:is="activeName"></component>
-          </div>
-        </el-main>
-      </el-container>
-    </div>
+          <el-menu-item index="confMan">
+            <i class="el-icon-menu"></i>
+            <span slot="title">参数设置</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+
+      <el-main style="padding-top:0px">
+        <component v-bind:is="activeName"></component>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -49,14 +46,14 @@ export default {
 
 <style lang="scss" scoped>
 .menu {
-  width: 175px;
+  width: 180px;
   min-height: 400px;
   /deep/ .el-menu {
     border-right: 1px solid #f0f0f0;
   }
   /deep/ .el-submenu .el-menu-item,
   .el-submenu__title {
-    min-width: 175px;
+    min-width: 180px;
   }
   /deep/ .el-menu-item,
   .el-submenu__title {

@@ -357,11 +357,6 @@ export default {
   min-height: 92vh;
   background-color: #fafafa;
 
-  /deep/ .el-card__header {
-    padding: 12px 20px;
-    font-size: 14px;
-  }
-
   /deep/ .el-card__body {
     padding: 5px 20px 5px;
     font-size: 14px;

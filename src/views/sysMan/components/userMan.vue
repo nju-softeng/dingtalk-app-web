@@ -102,7 +102,7 @@ export default {
         position: ""
       },
       page: null,
-      options: ["本科生", "硕士生", "博士生", "其他"]
+      options: ["本科生", "硕士生", "博士生", "待定"]
     };
   },
   created() {

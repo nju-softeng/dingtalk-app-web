@@ -16,3 +16,20 @@ export function fetchAllUser() {
     method: "get"
   });
 }
+
+// 查询所有绩效标准
+export function listSubsidy() {
+  return axios({
+    url: "/system/subsidy",
+    method: "get"
+  });
+}
+
+// 更新绩效标准
+export function updateSubsidy(data) {
+  return axios({
+    url: "/system/subsidy",
+    method: "post",
+    data
+  });
+}

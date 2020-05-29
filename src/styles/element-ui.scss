@@ -94,7 +94,7 @@
   margin-bottom: 5px;
 }
 
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
   background-color: white;
   color: #597ef7;
   border-color: #597ef7;
@@ -112,13 +112,16 @@
 
 .el-drawer__header {
   margin-bottom: 22px;
-  > button:focus {
+
+  >button:focus {
     outline-color: white;
   }
-  > button:hover {
+
+  >button:hover {
     outline-color: white;
   }
-  > span:focus {
+
+  >span:focus {
     outline-color: white;
   }
 }
@@ -127,12 +130,12 @@
   overflow-y: auto;
 }
 
-.el-menu--horizontal > .el-menu-item {
+.el-menu--horizontal>.el-menu-item {
   height: 50px;
   line-height: 50px;
 }
 
-.el-menu--horizontal > .el-menu-item.is-active {
+.el-menu--horizontal>.el-menu-item.is-active {
   border-bottom: 2px solid #409eff !important;
 }
 
@@ -151,4 +154,9 @@
 
 .el-table::before {
   height: 0px;
+}
+
+.el-card__header {
+  padding: 12px 20px;
+  font-size: 14px;
 }

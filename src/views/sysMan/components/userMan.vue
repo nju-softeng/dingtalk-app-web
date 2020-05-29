@@ -166,6 +166,7 @@ export default {
       };
       this.fetchUserList(0);
     },
+    // 拉取用户信息
     refreshUser() {
       fetchAllUser().then(() => {
         this.$message({

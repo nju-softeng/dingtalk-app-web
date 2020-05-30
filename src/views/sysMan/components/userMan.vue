@@ -53,11 +53,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="role" align="center" label="权限">
-          <template slot-scope="scope"> </template>
+          <template slot-scope="{ row }">
+            <el-tag v-if="row.authority == 0" type="info">普通用户</el-tag>
+            <el-tag v-else type="success">评审人</el-tag>
+          </template>
         </el-table-column>
         <el-table-column width="200px" align="center" label="操作">
           <template slot-scope="scope">
-            <el-button type="text">编辑</el-button>
+            <el-button type="text" style="padding-right:8px">编辑</el-button>
             <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="scope.row.visible">
               <div style="text-align: right; margin: 0">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>

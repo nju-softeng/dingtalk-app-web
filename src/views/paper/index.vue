@@ -191,7 +191,7 @@
               <el-form-item prop="level">
                 <span slot="label">
                   <svg-icon icon-class="grade" /> 论文分类</span>
-                <el-select style="width:193px" v-model="paperform.level" placeholder="请选择">
+                <el-select style="width:193px" v-model="paperform.paperType" placeholder="请选择">
                   <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -259,7 +259,7 @@ export default {
         id: null,
         title: null,
         journal: null,
-        level: null,
+        paperType: null,
         issueDate: null,
         paperDetails: [
           {
@@ -276,27 +276,27 @@ export default {
       },
       options: [
         {
-          value: 1,
+          value: "JOURNAL_A",
           label: "Journal A"
         },
         {
-          value: 2,
+          value: "CONFERENCE_A",
           label: "Conference A"
         },
         {
-          value: 3,
+          value: "JOURNAL_B",
           label: "Journal B"
         },
         {
-          value: 4,
+          value: "CONFERENCE_B",
           label: "Conference B"
         },
         {
-          value: 5,
+          value: "JOURNAL_C",
           label: "Journal C"
         },
         {
-          value: 6,
+          value: "CONFERENCE_C",
           label: "Conference C"
         }
       ],
@@ -311,7 +311,7 @@ export default {
       },
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
-        level: [
+        paperType: [
           { required: true, message: "请选择论文分类", trigger: "change" }
         ]
       }

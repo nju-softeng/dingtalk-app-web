@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <el-card class="box-card" style="width:50%">
+  <div style="display:flex">
+    <el-card class="box-card" style="width:50%; height: 260px;margin-right:5px" shadow="never">
       <div slot="header">
-        <span>绩效标准</span>
+        <span>津贴标准</span>
         <el-button v-if="flag1" @click="flag1 = false" style="float: right; padding: 3px 0" type="text">编辑</el-button>
         <el-button v-else @click="
             flag1 = true;
@@ -10,46 +10,91 @@
           " style="float: right; padding: 3px 0" type="text">保存</el-button>
       </div>
 
-      <el-table :data="subsidylist" style="width: 100%">
+      <el-table :data="subsidylist" :row-style="{ height: '41px' }">
         <el-table-column label="在读学位" prop="position"></el-table-column>
-        <el-table-column label="绩效标准" align="center">
+        <el-table-column label="津贴标准" align="center">
           <template slot-scope="{ row }">
-            <span v-if="flag1"> {{ row.subsidy }} </span>
+            <span v-if="flag1"> {{ row.subsidy }} 元</span>
             <el-input v-else v-model="row.subsidy" />
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-    <!-- <el-divider><span>绩效标准</span></el-divider> -->
+
+    <el-card class="box-card" style="width:50%; height: 450px;" shadow="never">
+      <div slot="header">
+        <span>论文AC标准</span>
+        <el-button v-if="flag2" @click="flag2 = false" style="float: right; padding: 3px 0" type="text">编辑</el-button>
+        <el-button v-else @click="
+            flag2 = true;
+            modfiyPaperLevel();
+          " style="float: right; padding: 3px 0" type="text">保存</el-button>
+      </div>
+
+      <el-table :data="paperlevels" :row-style="{ height: '41px' }">
+        <el-table-column label="论文类别" prop="title"></el-table-column>
+        <el-table-column label="总AC标准" align="center">
+          <template slot-scope="{ row }">
+            <span v-if="flag2"> {{ row.total }} </span>
+            <el-input v-else v-model="row.total" />
+          </template>
+        </el-table-column>
+      </el-table>
+      <p style="color:#434343">
+        <i class="el-icon-warning"> </i>
+        AC分配规则
+        <ul style="padding-left:16px;padding-top:0px">
+          <li>1st author : 50%</li>
+          <li>2nd author : 25%</li>
+          <li>3rd author : 15%</li>
+          <li>other share : 10%</li>
+        </ul>
+      </p>
+    </el-card>
   </div>
 </template>
 <script>
-import { listSubsidy, updateSubsidy } from "@/api/system";
+import {
+  listSubsidy,
+  updateSubsidy,
+  listPaperLevel,
+  updatePaperLevel
+} from "@/api/system";
 export default {
   data() {
     return {
       flag1: true,
-      subsidylist: []
+      flag2: true,
+      subsidylist: [],
+      paperlevels: []
     };
   },
   created() {
-    this.fetchSubsidy();
+    listSubsidy().then(res => {
+      this.subsidylist = res.data;
+    });
+    listPaperLevel().then(res => {
+      this.paperlevels = res.data;
+    });
   },
   methods: {
-    // 获取所有绩效标准
-    fetchSubsidy() {
-      listSubsidy().then(res => {
-        console.log(res);
-        this.subsidylist = res.data;
-      });
-    },
-
     //更新绩效标准
     modifySubsidy() {
       updateSubsidy(this.subsidylist).then(() => {
         this.$notify({
           title: "成功",
           message: "绩效标准保存成功",
+          position: "bottom-right",
+          type: "success"
+        });
+      });
+    },
+    // 更新论文AC标准
+    modfiyPaperLevel() {
+      updatePaperLevel(this.paperlevels).then(() => {
+        this.$notify({
+          title: "成功",
+          message: "论文标准保存成功",
           position: "bottom-right",
           type: "success"
         });
@@ -64,5 +109,8 @@ export default {
     padding: 5px 20px 10px;
     font-size: 14px;
   }
+}
+li {
+  padding-bottom: 2px;
 }
 </style>

@@ -33,3 +33,20 @@ export function updateSubsidy(data) {
     data
   });
 }
+
+// 查询所有的论文AC标准
+export function listPaperLevel() {
+  return axios({
+    url: "/system/paperlevel",
+    method: "get"
+  });
+}
+
+// 更新论文绩效标准
+export function updatePaperLevel(data) {
+  return axios({
+    url: "/system/paperlevel",
+    method: "post",
+    data
+  });
+}

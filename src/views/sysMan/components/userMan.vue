@@ -35,14 +35,15 @@
 
     <div>
       <el-table :data="list" style="margin-top:10px;">
-        <el-table-column label="姓名">
+        <el-table-column label="学号" align="center">
           <template slot-scope="scope">
-            <div style="display:flex;padding-left:10px">
-              <el-avatar :size="28" style="background-color: #409eff; font-size:11px">{{ scope.row.name }}</el-avatar>
-              <div style="padding-left:10px;text-align: center;">
-                <span>{{ scope.row.name }}</span>
-              </div>
-            </div>
+            <span v-if="scope.row.stuNum == undefined">未设置</span>
+            <span>{{ scope.row.stuNum }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="姓名" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="在读学位">
@@ -51,14 +52,12 @@
             <span v-if="scope.row.position == undefined">未设置</span>
           </template>
         </el-table-column>
-        <el-table-column prop="role" align="center" label="角色">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.authority" active-text="审核权限" @change="modRole(scope.row)" :active-value="1" :inactive-value="0">
-            </el-switch>
-          </template>
+        <el-table-column prop="role" align="center" label="权限">
+          <template slot-scope="scope"> </template>
         </el-table-column>
         <el-table-column width="200px" align="center" label="操作">
           <template slot-scope="scope">
+            <el-button type="text">编辑</el-button>
             <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="scope.row.visible">
               <div style="text-align: right; margin: 0">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>

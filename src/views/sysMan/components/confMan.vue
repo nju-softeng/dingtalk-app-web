@@ -14,7 +14,7 @@
         <el-table-column label="在读学位" prop="position"></el-table-column>
         <el-table-column label="津贴标准" align="center">
           <template slot-scope="{ row }">
-            <span v-if="flag1"> {{ row.subsidy }} 元</span>
+            <span v-if="flag1"> {{ row.subsidy }} 元 / 周</span>
             <el-input v-else v-model="row.subsidy" />
           </template>
         </el-table-column>
@@ -111,6 +111,7 @@ export default {
   }
 }
 li {
-  padding-bottom: 2px;
+  padding-bottom: 4px;
+  font-size: 12px;
 }
 </style>

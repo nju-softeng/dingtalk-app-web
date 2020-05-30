@@ -31,17 +31,14 @@ Router.prototype.push = function push(location) {
  */
 
 //所有权限通用路由表: 如首页和登录页和一些不用权限的公用页面
-export const constantRoutes = [
-  {
+export const constantRoutes = [{
     path: "/redirect",
     component: Layout,
     hidden: true,
-    children: [
-      {
-        path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect/index")
-      }
-    ]
+    children: [{
+      path: "/redirect/:path(.*)",
+      component: () => import("@/views/redirect/index")
+    }]
   },
   {
     path: "/login",
@@ -57,45 +54,53 @@ export const constantRoutes = [
     path: "/",
     component: Layout,
     redirect: "/dashboard",
-    children: [
-      {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
-        name: "Dashboard",
-        meta: { title: "工作台", icon: "dashboard", affix: true }
+    children: [{
+      path: "dashboard",
+      component: () => import("@/views/dashboard/index"),
+      name: "Dashboard",
+      meta: {
+        title: "工作台",
+        icon: "dashboard",
+        affix: true
       }
-    ]
+    }]
   },
   {
     path: "/profile",
     component: Layout,
     redirect: "/profile/index",
     hidden: true,
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/profile/index"),
-        name: "Profile",
-        meta: { title: "个人中心", icon: "user", noCache: true }
+    children: [{
+      path: "index",
+      component: () => import("@/views/profile/index"),
+      name: "Profile",
+      meta: {
+        title: "个人中心",
+        icon: "user",
+        noCache: true
       }
-    ]
+    }]
   }
 ];
 
 //异步挂载的路由：动态需要根据权限加载的路由表
-export const asyncRoutes = [
-  {
+export const asyncRoutes = [{
     path: "/performance",
     component: Layout,
     redirect: "/performance/perfApplication",
     name: "Performance",
-    meta: { title: "绩效管理", icon: "perf" },
-    children: [
-      {
+    meta: {
+      title: "绩效管理",
+      icon: "perf"
+    },
+    children: [{
         path: "perfApplication",
         name: "PerfApplication",
         component: () => import("@/views/perfApplication/index"),
-        meta: { title: "绩效申请", icon: "apply" }
+        meta: {
+          title: "绩效申请",
+          icon: "apply"
+        }
       },
       {
         path: "perfAudit",
@@ -104,20 +109,26 @@ export const asyncRoutes = [
         meta: {
           title: "绩效审核",
           icon: "audit",
-          roles: ["admin", "doctor"]
+          roles: ["admin", "auditor"]
         }
       },
       {
         path: "performance_dc",
         name: "Performance_dc",
         component: () => import("@/views/performance/dc-index"),
-        meta: { title: "绩效汇总", icon: "gather" }
+        meta: {
+          title: "绩效汇总",
+          icon: "gather"
+        }
       },
       {
         path: "performance_ac",
         name: "Performance_ac",
         component: () => import("@/views/performance/ac-index"),
-        meta: { title: "AC汇总", icon: "rank" }
+        meta: {
+          title: "AC汇总",
+          icon: "rank"
+        }
       }
     ]
   },
@@ -126,9 +137,11 @@ export const asyncRoutes = [
     path: "/project",
     component: Layout,
     name: "Project",
-    meta: { title: "开发管理", icon: "dev" },
-    children: [
-      {
+    meta: {
+      title: "开发管理",
+      icon: "dev"
+    },
+    children: [{
         path: "index",
         name: "Task",
         component: () => import("@/views/project/index"),
@@ -144,7 +157,7 @@ export const asyncRoutes = [
         meta: {
           title: "项目详情",
           icon: "table",
-          roles: ["admin", "doctor", "postgraduate"]
+          roles: ["admin", "auditor", "normal"]
         },
         hidden: true
       }
@@ -153,25 +166,35 @@ export const asyncRoutes = [
   {
     path: "/paper",
     component: Layout,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "Paper",
         component: () => import("@/views/paper/index"),
-        meta: { title: "论文管理", icon: "thesis" }
+        meta: {
+          title: "论文管理",
+          icon: "thesis"
+        }
       },
       {
         path: "detail/:id",
         component: () => import("@/views/paper/detail"),
         name: "Detail",
-        meta: { title: "详细", noCache: true, activeMenu: "/paper/index" },
+        meta: {
+          title: "详细",
+          noCache: true,
+          activeMenu: "/paper/index"
+        },
         hidden: true
       },
       {
         path: "vote/:id",
         component: () => import("@/views/paper/vote"),
         name: "Vote",
-        meta: { title: "投票", noCache: true, activeMenu: "/paper/index" },
+        meta: {
+          title: "投票",
+          noCache: true,
+          activeMenu: "/paper/index"
+        },
         hidden: true
       }
     ]
@@ -180,22 +203,30 @@ export const asyncRoutes = [
     path: "/system",
     component: Layout,
     redirect: "/system",
-    children: [
-      {
-        path: "index",
-        name: "System",
-        component: () => import("@/views/sysMan/index"),
-        meta: { title: "系统设置", icon: "setting", roles: ["admin", "doctor"] }
+    children: [{
+      path: "index",
+      name: "System",
+      component: () => import("@/views/sysMan/index"),
+      meta: {
+        title: "系统设置",
+        icon: "setting",
+        roles: ["admin", "auditor"]
       }
-    ]
+    }]
   },
-  { path: "*", redirect: "/404", hidden: true }
+  {
+    path: "*",
+    redirect: "/404",
+    hidden: true
+  }
 ];
 
 const createRouter = () =>
   new Router({
     mode: "history", // require service support
-    scrollBehavior: () => ({ y: 0 }),
+    scrollBehavior: () => ({
+      y: 0
+    }),
     routes: constantRoutes
   });
 

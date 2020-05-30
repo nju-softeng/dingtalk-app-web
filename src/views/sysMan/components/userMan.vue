@@ -130,6 +130,7 @@ export default {
         console.log(res.data);
         this.list = res.data.content;
         this.total = res.data.total;
+        console.log(this.list);
       });
     },
     modRole(row) {

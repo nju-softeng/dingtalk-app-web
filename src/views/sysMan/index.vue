@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-container class="box">
-      <el-aside width="180px" style="background-color:#fff; padding:0px">
+      <el-aside width="170px" style="background-color:#fff; padding:0px">
         <el-menu default-active="userMan" class="menu" @select="handleSelect">
           <el-menu-item index="userMan">
             <i class="el-icon-user"></i>
@@ -46,14 +46,14 @@ export default {
 
 <style lang="scss" scoped>
 .menu {
-  width: 180px;
+  width: 170px;
   min-height: 400px;
   /deep/ .el-menu {
     border-right: 1px solid #f0f0f0;
   }
   /deep/ .el-submenu .el-menu-item,
   .el-submenu__title {
-    min-width: 180px;
+    min-width: 170px;
   }
   /deep/ .el-menu-item,
   .el-submenu__title {

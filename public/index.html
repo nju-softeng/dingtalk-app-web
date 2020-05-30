@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>dingtalk-vue</title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but dingtalk-vue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="wpk-bid" content="dta_1_675502151">
+  <script>
+    !(function (c, i, e, b) {
+      var h = i.createElement("script");
+      var f = i.getElementsByTagName("script")[0];
+      h.type = "text/javascript";
+      h.crossorigin = true;
+      h.onload = function () {
+        c[b] || (c[b] = new c.wpkReporter({
+          bid: "dta_1_675502151"
+        }));
+        c[b].installAll()
+      };
+      f.parentNode.insertBefore(h, f);
+      h.src = e
+    })(window, document, "https://g.alicdn.com/woodpeckerx/jssdk??wpkReporter.js", "__wpk");
+  </script>
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>dingtalk-vue</title>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but dingtalk-vue doesn't work properly without JavaScript enabled. Please enable it to
+      continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
 </html>

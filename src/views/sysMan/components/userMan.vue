@@ -4,16 +4,13 @@
       <el-tooltip class="item" effect="dark" content="用户进入应用时会自动导入，权限默认为普通用户" placement="right">
         <el-button @click="refreshUser" type="primary">拉取钉钉用户</el-button>
       </el-tooltip>
-      <span style="padding-left:100px;color: #999999; font-size:13px">当前审核人:</span>
+      <span style="padding-left:100px;color: #999999; font-size:13px">当前评审人:</span>
       <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
         {{ item.name }}
       </el-tag>
       <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
         未设置
       </el-tag>
-      <!-- <div style="float:right;color:#8c8c8c;font-size:14px;margin-right:16px">
-        系统可用人数：{{ total }}
-      </div> -->
     </div>
     <el-divider></el-divider>
     <div class="filtrate">
@@ -27,29 +24,25 @@
       <el-button @click="refresh" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
         重置
       </el-button>
-      <!-- <el-radio-group v-model="radio" style="float:right; margin:0 20px" size="mini">
-        <el-radio-button label="可用用户"></el-radio-button>
-        <el-radio-button label="已禁用"></el-radio-button>
-      </el-radio-group> -->
     </div>
 
     <div>
       <el-table :data="list" style="margin-top:10px;">
         <el-table-column label="学号" align="center">
-          <template slot-scope="scope">
-            <span v-if="scope.row.stuNum == undefined">未设置</span>
-            <span>{{ scope.row.stuNum }}</span>
+          <template slot-scope="{ row }">
+            <span v-if="row.stuNum == undefined">未设置</span>
+            <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
         <el-table-column label="姓名" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+          <template slot-scope="{ row }">
+            <span>{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="在读学位">
-          <template slot-scope="scope">
-            {{ scope.row.position }}
-            <span v-if="scope.row.position == undefined">未设置</span>
+          <template slot-scope="{ row }">
+            {{ row.position }}
+            <span v-if="row.position == undefined">未设置</span>
           </template>
         </el-table-column>
         <el-table-column prop="role" align="center" label="权限">
@@ -59,12 +52,13 @@
           </template>
         </el-table-column>
         <el-table-column width="200px" align="center" label="操作">
-          <template slot-scope="scope">
-            <el-button type="text" style="padding-right:8px">编辑</el-button>
-            <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="scope.row.visible">
+          <template slot-scope="{ row }">
+            <el-button type="text" @click="editUserInfo(row)" style="padding-right:8px">编辑</el-button>
+
+            <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="row.visible">
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="scope.row.visible = false">确定</el-button>
+                <el-button size="mini" type="text" @click="row.visible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="row.visible = false">确定</el-button>
               </div>
               <el-button type="text" slot="reference">停用</el-button>
             </el-popover>
@@ -87,24 +81,63 @@
         </el-pagination>
       </div>
     </div>
+
+    <el-dialog title="编辑用户信息" :visible.sync="dialog" width="35%" :lock-scroll="false">
+      <div v-loading="loading">
+        <el-form label-position="left" label-width="70px" :model="userForm" style="padding:0 10px;">
+          <el-form-item label="姓名">
+            <span style="padding-left:5px">{{ userForm.name }}</span>
+          </el-form-item>
+          <el-form-item label="学号">
+            <el-input v-model="userForm.stuNum" style="width:200px" placeholder="请输入学号"></el-input>
+          </el-form-item>
+          <el-form-item label="在读学位">
+            <el-select v-model="userForm.position" style="width:200px" placeholder="请选择">
+              <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="用户权限">
+            <el-select v-model="userForm.authority" style="width:200px" placeholder="请选择">
+              <el-option v-for="(item, index) in authorityList" :key="index" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialog = false">取 消</el-button>
+        <el-button type="primary" @click="submitUserInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { updateUserRole } from "@/api/user";
-import { queryUser, fetchAllUser } from "@/api/system";
+import { queryUser, fetchAllUser, updateUserInfo } from "@/api/system";
 import { listAuditors } from "@/api/user";
 export default {
   data() {
     return {
+      loading: false,
+      userForm: {},
+      dialog: false,
       total: 0,
       auditors: [],
       list: [],
       queryForm: {
+        stuNum: "",
         name: "",
-        position: ""
+        position: "",
+        authority: null
       },
       page: null,
-      options: ["本科生", "硕士生", "博士生", "待定"]
+      options: ["本科生", "硕士生", "博士生", "待定"],
+      authorityList: [
+        { label: "普通用户", value: 0 },
+        { label: "评审人", value: 1 }
+      ]
     };
   },
   created() {
@@ -114,6 +147,25 @@ export default {
     });
   },
   methods: {
+    editUserInfo(data) {
+      this.userForm = data;
+      this.dialog = true;
+    },
+    submitUserInfo() {
+      this.loading = true;
+      updateUserInfo(this.userForm).then(() => {
+        this.loading = false;
+        this.dialog = false;
+        this.fetchUserList(this.page);
+        this.$notify({
+          title: "成功",
+          message: this.userForm.name + " 的信息保存成功",
+          position: "bottom-right",
+          type: "success"
+        });
+      });
+    },
+
     // 分页获取数据
     handleCurrentChange(val) {
       this.fetchUserList(val - 1);
@@ -129,35 +181,10 @@ export default {
         page = 0;
       }
       queryUser(this.queryForm, page).then(res => {
-        console.log(res.data);
         this.list = res.data.content;
         this.total = res.data.total;
         console.log(this.list);
       });
-    },
-    modRole(row) {
-      updateUserRole({
-        uid: row.id,
-        authority: row.authority
-      })
-        .then(() => {
-          listAuditors().then(res => {
-            this.auditors = res.data.auditorlist;
-          });
-          this.$message({
-            showClose: true,
-            message: "审核人设置成功",
-            type: "success"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            showClose: true,
-            message: "设置失败",
-            type: "error"
-          });
-        });
-      console.log(row);
     },
     search() {
       this.fetchUserList(0);

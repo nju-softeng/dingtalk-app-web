@@ -62,7 +62,7 @@ export default {
   }
   /deep/ .el-menu-item.is-active {
     background-color: #e6f7ff;
-    border-right: 2px #409eff solid;
+    border-right: 2.5px #409eff solid;
   }
 }
 

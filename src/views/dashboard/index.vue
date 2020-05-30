@@ -20,7 +20,7 @@ export default {
     ...mapGetters(["roles"])
   },
   created() {
-    if (!this.roles.includes("postgraduate")) {
+    if (!this.roles.includes("normal")) {
       this.currentRole = "auditorDashboard";
     }
   }

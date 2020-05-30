@@ -50,3 +50,12 @@ export function updatePaperLevel(data) {
     data
   });
 }
+
+// 更新论文绩效标准
+export function updateUserInfo(data) {
+  return axios({
+    url: "/system/userinfo",
+    method: "post",
+    data
+  });
+}

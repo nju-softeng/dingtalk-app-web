@@ -188,7 +188,7 @@
                 <el-input v-model="paperform.journal"></el-input>
               </el-form-item>
 
-              <el-form-item prop="level">
+              <el-form-item prop="paperType">
                 <span slot="label">
                   <svg-icon icon-class="grade" /> 论文分类</span>
                 <el-select style="width:193px" v-model="paperform.paperType" placeholder="请选择">
@@ -442,7 +442,7 @@ export default {
       this.paperform.journal = "";
       this.paperform.title = "";
       this.paperform.issueDate = "";
-      this.paperform.level = "";
+      this.paperform.paperType = "";
       this.paperform.paperDetails = [
         {
           num: 1,
@@ -521,7 +521,7 @@ export default {
         this.paperform.id = item.id;
         this.paperform.title = item.title;
         this.paperform.journal = item.journal;
-        this.paperform.level = item.level;
+        this.paperform.paperType = item.paperType;
         this.paperform.issueDate = item.issueDate;
         this.paperform.paperDetails = item.paperDetails;
       } else {

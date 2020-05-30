@@ -13,7 +13,7 @@
             <el-form-item>
               <span slot="label">
                 <svg-icon icon-class="grade" /> 论文分类</span>
-              {{ getlevel(paper.level) }}
+              {{ getlevel(paper.paperType) }}
             </el-form-item>
             <el-form-item>
               <span slot="label">
@@ -105,27 +105,27 @@ export default {
       loading: false,
       level: [
         {
-          value: 1,
+          value: "JOURNAL_A",
           label: "Journal A"
         },
         {
-          value: 2,
+          value: "CONFERENCE_A",
           label: "Conference A"
         },
         {
-          value: 3,
+          value: "JOURNAL_B",
           label: "Journal B"
         },
         {
-          value: 4,
+          value: "CONFERENCE_B",
           label: "Conference B"
         },
         {
-          value: 5,
+          value: "JOURNAL_C",
           label: "Journal C"
         },
         {
-          value: 6,
+          value: "CONFERENCE_C",
           label: "Conference C"
         }
       ],
@@ -181,6 +181,7 @@ export default {
     this.pid = this.$route.params.id;
     getPaper(this.pid).then(res => {
       console.log(res.data);
+      console.log("????");
       this.paper = res.data;
       this.vid = res.data.vote.id;
       this.endtime = res.data.vote.endTime;

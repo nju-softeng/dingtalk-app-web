@@ -58,7 +58,7 @@ export default {
   /deep/ .el-menu-item,
   .el-submenu__title {
     height: 40px;
-    line-height: 34px;
+    line-height: 40px;
   }
   /deep/ .el-menu-item.is-active {
     background-color: #e6f7ff;

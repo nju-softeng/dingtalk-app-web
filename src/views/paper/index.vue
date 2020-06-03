@@ -168,7 +168,7 @@
       </div>
     </el-dialog>
     <!-- 添加评审记录  dialog -->
-    <el-dialog :visible.sync="dialog" top="10vh" @closed="closeDialog" width="75%" center>
+    <el-dialog :visible.sync="dialog" top="10vh" :lock-scroll="false" @closed="closeDialog" width="75%" center>
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
       </div>

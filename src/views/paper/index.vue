@@ -244,6 +244,34 @@ import {
   submitResult,
   rmPaper
 } from "@/api/paper";
+
+const levels = [
+  {
+    value: "JOURNAL_A",
+    label: "Journal A"
+  },
+  {
+    value: "CONFERENCE_A",
+    label: "Conference A"
+  },
+  {
+    value: "JOURNAL_B",
+    label: "Journal B"
+  },
+  {
+    value: "CONFERENCE_B",
+    label: "Conference B"
+  },
+  {
+    value: "JOURNAL_C",
+    label: "Journal C"
+  },
+  {
+    value: "CONFERENCE_C",
+    label: "Conference C"
+  }
+];
+
 export default {
   data() {
     return {
@@ -274,32 +302,7 @@ export default {
         paperid: "",
         endTime: ""
       },
-      options: [
-        {
-          value: "JOURNAL_A",
-          label: "Journal A"
-        },
-        {
-          value: "CONFERENCE_A",
-          label: "Conference A"
-        },
-        {
-          value: "JOURNAL_B",
-          label: "Journal B"
-        },
-        {
-          value: "CONFERENCE_B",
-          label: "Conference B"
-        },
-        {
-          value: "JOURNAL_C",
-          label: "Journal C"
-        },
-        {
-          value: "CONFERENCE_C",
-          label: "Conference C"
-        }
-      ],
+      options: levels,
       list: [],
       loading: false,
       voteDialog: false,
@@ -606,13 +609,13 @@ export default {
 
 .app-container {
   background-color: #f5f5f5;
+  min-height: 95vh;
 }
 
 .box {
   max-width: 1080px;
   margin-left: auto;
   margin-right: auto;
-  min-height: 90vh;
 }
 
 .list {

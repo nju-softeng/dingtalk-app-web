@@ -166,6 +166,7 @@ export const asyncRoutes = [{
   {
     path: "/paper",
     component: Layout,
+    redirect: "/paper/index",
     children: [{
         path: "index",
         name: "Paper",

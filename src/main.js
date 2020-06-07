@@ -13,8 +13,18 @@ import "@/styles/element-variables.scss";
 
 import * as filters from "./filters"; // global filters
 
+import VueMarkdownEditor from "@kangc/v-md-editor";
+import "@kangc/v-md-editor/lib/style/base-editor.css";
+import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
+
+VueMarkdownEditor.use(vuepressTheme);
+
+Vue.use(VueMarkdownEditor);
+
 Vue.config.productionTip = false;
-Vue.use(ElementUI, { size: "mini" });
+Vue.use(ElementUI, {
+  size: "mini"
+});
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

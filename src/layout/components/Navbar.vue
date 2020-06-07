@@ -83,7 +83,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
   .navbar_wrap {
     max-width: 1072px;
     margin-left: auto;

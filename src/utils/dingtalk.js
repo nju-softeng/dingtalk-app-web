@@ -1,4 +1,6 @@
-import { authenticate } from "@/api/common"; // jsapi 鉴权时获取签名信息
+import {
+  authenticate
+} from "@/api/common"; // jsapi 鉴权时获取签名信息
 import * as dd from "dingtalk-jsapi/entry/union"; // 按需应用，微应用部分
 import requestAuthCode from "dingtalk-jsapi/api/runtime/permission/requestAuthCode"; // 登陆用临时授权码
 import choose from "dingtalk-jsapi/api/biz/contact/choose"; // PC 通讯录选人
@@ -52,5 +54,7 @@ export function contactChoose(url, userids) {
 
 // 获取登陆用临时授权码
 export function getAuthCode(corpId) {
-  return requestAuthCode({ corpId: corpId });
+  return requestAuthCode({
+    corpId: corpId
+  });
 }

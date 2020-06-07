@@ -12,7 +12,7 @@
                 <div class="left-content">
                   <div class="title">
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">
-                      <router-link :to="'/paper/detail/' + scope.row.id" class="link-type">
+                      <router-link :to="'/paper/detail/' + scope.row.id + '/review'" class="link-type">
                         <svg-icon icon-class="paper" /> {{ scope.row.title }}
                       </router-link>
                     </el-tooltip>
@@ -52,10 +52,10 @@
                 <el-link v-if="scope.row.vote == undefined" type="primary" @click="newVote(scope.row)">
                   发起投票</el-link>
 
-                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
                   <el-link type="success"> 前往投票</el-link>
                 </router-link>
-                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
                   <el-tag class="paper-tag" type="success" v-if="scope.row.vote.result == true">ACCEPT</el-tag>
                   <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>
                 </router-link>
@@ -244,6 +244,34 @@ import {
   submitResult,
   rmPaper
 } from "@/api/paper";
+
+const levels = [
+  {
+    value: "JOURNAL_A",
+    label: "Journal A"
+  },
+  {
+    value: "CONFERENCE_A",
+    label: "Conference A"
+  },
+  {
+    value: "JOURNAL_B",
+    label: "Journal B"
+  },
+  {
+    value: "CONFERENCE_B",
+    label: "Conference B"
+  },
+  {
+    value: "JOURNAL_C",
+    label: "Journal C"
+  },
+  {
+    value: "CONFERENCE_C",
+    label: "Conference C"
+  }
+];
+
 export default {
   data() {
     return {
@@ -274,32 +302,7 @@ export default {
         paperid: "",
         endTime: ""
       },
-      options: [
-        {
-          value: "JOURNAL_A",
-          label: "Journal A"
-        },
-        {
-          value: "CONFERENCE_A",
-          label: "Conference A"
-        },
-        {
-          value: "JOURNAL_B",
-          label: "Journal B"
-        },
-        {
-          value: "CONFERENCE_B",
-          label: "Conference B"
-        },
-        {
-          value: "JOURNAL_C",
-          label: "Journal C"
-        },
-        {
-          value: "CONFERENCE_C",
-          label: "Conference C"
-        }
-      ],
+      options: levels,
       list: [],
       loading: false,
       voteDialog: false,
@@ -606,13 +609,13 @@ export default {
 
 .app-container {
   background-color: #f5f5f5;
+  min-height: 95vh;
 }
 
 .box {
   max-width: 1080px;
   margin-left: auto;
   margin-right: auto;
-  min-height: 90vh;
 }
 
 .list {

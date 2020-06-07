@@ -5,7 +5,7 @@ export function addPaper(data) {
   return axios({
     url: "/paper",
     method: "post",
-    data,
+    data
   });
 }
 
@@ -13,7 +13,7 @@ export function addPaper(data) {
 export function listPaper(page) {
   return axios({
     url: "/paper/page/" + page,
-    method: "get",
+    method: "get"
   });
 }
 
@@ -21,7 +21,7 @@ export function listPaper(page) {
 export function getPaper(id) {
   return axios({
     url: "/paper/" + id,
-    method: "get",
+    method: "get"
   });
 }
 
@@ -30,7 +30,15 @@ export function createVote(data) {
   return axios({
     url: "/vote",
     method: "post",
-    data,
+    data
+  });
+}
+
+// 查询论文对应的投票
+export function getPaperVote(pid) {
+  return axios({
+    url: "/paper/" + pid + "/vote",
+    method: "get"
   });
 }
 
@@ -38,7 +46,7 @@ export function createVote(data) {
 export function getVoteDetail(pid) {
   return axios({
     url: "/vote/" + pid + "/detail",
-    method: "get",
+    method: "get"
   });
 }
 
@@ -47,7 +55,7 @@ export function addpoll(vid, data) {
   return axios({
     url: "/vote/" + vid,
     method: "post",
-    data,
+    data
   });
 }
 
@@ -57,8 +65,8 @@ export function submitResult(id, result) {
     url: "/paper_result/" + id,
     method: "post",
     data: {
-      data: result,
-    },
+      data: result
+    }
   });
 }
 
@@ -66,6 +74,40 @@ export function submitResult(id, result) {
 export function rmPaper(id) {
   return axios({
     url: "/paper/delete/" + id,
-    method: "get",
+    method: "get"
+  });
+}
+
+// 提交论文评审建议
+export function submitReview(data) {
+  return axios({
+    url: "/paper/review",
+    method: "post",
+    data
+  });
+}
+
+// 查询论文评审建议
+export function listReview(id) {
+  return axios({
+    url: "/paper/" + id + "/review",
+    method: "get"
+  });
+}
+
+// 更新论文评审建议
+export function updateReview(data, id) {
+  return axios({
+    url: "/paper/" + id + "/review/update",
+    method: "post",
+    data
+  });
+}
+
+// 删除论文评审
+export function deleteReview(id) {
+  return axios({
+    url: "/paper/review/delete/" + id,
+    method: "get"
   });
 }

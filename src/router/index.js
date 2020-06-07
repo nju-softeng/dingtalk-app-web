@@ -166,6 +166,7 @@ export const asyncRoutes = [{
   {
     path: "/paper",
     component: Layout,
+    redirect: "/paper/index",
     children: [{
         path: "index",
         name: "Paper",
@@ -176,22 +177,11 @@ export const asyncRoutes = [{
         }
       },
       {
-        path: "detail/:id",
+        path: "detail/:id/:tab",
         component: () => import("@/views/paper/detail"),
         name: "Detail",
         meta: {
-          title: "详细",
-          noCache: true,
-          activeMenu: "/paper/index"
-        },
-        hidden: true
-      },
-      {
-        path: "vote/:id",
-        component: () => import("@/views/paper/vote"),
-        name: "Vote",
-        meta: {
-          title: "投票",
+          title: "论文详细",
           noCache: true,
           activeMenu: "/paper/index"
         },

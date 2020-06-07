@@ -52,10 +52,10 @@
                 <el-link v-if="scope.row.vote == undefined" type="primary" @click="newVote(scope.row)">
                   发起投票</el-link>
 
-                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
                   <el-link type="success"> 前往投票</el-link>
                 </router-link>
-                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/vote/' + scope.row.id" class="link-type">
+                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
                   <el-tag class="paper-tag" type="success" v-if="scope.row.vote.result == true">ACCEPT</el-tag>
                   <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>
                 </router-link>

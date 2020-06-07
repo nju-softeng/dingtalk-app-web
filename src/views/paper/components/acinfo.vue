@@ -61,7 +61,7 @@ export default {
 <style lang="scss" scoped>
 .acinfo {
   background: #fff;
-  min-height: 50vh;
+  min-height: 80vh;
   padding: 20px;
 }
 </style>

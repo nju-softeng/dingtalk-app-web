@@ -186,17 +186,6 @@ export const asyncRoutes = [{
           activeMenu: "/paper/index"
         },
         hidden: true
-      },
-      {
-        path: "vote/:id",
-        component: () => import("@/views/paper/vote"),
-        name: "Vote",
-        meta: {
-          title: "投票",
-          noCache: true,
-          activeMenu: "/paper/index"
-        },
-        hidden: true
       }
     ]
   },

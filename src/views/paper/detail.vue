@@ -18,7 +18,8 @@
               <div style="font-size:13px;color:#595959; margin-right:48px">
                 <p>
                   <svg-icon icon-class="school" />
-                  <span style="margin-right:8px">期刊会议：{{ paper.journal }}</span>
+                  <span style="margin-right:8px">
+                    机构：{{ paper.journal }}</span>
                   <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
                 </p>
                 <p>
@@ -49,7 +50,7 @@
             </div>
           </div>
         </div>
-        <el-menu @select="handleSelect" default-active="review" mode="horizontal">
+        <el-menu @select="handleSelect" mode="horizontal">
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
@@ -125,7 +126,7 @@ export default {
             type: "info",
             content: "投票未发起"
           };
-        } else if (vote == undefined) {
+        } else if (vote.result == undefined) {
           return {
             type: "",
             content: "等待投票结果"

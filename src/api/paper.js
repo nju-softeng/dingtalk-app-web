@@ -34,6 +34,14 @@ export function createVote(data) {
   });
 }
 
+// 查询论文对应的投票
+export function getPaperVote(pid) {
+  return axios({
+    url: "/paper/" + pid + "/vote",
+    method: "get"
+  });
+}
+
 // 查询投票详情
 export function getVoteDetail(pid) {
   return axios({

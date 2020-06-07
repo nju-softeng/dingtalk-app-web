@@ -180,8 +180,6 @@ export default {
   created() {
     this.pid = this.$route.params.id;
     getPaper(this.pid).then(res => {
-      console.log(res.data);
-      console.log("????");
       this.paper = res.data;
       this.vid = res.data.vote.id;
       this.endtime = res.data.vote.endTime;

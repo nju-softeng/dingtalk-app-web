@@ -14,14 +14,12 @@
                 {{ paper.title }}</span>
             </p>
 
-            <div style="font-family: 'Segoe UI';display:flex">
+            <div style="font-family: 'Segoe UI';display:flex;flex-wrap: wrap">
               <div style="font-size:13px;color:#595959; margin-right:48px">
                 <p>
                   <svg-icon icon-class="school" />
-                  期刊会议：{{ paper.journal }}
-                  <el-tag style="margin-left:8px">{{
-                    getlevel(paper.paperType)
-                  }}</el-tag>
+                  <span style="margin-right:8px">期刊会议：{{ paper.journal }}</span>
+                  <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
                 </p>
                 <p>
                   <span>
@@ -30,7 +28,7 @@
                 </p>
               </div>
 
-              <div style="font-size:13px;color:#595959;">
+              <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
                 <p>
                   <span style="margin-right:8px">
                     <svg-icon icon-class="vote" /> 投票意见:
@@ -60,9 +58,7 @@
     </div>
 
     <div class="container">
-      <div class="box">
-        <component v-bind:is="activeName" :paperid="id"></component>
-      </div>
+      <component v-bind:is="activeTab" :paperid="id"></component>
     </div>
   </div>
 </template>
@@ -104,7 +100,7 @@ export default {
       paper: {},
       acceptlist: "",
       rejectlist: "",
-      activeName: "review"
+      activeTab: "review"
     };
   },
   components: {
@@ -163,7 +159,7 @@ export default {
         } else if (paper.vote == undefined || paper.vote.result == null) {
           return {
             type: "info",
-            content: "论文尚未投稿"
+            content: "等待内审中"
           };
         } else if (paper.vote.result == false) {
           return {
@@ -181,8 +177,10 @@ export default {
   },
   created() {
     this.id = this.$route.params.id;
+    this.activeTab = this.$route.params.tab || "review";
     getPaper(this.id).then(res => {
       this.paper = res.data;
+
       // todo 删除
       if (this.paper.result != undefined) {
         getVoteDetail(this.id).then(res => {
@@ -194,7 +192,7 @@ export default {
   },
   methods: {
     handleSelect(val) {
-      this.activeName = val;
+      this.activeTab = val;
     }
   }
 };

@@ -12,7 +12,7 @@
                 <div class="left-content">
                   <div class="title">
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">
-                      <router-link :to="'/paper/detail/' + scope.row.id" class="link-type">
+                      <router-link :to="'/paper/detail/' + scope.row.id + '/review'" class="link-type">
                         <svg-icon icon-class="paper" /> {{ scope.row.title }}
                       </router-link>
                     </el-tooltip>

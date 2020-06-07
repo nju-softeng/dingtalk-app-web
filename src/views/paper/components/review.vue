@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box">
     <div class="md-container">
       <div style=" margin-right:16px">
         <el-avatar :src="avatar"> {{ name }}</el-avatar>
@@ -123,5 +123,15 @@ export default {
 <style lang="scss" scoped>
 .md-container {
   display: flex;
+}
+
+.box {
+  min-height: 80vh;
+  overflow: auto;
+  border-radius: 2px;
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px 20px 0;
 }
 </style>

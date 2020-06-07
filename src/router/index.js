@@ -177,11 +177,11 @@ export const asyncRoutes = [{
         }
       },
       {
-        path: "detail/:id",
+        path: "detail/:id/:tab",
         component: () => import("@/views/paper/detail"),
         name: "Detail",
         meta: {
-          title: "详细",
+          title: "论文详细",
           noCache: true,
           activeMenu: "/paper/index"
         },

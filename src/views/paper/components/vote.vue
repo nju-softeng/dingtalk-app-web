@@ -1,20 +1,33 @@
 <template>
   <div class="vote" :v-loading="loading">
-    <div v-if="vote == ''" style="width:400px;margin-left: auto; margin-right: auto;">
+    <div
+      v-if="vote == ''"
+      style="width:400px;margin-left: auto; margin-right: auto;"
+    >
       <div style="font-family: 'Segoe UI'; padding-top:60px">
         <p>发起投票</p>
       </div>
       <div v-loading="loading" style="display:flex; flex-">
         <el-form style="width:210px" ref="voteform" :model="voteform">
-          <el-form-item prop="endTime" :rules="{
+          <el-form-item
+            prop="endTime"
+            :rules="{
               required: true,
               message: '请选择截止时间',
-              trigger: 'change'
-            }">
+              trigger: 'change',
+            }"
+          >
             <span slot="label">截止时间 </span>
-            <el-time-picker style="width:120px" arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
-                selectableRange: '08:30:00 - 21:30:00'
-              }" placeholder="选择时间">
+            <el-time-picker
+              style="width:120px"
+              arrow-control
+              v-model="voteform.endTime"
+              value-format="HH:mm:ss"
+              :picker-options="{
+                selectableRange: '08:30:00 - 21:30:00',
+              }"
+              placeholder="选择时间"
+            >
             </el-time-picker>
           </el-form-item>
         </el-form>
@@ -30,53 +43,112 @@
     </div>
     <div v-else-if="showAns == false" class="poll" v-loading="loading">
       <div style="padding:10px; font-size:12px">
-        <span slot="label">
-          <svg-icon icon-class="date" /> 投票截止</span>
+        <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
         {{ getddl(vote.startTime, vote.endTime) }}
         <span v-if="isEnd"> [已结束]</span>
-        <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
-          <span style="margin-left:8px">
-            <svg-icon icon-class="hint" /></span>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="截止时间后投票无效"
+          placement="right"
+        >
+          <span style="margin-left:8px"> <svg-icon icon-class="hint"/></span>
         </el-tooltip>
       </div>
       <div>
         <ul class="vote-item">
           <li>
-            <el-radio v-model="pollform.result" label="true">ACCEPT [接受]</el-radio>
+            <el-radio v-model="pollform.result" label="true"
+              >ACCEPT [接受]</el-radio
+            >
           </li>
           <li>
-            <el-radio v-model="pollform.result" label="false">REJECT [拒绝]</el-radio>
+            <el-radio v-model="pollform.result" label="false"
+              >REJECT [拒绝]</el-radio
+            >
           </li>
         </ul>
       </div>
       <div style="padding:10px">
-        <el-button style="width:100%" size="medium" @click="voting" type="primary">主要按钮</el-button>
+        <el-button
+          style="width:100%"
+          size="medium"
+          @click="voting"
+          type="primary"
+          >确认提交</el-button
+        >
       </div>
-      {{ pollform }}
     </div>
     <div v-if="showAns == true" class="poll">
       <el-form>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
+            <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span
+          >
           <span> {{ getNum(accept, total) }}% </span>
-          <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
+          <span v-if="myresult == true" style="color:#409EFF; font-weight:500"
+            >[已选]</span
+          >
+          <el-progress
+            class="progress"
+            :percentage="getpercentage(accept, total)"
+            status="success"
+          ></el-progress>
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
+            <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span
+          >
           {{ getNum(reject, total) }}%
-          <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
+          <span v-if="myresult == false" style="color:#409EFF; font-weight:500"
+            >[已选]</span
+          >
+          <el-progress
+            class="progress"
+            :percentage="getpercentage(reject, total)"
+            status="exception"
+          ></el-progress>
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
-          <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+            <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span
+          >
+          <span
+            v-if="myresult == undefined"
+            style="color:#409EFF; font-weight:500;margin-right:5px"
+            >[您未参与投票]
           </span>
-          <el-link type="primary" :underline="false" @click="dialog = true">详情
+          <el-link type="primary" :underline="false" @click="flag = true"
+            >详情
           </el-link>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="poll" v-if="flag">
+      <el-form>
+        <el-form-item>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 接收{{ accept }}票:
+          </span>
+
+          <el-tag
+            style="margin:0px 4px;"
+            v-for="(item, index) in acceptlist"
+            :key="index"
+            >{{ item }}</el-tag
+          >
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
+          </span>
+
+          <el-tag
+            style="margin:0px 4px;"
+            v-for="(item, index) in rejectlist"
+            :key="index"
+            >{{ item }}</el-tag
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -90,15 +162,15 @@ export default {
       loading: false,
       voteform: {
         paperid: "",
-        endTime: ""
+        endTime: "",
       },
       pid: null,
       vote: {},
       pollform: {
         result: "",
         vote: {
-          id: ""
-        }
+          id: "",
+        },
       },
       showAns: false,
       accept: "",
@@ -107,7 +179,8 @@ export default {
       acceptlist: [],
       rejectlist: [],
       total: "",
-      myresult: undefined
+      myresult: undefined,
+      flag: false,
     };
   },
 
@@ -117,7 +190,7 @@ export default {
 
     //todo 修改， 拿论文对应的投票
     getPaperVote(this.pid)
-      .then(res => {
+      .then((res) => {
         this.vote = res.data;
         this.isEnd = res.data.status;
         if (this.vote.id != undefined) {
@@ -139,12 +212,12 @@ export default {
   methods: {
     // 创建的投票
     submitvote() {
-      this.$refs.voteform.validate(valid => {
+      this.$refs.voteform.validate((valid) => {
         if (valid) {
           this.loading = true;
           this.voteform.paperid = this.pid;
           createVote(this.voteform)
-            .then(res => {
+            .then((res) => {
               console.log(res.data);
               this.vote = res.data;
             })
@@ -156,7 +229,7 @@ export default {
     },
     //获取投票详情
     fetchVoteDetail() {
-      getVoteDetail(this.pid).then(res => {
+      getVoteDetail(this.pid).then((res) => {
         console.log(res.data);
         this.showAns = res.data.status;
         if (this.showAns) {
@@ -204,7 +277,7 @@ export default {
       this.pollform.vote.id = this.vote.id;
       this.loading = true;
       addpoll(this.vote.id, this.pollform)
-        .then(res => {
+        .then((res) => {
           this.showAns = true;
           this.accept = res.data.accept;
           this.reject = res.data.reject;
@@ -213,7 +286,7 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    }
+    },
   },
   computed: {
     // 投票百分比
@@ -242,8 +315,8 @@ export default {
         }
         return st + " " + et.slice(0, 5);
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

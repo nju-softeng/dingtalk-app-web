@@ -53,6 +53,12 @@
       </div>
     </div>
     <div v-if="showAns == true" class="poll">
+      <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
+        <span slot="label">
+          <svg-icon icon-class="date" /> 投票截止</span>
+        {{ getddl(vote.startTime, vote.endTime) }}
+        <span v-if="isEnd"> [已结束]</span>
+      </div>
       <el-form>
         <el-form-item>
           <span slot="label">

@@ -3,21 +3,15 @@
     <div class="wrap-head">
       <div class="layout-container">
         <div class="groupInfo">
-          <el-breadcrumb
-            separator-class="el-icon-arrow-right"
-            style="font-size:13px"
-          >
-            <el-breadcrumb-item :to="{ path: '/paper/index' }"
-              >论文列表</el-breadcrumb-item
-            >
+          <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px">
+            <el-breadcrumb-item :to="{ path: '/paper/index' }">论文列表</el-breadcrumb-item>
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
 
           <div>
             <p style="margin-bottom:0px">
               <span style="font-size:18px;font-family: 'Segoe UI'">
-                {{ paper.title }}</span
-              >
+                {{ paper.title }}</span>
             </p>
 
             <div style="font-family: 'Segoe UI';display:flex;flex-wrap: wrap">
@@ -25,25 +19,17 @@
                 <p>
                   <svg-icon icon-class="school" />
                   <span style="margin-right:8px">
-                    机构：{{ paper.journal }}</span
-                  >
+                    机构：{{ paper.journal }}</span>
                   <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
                 </p>
                 <p>
-                  <span> <svg-icon icon-class="people" /> 作者: </span>
-                  <span
-                    style="margin:6px"
-                    v-for="(p, index) in paper.paperDetails"
-                    :key="index"
-                    >{{ p.user.name }}</span
-                  >
+                  <span>
+                    <svg-icon icon-class="people" /> 作者: </span>
+                  <span style="margin:6px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
                 </p>
               </div>
 
-              <div
-                v-show="activeTab != 'vote'"
-                style="font-size:13px;color:#595959;"
-              >
+              <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
                 <p>
                   <span style="margin-right:8px">
                     <svg-icon icon-class="vote" /> 投票意见:
@@ -64,11 +50,7 @@
             </div>
           </div>
         </div>
-        <el-menu
-          @select="handleSelect"
-          :default-active="activeTab"
-          mode="horizontal"
-        >
+        <el-menu @select="handleSelect" :default-active="activeTab" mode="horizontal">
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
@@ -87,28 +69,28 @@ import { getPaper, getVoteDetail } from "@/api/paper";
 const levels = [
   {
     value: "JOURNAL_A",
-    label: "Journal A",
+    label: "Journal A"
   },
   {
     value: "CONFERENCE_A",
-    label: "Conference A",
+    label: "Conference A"
   },
   {
     value: "JOURNAL_B",
-    label: "Journal B",
+    label: "Journal B"
   },
   {
     value: "CONFERENCE_B",
-    label: "Conference B",
+    label: "Conference B"
   },
   {
     value: "JOURNAL_C",
-    label: "Journal C",
+    label: "Journal C"
   },
   {
     value: "CONFERENCE_C",
-    label: "Conference C",
-  },
+    label: "Conference C"
+  }
 ];
 
 export default {
@@ -119,18 +101,18 @@ export default {
       paper: {},
       acceptlist: "",
       rejectlist: "",
-      activeTab: "review",
+      activeTab: "review"
     };
   },
   components: {
     review: () => import("./components/review"),
     vote: () => import("./components/vote"),
-    acinfo: () => import("./components/acinfo"),
+    acinfo: () => import("./components/acinfo")
   },
   computed: {
     getlevel() {
-      return (val) => {
-        let tmp = this.level.find((item) => item.value == val);
+      return val => {
+        let tmp = this.level.find(item => item.value == val);
         if (tmp != undefined) {
           return tmp.label;
         }
@@ -138,82 +120,86 @@ export default {
     },
     // 投票状态标签
     getVoteResult() {
-      return (vote) => {
+      return vote => {
         if (vote == undefined) {
           return {
             type: "info",
-            content: "投票未发起",
+            content: "投票未发起"
           };
         } else if (vote.result == undefined) {
           return {
             type: "",
-            content: "等待投票结果",
+            content: "等待投票结果"
           };
         } else if (vote.result == true) {
           return {
             type: "success",
-            content: "ACCEPT",
+            content: "ACCEPT"
           };
         } else if (vote.result == false) {
           return {
             type: "danger",
-            content: "REJECT",
+            content: "REJECT"
           };
         }
       };
     },
     // 论文状态标签
     getPaperResult() {
-      return (paper) => {
+      return paper => {
         if (paper.result == true) {
           return {
             type: "success",
-            content: "ACCEPT",
+            content: "ACCEPT"
           };
         } else if (paper.result == false) {
           return {
             type: "danger",
-            content: "REJECT",
+            content: "REJECT"
           };
         } else if (paper.vote == undefined || paper.vote.result == null) {
           return {
             type: "info",
-            content: "等待内审中",
+            content: "等待内审中"
           };
         } else if (paper.vote.result == false) {
           return {
             type: "info",
-            content: "内审未通过",
+            content: "内审未通过"
           };
         } else {
           return {
             type: "info",
-            content: "等待中",
+            content: "等待中"
           };
         }
       };
-    },
+    }
   },
   created() {
     this.id = this.$route.params.id;
     this.activeTab = this.$route.params.tab || "review";
-    getPaper(this.id).then((res) => {
-      this.paper = res.data;
+    getPaper(this.id)
+      .then(res => {
+        this.paper = res.data;
 
-      // todo 删除
-      if (this.paper.result != undefined) {
-        getVoteDetail(this.id).then((res) => {
-          this.acceptlist = res.data.acceptnames;
-          this.rejectlist = res.data.rejectnames;
-        });
-      }
-    });
+        // todo 删除
+        if (this.paper.result != undefined) {
+          getVoteDetail(this.id).then(res => {
+            this.acceptlist = res.data.acceptnames;
+            this.rejectlist = res.data.rejectnames;
+          });
+        }
+      })
+      .catch(() => {
+        this.$router.push({ path: "/404" });
+      });
   },
   methods: {
     handleSelect(val) {
       this.activeTab = val;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

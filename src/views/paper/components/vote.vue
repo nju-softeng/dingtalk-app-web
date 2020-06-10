@@ -5,14 +5,14 @@
         <p>发起投票</p>
       </div>
       <div v-loading="loading" style="display:flex; flex-">
-        <el-form style="width:210px" ref="voteform" :model="voteform">
+        <el-form style="width:240px" ref="voteform" :model="voteform">
           <el-form-item prop="endTime" :rules="{
               required: true,
               message: '请选择截止时间',
               trigger: 'change'
             }">
             <span slot="label">截止时间 </span>
-            <el-time-picker style="width:120px" arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
+            <el-time-picker style="width:150px" arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
                 selectableRange: '08:30:00 - 21:30:00'
               }" placeholder="选择时间">
             </el-time-picker>

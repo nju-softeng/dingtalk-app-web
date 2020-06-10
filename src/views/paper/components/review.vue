@@ -30,7 +30,7 @@
             <v-md-editor v-model="item.md" :mode="item.edit == false ? 'preview' : 'edit'"></v-md-editor>
             <div style="margin-top:8px" v-if="item.edit == true">
               <el-button @click="update(item)"> 提交</el-button>
-              <el-button @click="item.edit = false"> 取消</el-button>
+              <el-button @click="fetchReview()"> 取消</el-button>
             </div>
           </div>
         </div>

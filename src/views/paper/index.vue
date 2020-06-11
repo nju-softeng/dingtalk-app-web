@@ -327,7 +327,6 @@ export default {
     listPaper(0).then(res => {
       this.list = res.data.content;
       this.total = res.data.total;
-      console.log(this.list);
     });
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");

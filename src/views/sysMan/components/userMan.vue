@@ -5,12 +5,12 @@
         <el-button @click="refreshUser" type="primary">拉取钉钉用户</el-button>
       </el-tooltip>
       <span style="padding-left:100px;color: #999999; font-size:13px">当前评审人:</span>
-      <el-tag effect="plain" style="margin:0 5px" v-for="(item, index) in auditors" :key="index">
+      <span style="margin:0 5px; font-size:13px;color: #999999" v-for="(item, index) in auditors" :key="index">
         {{ item.name }}
-      </el-tag>
-      <el-tag effect="plain" style="margin:0 5px" v-if="auditors.length == 0">
+      </span>
+      <span style="margin:0 5px; font-size:13px;color: #999999" v-if="auditors.length == 0">
         未设置
-      </el-tag>
+      </span>
     </div>
     <el-divider></el-divider>
     <div class="filtrate">

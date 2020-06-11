@@ -41,7 +41,7 @@ export default {
     }
   },
   created() {
-    if (process.env.NODE_ENV == "development") {
+    if (process.env.NODE_ENV != "development") {
       // 配置测试状态无需钉钉登陆;
       this.$store
         .dispatch("user/test_login", 1)

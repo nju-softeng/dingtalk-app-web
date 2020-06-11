@@ -79,7 +79,10 @@
             <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
           <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
           </span>
-          <el-link type="primary" :underline="false" @click="flag = true">详情
+          <el-link type="primary" :underline="false" @click="
+              flag = true;
+              fetchVoteDetail();
+            ">详情
           </el-link>
         </el-form-item>
       </el-form>

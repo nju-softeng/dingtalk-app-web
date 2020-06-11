@@ -41,7 +41,7 @@
       </div>
 
       <div>
-        <div style="padding-left:10px; padding-right:10px">
+        <div style="padding-left:10px; padding-right:10px;margin-bottom:8px">
           <el-radio style="padding:10px;height:40px;width:100%" v-model="pollform.result" border label="true">ACCEPT [接受]</el-radio>
         </div>
         <div style="padding-left:10px; padding-right:10px">

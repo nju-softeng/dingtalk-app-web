@@ -11,15 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: use node.js 10
+      - name: use node.js
         uses: actions/setup-node@v1
         with:
           node-version: 10
 
-      - name: npm install and build
-        run: |
-          npm install
-          npm run build
+      - name: Cache node modules
+        uses: actions/cache@v2
+        id: cache
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package.json') }}
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Build
+        run: npm run build
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_IMAGE }} .
@@ -32,6 +43,7 @@ jobs:
           docker push ${{ secrets.DOCKER_IMAGE }}
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Pull Docker And Run Container With SSH
@@ -53,5 +65,5 @@ jobs:
             docker container rm ${{ secrets.DOCKER_CONTAINER }}
 
             echo "run new docker container"
-            docker run -d --net dingtalk-net  --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
+            docker run -d --net dingtalk-net -p 80:80 --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
             docker image prune -f

@@ -8,8 +8,6 @@
 
 引入 markdown 编辑器 [vue-markdown-editor](https://github.com/code-farmer-i/vue-markdown-editor)
 
-> > > > > > > dev
-
 ###### 2020.04.05
 
 更新 ui，确定 ui 风格

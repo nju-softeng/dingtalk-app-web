@@ -1,0 +1,55 @@
+name: Test Environment
+on:
+  push:
+    branches: [test]
+  pull_request:
+    branches: [test]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: use node.js 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: npm install and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_IMAGE }} .
+
+      - name: Push Docker Image
+        run: |
+          docker login -u=${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} swr.cn-north-4.myhuaweicloud.com
+          docker push ${{ secrets.DOCKER_IMAGE }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Docker And Run Container With SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USER }}
+          key: ${{ secrets.TEST_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            echo "login docker repository"
+            docker login -u=${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} swr.cn-north-4.myhuaweicloud.com
+
+            echo "pull docker image"
+            docker pull ${{ secrets.DOCKER_IMAGE }}:latest
+
+            echo "stop and remove docker old container"
+            docker container stop ${{ secrets.DOCKER_CONTAINER }}
+            docker container rm ${{ secrets.DOCKER_CONTAINER }}
+
+            echo "run new docker container"
+            docker run -d --net dingtalk-net  --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
+            docker image prune -f

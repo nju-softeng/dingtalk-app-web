@@ -72,13 +72,13 @@ export default {
             })
             .catch(() => {
               this.loading = false;
-              Message.error("登录失败");
+              Message.error("dingtalk API 只在钉钉容器中生效,请在工作台打开");
             });
         })
-        .catch(() => {
+        .catch(e => {
           this.$message({
             showClose: true,
-            message: "dingtalk API 只在钉钉容器中生效,请在工作台打开???",
+            message: e,
             type: "error",
             duration: "5000"
           });

@@ -1,6 +1,7 @@
 # dingtalk-vue
 
-![CI](https://github.com/zhanyeye/dingtalk-vue/workflows/CI/badge.svg?branch=master)
+![Prod](https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg)
+![Test](https://github.com/zhanyeye/dingtalk-vue/workflows/Test/badge.svg)
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
 

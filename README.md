@@ -5,6 +5,9 @@
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
 
+###### 2020.06.14
+搭建测试环境CD
+
 ###### 2020.06.07
 
 引入 markdown 编辑器 [vue-markdown-editor](https://github.com/code-farmer-i/vue-markdown-editor)

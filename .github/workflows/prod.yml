@@ -1,5 +1,4 @@
-# 一个workflow，名为 Auto-deployment
-name: Auto-deployment
+name: Prod
 
 # 此CI/CD触发时的事件
 on:

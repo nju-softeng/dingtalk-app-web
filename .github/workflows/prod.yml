@@ -24,12 +24,23 @@ jobs:
       uses: actions/setup-node@v1
       with:
           node-version: 10
-      
+    
+    - name: Cache node modules
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            **/node_modules
+          key: build-${{ hashFiles('**/package.json') }}
+
+    # 运行命令 npm install
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm install
+
     # 运行命令 npm install && npm run build
-    - name: npm install and build
-      run: |
-        npm install
-        npm run build
+    - name: Build
+      run: npm run build
 
     # 部署到云服务器
     - name: deploy to server

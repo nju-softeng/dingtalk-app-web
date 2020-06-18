@@ -202,7 +202,7 @@ export default {
       let that = this;
       if (window.WebSocket) {
         //var server_host = window.location.hostname;//localhost:8080/
-        var url = "ws://localhost:8080/websocket";
+        var url = "ws://localhost:8080/wsapi";
         let ws = new WebSocket(url);
         that.ws = ws;
         ws.onopen = function() {

@@ -32,7 +32,7 @@
       <div style="padding:10px; font-size:12px">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
-        {{ getddl(vote.startTime, vote.endTime) }}
+        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
         <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
           <span style="margin-left:8px">
@@ -56,7 +56,7 @@
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
-        {{ getddl(vote.startTime, vote.endTime) }}
+        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
       </div>
       <el-form>
@@ -145,6 +145,7 @@ export default {
     getPaperVote(this.pid)
       .then(res => {
         this.vote = res.data;
+        console.log(this.vote);
         this.isEnd = res.data.status;
         if (this.vote.id != undefined) {
           this.fetchVoteDetail();
@@ -258,15 +259,6 @@ export default {
           return 0;
         }
         return (val / total).toFixed(2) * 100;
-      };
-    },
-    // 时间格式化
-    getddl() {
-      return (st, et) => {
-        if (et == undefined) {
-          return;
-        }
-        return st + " " + et.slice(0, 5);
       };
     }
   }

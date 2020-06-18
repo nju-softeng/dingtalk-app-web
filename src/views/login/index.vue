@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV == "development") {
       // 配置测试状态无需钉钉登陆;
       this.$store

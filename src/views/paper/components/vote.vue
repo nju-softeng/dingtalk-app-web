@@ -266,7 +266,8 @@ export default {
     initWebSocket() {
       let that = this;
       if (window.WebSocket) {
-        var url = process.env.VUE_APP_WS_API + "/wsapi";
+        var url = "ws://" + location.host + "/wsapi";
+        console.log(url);
         let ws = new WebSocket(url);
         that.ws = ws;
         ws.onopen = function() {

@@ -1,25 +1,51 @@
 <template>
-  <div class="vote" :v-loading="loading">
-    <div v-if="vote == ''" style="width:400px;margin-left: auto; margin-right: auto;">
-      <div style="font-family: 'Segoe UI'; padding-top:60px">
+  <div
+    class="vote"
+    :v-loading="loading"
+  >
+    <!-- 创建投票 -->
+    <div
+      v-if="vote == ''"
+      class="create"
+    >
+      <div>
         <p>发起投票</p>
       </div>
-      <div v-loading="loading" style="display:flex; flex-">
-        <el-form style="width:240px" ref="voteform" :model="voteform">
-          <el-form-item prop="endTime" :rules="{
+      <div
+        v-loading="loading"
+        style="display:flex; "
+      >
+        <el-form
+          style="width:240px"
+          ref="voteform"
+          :model="voteform"
+        >
+          <el-form-item
+            prop="endTime"
+            :rules="{
               required: true,
               message: '请选择截止时间',
               trigger: 'change'
-            }">
+            }"
+          >
             <span slot="label">截止时间 </span>
-            <el-time-picker style="width:150px" arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
-                selectableRange: '08:30:00 - 21:30:00'
-              }" placeholder="选择时间">
+            <el-time-picker
+              style="width:150px"
+              v-model="voteform.endTime"
+              value-format="HH:mm:ss"
+              :picker-options="{
+                selectableRange: '07:00:00 - 21:30:00'
+              }"
+              placeholder="选择时间"
+            >
             </el-time-picker>
           </el-form-item>
         </el-form>
         <div>
-          <el-button type="primary" @click="submitvote">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="submitvote"
+          >确 定</el-button>
         </div>
       </div>
       <span style="font-size:12px">
@@ -28,35 +54,63 @@
         </i>
       </span>
     </div>
-    <div v-else-if="showAns == false" class="poll" v-loading="loading">
+
+    <!-- 投票div -->
+    <div
+      v-else-if="showAns == false"
+      class="poll"
+      v-loading="loading"
+    >
       <div style="padding:10px; font-size:12px">
-        <span slot="label">
-          <svg-icon icon-class="date" /> 投票截止</span>
-        {{ getddl(vote.startTime, vote.endTime) }}
+        <svg-icon icon-class="date" /> 投票截止
+        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
-        <el-tooltip class="item" effect="dark" content="截止时间后投票无效" placement="right">
-          <span style="margin-left:8px">
-            <svg-icon icon-class="hint" /></span>
+        <el-tooltip
+          content="截止时间后投票无效"
+          placement="right"
+        >
+          <svg-icon
+            style="margin-left:8px"
+            icon-class="hint"
+          />
         </el-tooltip>
       </div>
-
       <div>
-        <div style="padding-left:10px; padding-right:10px;margin-bottom:8px">
-          <el-radio style="padding:10px;height:40px;width:100%" v-model="pollform.result" border label="true">ACCEPT [接受]</el-radio>
+        <div class="choice">
+          <el-radio
+            class="radio"
+            v-model="pollform.result"
+            border
+            label="true"
+          >ACCEPT [接受]</el-radio>
         </div>
-        <div style="padding-left:10px; padding-right:10px">
-          <el-radio style="padding:10px;height:40px;width:100%" v-model="pollform.result" border label="false">REJECT [拒绝]</el-radio>
+        <div class="choice">
+          <el-radio
+            class="radio"
+            v-model="pollform.result"
+            border
+            label="false"
+          >REJECT [拒绝]</el-radio>
         </div>
       </div>
       <div style="padding:10px">
-        <el-button style="width:100%" size="medium" @click="voting" type="primary">确认提交</el-button>
+        <el-button
+          style="width:100%"
+          size="medium"
+          @click="voting"
+          type="primary"
+        >确认提交</el-button>
       </div>
     </div>
-    <div v-if="showAns == true" class="poll">
+    <!-- 投票结果 -->
+    <div
+      v-if="showAns == true"
+      class="poll"
+    >
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
-        {{ getddl(vote.startTime, vote.endTime) }}
+        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
       </div>
       <el-form>
@@ -64,44 +118,89 @@
           <span slot="label">
             <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
           <span> {{ getNum(accept, total) }}% </span>
-          <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
+          <span
+            v-if="myresult == true"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
+          <el-progress
+            class="progress"
+            :percentage="getpercentage(accept, total)"
+            status="success"
+          ></el-progress>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
           {{ getNum(reject, total) }}%
-          <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
+          <span
+            v-if="myresult == false"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
+          <el-progress
+            class="progress"
+            :percentage="getpercentage(reject, total)"
+            status="exception"
+          ></el-progress>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
-          <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+          <span
+            v-if="myresult == undefined"
+            style="color:#409EFF; font-weight:500;margin-right:5px"
+          >[您未参与投票]
           </span>
-          <el-link type="primary" :underline="false" @click="
+          <el-link
+            type="primary"
+            :underline="false"
+            @click="
               flag = true;
               fetchVoteDetail();
-            ">详情
+            "
+          >详情
           </el-link>
         </el-form-item>
       </el-form>
     </div>
-    <div class="poll" v-if="flag">
+    <div
+      class="poll"
+      v-if="flag"
+    >
       <el-form>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 接收{{ accept }}票:
           </span>
 
-          <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
+          <el-tag
+            style="margin:0px 4px;"
+            v-for="(item, index) in acceptlist"
+            :key="index"
+          >{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 拒绝{{ reject }}票:
           </span>
 
-          <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
+          <el-tag
+            style="margin:0px 4px;"
+            v-for="(item, index) in rejectlist"
+            :key="index"
+          >{{ item }}</el-tag>
+        </el-form-item>
+        <el-form-item v-if="unvotelist.length > 0">
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 未参与投票
+            {{ unvotelist.length }} 人:
+          </span>
+
+          <el-tag
+            type="info"
+            style="margin:0px 4px;"
+            v-for="(item, index) in unvotelist"
+            :key="index"
+          >{{ item }}</el-tag>
         </el-form-item>
       </el-form>
     </div>
@@ -131,6 +230,7 @@ export default {
       isEnd: "false",
       acceptlist: [],
       rejectlist: [],
+      unvotelist: [],
       total: "",
       myresult: undefined,
       flag: false
@@ -145,6 +245,7 @@ export default {
     getPaperVote(this.pid)
       .then(res => {
         this.vote = res.data;
+        console.log(this.vote);
         this.isEnd = res.data.status;
         if (this.vote.id != undefined) {
           this.fetchVoteDetail();
@@ -192,6 +293,7 @@ export default {
           this.myresult = res.data.result;
           this.acceptlist = res.data.acceptnames;
           this.rejectlist = res.data.rejectnames;
+          this.unvotelist = res.data.unvotenames || [];
         }
       });
     },
@@ -200,8 +302,8 @@ export default {
     initWebSocket() {
       let that = this;
       if (window.WebSocket) {
-        //var server_host = window.location.hostname;//localhost:8080/
-        var url = "ws://localhost:8080/websocket";
+        var url = "ws://" + location.host + "/wsapi";
+        console.log(url);
         let ws = new WebSocket(url);
         that.ws = ws;
         ws.onopen = function() {
@@ -232,9 +334,16 @@ export default {
       addpoll(this.vote.id, this.pollform)
         .then(res => {
           this.showAns = true;
+          this.myresult = res.data.result;
           this.accept = res.data.accept;
           this.reject = res.data.reject;
           this.total = res.data.total;
+        })
+        .catch(error => {
+          if (error.response.data.status == 409) {
+            this.fetchVoteDetail();
+            console.log("?????");
+          }
         })
         .finally(() => {
           this.loading = false;
@@ -259,20 +368,26 @@ export default {
         }
         return (val / total).toFixed(2) * 100;
       };
-    },
-    // 时间格式化
-    getddl() {
-      return (st, et) => {
-        if (et == undefined) {
-          return;
-        }
-        return st + " " + et.slice(0, 5);
-      };
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+.create {
+  width: 400px;
+  font-family: "Segoe UI";
+  padding-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.choice {
+  padding: 4px 10px;
+  .radio {
+    padding: 10px;
+    height: 40px;
+    width: 100%;
+  }
+}
 .vote {
   background: #fff;
   min-height: 80vh;

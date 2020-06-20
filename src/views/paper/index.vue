@@ -256,7 +256,7 @@
               v-model="voteform.endTime"
               value-format="HH:mm:ss"
               :picker-options="{
-                selectableRange: '08:30:00 - 21:30:00',
+                selectableRange: '07:00:00 - 21:30:00',
               }"
               placeholder="选择时间"
             >
@@ -578,9 +578,10 @@ export default {
       if (this.paperform.id != undefined) {
         page = this.currentPage - 1;
       }
-      this.loading = true;
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true;
           addPaper(this.paperform)
             .then(() => {
               this.dialog = false;

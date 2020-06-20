@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { getAuthCode } from "@/utils/dingtalk";
-import { Message } from "element-ui";
+import { getAuthCode } from '@/utils/dingtalk';
+import { Message } from 'element-ui';
 export default {
   data: () => ({
     loading: true,
@@ -41,35 +41,63 @@ export default {
     }
   },
   created() {
-    getAuthCode(process.env.VUE_APP_CORPID)
-      .then(res => {
-        this.code.authcode = res.code; // 获取authcode
-        this.$store
-          .dispatch("user/_login", this.code)
-          .then(() => {
-            this.$router.push({
-              path: this.redirect || "/",
-              query: this.otherQuery
-            });
-          })
-          .catch(() => {
-            this.loading = false;
-            Message.error("登录失败");
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV == 'development') {
+      // 配置测试状态无需钉钉登陆;
+      this.$store
+        .dispatch('user/test_login', 1)
+        .then(res => {
+          this.$router.push({
+            path: this.redirect || '/',
+            query: this.otherQuery
           });
-      })
-      .catch(() => {
-        this.$message({
-          showClose: true,
-          message: "dingtalk API 只在钉钉容器中生效,请在工作台打开???",
-          type: "error",
-          duration: "5000"
+          Message.success('测试状态，跳过钉钉登陆');
+          console.log(res);
+        })
+        .catch(() => {
+          this.loading = false;
+          Message.error('登录失败');
         });
-      });
+    } else {
+      // 获取钉钉临时授权码
+      getAuthCode(process.env.VUE_APP_CORPID)
+        .then(res => {
+          this.code.authcode = res.code; // 获取authcode
+          this.$store
+            .dispatch('user/_login', this.code)
+            .then(() => {
+              this.$router.push({
+                path: this.redirect || '/',
+                query: this.otherQuery
+              });
+            })
+            .catch(() => {
+              this.loading = false;
+              Message.error('dingtalk API 只在钉钉容器中生效,请在工作台打开');
+            });
+        })
+        .catch(e => {
+          this.$message({
+            showClose: true,
+            message: e,
+            type: 'error',
+            duration: '5000'
+          });
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            message: 'dingtalk API 只在钉钉容器中生效,请在工作台打开???',
+            type: 'error',
+            duration: '5000'
+          });
+        });
+    }
   },
   methods: {
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== "redirect") {
+        if (cur !== 'redirect') {
           acc[cur] = query[cur];
         }
         return acc;

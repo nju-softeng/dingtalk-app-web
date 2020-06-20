@@ -1,30 +1,40 @@
 <template>
-  <div class="vote" :v-loading="loading">
+  <div
+    class="vote"
+    :v-loading="loading"
+  >
+    <!-- 创建投票 -->
     <div
       v-if="vote == ''"
-      style="width:400px;margin-left: auto; margin-right: auto;"
+      class="create"
     >
-      <div style="font-family: 'Segoe UI'; padding-top:60px">
+      <div>
         <p>发起投票</p>
       </div>
-      <div v-loading="loading" style="display:flex; flex-">
-        <el-form style="width:240px" ref="voteform" :model="voteform">
+      <div
+        v-loading="loading"
+        style="display:flex; "
+      >
+        <el-form
+          style="width:240px"
+          ref="voteform"
+          :model="voteform"
+        >
           <el-form-item
             prop="endTime"
             :rules="{
               required: true,
               message: '请选择截止时间',
-              trigger: 'change',
+              trigger: 'change'
             }"
           >
             <span slot="label">截止时间 </span>
             <el-time-picker
               style="width:150px"
-              arrow-control
               v-model="voteform.endTime"
               value-format="HH:mm:ss"
               :picker-options="{
-                selectableRange: '08:30:00 - 21:30:00',
+                selectableRange: '07:00:00 - 21:30:00'
               }"
               placeholder="选择时间"
             >
@@ -32,7 +42,10 @@
           </el-form-item>
         </el-form>
         <div>
-          <el-button type="primary" @click="submitvote">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="submitvote"
+          >确 定</el-button>
         </div>
       </div>
       <span style="font-size:12px">
@@ -41,39 +54,43 @@
         </i>
       </span>
     </div>
-    <div v-else-if="showAns == false" class="poll" v-loading="loading">
+
+    <!-- 投票div -->
+    <div
+      v-else-if="showAns == false"
+      class="poll"
+      v-loading="loading"
+    >
       <div style="padding:10px; font-size:12px">
-        <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
+        <svg-icon icon-class="date" /> 投票截止
         {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
         <el-tooltip
-          class="item"
-          effect="dark"
           content="截止时间后投票无效"
           placement="right"
         >
-          <span style="margin-left:8px"> <svg-icon icon-class="hint"/></span>
+          <svg-icon
+            style="margin-left:8px"
+            icon-class="hint"
+          />
         </el-tooltip>
       </div>
-
       <div>
-        <div style="padding-left:10px; padding-right:10px;margin-bottom:8px">
+        <div class="choice">
           <el-radio
-            style="padding:10px;height:40px;width:100%"
+            class="radio"
             v-model="pollform.result"
             border
             label="true"
-            >ACCEPT [接受]</el-radio
-          >
+          >ACCEPT [接受]</el-radio>
         </div>
-        <div style="padding-left:10px; padding-right:10px">
+        <div class="choice">
           <el-radio
-            style="padding:10px;height:40px;width:100%"
+            class="radio"
             v-model="pollform.result"
             border
             label="false"
-            >REJECT [拒绝]</el-radio
-          >
+          >REJECT [拒绝]</el-radio>
         </div>
       </div>
       <div style="padding:10px">
@@ -82,25 +99,29 @@
           size="medium"
           @click="voting"
           type="primary"
-          >确认提交</el-button
-        >
+        >确认提交</el-button>
       </div>
     </div>
-    <div v-if="showAns == true" class="poll">
+    <!-- 投票结果 -->
+    <div
+      v-if="showAns == true"
+      class="poll"
+    >
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
-        <span slot="label"> <svg-icon icon-class="date" /> 投票截止</span>
+        <span slot="label">
+          <svg-icon icon-class="date" /> 投票截止</span>
         {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
       </div>
       <el-form>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span
-          >
+            <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
           <span> {{ getNum(accept, total) }}% </span>
-          <span v-if="myresult == true" style="color:#409EFF; font-weight:500"
-            >[已选]</span
-          >
+          <span
+            v-if="myresult == true"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
           <el-progress
             class="progress"
             :percentage="getpercentage(accept, total)"
@@ -109,12 +130,12 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span
-          >
+            <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
           {{ getNum(reject, total) }}%
-          <span v-if="myresult == false" style="color:#409EFF; font-weight:500"
-            >[已选]</span
-          >
+          <span
+            v-if="myresult == false"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
           <el-progress
             class="progress"
             :percentage="getpercentage(reject, total)"
@@ -123,12 +144,11 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span
-          >
+            <svg-icon icon-class="paper" /> 参与人数 {{ total }} 人</span>
           <span
             v-if="myresult == undefined"
             style="color:#409EFF; font-weight:500;margin-right:5px"
-            >[您未参与投票]
+          >[您未参与投票]
           </span>
           <el-link
             type="primary"
@@ -137,12 +157,15 @@
               flag = true;
               fetchVoteDetail();
             "
-            >详情
+          >详情
           </el-link>
         </el-form-item>
       </el-form>
     </div>
-    <div class="poll" v-if="flag">
+    <div
+      class="poll"
+      v-if="flag"
+    >
       <el-form>
         <el-form-item>
           <span slot="label">
@@ -153,8 +176,7 @@
             style="margin:0px 4px;"
             v-for="(item, index) in acceptlist"
             :key="index"
-            >{{ item }}</el-tag
-          >
+          >{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
@@ -165,8 +187,20 @@
             style="margin:0px 4px;"
             v-for="(item, index) in rejectlist"
             :key="index"
-            >{{ item }}</el-tag
-          >
+          >{{ item }}</el-tag>
+        </el-form-item>
+        <el-form-item v-if="unvotelist.length > 0">
+          <span slot="label">
+            <svg-icon icon-class="paper" /> 未参与投票
+            {{ unvotelist.length }} 人:
+          </span>
+
+          <el-tag
+            type="info"
+            style="margin:0px 4px;"
+            v-for="(item, index) in unvotelist"
+            :key="index"
+          >{{ item }}</el-tag>
         </el-form-item>
       </el-form>
     </div>
@@ -180,15 +214,15 @@ export default {
       loading: false,
       voteform: {
         paperid: "",
-        endTime: "",
+        endTime: ""
       },
       pid: null,
       vote: {},
       pollform: {
         result: "",
         vote: {
-          id: "",
-        },
+          id: ""
+        }
       },
       showAns: false,
       accept: "",
@@ -196,9 +230,10 @@ export default {
       isEnd: "false",
       acceptlist: [],
       rejectlist: [],
+      unvotelist: [],
       total: "",
       myresult: undefined,
-      flag: false,
+      flag: false
     };
   },
 
@@ -208,7 +243,7 @@ export default {
 
     //todo 修改， 拿论文对应的投票
     getPaperVote(this.pid)
-      .then((res) => {
+      .then(res => {
         this.vote = res.data;
         console.log(this.vote);
         this.isEnd = res.data.status;
@@ -231,12 +266,12 @@ export default {
   methods: {
     // 创建的投票
     submitvote() {
-      this.$refs.voteform.validate((valid) => {
+      this.$refs.voteform.validate(valid => {
         if (valid) {
           this.loading = true;
           this.voteform.paperid = this.pid;
           createVote(this.voteform)
-            .then((res) => {
+            .then(res => {
               console.log(res.data);
               this.vote = res.data;
             })
@@ -248,7 +283,7 @@ export default {
     },
     //获取投票详情
     fetchVoteDetail() {
-      getVoteDetail(this.pid).then((res) => {
+      getVoteDetail(this.pid).then(res => {
         console.log(res.data);
         this.showAns = res.data.status;
         if (this.showAns) {
@@ -258,6 +293,7 @@ export default {
           this.myresult = res.data.result;
           this.acceptlist = res.data.acceptnames;
           this.rejectlist = res.data.rejectnames;
+          this.unvotelist = res.data.unvotenames || [];
         }
       });
     },
@@ -296,16 +332,23 @@ export default {
       this.pollform.vote.id = this.vote.id;
       this.loading = true;
       addpoll(this.vote.id, this.pollform)
-        .then((res) => {
+        .then(res => {
           this.showAns = true;
+          this.myresult = res.data.result;
           this.accept = res.data.accept;
           this.reject = res.data.reject;
           this.total = res.data.total;
         })
+        .catch(error => {
+          if (error.response.data.status == 409) {
+            this.fetchVoteDetail();
+            console.log("?????");
+          }
+        })
         .finally(() => {
           this.loading = false;
         });
-    },
+    }
   },
   computed: {
     // 投票百分比
@@ -325,11 +368,26 @@ export default {
         }
         return (val / total).toFixed(2) * 100;
       };
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
+.create {
+  width: 400px;
+  font-family: "Segoe UI";
+  padding-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.choice {
+  padding: 4px 10px;
+  .radio {
+    padding: 10px;
+    height: 40px;
+    width: 100%;
+  }
+}
 .vote {
   background: #fff;
   min-height: 80vh;

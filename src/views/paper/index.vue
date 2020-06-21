@@ -638,6 +638,7 @@ export default {
     .title {
       a {
         color: #0366d6;
+        font-weight: 600;
       }
       color: #409eff;
       font-weight: 500;

@@ -125,7 +125,7 @@
     </div>
 
     <!-- 投稿结果  dialog -->
-    <el-dialog title="录用结果" width="30%" :visible.sync="resultDialog">
+    <el-dialog title="录用结果" width="30%" :visible.sync="resultDialog" :lock-scroll="false">
       <div v-loading="loading">
         <el-form>
           <el-form-item>
@@ -146,7 +146,7 @@
     </el-dialog>
 
     <!-- 发起投票  dialog -->
-    <el-dialog title="发起投票" :visible.sync="voteDialog" width="40%">
+    <el-dialog title="发起投票" :visible.sync="voteDialog" :lock-scroll="false" width="40%">
       <div v-loading="loading">
         <el-form ref="voteform" :model="voteform">
           <el-form-item prop="endTime" :rules="{

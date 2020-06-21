@@ -637,7 +637,7 @@ export default {
     flex-direction: column;
     .title {
       a {
-        color: #409eff;
+        color: #0366d6;
       }
       color: #409eff;
       font-weight: 500;

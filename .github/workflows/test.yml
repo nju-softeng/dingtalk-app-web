@@ -65,5 +65,5 @@ jobs:
             docker container rm ${{ secrets.DOCKER_CONTAINER }}
 
             echo "run new docker container"
-            docker run -d --net dingtalk-net -p 8089:80 --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
+            docker run -d --net dingtalk-net -p 8089:80 -v /etc/localtime:/etc/localtime --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
             docker image prune -f

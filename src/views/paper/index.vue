@@ -87,13 +87,7 @@
             <template slot-scope="scope">
               <div class="info-item">
                 <div style="font-size:14px">
-                  <el-tooltip effect="dark" content="评审投票" placement="top">
-                    <svg-icon @click="newVote(scope.row)" icon-class="vote" />
-                  </el-tooltip>
-
-                  <el-divider direction="vertical"></el-divider>
-
-                  <el-tooltip effect="dark" content="投稿结果" placement="top">
+                  <el-tooltip effect="dark" content="录用结果" placement="top">
                     <svg-icon @click="updatePaperResult(scope.row)" icon-class="review" />
                   </el-tooltip>
 
@@ -131,7 +125,7 @@
     </div>
 
     <!-- 投稿结果  dialog -->
-    <el-dialog title="投稿结果" width="30%" :visible.sync="resultDialog">
+    <el-dialog title="录用结果" width="30%" :visible.sync="resultDialog">
       <div v-loading="loading">
         <el-form>
           <el-form-item>

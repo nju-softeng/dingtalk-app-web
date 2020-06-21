@@ -10,7 +10,7 @@
 
           <div>
             <p style="margin-bottom:0px">
-              <span style="font-family:SimHei;font-size:18px;color:#0366d6;font-weight: 600;">
+              <span style="font-size:18px;color:#0366d6;font-weight: 500;">
                 {{ paper.title }}</span>
             </p>
 

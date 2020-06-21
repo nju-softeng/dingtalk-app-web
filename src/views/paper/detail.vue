@@ -10,11 +10,11 @@
 
           <div>
             <p style="margin-bottom:0px">
-              <span style="font-size:18px;font-family: 'Segoe UI';color:#0366d6;font-weight: 600;">
+              <span style="font-family:SimHei;font-size:18px;color:#0366d6;font-weight: 600;">
                 {{ paper.title }}</span>
             </p>
 
-            <div style="font-family: 'Segoe UI';display:flex;flex-wrap: wrap">
+            <div style="display:flex;flex-wrap: wrap">
               <div style="font-size:13px;color:#595959; margin-right:48px">
                 <p>
                   <svg-icon icon-class="school" />

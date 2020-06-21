@@ -25,7 +25,8 @@
                 <p>
                   <span>
                     <svg-icon icon-class="people" /> 作者: </span>
-                  <span style="margin:6px" v-for="(p, index) in paper.paperDetails" :key="index">{{ p.user.name }}</span>
+                  <span style="margin:6px" v-for="(p, index) in paper.paperDetails"
+                    :key="index">{{ p.user.name }}</span>
                 </p>
               </div>
 
@@ -51,8 +52,8 @@
           </div>
         </div>
         <el-menu @select="handleSelect" :default-active="activeTab" mode="horizontal">
-          <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="vote">投票</el-menu-item>
+          <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
         </el-menu>
       </div>
@@ -101,7 +102,7 @@ export default {
       paper: {},
       acceptlist: "",
       rejectlist: "",
-      activeTab: "review"
+      activeTab: "vote"
     };
   },
   components: {
@@ -178,7 +179,7 @@ export default {
   },
   created() {
     this.id = this.$route.params.id;
-    this.activeTab = this.$route.params.tab || "review";
+    this.activeTab = this.$route.params.tab || "vote";
     getPaper(this.id)
       .then(res => {
         this.paper = res.data;

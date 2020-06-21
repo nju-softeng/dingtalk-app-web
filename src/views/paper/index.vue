@@ -638,7 +638,7 @@ export default {
     .title {
       a {
         color: #0366d6;
-        font-weight: 500;
+        font-weight: 570;
         font-family: "Segoe UI";
       }
       color: #409eff;

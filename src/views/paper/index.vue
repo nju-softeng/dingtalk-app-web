@@ -83,7 +83,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center" fixed="right" width="180">
+          <el-table-column label="操作" align="center" width="180">
             <template slot-scope="scope">
               <div class="info-item">
                 <div style="font-size:14px">

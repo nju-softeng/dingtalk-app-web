@@ -14,7 +14,6 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-
       <el-main style="padding-top:0px">
         <component v-bind:is="activeName"></component>
       </el-main>
@@ -47,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 .menu {
   width: 170px;
-  min-height: 400px;
+  min-height: 550px;
   /deep/ .el-menu {
     border-right: 1px solid #f0f0f0;
   }
@@ -79,6 +78,6 @@ export default {
   margin-right: auto;
   background: #fff;
   padding-top: 12px;
-  min-height: 89vh;
+  min-height: 570px;
 }
 </style>

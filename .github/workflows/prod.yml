@@ -18,7 +18,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/dingtalk-vue/
-            rm -rf dist/
+            git pull origin master
             npm install
             npm run build
             docker build -t dingtalk_vue .

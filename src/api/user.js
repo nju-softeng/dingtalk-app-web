@@ -66,3 +66,12 @@ export function getUserDetail() {
     method: "get"
   });
 }
+
+// 查询用户详细
+export function updateUserInfo(data) {
+  return axios({
+    url: "/user/update",
+    method: "post",
+    data
+  });
+}

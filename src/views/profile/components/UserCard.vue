@@ -8,25 +8,47 @@
           }}</el-avatar>
         </div>
         <div class="box-center" style="height:100px">
-          <div class="user-name text-center">{{ user.name }}</div>
-          <div class="user-role text-center text-muted">
-            <el-tag>
-              {{ user.position }}
-            </el-tag>
+          <template v-if="edit == false">
+            <div class="user-name text-center">{{ user.name }}</div>
+            <div class="user-role text-center text-muted">
+              {{ user.stuNum }}
+            </div>
+          </template>
+          <template v-else>
+            <div class="user-name text-center">
+              <el-input v-model="user.name" style="width:180px" placeholder="姓名"></el-input>
+              <el-input v-model="user.stuNum" style="width:180px;padding-top:10px" placeholder="学号"></el-input>
+            </div>
+          </template>
+
+          <div class="text-center text-muted" style="padding-top:16px">
+            <el-button size="mini" style="width:180px" v-if="edit == false" @click="edit = true">编辑资料</el-button>
+            <el-button size="mini" style="width:180px" v-else @click="
+                edit = false;
+                submitUserinfo();
+              ">确认</el-button>
           </div>
         </div>
       </div>
 
       <el-divider></el-divider>
 
-      <div class="user-bio">
-        <div class="user-education user-bio-section">
-          <div class="user-bio-section-header">
-            <svg-icon icon-class="education" />
-          </div>
-          <div class="user-bio-section-body">
-            <div class="text-muted"></div>
-          </div>
+      <div style="height:100px">
+        <div style="padding-left:30px;padding-top:20px;">
+          <span style="color:#8c8c8c;font-size:14px">
+            在读学位 :
+          </span>
+          <el-tag>
+            {{ user.position }}
+          </el-tag>
+        </div>
+        <div style="padding-left:30px;padding-top:10px">
+          <span style="color:#8c8c8c;font-size:14px">
+            当前 A C :
+          </span>
+          <span style="padding:20px">
+            {{ acTotal }}
+          </span>
         </div>
       </div>
     </div>
@@ -34,23 +56,57 @@
 </template>
 
 <script>
-import { getUserDetail } from "@/api/user";
+import { getUserDetail, updateUserInfo } from "@/api/user";
+import { getPerformance } from "@/api/performance";
 export default {
   data() {
     return {
+      edit: false,
       user: {
         name: "",
         avatar: "",
-        position: ""
-      }
+        position: "",
+        stuNum: ""
+      },
+      acTotal: null
     };
   },
   created() {
     this.avatar = sessionStorage.getItem("avatar");
     getUserDetail().then(res => {
-      console.log(res.data);
       this.user = res.data;
     });
+    getPerformance().then(res => {
+      this.acTotal = res.data.acTotal;
+    });
+  },
+  methods: {
+    submitUserinfo() {
+      if (this.user.name == "") {
+        this.$message({
+          showClose: true,
+          message: "请填写必要信息",
+          type: "warning"
+        });
+        getUserDetail().then(res => {
+          this.user = res.data;
+        });
+        return;
+      }
+      updateUserInfo(this.user)
+        .then(() => {
+          this.$message({
+            showClose: true,
+            message: "更新成功",
+            type: "success"
+          });
+        })
+        .finally(() => {
+          getUserDetail().then(res => {
+            this.user = res.data;
+          });
+        });
+    }
   }
 };
 </script>
@@ -92,39 +148,6 @@ export default {
     padding-top: 10px;
     font-weight: 400;
     font-size: 14px;
-  }
-
-  .box-social {
-    padding-top: 30px;
-
-    .el-table {
-      border-top: 1px solid #dfe6ec;
-    }
-  }
-
-  .user-follow {
-    padding-top: 20px;
-  }
-}
-
-.user-bio {
-  margin-top: 20px;
-  color: #606266;
-
-  span {
-    padding-left: 4px;
-  }
-
-  .user-bio-section {
-    font-size: 14px;
-    padding: 15px 0;
-
-    .user-bio-section-header {
-      border-bottom: 1px solid #dfe6ec;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
   }
 }
 </style>

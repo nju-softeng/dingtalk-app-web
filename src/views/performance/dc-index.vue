@@ -2,24 +2,23 @@
   <div class="app-container">
     <div class="box">
       <div>
-        <el-date-picker size="mini" v-model="date" :clearable="false" value-format="yyyy-MM-dd" @change="filtrate"
-          type="month" style="width:120px" placeholder="选择月">
-        </el-date-picker>
+        <el-date-picker size="mini" v-model="date" :clearable="false" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月"> </el-date-picker>
         <el-button-group style="margin-left:5px">
           <el-button @click="prev" icon="el-icon-arrow-left">上一月</el-button>
           <el-button @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </el-button-group>
+        <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+          Export Excel
+        </el-button>
       </div>
 
-      <el-table v-loading="loading" element-loading-spinner="el-icon-loading" class="table" stripe :data="list" border
-        style="margin-top:10px;" height="77.5vh">
+      <el-table v-loading="loading" element-loading-spinner="el-icon-loading" class="table" stripe :data="list" border style="margin-top:10px;" height="77.5vh">
         <el-table-column fixed label="学号" width="100" align="center">
           <template slot-scope="{ row }">
-            {{ row.stu_num || "未设置" }}
+            {{ row.stu_num || '未设置' }}
           </template>
         </el-table-column>
-        <el-table-column fixed prop="name" label="姓名" align="center">
-        </el-table-column>
+        <el-table-column fixed prop="name" label="姓名" align="center"> </el-table-column>
         <el-table-column label="助研金" align="center">
           <template slot-scope="{ row }">
             {{ row.salary || 0 }}
@@ -65,16 +64,19 @@
             <template v-if="!row.edit">
               {{ row.topup || 0 }}
 
-              <el-button type="text" v-if="roles.includes('admin')" icon="el-icon-edit" @click="row.edit = true"
-                style="margin-left:16px">
-              </el-button>
+              <el-button type="text" v-if="roles.includes('admin')" icon="el-icon-edit" @click="row.edit = true" style="margin-left:16px"> </el-button>
             </template>
             <template v-else>
               <el-input v-model="row.topup" placeholder="请输入内容"></el-input>
-              <el-button type="text" icon="el-icon-check" @click="
+              <el-button
+                type="text"
+                icon="el-icon-check"
+                @click="
                   row.edit = false;
                   updateTopup(row);
-                " style="margin-right:8px">
+                "
+                style="margin-right:8px"
+              >
                 确认
               </el-button>
               <el-button type="text" icon="el-icon-close" @click="row.edit = false" style="margin-left:8px">
@@ -89,13 +91,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { getDcSummary, updateTopup } from "@/api/performance";
+import { mapGetters } from 'vuex';
+import { getDcSummary, updateTopup } from '@/api/performance';
+
 export default {
   data() {
     return {
       loading: false,
       list: null,
+      downloadLoading: false,
       date: new Date().toISOString().slice(0, 10)
     };
   },
@@ -103,13 +107,42 @@ export default {
     this.fetchDcSummary(new Date());
   },
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(['roles']),
+    filename() {
+      return this.date + '-绩效汇总';
+    }
   },
   methods: {
+    handleDownload() {
+      this.downloadLoading = true;
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['学号', '姓名', '补贴总金额', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '本月总DC值', '当前AC值', 'topup'];
+        const filterVal = ['stu_num', 'name', 'salary', 'week1', 'week2', 'week3', 'week4', 'week5', 'total', 'ac', 'topup'];
+        const list = this.list;
+        const data = this.formatJson(filterVal, list);
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: true,
+          bookType: 'xlsx'
+        });
+        this.downloadLoading = false;
+        console.log(data);
+      });
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v =>
+        filterVal.map(j => {
+          console.log(j);
+          return v[j];
+        })
+      );
+    },
     updateTopup(row) {
       let vo = {
         uid: row.uid,
-        yearmonth: this.date.slice(0, 8).replace(/-/g, ""),
+        yearmonth: this.date.slice(0, 8).replace(/-/g, ''),
         topup: row.topup
       };
       console.log(vo);
@@ -119,8 +152,8 @@ export default {
         this.fetchDcSummary(this.date);
         this.$message({
           showClose: true,
-          message: "编辑成功",
-          type: "success"
+          message: '编辑成功',
+          type: 'success'
         });
       });
     },
@@ -130,6 +163,7 @@ export default {
           item.edit = false;
           return item;
         });
+        console.log(this.list);
       });
     },
     filtrate() {
@@ -138,13 +172,13 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "请选择月份",
-          type: "warning"
+          message: '请选择月份',
+          type: 'warning'
         });
       }
     },
     next() {
-      if (typeof this.date == "string") {
+      if (typeof this.date == 'string') {
         this.date = new Date(this.date);
       }
       this.loading = true;
@@ -156,7 +190,7 @@ export default {
       }, 400);
     },
     prev() {
-      if (typeof this.date == "string") {
+      if (typeof this.date == 'string') {
         this.date = new Date(this.date);
       }
       this.loading = true;

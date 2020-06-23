@@ -28,7 +28,7 @@
     </div>
 
     <div>
-      <el-table :data="list" style="margin-top:10px;">
+      <el-table :data="list" style="margin-top:10px;" :header-cell-style="{ background: '#eef1f6' }">
         <el-table-column label="学号" align="center">
           <template slot-scope="{ row }">
             <span v-if="row.stuNum == undefined">未设置</span>

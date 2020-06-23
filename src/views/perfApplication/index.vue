@@ -8,7 +8,7 @@
         <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
         <!-- 已提的交申请 -->
         <div style="height:430px">
-          <el-table :data="list" fit highlight-current-row style="width: 100%">
+          <el-table :data="list" fit highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }">
             <el-table-column width="30px" label="#" type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline>

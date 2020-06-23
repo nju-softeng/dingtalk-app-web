@@ -3,7 +3,7 @@
     <div class="box">
       <!-- AC排名 -->
       <el-card shadow="never" class="box-card" style="width: 35%;">
-        <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
+        <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" :header-cell-style="{ background: '#eef1f6' }">
           <el-table-column type="index"> </el-table-column>
           <el-table-column prop="name" label="姓名"> </el-table-column>
           <el-table-column prop="total" label="总AC"> </el-table-column>
@@ -46,26 +46,26 @@
 </template>
 
 <script>
-import { getAcSummary, listUserAc } from "@/api/performance";
+import { getAcSummary, listUserAc } from '@/api/performance';
 
 export default {
   data() {
     return {
       loading: false,
       list: [],
-      name: "",
-      ac: "",
+      name: '',
+      ac: '',
       aclist: []
     };
   },
   computed: {
     getClassify() {
       return val => {
-        if (val == 0) return "周报申请";
-        else if (val == 1) return "项目AC";
-        else if (val == 2) return "论文AC";
-        else if (val == 4) return "bug";
-        else return "投票AC";
+        if (val == 0) return '周报申请';
+        else if (val == 1) return '项目AC';
+        else if (val == 2) return '论文AC';
+        else if (val == 4) return 'bug';
+        else return '投票AC';
       };
     }
   },

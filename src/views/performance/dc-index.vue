@@ -12,7 +12,17 @@
         </el-button>
       </div>
 
-      <el-table v-loading="loading" element-loading-spinner="el-icon-loading" class="table" stripe :data="list" border style="margin-top:10px;" height="77.5vh">
+      <el-table
+        v-loading="loading"
+        element-loading-spinner="el-icon-loading"
+        class="table"
+        stripe
+        :data="list"
+        border
+        style="margin-top:10px;"
+        height="77.5vh"
+        :header-cell-style="{ background: '#eef1f6' }"
+      >
         <el-table-column fixed label="学号" width="100" align="center">
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}

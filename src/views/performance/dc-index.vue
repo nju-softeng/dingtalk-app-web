@@ -59,7 +59,7 @@
             {{ row.ac || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="topup" align="center" width="140">
+        <el-table-column label="Topup" align="center" width="140">
           <template slot-scope="{ row }">
             <template v-if="!row.edit">
               {{ row.topup || 0 }}
@@ -116,7 +116,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true;
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['学号', '姓名', '补贴总金额', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '本月总DC值', '当前AC值', 'topup'];
+        const tHeader = ['学号', '姓名', '补贴总金额', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '本月总DC值', '当前AC值', 'Topup'];
         const filterVal = ['stu_num', 'name', 'salary', 'week1', 'week2', 'week3', 'week4', 'week5', 'total', 'ac', 'topup'];
         const list = this.list;
         const data = this.formatJson(filterVal, list);

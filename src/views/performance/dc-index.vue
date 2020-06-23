@@ -1,48 +1,133 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-date-picker size="small" v-model="date" value-format="yyyy-MM-dd" @change="filtrate" type="month" style="width:120px" placeholder="选择月">
-      </el-date-picker>
-      <el-button-group style="margin-left:5px">
-        <el-button type="primary" @click="prev" icon="el-icon-arrow-left">上一月</el-button>
-        <el-button type="primary" @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-      </el-button-group>
-      <el-table class="table" stripe :data="list" border style="margin-top:10px;" height="77.5vh">
+      <div>
+        <el-date-picker size="mini" v-model="date" :clearable="false" value-format="yyyy-MM-dd" @change="filtrate"
+          type="month" style="width:120px" placeholder="选择月">
+        </el-date-picker>
+        <el-button-group style="margin-left:5px">
+          <el-button @click="prev" icon="el-icon-arrow-left">上一月</el-button>
+          <el-button @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+        </el-button-group>
+      </div>
+
+      <el-table v-loading="loading" element-loading-spinner="el-icon-loading" class="table" stripe :data="list" border
+        style="margin-top:10px;" height="77.5vh">
+        <el-table-column fixed label="学号" width="100">
+          <template slot-scope="{ row }">
+            {{ row.stu_num || "未设置" }}
+          </template>
+        </el-table-column>
         <el-table-column fixed prop="name" label="姓名"> </el-table-column>
-        <el-table-column prop="salary" label="助研金"> </el-table-column>
-        <el-table-column prop="week1" label="第一周DC"> </el-table-column>
-        <el-table-column prop="week2" label="第二周DC"> </el-table-column>
-        <el-table-column prop="week3" label="第三周DC"> </el-table-column>
-        <el-table-column prop="week4" label="第四周DC"> </el-table-column>
-        <el-table-column prop="week5" label="第五周DC"> </el-table-column>
-        <el-table-column prop="total" label="本月总DC"> </el-table-column>
-        <el-table-column prop="ac" label="当前AC值"> </el-table-column>
-        <el-table-column prop="topup" label="Topup"> </el-table-column>
+        <el-table-column label="助研金">
+          <template slot-scope="{ row }">
+            {{ row.salary || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="第1周DC">
+          <template slot-scope="{ row }">
+            {{ row.week1 || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="第2周DC">
+          <template slot-scope="{ row }">
+            {{ row.week2 || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="第3周DC">
+          <template slot-scope="{ row }">
+            {{ row.week3 || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="第4周DC">
+          <template slot-scope="{ row }">
+            {{ row.week4 || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="第5周DC">
+          <template slot-scope="{ row }">
+            {{ row.week5 || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="本月总DC">
+          <template slot-scope="{ row }">
+            {{ row.total || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="当前AC值">
+          <template slot-scope="{ row }">
+            {{ row.ac || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="topup" align="center" width="150">
+          <template slot-scope="{ row }">
+            <template v-if="!row.edit">
+              {{ row.topup || 0 }}
+
+              <el-button type="text" icon="el-icon-edit" @click="row.edit = true" style="margin-left:16px"></el-button>
+            </template>
+            <template v-else>
+              <el-input v-model="row.topup" placeholder="请输入内容"></el-input>
+              <el-button type="text" icon="el-icon-check" @click="
+                  row.edit = false;
+                  updateTopup(row);
+                " style="margin-right:8px">
+                确认
+              </el-button>
+              <el-button type="text" icon="el-icon-close" @click="row.edit = false" style="margin-left:8px">
+                取消
+              </el-button>
+            </template>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
-import { getDcSummary } from "@/api/performance";
+import { getDcSummary, updateTopup } from "@/api/performance";
 export default {
   data() {
     return {
+      loading: false,
       list: null,
-      date: new Date()
+      date: new Date().toISOString().slice(0, 10)
     };
   },
   created() {
-    getDcSummary(new Date()).then(res => {
-      this.list = res.data;
-    });
+    this.fetchDcSummary(new Date());
   },
   methods: {
+    updateTopup(row) {
+      let vo = {
+        uid: row.uid,
+        yearmonth: this.date.slice(0, 8).replace(/-/g, ""),
+        topup: row.topup
+      };
+      console.log(vo);
+      updateTopup(vo).then(() => {
+        this.date = new Date(this.date);
+        this.date = this.date.toISOString().slice(0, 10);
+        this.fetchDcSummary(this.date);
+        this.$message({
+          showClose: true,
+          message: "编辑成功",
+          type: "success"
+        });
+      });
+    },
+    fetchDcSummary(date) {
+      getDcSummary(date).then(res => {
+        this.list = res.data.map(item => {
+          item.edit = false;
+          return item;
+        });
+      });
+    },
     filtrate() {
       if (this.date != undefined) {
-        getDcSummary(this.date).then(res => {
-          this.list = res.data;
-        });
+        this.fetchDcSummary(this.date);
       } else {
         this.$message({
           showClose: true,
@@ -55,21 +140,25 @@ export default {
       if (typeof this.date == "string") {
         this.date = new Date(this.date);
       }
+      this.loading = true;
       this.date.setMonth(this.date.getMonth() + 1);
       this.date = this.date.toISOString().slice(0, 10);
-      getDcSummary(this.date).then(res => {
-        this.list = res.data;
-      });
+      this.fetchDcSummary(this.date);
+      setTimeout(() => {
+        this.loading = false;
+      }, 400);
     },
     prev() {
       if (typeof this.date == "string") {
         this.date = new Date(this.date);
       }
+      this.loading = true;
       this.date.setMonth(this.date.getMonth() - 1);
       this.date = this.date.toISOString().slice(0, 10);
-      getDcSummary(this.date).then(res => {
-        this.list = res.data;
-      });
+      this.fetchDcSummary(this.date);
+      setTimeout(() => {
+        this.loading = false;
+      }, 400);
     }
   }
 };
@@ -87,7 +176,7 @@ export default {
 }
 
 .box {
-  max-width: 1056px;
+  max-width: 1072px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;

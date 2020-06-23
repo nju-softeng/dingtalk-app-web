@@ -42,3 +42,12 @@ export function getPerformance() {
     method: "get"
   });
 }
+
+// 更新用户指定月份的topup
+export function updateTopup(data) {
+  return axios({
+    url: "/performance/topup",
+    method: "post",
+    data
+  });
+}

@@ -13,58 +13,61 @@
 
       <el-table v-loading="loading" element-loading-spinner="el-icon-loading" class="table" stripe :data="list" border
         style="margin-top:10px;" height="77.5vh">
-        <el-table-column fixed label="学号" width="100">
+        <el-table-column fixed label="学号" width="100" align="center">
           <template slot-scope="{ row }">
             {{ row.stu_num || "未设置" }}
           </template>
         </el-table-column>
-        <el-table-column fixed prop="name" label="姓名"> </el-table-column>
-        <el-table-column label="助研金">
+        <el-table-column fixed prop="name" label="姓名" align="center">
+        </el-table-column>
+        <el-table-column label="助研金" align="center">
           <template slot-scope="{ row }">
             {{ row.salary || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="第1周DC">
+        <el-table-column label="第1周DC" align="center">
           <template slot-scope="{ row }">
             {{ row.week1 || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="第2周DC">
+        <el-table-column label="第2周DC" align="center">
           <template slot-scope="{ row }">
             {{ row.week2 || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="第3周DC">
+        <el-table-column label="第3周DC" align="center">
           <template slot-scope="{ row }">
             {{ row.week3 || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="第4周DC">
+        <el-table-column label="第4周DC" align="center">
           <template slot-scope="{ row }">
             {{ row.week4 || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="第5周DC">
+        <el-table-column label="第5周DC" align="center">
           <template slot-scope="{ row }">
             {{ row.week5 || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="本月总DC">
+        <el-table-column label="本月总DC" align="center">
           <template slot-scope="{ row }">
             {{ row.total || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="当前AC值">
+        <el-table-column label="当前AC值" align="center">
           <template slot-scope="{ row }">
             {{ row.ac || 0 }}
           </template>
         </el-table-column>
-        <el-table-column label="topup" align="center" width="150">
+        <el-table-column label="topup" align="center" width="140">
           <template slot-scope="{ row }">
             <template v-if="!row.edit">
               {{ row.topup || 0 }}
 
-              <el-button type="text" icon="el-icon-edit" @click="row.edit = true" style="margin-left:16px"></el-button>
+              <el-button type="text" v-if="roles.includes('admin')" icon="el-icon-edit" @click="row.edit = true"
+                style="margin-left:16px">
+              </el-button>
             </template>
             <template v-else>
               <el-input v-model="row.topup" placeholder="请输入内容"></el-input>
@@ -86,6 +89,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { getDcSummary, updateTopup } from "@/api/performance";
 export default {
   data() {
@@ -97,6 +101,9 @@ export default {
   },
   created() {
     this.fetchDcSummary(new Date());
+  },
+  computed: {
+    ...mapGetters(["roles"])
   },
   methods: {
     updateTopup(row) {

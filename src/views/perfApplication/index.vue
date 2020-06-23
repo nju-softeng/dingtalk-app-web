@@ -15,9 +15,7 @@
                   <el-form-item label="AC申请：">
                     <span v-if="props.row.acItems.length == 0"> 无 </span>
                     <div v-else>
-                      <li v-for="(item, index) in props.row.acItems" :key="index">
-                        申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
-                      </li>
+                      <li v-for="(item, index) in props.row.acItems" :key="index">申请值: {{ item.ac }} / 申请理由：{{ item.reason }}</li>
                     </div>
                   </el-form-item>
                 </el-form>
@@ -26,9 +24,7 @@
 
             <el-table-column width="140px" align="center" label="提交日期">
               <template slot-scope="{ row }">
-                <span>{{
-                  row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
-                }}</span>
+                <span>{{ row.insertTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
               </template>
             </el-table-column>
 
@@ -72,9 +68,7 @@
             </el-table-column>
             <template slot="empty">
               <div style="height:280px;">
-                <div style="margin-top:100px;">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
-                </div>
+                <div style="margin-top:100px;"><svg-icon icon-class="null" style="font-size:32px" /> <br /></div>
                 <div style="line-height: 10px;">
                   <span>没有已申请内容</span>
                 </div>
@@ -82,7 +76,17 @@
             </template>
           </el-table>
           <div style="text-align:center; margin-top:5px">
-            <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total > 10" small layout="prev, pager, next" :total="total" :page-size="10">
+            <el-pagination
+              @prev-click="handlePrev"
+              @next-click="handleNext"
+              @current-change="handleCurrentChange"
+              background
+              :hide-on-single-page="total < 10 ? true : false"
+              small
+              layout="prev, pager, next"
+              :total="total"
+              :page-size="10"
+            >
             </el-pagination>
           </div>
         </div>
@@ -93,16 +97,16 @@
 </template>
 
 <script>
-import { listAuditors } from "@/api/user";
-import { getUserApplication } from "@/api/application";
-import drawer from "./components/drawer";
+import { listAuditors } from '@/api/user';
+import { getUserApplication } from '@/api/application';
+import drawer from './components/drawer';
 export default {
   data: () => ({
     show: false,
     tmp: {},
     auditors: [],
     loading: false,
-    direction: "ltr",
+    direction: 'ltr',
     list: [],
     total: 0
   }),
@@ -141,13 +145,13 @@ export default {
     // 点击添加后调用
     addApply() {
       this.tmp = null;
-      this.direction = "ltr";
+      this.direction = 'ltr';
       this.show = true;
     },
     // 点击修改后调用
     addModify(row) {
       this.tmp = row;
-      this.direction = "rtl";
+      this.direction = 'rtl';
       this.show = true;
     },
     // 提交后刷新数据
@@ -177,6 +181,6 @@ export default {
 .box {
   background: #fff;
   padding: 10px 15px;
-  min-height: 89vh;
+  min-height: 540px;
 }
 </style>

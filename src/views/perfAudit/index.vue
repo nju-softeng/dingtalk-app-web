@@ -15,12 +15,12 @@
 export default {
   data() {
     return {
-      activetab: "checking"
+      activetab: 'checking'
     };
   },
   components: {
-    checking: () => import("./components/checking"),
-    checked: () => import("./components/checked")
+    checking: () => import('./components/checking'),
+    checked: () => import('./components/checked')
   }
 };
 </script>
@@ -39,6 +39,6 @@ export default {
   margin-right: auto;
   background: #fff;
   padding: 10px 15px;
-  min-height: 89vh;
+  min-height: 530px;
 }
 </style>

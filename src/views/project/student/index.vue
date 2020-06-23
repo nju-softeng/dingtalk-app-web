@@ -16,16 +16,16 @@ export default {
   data() {
     return {
       unfinish: true,
-      activeTab: "myIteration"
+      activeTab: 'myIteration'
     };
   },
   components: {
-    myIteration: () => import("../components/myIteration"),
-    userbug: () => import("../components/userbug"),
-    devlist: () => import("../components/devlist")
+    myIteration: () => import('../components/myIteration'),
+    userbug: () => import('../components/userbug'),
+    devlist: () => import('../components/devlist')
   },
   created() {
-    this.activeTab = this.$route.query.tab || "myIteration";
+    this.activeTab = this.$route.query.tab || 'myIteration';
   },
   methods: {}
 };
@@ -48,6 +48,6 @@ export default {
   margin-right: auto;
   background: #fff;
   padding: 5px 20px;
-  min-height: 87vh;
+  min-height: 530px;
 }
 </style>

@@ -14,16 +14,16 @@
 export default {
   data() {
     return {
-      activeTab: "assign"
+      activeTab: 'assign'
     };
   },
   components: {
-    assign: () => import("../components/assign"),
-    auditbug: () => import("../components/auditbug"),
-    devlist: () => import("../components/devlist")
+    assign: () => import('../components/assign'),
+    auditbug: () => import('../components/auditbug'),
+    devlist: () => import('../components/devlist')
   },
   created() {
-    this.activeTab = this.$route.query.tab || "assign";
+    this.activeTab = this.$route.query.tab || 'assign';
   },
   methods: {}
 };
@@ -44,7 +44,7 @@ export default {
   max-width: 1056px;
   margin-left: auto;
   margin-right: auto;
-  min-height: 86vh;
+  min-height: 530px;
   background: #fff;
   padding: 5px 20px 0 20px;
 }

@@ -128,7 +128,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="停用列表" :visible.sync="disableDialog">
+    <el-dialog title="停用列表" :lock-scroll="false" :visible.sync="disableDialog">
       <el-table :data="disablelist">
         <el-table-column label="学号">
           <template slot-scope="{ row }">

@@ -59,3 +59,27 @@ export function updateUserInfo(data) {
     data
   });
 }
+
+// 禁用用户
+export function disableUser(uid) {
+  return axios({
+    url: "/system/disable/user/" + uid,
+    method: "get"
+  });
+}
+
+// 启用用户
+export function enableUser(uid) {
+  return axios({
+    url: "/system/enable/user/" + uid,
+    method: "get"
+  });
+}
+
+// 查询禁用的用户
+export function queryDisableUser() {
+  return axios({
+    url: "/system/query/disableuser",
+    method: "get"
+  });
+}

@@ -14,15 +14,16 @@
     </div>
     <el-divider></el-divider>
     <div class="filtrate">
-      <el-input @change="search" placeholder="姓名" v-model="queryForm.name" style="width:160px" clearable>
-      </el-input>
+      <el-input @change="search" placeholder="姓名" v-model="queryForm.name" style="width:160px" clearable> </el-input>
       <el-select style="margin-left:5px; width:160px" v-model="queryForm.position" clearable placeholder="在读学历">
-        <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item">
-        </el-option>
+        <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item"> </el-option>
       </el-select>
       <el-button @click="search" style="margin-left:5px" size="mini" icon="el-icon-search">搜索</el-button>
       <el-button @click="refresh" size="mini" icon="el-icon-refresh-right" style="margin-left:5px">
         重置
+      </el-button>
+      <el-button size="mini" type="success" plain icon="el-icon-s-release" @click="showDisableUser" style="float:right">
+        停用名单
       </el-button>
     </div>
 
@@ -39,7 +40,7 @@
             <span>{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="在读学位">
+        <el-table-column align="center" label="职位">
           <template slot-scope="{ row }">
             {{ row.position }}
             <span v-if="row.position == undefined">未设置</span>
@@ -55,10 +56,18 @@
           <template slot-scope="{ row }">
             <el-button type="text" @click="editUserInfo(row)" style="padding-right:8px">编辑</el-button>
 
-            <el-popover placement="top" title="后端正在修改中" width="200" trigger="click" v-model="row.visible">
+            <el-popover placement="top" title="停用后用户将移除绩效列表" width="195" style="font-size:13px" trigger="click" v-model="row.visible">
               <div style="text-align: right; margin: 0">
                 <el-button size="mini" type="text" @click="row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="row.visible = false">确定</el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="
+                    row.visible = false;
+                    disableU(row.id);
+                  "
+                  >确定</el-button
+                >
               </div>
               <el-button type="text" slot="reference">停用</el-button>
             </el-popover>
@@ -66,9 +75,7 @@
         </el-table-column>
         <template slot="empty">
           <div style="height:200px;">
-            <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
-            </div>
+            <div style="margin-top:100px;"><svg-icon icon-class="null" style="font-size:32px" /> <br /></div>
             <div style="line-height: 10px;">
               <span>无记录</span>
             </div>
@@ -77,7 +84,17 @@
       </el-table>
 
       <div style="margin-top:5px;display:flex; justify-content:center">
-        <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" :hide-on-single-page="total < 10 ? true : false" small background layout="prev, pager, next" :total="total" :page-size="10">
+        <el-pagination
+          @prev-click="handlePrev"
+          @next-click="handleNext"
+          @current-change="handleCurrentChange"
+          :hide-on-single-page="total < 10 ? true : false"
+          small
+          background
+          layout="prev, pager, next"
+          :total="total"
+          :page-size="10"
+        >
         </el-pagination>
       </div>
     </div>
@@ -93,15 +110,13 @@
           </el-form-item>
           <el-form-item label="在读学位">
             <el-select v-model="userForm.position" style="width:200px" placeholder="请选择">
-              <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item">
-              </el-option>
+              <el-option v-for="(item, index) in options" :key="index" :label="item" :value="item"> </el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="用户权限">
             <el-select v-model="userForm.authority" style="width:200px" placeholder="请选择">
-              <el-option v-for="(item, index) in authorityList" :key="index" :label="item.label" :value="item.value">
-              </el-option>
+              <el-option v-for="(item, index) in authorityList" :key="index" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -112,31 +127,56 @@
         <el-button type="primary" @click="submitUserInfo">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="停用列表" :visible.sync="disableDialog">
+      <el-table :data="disablelist">
+        <el-table-column label="学号">
+          <template slot-scope="{ row }">
+            <span v-if="row.stuNum == undefined">未设置</span>
+            <span>{{ row.stuNum }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column property="name" label="姓名"></el-table-column>
+        <el-table-column prop="role" label="权限">
+          <template slot-scope="{ row }">
+            <el-tag v-if="row.authority == 0" type="info">普通用户</el-tag>
+            <el-tag v-else type="success">评审人</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="{ row }">
+            <el-button type="text" @click="recoverU(row.id)">恢复</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { queryUser, fetchAllUser, updateUserInfo } from "@/api/system";
-import { listAuditors } from "@/api/user";
+import { queryUser, fetchAllUser, updateUserInfo, disableUser, enableUser, queryDisableUser } from '@/api/system';
+import { listAuditors } from '@/api/user';
 export default {
   data() {
     return {
+      disableDialog: false,
       loading: false,
       userForm: {},
       dialog: false,
       total: 0,
       auditors: [],
       list: [],
+      disablelist: [],
       queryForm: {
-        stuNum: "",
-        name: "",
-        position: "",
+        stuNum: '',
+        name: '',
+        position: '',
         authority: null
       },
-      page: null,
-      options: ["本科生", "硕士生", "博士生", "待定"],
+      page: 0,
+      options: ['本科生', '硕士生', '博士生', '待定'],
       authorityList: [
-        { label: "普通用户", value: 0 },
-        { label: "评审人", value: 1 }
+        { label: '普通用户', value: 0 },
+        { label: '评审人', value: 1 }
       ]
     };
   },
@@ -147,6 +187,35 @@ export default {
     });
   },
   methods: {
+    showDisableUser() {
+      this.disableDialog = true;
+      queryDisableUser().then(res => {
+        this.disablelist = res.data;
+      });
+    },
+    recoverU(uid) {
+      enableUser(uid).then(() => {
+        queryDisableUser().then(res => {
+          this.disablelist = res.data;
+        });
+        this.fetchUserList(this.page);
+        this.$message({
+          showClose: true,
+          message: '恢复成功',
+          type: 'success'
+        });
+      });
+    },
+    disableU(uid) {
+      disableUser(uid).then(() => {
+        this.fetchUserList(this.page);
+        this.$message({
+          showClose: true,
+          message: '禁用成功',
+          type: 'success'
+        });
+      });
+    },
     editUserInfo(data) {
       this.userForm = data;
       this.dialog = true;
@@ -158,10 +227,10 @@ export default {
         this.dialog = false;
         this.fetchUserList(this.page);
         this.$notify({
-          title: "成功",
-          message: this.userForm.name + " 的信息保存成功",
-          position: "bottom-right",
-          type: "success"
+          title: '成功',
+          message: this.userForm.name + ' 的信息保存成功',
+          position: 'bottom-right',
+          type: 'success'
         });
       });
     },
@@ -191,8 +260,8 @@ export default {
     },
     refresh() {
       this.queryForm = {
-        name: "",
-        position: ""
+        name: '',
+        position: ''
       };
       this.fetchUserList(0);
     },
@@ -200,8 +269,8 @@ export default {
     refreshUser() {
       fetchAllUser().then(() => {
         this.$message({
-          message: "拉取成功",
-          type: "success"
+          message: '拉取成功',
+          type: 'success'
         });
         this.fetchUserList(0);
       });

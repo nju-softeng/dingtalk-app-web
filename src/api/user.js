@@ -25,7 +25,7 @@ export function getInfo() {
   });
 }
 
-// 获取审核人
+// 获取审核人, 用于申请绩效时审核
 export function listAuditors() {
   return axios({
     url: "/user/getAuditors",

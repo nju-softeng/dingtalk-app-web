@@ -66,12 +66,6 @@
                   --
                 </div>
               </div>
-              <div class="h-card">
-                <div class="title">voucher</div>
-                <div class="content">
-                  --
-                </div>
-              </div>
             </div>
           </el-col>
         </el-row>
@@ -160,9 +154,7 @@
                 <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
                   <div class="ac-card">
                     <div class="ac-head">
-                      <el-avatar :size="35" class="avatar">{{
-                        item.username
-                      }}</el-avatar>
+                      <el-avatar :size="35" class="avatar">{{ item.username }}</el-avatar>
                       <div class="title">
                         <span>{{ item.username }} AC值</span>
                         <span v-if="item.ac > 0"> + </span>
@@ -175,9 +167,7 @@
                     <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
                       <span>审核人: {{ item.auditorname }}</span>
                     </div>
-                    <div style="padding-top:15px;font-size:12.5px">
-                      时间: {{ item.create_time }}
-                    </div>
+                    <div style="padding-top:15px;font-size:12.5px">时间: {{ item.create_time }}</div>
                   </div>
                 </el-carousel-item>
               </el-carousel>
@@ -190,11 +180,11 @@
 </template>
 
 <script>
-import { getMessages } from "@/api/message";
-import { lastAc, getPerformance } from "@/api/performance";
-import { getUnCheckCnt } from "@/api/audit";
-import { showHelloTime } from "@/utils/index";
-import { getYiYan } from "@/api/common";
+import { getMessages } from '@/api/message';
+import { lastAc, getPerformance } from '@/api/performance';
+import { getUnCheckCnt } from '@/api/audit';
+import { showHelloTime } from '@/utils/index';
+import { getYiYan } from '@/api/common';
 
 export default {
   data() {
@@ -203,23 +193,23 @@ export default {
       lastAcs: [],
       unCheckCnt: 0,
       perf: {
-        dcTotal: "",
-        acTotal: "",
-        w1: "",
-        w2: "",
-        w3: "",
-        w4: "",
-        w5: ""
+        dcTotal: '',
+        acTotal: '',
+        w1: '',
+        w2: '',
+        w3: '',
+        w4: '',
+        w5: ''
       },
-      name: "",
+      name: '',
       avatar: null,
       count: 0,
       yiyan: {}
     };
   },
   created() {
-    this.avatar = sessionStorage.getItem("avatar");
-    this.name = sessionStorage.getItem("name");
+    this.avatar = sessionStorage.getItem('avatar');
+    this.name = sessionStorage.getItem('name');
     this.getYiYan();
     // 消息
     getMessages(0, 5).then(res => {
@@ -251,17 +241,17 @@ export default {
     },
     goAc() {
       this.$router.push({
-        path: "/profile/index",
+        path: '/profile/index',
         query: {
-          tab: "actab"
+          tab: 'actab'
         }
       });
     },
     goBug() {
       this.$router.push({
-        path: "/project/index",
+        path: '/project/index',
         query: {
-          tab: "userbug"
+          tab: 'userbug'
         }
       });
     }

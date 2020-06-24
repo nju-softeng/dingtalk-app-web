@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box-r">
     <div class="md-container" style=" ">
       <div style="margin-right:16px" class="hiden-xs">
         <el-avatar :src="avatar"> {{ name }}</el-avatar>
@@ -17,8 +17,7 @@
         <div style="flex-grow:1">
           <p>
             <span style="font-size:14px;">{{ item.user.name }} </span>
-            <span style=" font-size:12px; color:#595959; padding:8px">
-              {{ item.updateTime | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
+            <span style=" font-size:12px; color:#595959; padding:8px"> {{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             <template v-if="uid == item.user.id">
               <el-button type="text" @click="item.edit = true" style="margin-right:4px">编辑</el-button>
               <el-popconfirm confirmButtonText="好的" cancelButtonText="不用了" icon="el-icon-info" iconColor="red" title="确定删除吗？" @onConfirm="remove(item.id)">
@@ -40,36 +39,31 @@
 </template>
 
 <script>
-import {
-  submitReview,
-  listReview,
-  updateReview,
-  deleteReview
-} from "@/api/paper";
+import { submitReview, listReview, updateReview, deleteReview } from '@/api/paper';
 export default {
   data() {
     return {
-      value: "",
+      value: '',
       list: [],
       uid: null,
-      avatar: "",
-      name: ""
+      avatar: '',
+      name: ''
     };
   },
   created() {
     this.fetchReview();
-    this.value = localStorage.getItem("review-content") || "";
-    this.uid = sessionStorage.getItem("uid");
-    this.avatar = sessionStorage.getItem("avatar");
-    this.name = sessionStorage.getItem("name");
+    this.value = localStorage.getItem('review-content') || '';
+    this.uid = sessionStorage.getItem('uid');
+    this.avatar = sessionStorage.getItem('avatar');
+    this.name = sessionStorage.getItem('name');
   },
-  props: ["paperid"],
+  props: ['paperid'],
   methods: {
     fetchReview() {
       listReview(this.paperid).then(res => {
         this.list = res.data;
         this.list.forEach(item => {
-          this.$set(item, "edit", false);
+          this.$set(item, 'edit', false);
         });
       });
     },
@@ -78,14 +72,14 @@ export default {
       console.log(data);
     },
     save() {
-      localStorage.setItem("review-content", this.value);
+      localStorage.setItem('review-content', this.value);
     },
     submit() {
-      if (this.value == "") {
+      if (this.value == '') {
         this.$notify({
-          title: "内容不能为空",
-          message: "这是一条成功的提示消息",
-          type: "warning"
+          title: '内容不能为空',
+          message: '这是一条成功的提示消息',
+          type: 'warning'
         });
         return;
       }
@@ -94,21 +88,21 @@ export default {
         md: this.value
       }).then(() => {
         this.fetchReview();
-        this.value = "";
+        this.value = '';
         this.$notify({
-          title: "成功",
-          message: "评审意见提交成功",
-          type: "success"
+          title: '成功',
+          message: '评审意见提交成功',
+          type: 'success'
         });
       });
     },
     update(data) {
       updateReview(data, this.paperid).then(() => {
         this.fetchReview();
-        this.value = "";
+        this.value = '';
         this.$notify({
-          title: "更新成功",
-          type: "success"
+          title: '更新成功',
+          type: 'success'
         });
       });
     },
@@ -125,7 +119,7 @@ export default {
   display: flex;
 }
 
-.box {
+.box-r {
   min-height: 80vh;
   overflow: auto;
   border-radius: 2px;

@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <div class="box">
+    <div class="box-ac">
       <!-- AC排名 -->
-      <el-card shadow="never" class="box-card" style="width: 35%;">
+      <el-card shadow="never" class="box-ac-card" style="width: 35%;">
         <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" :header-cell-style="{ background: '#eef1f6' }">
           <el-table-column type="index"> </el-table-column>
           <el-table-column prop="name" label="姓名"> </el-table-column>
@@ -10,7 +10,7 @@
         </el-table>
       </el-card>
       <!-- 详细AC -->
-      <div class="box-card" v-loading="loading" style="width: 65%;">
+      <div class="box-ac-card" v-loading="loading" style="width: 65%;">
         <!-- 标题 -->
         <div class="title">
           <span style="padding-right:20px">{{ name }} 的AC日志</span>
@@ -104,27 +104,28 @@ export default {
   margin-bottom: 5px;
 }
 
-.box {
+.box-ac {
   max-width: 1056px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   justify-content: space-between;
 }
-.box-card {
+.box-ac-card {
   border-radius: 4px;
   border: 1px solid #ebeef5;
   height: 85vh;
   padding: 10px 0px;
+  background-color: white;
 }
 .ac-card {
   width: 90%;
 }
-.box-card /deep/ .el-card__body {
+.box-ac-card /deep/ .el-card__body {
   padding: 0px 20px;
 }
 
-.box-card /deep/ .el-scrollbar__wrap {
+.box-ac-card /deep/ .el-scrollbar__wrap {
   overflow-x: hidden;
 }
 

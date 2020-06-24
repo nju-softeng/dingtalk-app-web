@@ -6,44 +6,7 @@ on:
     branches: [test]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: use node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10
-
-      - name: Cache node modules
-        uses: actions/cache@v2
-        id: cache
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package.json') }}
-
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install
-
-      - name: Build
-        run: npm run build:stage
-
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_IMAGE }} .
-
-      - name: Push Docker Image
-        run: |
-          echo "login docker repository"
-          docker login -u=${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} swr.cn-north-4.myhuaweicloud.com
-          echo "docker push"
-          docker push ${{ secrets.DOCKER_IMAGE }}
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Pull Docker And Run Container With SSH
@@ -54,16 +17,12 @@ jobs:
           key: ${{ secrets.TEST_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "login docker repository"
-            docker login -u=${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} swr.cn-north-4.myhuaweicloud.com
-
-            echo "pull docker image"
-            docker pull ${{ secrets.DOCKER_IMAGE }}:latest
-
-            echo "stop and remove docker old container"
-            docker container stop ${{ secrets.DOCKER_CONTAINER }}
-            docker container rm ${{ secrets.DOCKER_CONTAINER }}
-
-            echo "run new docker container"
-            docker run -d --net dingtalk-net -p 8089:80 -v /etc/localtime:/etc/localtime --name ${{ secrets.DOCKER_CONTAINER }}  ${{ secrets.DOCKER_IMAGE }}
+            cd ~/dingtalk-vue/
+            git pull origin test
+            npm install
+            npm run build:stage
+            docker build -t dingtalk_vue .
+            docker container stop dingtalk_vue
+            docker container rm dingtalk_vue
+            docker run -d --net dingtalk-net -p 8089:80 -v /etc/timezone:/etc/timezone -v /etc/localtime:/etc/localtime --name dingtalk_vue  dingtalk_vue
             docker image prune -f

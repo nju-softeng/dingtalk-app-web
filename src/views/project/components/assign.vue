@@ -47,14 +47,12 @@
         <!-- 项目迭代信息 -->
         <template v-else-if="!item.status">
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;">
-              <i class="el-icon-time"></i> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span>
+            <span class="date" style="padding-right:15px;"> <i class="el-icon-time"></i> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
             <span style="color:#67C23A" v-if="getRemainDay(item.end_time) >= 0">
               剩余:
-              {{ getRemainDay(item.end_time) }} 天</span>
-            <span style="color:#F56C6C" v-else>
-              延期: {{ -getRemainDay(item.end_time) }} 天</span>
+              {{ getRemainDay(item.end_time) }} 天</span
+            >
+            <span style="color:#F56C6C" v-else> 延期: {{ -getRemainDay(item.end_time) }} 天</span>
           </p>
           <div style="font-size:12px;color:#bfbfbf;line-height:28px;">
             <span style="padding-right:15px; ">预期AC：{{ item.expectedac }}</span>
@@ -65,9 +63,7 @@
         </template>
         <template v-else>
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;">
-              <i class="el-icon-time"></i> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span>
+            <span class="date" style="padding-right:15px;"> <i class="el-icon-time"></i> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
             <span style="color:#67C23A" v-if="compareTime(item.end_time, item.finish_time)">
               按时完成
             </span>
@@ -87,7 +83,7 @@
     </div>
 
     <!-- 创建项目dialog -->
-    <el-dialog title="项目" @submit.native.prevent :visible.sync="projectDialog" width="32%" @close="clearProjectForm">
+    <el-dialog title="项目" :lock-scroll="false" @submit.native.prevent :visible.sync="projectDialog" width="32%" @close="clearProjectForm">
       <el-form style="width:100%" v-loading="loading" ref="projectform" :rules="rules" :model="projectform">
         <el-form-item prop="title">
           <el-input v-model="projectform.title" style="width:100% !important" placeholder="项目名称"></el-input>
@@ -105,35 +101,30 @@
   </div>
 </template>
 <script>
-import {
-  createProject,
-  listProject,
-  rmProject,
-  getIteration
-} from "@/api/project.js";
-import FinishDrawer from "./finishDrawer";
-import IterateDialog from "./iterateDialog";
+import { createProject, listProject, rmProject, getIteration } from '@/api/project.js';
+import FinishDrawer from './finishDrawer';
+import IterateDialog from './iterateDialog';
 export default {
   data() {
     return {
       bdrawer_show: false,
       iteationDialog: false,
       projectDialog: false,
-      pid: "",
-      title: "",
-      cnt: "",
+      pid: '',
+      title: '',
+      cnt: '',
       list: [],
       serial: 0,
       loading: false,
       projectform: {
-        id: "",
-        title: ""
+        id: '',
+        title: ''
       },
       tmp: {},
       rules: {
-        title: [{ required: true, message: "请输入项目名称", trigger: "blur" }],
-        dates: [{ required: true, message: "请选择时间", trigger: "blur" }],
-        dingIds: [{ required: true, message: "请分配任务", trigger: "blur" }]
+        title: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
+        dates: [{ required: true, message: '请选择时间', trigger: 'blur' }],
+        dingIds: [{ required: true, message: '请分配任务', trigger: 'blur' }]
       }
     };
   },
@@ -141,9 +132,7 @@ export default {
   computed: {
     getRemainDay() {
       return endtime => {
-        let day =
-          (new Date(endtime) - new Date().setHours(8, 0, 0, 0)) /
-          (24 * 3600 * 1000);
+        let day = (new Date(endtime) - new Date().setHours(8, 0, 0, 0)) / (24 * 3600 * 1000);
         return day;
       };
     }
@@ -174,9 +163,9 @@ export default {
             .then(() => {
               this.projectDialog = false;
               this.$notify({
-                title: "成功",
-                message: "提交成功",
-                type: "success"
+                title: '成功',
+                message: '提交成功',
+                type: 'success'
               });
               listProject().then(res => {
                 this.list = res.data;
@@ -187,9 +176,9 @@ export default {
             });
         } else {
           this.$notify({
-            title: "提交失败",
-            message: "请填写项目名称",
-            type: "warning"
+            title: '提交失败',
+            message: '请填写项目名称',
+            type: 'warning'
           });
         }
       });
@@ -204,12 +193,12 @@ export default {
     },
     // 删除项目
     rmProject(item) {
-      console.log("/????");
+      console.log('/????');
       if (item.cnt != 0) {
         this.$message({
           showClose: true,
-          message: "请删除项目的迭代之后，再删除项目",
-          type: "warning"
+          message: '请删除项目的迭代之后，再删除项目',
+          type: 'warning'
         });
       } else {
         rmProject(item.id).then(() => {
@@ -218,8 +207,8 @@ export default {
           });
           this.$message({
             showClose: true,
-            message: "删除成功",
-            type: "success"
+            message: '删除成功',
+            type: 'success'
           });
         });
       }
@@ -227,7 +216,7 @@ export default {
     // 清空dialog
     clearProjectForm() {
       this.$refs.projectform.resetFields();
-      this.projectform.id = "";
+      this.projectform.id = '';
     },
     //新建一个迭代
     newIterate(item) {

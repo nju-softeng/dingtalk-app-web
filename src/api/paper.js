@@ -1,35 +1,35 @@
-import axios from "@/utils/request";
+import axios from '@/utils/request';
 
 // 添加论文
 export function addPaper(data) {
   return axios({
-    url: "/paper",
-    method: "post",
+    url: '/paper',
+    method: 'post',
     data
   });
 }
 
 // 分页查询论文
-export function listPaper(page) {
+export function listPaper(page, size) {
   return axios({
-    url: "/paper/page/" + page,
-    method: "get"
+    url: '/paper/page/' + page + '/' + size,
+    method: 'get'
   });
 }
 
 // 获取某个论文的详细信息
 export function getPaper(id) {
   return axios({
-    url: "/paper/" + id,
-    method: "get"
+    url: '/paper/' + id,
+    method: 'get'
   });
 }
 
 // 创建投票
 export function createVote(data) {
   return axios({
-    url: "/vote",
-    method: "post",
+    url: '/vote',
+    method: 'post',
     data
   });
 }
@@ -37,24 +37,24 @@ export function createVote(data) {
 // 查询论文对应的投票
 export function getPaperVote(pid) {
   return axios({
-    url: "/paper/" + pid + "/vote",
-    method: "get"
+    url: '/paper/' + pid + '/vote',
+    method: 'get'
   });
 }
 
 // 查询投票详情
 export function getVoteDetail(pid) {
   return axios({
-    url: "/vote/" + pid + "/detail",
-    method: "get"
+    url: '/vote/' + pid + '/detail',
+    method: 'get'
   });
 }
 
 // 用户投票
 export function addpoll(vid, data) {
   return axios({
-    url: "/vote/" + vid,
-    method: "post",
+    url: '/vote/' + vid,
+    method: 'post',
     data
   });
 }
@@ -62,8 +62,8 @@ export function addpoll(vid, data) {
 // 提交论文结果
 export function submitResult(id, result) {
   return axios({
-    url: "/paper_result/" + id,
-    method: "post",
+    url: '/paper_result/' + id,
+    method: 'post',
     data: {
       data: result
     }
@@ -73,16 +73,16 @@ export function submitResult(id, result) {
 // 删除论文记录
 export function rmPaper(id) {
   return axios({
-    url: "/paper/delete/" + id,
-    method: "get"
+    url: '/paper/delete/' + id,
+    method: 'get'
   });
 }
 
 // 提交论文评审建议
 export function submitReview(data) {
   return axios({
-    url: "/paper/review",
-    method: "post",
+    url: '/paper/review',
+    method: 'post',
     data
   });
 }
@@ -90,16 +90,16 @@ export function submitReview(data) {
 // 查询论文评审建议
 export function listReview(id) {
   return axios({
-    url: "/paper/" + id + "/review",
-    method: "get"
+    url: '/paper/' + id + '/review',
+    method: 'get'
   });
 }
 
 // 更新论文评审建议
 export function updateReview(data, id) {
   return axios({
-    url: "/paper/" + id + "/review/update",
-    method: "post",
+    url: '/paper/' + id + '/review/update',
+    method: 'post',
     data
   });
 }
@@ -107,7 +107,7 @@ export function updateReview(data, id) {
 // 删除论文评审
 export function deleteReview(id) {
   return axios({
-    url: "/paper/review/delete/" + id,
-    method: "get"
+    url: '/paper/review/delete/' + id,
+    method: 'get'
   });
 }

@@ -12,11 +12,15 @@
                 <div class="left-content">
                   <div class="title">
                     <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">
-                      <router-link :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type"> <svg-icon icon-class="paper" /> {{ scope.row.title }} </router-link>
+                      <router-link :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
+                        <svg-icon icon-class="paper" /> {{ scope.row.title }}
+                      </router-link>
                     </el-tooltip>
                   </div>
                   <div class="detail">
-                    <div class="journal"><svg-icon icon-class="school" /> {{ scope.row.journal }}</div>
+                    <div class="journal">
+                      <svg-icon icon-class="school" /> {{ scope.row.journal }}
+                    </div>
                     <el-tooltip class="item" effect="dark" content="会议/出刊时间" placement="top-start">
                       <div class="time">
                         <svg-icon icon-class="date" />
@@ -31,12 +35,12 @@
           <el-table-column label="论文作者" align="center">
             <template slot-scope="scope">
               <div class="info-item">
-                <el-tooltip :disabled="scope.row.paperDetails.length <= 3" class="item" effect="dark" placement="top-start">
+                <el-tooltip :disabled="scope.row.authors.length <= 3" class="item" effect="dark" placement="top-start">
                   <div slot="content">
-                    <span style="padding:5px;" v-for="(o, index) in scope.row.paperDetails" :key="index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>
                   </div>
                   <div class="namelist">
-                    <span style="padding:5px;" v-for="(o, index) in scope.row.paperDetails" :key="index">{{ o.user.name }}</span>
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
@@ -45,24 +49,30 @@
           <el-table-column label="投票结果" align="center" width="100">
             <template slot-scope="scope">
               <div class="info-item">
-                <el-link v-if="scope.row.vote == undefined" type="primary" @click="newVote(scope.row)"> 发起投票</el-link>
+                <el-link v-if="scope.row.v_status == undefined" type="primary" @click="newVote(scope.row)">
+                  发起投票</el-link>
 
-                <router-link v-else-if="scope.row.vote.status == false" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
+                <router-link v-else-if="scope.row.v_status == false" :to="'/paper/detail/' + scope.row.id + '/vote'"
+                  class="link-type">
                   <el-link type="success"> 前往投票</el-link>
                 </router-link>
-                <router-link v-else-if="scope.row.vote.status == true" :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
-                  <el-tag class="paper-tag" type="success" v-if="scope.row.vote.result == true">ACCEPT</el-tag>
+                <router-link v-else-if="scope.row.v_status == true" :to="'/paper/detail/' + scope.row.id + '/vote'"
+                  class="link-type">
+                  <el-tag class="paper-tag" type="success" v-if="scope.row.v_result == true">ACCEPT</el-tag>
                   <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>
                 </router-link>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column label="投稿结果" align="center" width="100">
+          <el-table-column label="录用结果" align="center" width="100">
             <template slot-scope="scope">
               <div class="info-item">
-                <el-tag class="paper-tag" v-if="scope.row.vote == undefined || scope.row.vote.status == false">待内部投票</el-tag>
-                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.vote.result == false">未提交</el-tag>
+                <el-tag class="paper-tag" v-if="
+                    scope.row.v_status == undefined ||
+                      scope.row.v_status == false
+                  ">待内部投票</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.v_result == false">未提交</el-tag>
                 <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == undefined">审稿中</el-tag>
                 <el-tag class="paper-tag" v-else-if="scope.row.result == true" type="success">ACCEPT</el-tag>
                 <el-tag class="paper-tag" v-else type="danger">REJECT</el-tag>
@@ -93,7 +103,9 @@
           </el-table-column>
           <template slot="empty">
             <div style="height:200px;">
-              <div style="margin-top:100px;"><svg-icon icon-class="null" style="font-size:32px" /> <br /></div>
+              <div style="margin-top:100px;">
+                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              </div>
               <div style="line-height: 10px;">
                 <span>没有论文记录</span>
               </div>
@@ -102,18 +114,9 @@
         </el-table>
       </div>
       <div style="margin-top:5px;display:flex; justify-content:center">
-        <el-pagination
-          @prev-click="handlePrev"
-          @next-click="handleNext"
-          @current-change="handleCurrentChange"
-          background
-          :current-page.sync="currentPage"
-          :hide-on-single-page="total < 6 ? true : false"
-          small
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="6"
-        >
+        <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange"
+          background :current-page.sync="currentPage" :hide-on-single-page="total < 6 ? true : false" small
+          layout="prev, pager, next" :total="total" :page-size="6">
         </el-pagination>
       </div>
     </div>
@@ -123,7 +126,9 @@
       <div v-loading="loading">
         <el-form>
           <el-form-item>
-            <span slot="label"> <svg-icon icon-class="paper" /> 接收情况: </span>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 接收情况:
+            </span>
             <el-radio-group v-model="resultForm.result">
               <el-radio :label="true">接收</el-radio>
               <el-radio :label="false">拒绝</el-radio>
@@ -141,24 +146,15 @@
     <el-dialog title="发起投票" :visible.sync="voteDialog" :lock-scroll="false" width="40%">
       <div v-loading="loading">
         <el-form ref="voteform" :model="voteform">
-          <el-form-item
-            prop="endTime"
-            :rules="{
+          <el-form-item prop="endTime" :rules="{
               required: true,
               message: '请选择截止时间',
               trigger: 'change'
-            }"
-          >
+            }">
             <span slot="label">截止时间 </span>
-            <el-time-picker
-              arrow-control
-              v-model="voteform.endTime"
-              value-format="HH:mm:ss"
-              :picker-options="{
+            <el-time-picker arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
                 selectableRange: '07:00:00 - 21:30:00'
-              }"
-              placeholder="选择时间"
-            >
+              }" placeholder="选择时间">
             </el-time-picker>
           </el-form-item>
         </el-form>
@@ -169,54 +165,61 @@
         </span>
       </div>
     </el-dialog>
+
     <!-- 添加评审记录  dialog -->
     <el-dialog :visible.sync="dialog" top="10vh" :lock-scroll="false" @closed="closeDialog" width="75%" center>
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
       </div>
-
+      {{ paperform }}
       <div v-loading="loading">
         <div class="dialog-content">
           <div class="paper-form">
             <el-form ref="paperform" :rules="rules" :model="paperform" label-width="110px">
               <el-form-item prop="title">
-                <span slot="label"> <svg-icon icon-class="paper" /> 论文名称</span>
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 论文名称</span>
                 <el-input v-model="paperform.title"></el-input>
               </el-form-item>
               <el-form-item>
-                <span slot="label"> <svg-icon icon-class="school" /> 刊物/会议</span>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 刊物/会议</span>
                 <el-input v-model="paperform.journal"></el-input>
               </el-form-item>
 
               <el-form-item prop="paperType">
-                <span slot="label"> <svg-icon icon-class="grade" /> 论文分类</span>
+                <span slot="label">
+                  <svg-icon icon-class="grade" /> 论文分类</span>
                 <el-select style="width:193px" v-model="paperform.paperType" placeholder="请选择">
-                  <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"> </el-option>
+                  <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value">
+                  </el-option>
                 </el-select>
               </el-form-item>
 
               <el-form-item>
-                <span slot="label"> <svg-icon icon-class="school" /> 通知时间</span>
-                <el-date-picker style="width:193px" v-model="paperform.issueDate" type="date" placeholder="选择日期"> </el-date-picker>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 通知时间</span>
+                <el-date-picker style="width:193px" v-model="paperform.issueDate" type="date" placeholder="选择日期">
+                </el-date-picker>
               </el-form-item>
 
-              <el-form-item
-                v-for="(author, index) in paperform.paperDetails"
-                :prop="'paperDetails.' + index + '.user.id'"
-                :key="index"
-                :rules="{
+              <el-form-item v-for="(author, index) in paperform.authors" :prop="'authors.' + index + '.uid'"
+                :key="index" :rules="{
                   required: true,
                   message: '请选择学生作者',
                   trigger: 'change'
-                }"
-              >
-                <span slot="label"> <svg-icon icon-class="people" /> 学生作者 {{ index + 1 }}</span>
+                }">
+                <span slot="label">
+                  <svg-icon icon-class="people" /> 学生作者
+                  {{ index + 1 }}</span>
 
                 <el-select style="width:193px" v-model="author.user.id" filterable placeholder="请选择">
-                  <el-option v-for="(item, index) in userlist" :key="index" :label="item.name" :value="item.id"> </el-option>
+                  <el-option v-for="(item, index) in userlist" :key="index" :label="item.name" :value="item.id">
+                  </el-option>
                 </el-select>
                 <el-tooltip class="item" effect="dark" content="支持搜索功能快速查找用户" placement="right">
-                  <span style="margin-left:8px"> <svg-icon icon-class="hint"/></span>
+                  <span style="margin-left:8px">
+                    <svg-icon icon-class="hint" /></span>
                 </el-tooltip>
               </el-form-item>
               <el-button type="text" @click="addAuthor" style="margin-left:20px;" icon="el-icon-plus">添加作者</el-button>
@@ -233,33 +236,39 @@
   </div>
 </template>
 <script>
-import { getUserList } from '@/api/common';
-import { addPaper, listPaper, createVote, submitResult, rmPaper } from '@/api/paper';
+import { getUserList } from "@/api/common";
+import {
+  addPaper,
+  listPaper,
+  createVote,
+  submitResult,
+  rmPaper
+} from "@/api/paper";
 
 const levels = [
   {
-    value: 'JOURNAL_A',
-    label: 'Journal A'
+    value: "JOURNAL_A",
+    label: "Journal A"
   },
   {
-    value: 'CONFERENCE_A',
-    label: 'Conference A'
+    value: "CONFERENCE_A",
+    label: "Conference A"
   },
   {
-    value: 'JOURNAL_B',
-    label: 'Journal B'
+    value: "JOURNAL_B",
+    label: "Journal B"
   },
   {
-    value: 'CONFERENCE_B',
-    label: 'Conference B'
+    value: "CONFERENCE_B",
+    label: "Conference B"
   },
   {
-    value: 'JOURNAL_C',
-    label: 'Journal C'
+    value: "JOURNAL_C",
+    label: "Journal C"
   },
   {
-    value: 'CONFERENCE_C',
-    label: 'Conference C'
+    value: "CONFERENCE_C",
+    label: "Conference C"
   }
 ];
 
@@ -271,41 +280,41 @@ export default {
       author: [],
       resultDialog: false,
       dialog: false,
-      journalrank: [],
-      state: '',
-      currentPage: 0,
+      state: "",
+      currentPage: 1,
       paperform: {
         id: null,
         title: null,
         journal: null,
         paperType: null,
         issueDate: null,
-        paperDetails: [
+        authors: [
           {
             num: 1,
-            user: {
-              id: ''
-            }
+            name: "",
+            uid: null
           }
         ]
       },
       voteform: {
-        paperid: '',
-        endTime: ''
+        paperid: "",
+        endTime: ""
       },
       options: levels,
       list: [],
       loading: false,
       voteDialog: false,
-      uid: '',
-      role: '',
+      uid: "",
+      role: "",
       resultForm: {
-        paperid: '',
-        result: ''
+        paperid: "",
+        result: ""
       },
       rules: {
-        title: [{ required: true, message: '请输入论文名称', trigger: 'blur' }],
-        paperType: [{ required: true, message: '请选择论文分类', trigger: 'change' }]
+        title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
+        paperType: [
+          { required: true, message: "请选择论文分类", trigger: "change" }
+        ]
       }
     };
   },
@@ -313,49 +322,56 @@ export default {
     getUserList().then(res => {
       this.userlist = res.data;
     });
-    listPaper(0).then(res => {
-      this.list = res.data.content;
-      this.total = res.data.total;
-    });
-    this.uid = sessionStorage.getItem('uid');
-    this.role = sessionStorage.getItem('role');
 
-    this.$notify({
-      title: '小提示',
-      message: '点击论文标题可以查看详情',
-      position: 'bottom-right'
+    this.fetchPaper(1);
+    this.uid = sessionStorage.getItem("uid");
+    this.role = sessionStorage.getItem("role");
+
+    this.$message({
+      showClose: true,
+      duration: 1000,
+      message: "点击论文标题可以查看详情"
     });
-  },
-  computed: {
-    getPermission() {
-      return (val, uid) => {
-        if (this.role == 'admin' || this.role == 'auditor') return false;
-        if (val.map(item => item.user.id).indexOf(eval(uid)) != -1) {
-          return false;
-        } else {
-          return true;
-        }
-      };
-    }
   },
   methods: {
+    // 分页获取论文信息
+    fetchPaper(page) {
+      return new Promise((resolve, reject) => {
+        listPaper(page, 6)
+          .then(res => {
+            this.list = res.data.list;
+            this.total = res.data.total;
+            console.log(res.data);
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
     // 分页前一页
     handlePrev(val) {
-      listPaper(val - 1).then(res => {
-        this.list = res.data.content;
-      });
+      this.fetchPaper(val);
     },
     // 分页下一页
     handleNext(val) {
-      listPaper(val - 1).then(res => {
-        this.list = res.data.content;
-      });
+      this.fetchPaper(val);
     },
     // 分页当前页
     handleCurrentChange(val) {
-      listPaper(val - 1).then(res => {
-        this.list = res.data.content;
-      });
+      this.fetchPaper(val);
+    },
+    // 创建投票，唤起dialog
+    newVote(item) {
+      this.voteform.paperid = item.id;
+      if (item.vote == undefined) {
+        console.log(item);
+        this.voteDialog = true;
+      } else {
+        this.$router.push({
+          path: "/paper/vote/" + item.id
+        });
+      }
     },
     // 提交新创建的投票
     submitvote() {
@@ -366,12 +382,11 @@ export default {
             .then(() => {
               this.voteDialog = false;
               this.$notify({
-                title: '发起投票',
-                message: '发起投票成功',
-                type: 'success'
+                message: "发起投票成功",
+                type: "success"
               });
               this.$router.push({
-                path: '/paper/detail/' + this.voteform.paperid + '/vote'
+                path: "/paper/detail/" + this.voteform.paperid + "/vote"
               });
             })
             .finally(() => {
@@ -380,25 +395,8 @@ export default {
         }
       });
     },
-    // 创建投票，唤起dialog
-    newVote(item) {
-      this.voteform.paperid = item.id;
-      if (item.vote == undefined) {
-        console.log(item);
-        this.voteDialog = true;
-      } else {
-        this.$router.push({
-          path: '/paper/vote/' + item.id
-        });
-      }
-    },
     // 提交论文评审记录
     submit(formName) {
-      let page = 0;
-      if (this.paperform.id != undefined) {
-        page = this.currentPage - 1;
-      }
-
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.loading = true;
@@ -407,23 +405,20 @@ export default {
               this.dialog = false;
               this.loading = false;
               this.$notify({
-                title: '成功',
-                message: '论文记录提交成功',
-                type: 'success'
+                title: "成功",
+                message: "论文记录提交成功",
+                type: "success"
               });
-              listPaper(page).then(res => {
-                console.log(res.data.content);
-                this.list = res.data.content;
-              });
+              this.fetchPaper(1);
             })
             .catch(() => {
               this.loading = false;
             });
         } else {
           this.$notify({
-            title: '提交失败',
-            message: '请填写必要信息',
-            type: 'warning'
+            title: "提交失败",
+            message: "请填写必要信息",
+            type: "warning"
           });
         }
       });
@@ -432,15 +427,15 @@ export default {
     closeDialog() {
       this.$refs.paperform.resetFields();
       this.paperform.id = null;
-      this.paperform.journal = '';
-      this.paperform.title = '';
-      this.paperform.issueDate = '';
-      this.paperform.paperType = '';
+      this.paperform.journal = "";
+      this.paperform.title = "";
+      this.paperform.issueDate = "";
+      this.paperform.paperType = "";
       this.paperform.paperDetails = [
         {
           num: 1,
           user: {
-            id: ''
+            id: ""
           }
         }
       ];
@@ -451,7 +446,7 @@ export default {
       this.paperform.paperDetails.push({
         num: val,
         user: {
-          id: ''
+          id: ""
         }
       });
     },
@@ -461,20 +456,31 @@ export default {
         this.paperform.paperDetails.pop();
       }
     },
-    // 更新论文投稿结果
+    // 判断用户是否有修改论文记录的权限
+    hasAuth(authors) {
+      if (
+        this.role == "admin" ||
+        this.role == "auditor" ||
+        authors.map(item => item.uid).indexOf(eval(this.uid)) != -1
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 更新论文投稿结果, 唤醒dialog
     updatePaperResult(item) {
       this.resultForm.paperid = item.id;
-      let val = item.paperDetails;
-      if (this.role == 'admin' || this.role == 'auditor' || val.map(item => item.user.id).indexOf(eval(this.uid)) != -1) {
+      if (this.hasAuth(item.authors)) {
         this.resultDialog = true;
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
-          type: 'warning'
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
         });
       }
     },
-
+    // 提交论文投稿结果
     submitPaperResult() {
       if (this.resultForm.result != undefined) {
         this.loading = true;
@@ -482,26 +488,21 @@ export default {
           .then(res => {
             console.log(res.data);
             this.resultDialog = false;
-            listPaper(this.currentPage - 1).then(res => {
-              this.list = res.data.content;
-              this.total = res.data.total;
-              console.log(this.list);
-            });
+            this.fetchPaper(this.currentPage);
           })
           .finally(() => {
             this.loading = false;
           });
       } else {
         this.$message({
-          message: '请选择结果',
-          type: 'warning'
+          message: "请选择结果",
+          type: "warning"
         });
       }
     },
     // 修改论文记录
     modifyPaper(item) {
-      let val = item.paperDetails;
-      if (this.role == 'admin' || this.role == 'auditor' || val.map(item => item.user.id).indexOf(eval(this.uid)) != -1) {
+      if (this.hasAuth(item.authors)) {
         this.dialog = true;
         this.paperform.id = item.id;
         this.paperform.title = item.title;
@@ -511,20 +512,24 @@ export default {
         this.paperform.paperDetails = item.paperDetails;
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
-          type: 'warning'
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
         });
       }
     },
     // 删除论文记录
+    // todo 修改，太罗嗦了
     removePaper(item) {
-      let val = item.paperDetails;
-      if (this.role == 'admin' || this.role == 'auditor' || val.map(item => item.user.id).indexOf(eval(this.uid)) != -1) {
-        this.$confirm('删除后，对应的AC变化和投票记录也将被删除，请谨慎操作', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+      if (this.hasAuth(item.authors)) {
+        this.$confirm(
+          "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
           .then(() => {
             rmPaper(item.id).then(() => {
               listPaper(0).then(res => {
@@ -532,21 +537,21 @@ export default {
                 this.total = res.data.total;
               });
               this.$message({
-                type: 'success',
-                message: '删除成功!'
+                type: "success",
+                message: "删除成功!"
               });
             });
           })
           .catch(() => {
             this.$message({
-              type: 'info',
-              message: '已取消删除'
+              type: "info",
+              message: "已取消删除"
             });
           });
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
-          type: 'warning'
+          message: "只有审核人，和论文作者才可以操作",
+          type: "warning"
         });
       }
     }

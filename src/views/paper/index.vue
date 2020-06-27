@@ -68,14 +68,11 @@
           <el-table-column label="录用结果" align="center" width="100">
             <template slot-scope="scope">
               <div class="info-item">
-                <el-tag class="paper-tag" v-if="
-                    scope.row.v_status == undefined ||
-                      scope.row.v_status == false
-                  ">待内部投票</el-tag>
-                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.v_result == false">未提交</el-tag>
-                <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == undefined">审稿中</el-tag>
-                <el-tag class="paper-tag" v-else-if="scope.row.result == true" type="success">ACCEPT</el-tag>
-                <el-tag class="paper-tag" v-else type="danger">REJECT</el-tag>
+                <el-tag class="paper-tag" v-if="scope.row.result == 0">待内部投票</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 1">未提交</el-tag>
+                <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == 2">审稿中</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 3">REJECT</el-tag>
+                <el-tag class="paper-tag" v-else type="success">ACCEPT</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -213,7 +210,7 @@
                   <svg-icon icon-class="people" /> 学生作者
                   {{ index + 1 }}</span>
 
-                <el-select style="width:193px" v-model="author.user.id" filterable placeholder="请选择">
+                <el-select style="width:193px" v-model="author.uid" filterable placeholder="请选择">
                   <el-option v-for="(item, index) in userlist" :key="index" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -277,7 +274,6 @@ export default {
     return {
       userlist: [],
       total: 0,
-      author: [],
       resultDialog: false,
       dialog: false,
       state: "",
@@ -410,6 +406,7 @@ export default {
                 type: "success"
               });
               this.fetchPaper(1);
+              this.currentPage = 1;
             })
             .catch(() => {
               this.loading = false;
@@ -431,29 +428,25 @@ export default {
       this.paperform.title = "";
       this.paperform.issueDate = "";
       this.paperform.paperType = "";
-      this.paperform.paperDetails = [
+      this.paperform.authors = [
         {
           num: 1,
-          user: {
-            id: ""
-          }
+          uid: ""
         }
       ];
     },
     // 添加论文作者
     addAuthor() {
-      let val = this.paperform.paperDetails.length + 1;
-      this.paperform.paperDetails.push({
+      let val = this.paperform.authors.length + 1;
+      this.paperform.authors.push({
         num: val,
-        user: {
-          id: ""
-        }
+        uid: ""
       });
     },
     // 移除论文作者
     rmAuthor() {
-      if (this.paperform.paperDetails.length != 1) {
-        this.paperform.paperDetails.pop();
+      if (this.paperform.authors.length != 1) {
+        this.paperform.authors.pop();
       }
     },
     // 判断用户是否有修改论文记录的权限
@@ -509,7 +502,7 @@ export default {
         this.paperform.journal = item.journal;
         this.paperform.paperType = item.paperType;
         this.paperform.issueDate = item.issueDate;
-        this.paperform.paperDetails = item.paperDetails;
+        this.paperform.authors = item.authors;
       } else {
         this.$message({
           message: "只有审核人，和论文作者才可以操作",
@@ -532,10 +525,7 @@ export default {
         )
           .then(() => {
             rmPaper(item.id).then(() => {
-              listPaper(0).then(res => {
-                this.list = res.data.content;
-                this.total = res.data.total;
-              });
+              this.fetchPaper(this.currentPage);
               this.$message({
                 type: "success",
                 message: "删除成功!"

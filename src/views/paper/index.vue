@@ -168,7 +168,6 @@
       <div slot="title" class="header-title">
         <span class="title-age">内部论文评审记录 </span>
       </div>
-      {{ paperform }}
       <div v-loading="loading">
         <div class="dialog-content">
           <div class="paper-form">

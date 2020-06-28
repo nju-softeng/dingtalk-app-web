@@ -1,19 +1,20 @@
 <template>
   <div class="acinfo">
-    <el-alert v-if="paper.result == undefined" title="论文投稿结果尚未确定，无AC变化显示" type="warning">
+    <el-alert v-if="paper.result != 3 && paper.result != 4" title="论文投稿结果尚未确定，无AC变化显示" type="warning">
     </el-alert>
     <div class="ac" v-else>
       <el-form :label-position="top">
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 作者AC变化</span>
-          <span style="padding:6px" v-for="(item, index) in paper.paperDetails" :key="index">{{ item.user.name }}: {{ item.ac }}</span>
+          <span style="padding:6px" v-for="(item, index) in paper.paperDetails" :key="index">{{ item.user.name }}:
+            {{ item.ac }}</span>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿支持者AC</span>
           <span>
-            <span v-if="paper.result == true">+ 1</span>
+            <span v-if="paper.result == 4">+ 1</span>
             <span v-else>- 1</span>
           </span>
           <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
@@ -21,7 +22,7 @@
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿反对者AC</span>
-          <span v-if="paper.result == false"> + 1</span>
+          <span v-if="paper.result == 3"> + 1</span>
           <span v-else> - 1</span>
           <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
         </el-form-item>
@@ -45,9 +46,10 @@ export default {
     this.id = this.$route.params.id;
     getPaper(this.id).then(res => {
       this.paper = res.data;
+      console.log(this.paper);
 
       // todo 删除
-      if (this.paper.result != undefined) {
+      if (this.paper.result == 3 || this.paper.result == 4) {
         getVoteDetail(this.id).then(res => {
           this.acceptlist = res.data.acceptnames;
           this.rejectlist = res.data.rejectnames;

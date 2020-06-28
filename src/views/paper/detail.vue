@@ -100,8 +100,6 @@ export default {
       level: levels,
       id: null,
       paper: {},
-      acceptlist: "",
-      rejectlist: "",
       activeTab: "vote"
     };
   },
@@ -148,30 +146,30 @@ export default {
     // 论文状态标签
     getPaperResult() {
       return paper => {
-        if (paper.result == true) {
-          return {
-            type: "success",
-            content: "ACCEPT"
-          };
-        } else if (paper.result == false) {
-          return {
-            type: "danger",
-            content: "REJECT"
-          };
-        } else if (paper.vote == undefined || paper.vote.result == null) {
+        if (paper.result == 0) {
           return {
             type: "info",
             content: "等待内审中"
           };
-        } else if (paper.vote.result == false) {
+        } else if (paper.result == 1) {
           return {
             type: "info",
             content: "内审未通过"
           };
-        } else {
+        } else if (paper.result == 2) {
           return {
             type: "info",
             content: "等待中"
+          };
+        } else if (paper.result == 3) {
+          return {
+            type: "danger",
+            content: "REJECT"
+          };
+        } else if (paper.result == 4) {
+          return {
+            type: "success",
+            content: "ACCEPT"
           };
         }
       };
@@ -183,14 +181,7 @@ export default {
     getPaper(this.id)
       .then(res => {
         this.paper = res.data;
-
-        // todo 删除
-        if (this.paper.result != undefined) {
-          getVoteDetail(this.id).then(res => {
-            this.acceptlist = res.data.acceptnames;
-            this.rejectlist = res.data.rejectnames;
-          });
-        }
+        console.log(this.paper);
       })
       .catch(() => {
         this.$router.push({ path: "/404" });
@@ -203,6 +194,7 @@ export default {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .wrap-head {
   padding-top: 16px;

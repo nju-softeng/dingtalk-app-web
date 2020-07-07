@@ -5,17 +5,21 @@
       <drawer :show.sync="show" :direction="direction" :tmp="tmp" :auditors="auditors" @submitted="submitted" />
       <div class="box">
         <!-- 申请按钮 -->
-        <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请</el-button>
+        <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请
+        </el-button>
         <!-- 已提的交申请 -->
         <div style="height:430px">
-          <el-table :data="list" fit highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }">
+          <el-table :data="list" fit highlight-current-row style="width: 100%"
+            :header-cell-style="{ background: '#eef1f6' }">
             <el-table-column width="30px" label="#" type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline>
                   <el-form-item label="AC申请：">
                     <span v-if="props.row.acItems.length == 0"> 无 </span>
                     <div v-else>
-                      <li v-for="(item, index) in props.row.acItems" :key="index">申请值: {{ item.ac }} / 申请理由：{{ item.reason }}</li>
+                      <li v-for="(item, index) in props.row.acItems" :key="index">
+                        申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
+                      </li>
                     </div>
                   </el-form-item>
                 </el-form>
@@ -24,7 +28,9 @@
 
             <el-table-column width="140px" align="center" label="提交日期">
               <template slot-scope="{ row }">
-                <span>{{ row.insertTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                <span>{{
+                  row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
+                }}</span>
               </template>
             </el-table-column>
 
@@ -36,7 +42,7 @@
 
             <el-table-column width="90px" align="center" label="审核人">
               <template slot-scope="{ row }">
-                <span>{{ row.auditor.name }}</span>
+                <span>{{ row.auditorName }}</span>
               </template>
             </el-table-column>
 
@@ -61,14 +67,17 @@
 
             <el-table-column align="center" label="操作">
               <template slot-scope="{ row }">
-                <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改</el-button>
+                <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改
+                </el-button>
                 <el-tag v-else type="info">已审核</el-tag>
                 <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
               </template>
             </el-table-column>
             <template slot="empty">
               <div style="height:280px;">
-                <div style="margin-top:100px;"><svg-icon icon-class="null" style="font-size:32px" /> <br /></div>
+                <div style="margin-top:100px;">
+                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                </div>
                 <div style="line-height: 10px;">
                   <span>没有已申请内容</span>
                 </div>
@@ -76,17 +85,9 @@
             </template>
           </el-table>
           <div style="text-align:center; margin-top:5px">
-            <el-pagination
-              @prev-click="handlePrev"
-              @next-click="handleNext"
-              @current-change="handleCurrentChange"
-              background
-              :hide-on-single-page="total < 10 ? true : false"
-              small
-              layout="prev, pager, next"
-              :total="total"
-              :page-size="10"
-            >
+            <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange"
+              background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next"
+              :total="total" :page-size="10">
             </el-pagination>
           </div>
         </div>
@@ -97,16 +98,16 @@
 </template>
 
 <script>
-import { listAuditors } from '@/api/user';
-import { getUserApplication } from '@/api/application';
-import drawer from './components/drawer';
+import { listAuditors } from "@/api/user";
+import { getUserApplication } from "@/api/application";
+import drawer from "./components/drawer";
 export default {
   data: () => ({
     show: false,
     tmp: {},
     auditors: [],
     loading: false,
-    direction: 'ltr',
+    direction: "ltr",
     list: [],
     total: 0
   }),
@@ -117,14 +118,13 @@ export default {
         this.auditors = res.data.auditorlist;
       })
       .then(() => {
-        this.fetchApplication(0);
+        this.fetchApplication(1);
       });
   },
-  computed: {},
   methods: {
     // 获取申请记录
     fetchApplication(page) {
-      getUserApplication(page).then(res => {
+      getUserApplication(page, 10).then(res => {
         this.list = res.data.list;
         this.total = res.data.total;
         console.log(this.list);
@@ -132,31 +132,31 @@ export default {
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchApplication(val - 1);
+      this.fetchApplication(val);
     },
     // 上一页
     handlePrev(val) {
-      this.fetchApplication(val - 1);
+      this.fetchApplication(val);
     },
     // 下一页
     handleNext(val) {
-      this.fetchApplication(val - 1);
+      this.fetchApplication(val);
     },
     // 点击添加后调用
     addApply() {
       this.tmp = null;
-      this.direction = 'ltr';
+      this.direction = "ltr";
       this.show = true;
     },
     // 点击修改后调用
     addModify(row) {
       this.tmp = row;
-      this.direction = 'rtl';
+      this.direction = "rtl";
       this.show = true;
     },
     // 提交后刷新数据
     submitted() {
-      this.fetchApplication(0);
+      this.fetchApplication(1);
     }
   }
 };

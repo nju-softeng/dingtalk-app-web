@@ -1,6 +1,7 @@
 <template>
   <div class="apply">
-    <el-drawer :direction="direction" :modal="false" :visible.sync="visible" @close="$emit('update:show', false)" @closed="emptyForm" size="380px">
+    <el-drawer :direction="direction" :modal="false" :visible.sync="visible" @close="$emit('update:show', false)"
+      @closed="emptyForm" size="380px">
       <div slot="title" style="font-size:14px">{{ title }}</div>
 
       <div class="drawer-content">
@@ -21,7 +22,9 @@
           <el-form-item prop="date">
             <span slot="label">
               <svg-icon icon-class="week" /> 申请周</span>
-            <el-date-picker v-show="!form.date" v-model="form.date" style="width:210px" type="week" value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }" @change="getDate"></el-date-picker>
+            <el-date-picker v-show="!form.date" v-model="form.date" style="width:210px" type="week"
+              value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }"
+              @change="getDate"></el-date-picker>
             <el-tag v-show="form.date" closable @close="closeTag" effect="plain" size="medium" style="font-size:12px;">
               {{ monthWeek }}
             </el-tag>
@@ -29,13 +32,15 @@
         </el-form>
         <!-- ac申请 -->
         <div>
-          <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index" style="margin : 5px 0px 5px 0px;display:flex">
+          <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index"
+            style="margin : 5px 0px 5px 0px;display:flex">
             <el-input v-model="item.reason" style="margin-right:3px;" placeholder="申请原因"></el-input>
             <el-input v-model="item.ac" style="width:20%" placeholder="AC"></el-input>
 
             <el-button style="border: 0px" icon="el-icon-delete" @click.prevent="rmAcItem(item)" />
           </div>
-          <el-button @click="addAcItem" style="border-style:dashed; width:298px; "><i class="el-icon-plus"></i> 添加AC申请</el-button>
+          <el-button @click="addAcItem" style="border-style:dashed; width:298px; "><i class="el-icon-plus"></i> 添加AC申请
+          </el-button>
 
           <br />
         </div>
@@ -43,7 +48,8 @@
 
       <div class="drawer-footer">
         <el-button style="width:50%" @click="visible = false">取 消</el-button>
-        <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
+        <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">
+          {{ loading ? "提交中 ..." : "确 定" }}</el-button>
       </div>
     </el-drawer>
   </div>
@@ -153,7 +159,7 @@ export default {
         this.form.id = this.tmp.id;
         this.form.acItems = this.tmp.acItems;
         this.form.dvalue = this.tmp.dvalue;
-        this.form.auditorid = this.tmp.auditor.id;
+        this.form.auditorid = this.tmp.auditorid;
         this.form.date = this.tmp.weekdate;
         this.form.acItems = this.tmp.acItems;
         this.monthWeek =
@@ -161,6 +167,8 @@ export default {
           " 月 第 " +
           this.tmp.week +
           " 周";
+
+        console.log(this.monthWeek);
       });
     },
     // 提交申请

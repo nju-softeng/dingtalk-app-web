@@ -26,11 +26,11 @@ export default {
   },
   mounted() {
     let windowWidth = document.body.clientWidth;
-    if (windowWidth > 700 && windowWidth < 890) {
-      this.$message({
-        showClose: true,
+    if (windowWidth > 700 && windowWidth < 1024) {
+      this.$notify({
+        title: "小提示",
         message: "建议点击右上角的'独立窗口', 调整宽度，以提升使用体验",
-        offset: 32
+        position: "bottom-right"
       });
     }
   }

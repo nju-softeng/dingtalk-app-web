@@ -370,7 +370,7 @@ export default {
 }
 
 .wrap {
-  max-width: 1072px;
+  max-width: 1024px;
   margin-left: auto;
   margin-right: auto;
 }

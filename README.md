@@ -3,7 +3,7 @@
 ![Prod](https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg)
 ![Test](https://github.com/zhanyeye/dingtalk-vue/workflows/Test/badge.svg)
 
-参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
+参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  
 预览 -> https://www.bilibili.com/video/BV1DK411H7Ti/
 
 

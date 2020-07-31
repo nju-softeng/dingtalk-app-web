@@ -49,7 +49,7 @@ export default {
     };
   },
   created() {
-    getUserApplication(0).then(res => {
+    getUserApplication(1, 10).then(res => {
       this.list = res.data.list || [];
       this.total = res.data.total || 0;
       console.log(this.total);
@@ -60,17 +60,17 @@ export default {
   methods: {
     // 分页获取数据
     handleCurrentChange(val) {
-      getUserApplication(val - 1).then(res => {
+      getUserApplication(val, 10).then(res => {
         this.list = res.data.list;
       });
     },
     handlePrev(val) {
-      getUserApplication(val - 1).then(res => {
+      getUserApplication(val, 10).then(res => {
         this.list = res.data.list;
       });
     },
     handleNext(val) {
-      getUserApplication(val - 1).then(res => {
+      getUserApplication(val, 10).then(res => {
         this.list = res.data.list;
       });
     }

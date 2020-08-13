@@ -21,8 +21,8 @@ jobs:
             git pull origin test
             npm install
             npm run build:stage
-#            docker build -t dingtalk_vue .
-#            docker container stop dingtalk_vue
-#            docker container rm dingtalk_vue
-#            docker run -d --net dingtalk-net -p 8089:80 -v /etc/timezone:/etc/timezone -v /etc/localtime:/etc/localtime --name dingtalk_vue  dingtalk_vue
-#            docker image prune -f
+            cd ~/dingtalk
+            docker-compose build
+            docker-compose up
+	    docker image prune
+            

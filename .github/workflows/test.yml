@@ -23,5 +23,5 @@ jobs:
             npm run build:stage
             cd ~/dingtalk
             docker-compose build
-            docker-compose up
+            docker-compose up -d
             docker image prune -f

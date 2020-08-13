@@ -24,5 +24,4 @@ jobs:
             cd ~/dingtalk
             docker-compose build
             docker-compose up
-	    docker image prune
-            
+            docker image prune -f

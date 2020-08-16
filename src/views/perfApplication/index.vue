@@ -67,7 +67,7 @@
 
             <el-table-column align="center" label="操作">
               <template slot-scope="{ row }">
-                <el-button v-if="!row.status" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改
+                <el-button v-if="!row.status || isAuditor(row.auditorid)" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改
                 </el-button>
                 <el-tag v-else type="info">已审核</el-tag>
                 <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
@@ -109,7 +109,9 @@ export default {
     loading: false,
     direction: "ltr",
     list: [],
-    total: 0
+    total: 0,
+    uid:"",
+    role:""
   }),
   components: { drawer },
   created() {
@@ -120,6 +122,22 @@ export default {
       .then(() => {
         this.fetchApplication(1);
       });
+    this.uid = sessionStorage.getItem("uid");
+    this.role = sessionStorage.getItem("role")
+  },
+  computed:{
+    isAuditor() {
+      return aid => {
+        if (aid == this.uid && this.role == 'auditor') {
+          console.log("true")
+          return true;
+        } else {
+          console.log("false")
+          return false;
+        }
+      }
+    }
+
   },
   methods: {
     // 获取申请记录

@@ -100,6 +100,15 @@
 
           <br />
         </div>
+
+        <div style="padding-top:16px;font-size:12px; color:#8c8c8c">
+          <svg-icon icon-class="hint" />
+          <span style="">  过期一周不可补登记</span>
+        </div>
+        <div style="padding-top:16px;font-size:12px;color:#8c8c8c">
+          <svg-icon icon-class="hint" />
+          <span> 审核人可以填写D值和C值，直接录入无需审核</span>
+        </div>
       </div>
 
       <div class="drawer-footer">

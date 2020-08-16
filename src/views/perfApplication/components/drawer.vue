@@ -1,45 +1,101 @@
 <template>
   <div class="apply">
-    <el-drawer :direction="direction" :modal="false" :visible.sync="visible" @close="$emit('update:show', false)"
-      @closed="emptyForm" size="380px">
+    <el-drawer
+      :direction="direction"
+      :modal="false"
+      :visible.sync="visible"
+      @close="$emit('update:show', false)"
+      @closed="emptyForm"
+      size="380px"
+    >
       <div slot="title" style="font-size:14px">{{ title }}</div>
 
       <div class="drawer-content">
         <!-- dc表单 -->
-        <el-form :model="form" label-width="90px" :rules="rules" ref="form" label-position="left">
+        <el-form
+          :model="form"
+          label-width="90px"
+          :rules="rules"
+          ref="form"
+          label-position="left"
+        >
           <el-form-item prop="auditorid">
-            <span slot="label">
-              <svg-icon icon-class="people" /> 审核人</span>
-            <el-select style="width:210px" v-model="form.auditorid" placeholder="请选择审核人">
-              <el-option v-for="(item, index) in auditors" :key="index" :label="item.name" :value="item.id"></el-option>
+            <span slot="label"> <svg-icon icon-class="people" /> 审核人</span>
+            <el-select
+              style="width:210px"
+              v-model="form.auditorid"
+              placeholder="请选择审核人"
+            >
+              <el-option
+                v-for="(item, index) in auditors"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="dvalue">
-            <span slot="label">
-              <svg-icon icon-class="dvalue" /> D值</span>
+            <span slot="label"> <svg-icon icon-class="dvalue" /> D值</span>
             <el-input v-model="form.dvalue" style="width:210px"></el-input>
           </el-form-item>
+          <el-form-item prop="cvalue" v-if="showCvalue">
+            <span slot="label"> <svg-icon icon-class="dvalue" /> C值</span>
+            <el-input v-model="form.cvalue" style="width:210px"></el-input>
+          </el-form-item>
           <el-form-item prop="date">
-            <span slot="label">
-              <svg-icon icon-class="week" /> 申请周</span>
-            <el-date-picker v-show="!form.date" v-model="form.date" style="width:210px" type="week"
-              value-format="yyyy-MM-dd" format="yyyy 第 WW 周" placeholder="选择周" :picker-options="{ firstDayOfWeek: 1 }"
-              @change="getDate"></el-date-picker>
-            <el-tag v-show="form.date" closable @close="closeTag" effect="plain" size="medium" style="font-size:12px;">
+            <span slot="label"> <svg-icon icon-class="week" /> 申请周</span>
+            <el-date-picker
+              v-show="!form.date"
+              v-model="form.date"
+              style="width:210px"
+              type="week"
+              value-format="yyyy-MM-dd"
+              format="yyyy 第 WW 周"
+              placeholder="选择周"
+              :picker-options="{ firstDayOfWeek: 1 }"
+              @change="getDate"
+            ></el-date-picker>
+            <el-tag
+              v-show="form.date"
+              closable
+              @close="closeTag"
+              effect="plain"
+              size="medium"
+              style="font-size:12px;"
+            >
               {{ monthWeek }}
             </el-tag>
           </el-form-item>
         </el-form>
         <!-- ac申请 -->
         <div>
-          <div :label="index === 0 ? 'AC值' : ''" v-for="(item, index) in form.acItems" :key="index"
-            style="margin : 5px 0px 5px 0px;display:flex">
-            <el-input v-model="item.reason" style="margin-right:3px;" placeholder="申请原因"></el-input>
-            <el-input v-model="item.ac" style="width:20%" placeholder="AC"></el-input>
+          <div
+            :label="index === 0 ? 'AC值' : ''"
+            v-for="(item, index) in form.acItems"
+            :key="index"
+            style="margin : 5px 0px 5px 0px;display:flex"
+          >
+            <el-input
+              v-model="item.reason"
+              style="margin-right:3px;"
+              placeholder="申请原因"
+            ></el-input>
+            <el-input
+              v-model="item.ac"
+              style="width:20%"
+              placeholder="AC"
+            ></el-input>
 
-            <el-button style="border: 0px" icon="el-icon-delete" @click.prevent="rmAcItem(item)" />
+            <el-button
+              style="border: 0px"
+              icon="el-icon-delete"
+              @click.prevent="rmAcItem(item)"
+            />
           </div>
-          <el-button @click="addAcItem" style="border-style:dashed; width:298px; "><i class="el-icon-plus"></i> 添加AC申请
+          <el-button
+            @click="addAcItem"
+            style="border-style:dashed; width:298px; "
+            ><i class="el-icon-plus"></i> 添加AC申请
           </el-button>
 
           <br />
@@ -48,8 +104,14 @@
 
       <div class="drawer-footer">
         <el-button style="width:50%" @click="visible = false">取 消</el-button>
-        <el-button style="width:50%" type="primary" @click="submit()" :loading="loading">
-          {{ loading ? "提交中 ..." : "确 定" }}</el-button>
+        <el-button
+          style="width:50%"
+          type="primary"
+          @click="submit()"
+          :loading="loading"
+        >
+          {{ loading ? "提交中 ..." : "确 定" }}</el-button
+        >
       </div>
     </el-drawer>
   </div>
@@ -65,11 +127,13 @@ export default {
       monthWeek: "请选择报表申请所在在周",
       loading: false,
       status: false,
+      showCvalue:false,
       form: {
         id: null,
         auditorid: null,
         date: "",
         dvalue: "",
+        cvalue: "",
         acItems: []
       },
       rules: {
@@ -77,6 +141,7 @@ export default {
           { required: true, message: "请选择审核人", trigger: "change" }
         ],
         dvalue: [{ required: true, message: "请输入D值", trigger: "blur" }],
+        cvalue: [{ required: true, message: "请输入C值", trigger: "blur" }],
         "acItems.reason": [
           { required: true, message: "请填写AC申请", trigger: "blur" }
         ],
@@ -113,6 +178,21 @@ export default {
       if (this.tmp != null) {
         this.initModeify();
         this.title = "更新绩效";
+      } else {
+        let uid = parseInt(sessionStorage.getItem("uid"));
+        let aids = this.auditors.map(x => x.id);
+        if (aids.indexOf(uid) > -1) {
+          this.form.auditorid = uid;
+        }
+        console.log(this.form);
+      }
+    },
+    "form.auditorid"() {
+      let uid = parseInt(sessionStorage.getItem("uid"));
+      if (uid == this.form.auditorid) {
+          this.showCvalue = true;
+      } else {
+        this.showCvalue = false;
       }
     }
   },
@@ -159,6 +239,7 @@ export default {
         this.form.id = this.tmp.id;
         this.form.acItems = this.tmp.acItems;
         this.form.dvalue = this.tmp.dvalue;
+        this.form.cvalue = this.tmp.cvalue;
         this.form.auditorid = this.tmp.auditorid;
         this.form.date = this.tmp.weekdate;
         this.form.acItems = this.tmp.acItems;

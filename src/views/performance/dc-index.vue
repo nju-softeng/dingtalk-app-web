@@ -31,42 +31,42 @@
         <el-table-column fixed prop="name" label="姓名" align="center"> </el-table-column>
         <el-table-column label="助研金" align="center">
           <template slot-scope="{ row }">
-            {{ row.salary || 0 }}
+            {{ row.salary || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="第1周DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.week1 || 0 }}
+            {{ row.week1 || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="第2周DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.week2 || 0 }}
+            {{ row.week2 || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="第3周DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.week3 || 0 }}
+            {{ row.week3 || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="第4周DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.week4 || 0 }}
+            {{ row.week4 || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="第5周DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.week5 || 0 }}
+            {{ row.week5 || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="本月总DC" align="center">
           <template slot-scope="{ row }">
-            {{ row.total || 0 }}
+            {{ row.total || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="当前AC值" align="center">
           <template slot-scope="{ row }">
-            {{ row.ac || 0 }}
+            {{ row.ac || '-' }}
           </template>
         </el-table-column>
         <el-table-column label="Topup" align="center" width="140">

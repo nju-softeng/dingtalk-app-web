@@ -117,31 +117,43 @@
               <div class="shortcut">
                 <div class="item">
                   <router-link to="/performance/perfApplication">
-                    <el-link type="primary">绩效申请</el-link>
+                    <el-button plain class="btn">绩效申请</el-button>
                   </router-link>
                 </div>
                 <div class="item">
                   <router-link to="/performance/performance_dc">
-                    <el-link type="primary">绩效汇总</el-link>
+                    <el-button plain class="btn">绩效汇总</el-button>
                   </router-link>
                 </div>
                 <div class="item">
                   <router-link to="/performance/performance_ac">
-                    <el-link type="primary">AC汇总</el-link>
+                    <el-button plain class="btn">AC汇总</el-button>
                   </router-link>
                 </div>
                 <div class="item">
                   <router-link to="/project/index">
-                    <el-link type="primary">迭代任务 </el-link>
+                    <el-button plain class="btn">迭代任务</el-button>
                   </router-link>
                 </div>
 
                 <div class="item">
                   <router-link to="/paper/index">
-                    <el-link type="primary">论文管理</el-link>
+                    <el-button plain class="btn">论文管理</el-button>
                   </router-link>
                 </div>
               </div>
+            </el-card>
+
+            <!-- AC排行 -->
+            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+              <div slot="header" class="clearfix">
+                <span>AC排行</span>
+              </div>
+              <el-table class="table" ref="table" height="83vh" :data="aclist" max-height="250" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" >
+                <el-table-column type="index" > </el-table-column>
+                <el-table-column prop="name" label="姓名"> </el-table-column>
+                <el-table-column prop="total" label="总AC" > </el-table-column>
+              </el-table>
             </el-card>
 
             <!-- AC变动公告 -->
@@ -185,10 +197,11 @@
 
 <script>
 import { getMessages } from "@/api/message";
-import { lastAc, getPerformance } from "@/api/performance";
+import {lastAc, getPerformance, getAcSummary} from "@/api/performance";
 import { getUnCheckCnt } from "@/api/audit";
 import { showHelloTime } from "@/utils/index";
 import { getYiYan } from "@/api/common";
+
 
 export default {
   data() {
@@ -231,6 +244,10 @@ export default {
     getUnCheckCnt().then(res => {
       this.unCheckCnt = res.data;
     });
+    // 获取ac排名
+    getAcSummary().then(res => {
+      this.aclist = res.data;
+    })
   },
   computed: {
     helloTime() {
@@ -335,6 +352,18 @@ export default {
   }
 }
 
+@media only screen and (min-width: 1024px) and (max-width:1500px) {
+  .wrap {
+    max-width: 96%;
+  }
+}
+
+@media only screen and (min-width: 1501px) {
+  .wrap {
+    max-width: 1305px;
+  }
+}
+
 .popover {
   display: flex;
   .item {
@@ -358,7 +387,6 @@ export default {
 }
 
 .wrap {
-  max-width: 1024px;
   margin-left: auto;
   margin-right: auto;
 }

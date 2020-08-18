@@ -149,7 +149,7 @@
               <div slot="header" class="clearfix">
                 <span>AC排行</span>
               </div>
-              <el-table class="table" ref="table" height="83vh" :data="aclist" max-height="250" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" >
+              <el-table class="table" ref="table" height="83vh" :data="aclist" max-height="250" highlight-current-row  style="width: 100%" >
                 <el-table-column type="index" > </el-table-column>
                 <el-table-column prop="name" label="姓名"> </el-table-column>
                 <el-table-column prop="total" label="总AC" > </el-table-column>
@@ -209,6 +209,7 @@ export default {
       messages: [],
       lastAcs: [],
       unCheckCnt: 0,
+      aclist:[],
       perf: {
         dcTotal: "",
         acTotal: "",
@@ -352,7 +353,7 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1024px) and (max-width:1500px) {
+@media only screen and (min-width: 1200px) and (max-width:1500px) {
   .wrap {
     max-width: 96%;
   }

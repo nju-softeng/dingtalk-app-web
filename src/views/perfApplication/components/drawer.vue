@@ -100,6 +100,15 @@
 
           <br />
         </div>
+
+        <div style="padding-top:16px;font-size:12px; color:#8c8c8c">
+          <svg-icon icon-class="hint" />
+          <span style="">  过期一周不可补登记</span>
+        </div>
+        <div style="padding-top:16px;font-size:12px;color:#8c8c8c">
+          <svg-icon icon-class="hint" />
+          <span> 审核人提交给自己的绩效申请，直接录入，无需审核</span>
+        </div>
       </div>
 
       <div class="drawer-footer">

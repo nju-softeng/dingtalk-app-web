@@ -149,6 +149,18 @@
               </div>
             </el-card>
 
+            <!-- AC排行 -->
+            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+              <div slot="header" class="clearfix">
+                <span>AC排行</span>
+              </div>
+              <el-table class="table" ref="table" height="83vh" :data="aclist" max-height="250" highlight-current-row  style="width: 100%" >
+                <el-table-column type="index" > </el-table-column>
+                <el-table-column prop="name" label="姓名"> </el-table-column>
+                <el-table-column prop="total" label="总AC" > </el-table-column>
+              </el-table>
+            </el-card>
+
             <!-- AC变动公告 -->
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
@@ -178,6 +190,7 @@
                 </el-carousel-item>
               </el-carousel>
             </el-card>
+
           </el-col>
         </el-row>
       </div>
@@ -192,12 +205,14 @@ import { getUnCheckCnt } from "@/api/audit";
 import { getAuditorBugCnt } from "@/api/bug";
 import { showHelloTime } from "@/utils/index";
 import { getYiYan } from "@/api/common";
+import { getAcSummary } from '@/api/performance';
 
 export default {
   data() {
     return {
       messages: [],
       lastAcs: [],
+      aclist:[],
       unCheckCnt: 0,
       perf: {
         dcTotal: "",
@@ -239,6 +254,11 @@ export default {
     getAuditorBugCnt().then(res => {
       this.bugCnt = res.data;
     });
+    // 获取ac排名
+    getAcSummary().then(res => {
+      this.aclist = res.data;
+    })
+
   },
   computed: {
     helloTime() {
@@ -338,6 +358,7 @@ export default {
   .hello-text {
     padding-top: 0px !important;
   }
+
 }
 
 @media only screen and (min-width: 768px) {
@@ -345,7 +366,20 @@ export default {
     position: absolute;
     bottom: 0;
   }
+
 }
+
+@media only screen and (min-width: 1200px) and (max-width:1500px) {
+  .wrap {
+    max-width: 96%;
+  }
+}
+@media only screen and (min-width: 1501px) {
+  .wrap {
+    max-width: 1305px;
+  }
+}
+
 
 .popover {
   display: flex;
@@ -370,7 +404,7 @@ export default {
 }
 
 .wrap {
-  max-width: 1024px;
+  //max-width: 80%;
   margin-left: auto;
   margin-right: auto;
 }

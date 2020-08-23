@@ -136,6 +136,7 @@ export default {
         }
       },
       showAns: false,
+      vid:"",
       accept: "",
       reject: "",
       isEnd: "false",
@@ -198,6 +199,7 @@ export default {
         console.log(res.data);
         this.showAns = res.data.status;
         if (this.showAns) {
+          this.vid = res.data.vid;
           this.accept = res.data.accept;
           this.reject = res.data.reject;
           this.total = res.data.total;
@@ -230,12 +232,14 @@ export default {
           //接收服务器返回的数据
           console.log(e.data);
           let data = JSON.parse(e.data);
-          that.total = data.total;
-          that.accept = data.accept;
-          that.reject = data.reject;
-          that.myresult = data.result;
-          that.acceptlist = data.acceptnames;
-          that.rejectlist = data.rejectnames;
+          if (data.vid == this.vid) {
+            that.total = data.total;
+            that.accept = data.accept;
+            that.reject = data.reject;
+            that.myresult = data.result;
+            that.acceptlist = data.acceptnames;
+            that.rejectlist = data.rejectnames;
+          }
         };
       }
     },

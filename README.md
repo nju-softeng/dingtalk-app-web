@@ -1,11 +1,13 @@
 # dingtalk-vue
 
-![Prod](https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg)
-![Test](https://github.com/zhanyeye/dingtalk-vue/workflows/Test/badge.svg)
+[![Prod](https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg)](https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AProd)
+[![Test](https://github.com/zhanyeye/dingtalk-vue/workflows/Test/badge.svg)](https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3ATest)
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  
 预览 -> https://www.bilibili.com/video/BV1DK411H7Ti/
 
+###### 2020.08.13
+使用`docker-compose`代替`docker run`
 
 ###### 2020.06.23
 更新topup设置; 绩效报表导出execl

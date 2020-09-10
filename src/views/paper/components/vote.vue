@@ -196,6 +196,7 @@ export default {
     //获取投票详情
     fetchVoteDetail() {
       getVoteDetail(this.pid).then(res => {
+        console.log("获取投票详情数据");
         console.log(res.data);
         this.showAns = res.data.status;
         if (this.showAns) {
@@ -233,6 +234,8 @@ export default {
           console.log("websocket 接收到数据：")
           console.log(e.data);
           let data = JSON.parse(e.data);
+          console.log(data)
+          console.log(that)
           if (data.vid == that.vid) {
             that.total = data.total;
             that.accept = data.accept;

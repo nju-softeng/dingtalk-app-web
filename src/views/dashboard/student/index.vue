@@ -160,7 +160,9 @@
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>AC变动公告</span>
-                <el-button style="float: right; padding:0" type="text">查看详情</el-button>
+                <router-link to="/performance/performance_ac">
+                  <el-button style="float: right; padding:0" type="text">查看详情</el-button>
+                </router-link>
               </div>
               <el-carousel indicator-position="none" trigger="click" height="150px">
                 <el-carousel-item v-for="(item, index) in lastAcs" :key="index">

@@ -160,7 +160,9 @@ export default {
         console.log(this.vote);
         this.isEnd = res.data.status;
         if (this.vote.id != undefined) {
-          this.fetchVoteDetail();
+          this.fetchVoteDetail().then(() => {
+            this.initWebSocket();
+          })
         }
       })
       .finally(() => {
@@ -169,7 +171,7 @@ export default {
         }, 400);
       });
 
-    this.initWebSocket();
+
   },
   destroyed() {
     // 离开页面时关闭websocket连接
@@ -195,21 +197,26 @@ export default {
     },
     //获取投票详情
     fetchVoteDetail() {
-      getVoteDetail(this.pid).then(res => {
-        console.log("获取投票详情数据");
-        console.log(res.data);
-        this.showAns = res.data.status;
-        if (this.showAns) {
-          this.vid = res.data.vid;
-          this.accept = res.data.accept;
-          this.reject = res.data.reject;
-          this.total = res.data.total;
-          this.myresult = res.data.result;
-          this.acceptlist = res.data.acceptnames;
-          this.rejectlist = res.data.rejectnames;
-          this.unvotelist = res.data.unvotenames || [];
-        }
-      });
+      return new Promise(((resolve, reject) => {
+        getVoteDetail(this.pid).then(res => {
+          console.log("获取投票详情数据");
+          console.log(res.data);
+          this.showAns = res.data.status;
+          if (this.showAns) {
+            this.vid = res.data.vid;
+            this.accept = res.data.accept;
+            this.reject = res.data.reject;
+            this.total = res.data.total;
+            this.myresult = res.data.result;
+            this.acceptlist = res.data.acceptnames;
+            this.rejectlist = res.data.rejectnames;
+            this.unvotelist = res.data.unvotenames || [];
+          }
+          resolve();
+        }).catch(error => {
+          reject(error);
+        });
+      }))
     },
 
     // 初始化websocket

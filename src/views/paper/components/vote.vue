@@ -161,6 +161,7 @@ export default {
         this.isEnd = res.data.status;
         if (this.vote.id != undefined) {
           this.fetchVoteDetail().then(() => {
+            console.log("vid:   " + this.vid)
             this.initWebSocket();
           })
         }

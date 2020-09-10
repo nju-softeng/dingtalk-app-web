@@ -216,7 +216,7 @@ export default {
       let that = this;
       if (window.WebSocket) {
         var url = "ws://" + location.host + "/wsapi";
-        console.log(url);
+        console.log("location.host for websocket: " + url);
         let ws = new WebSocket(url);
         that.ws = ws;
         ws.onopen = function() {
@@ -230,9 +230,10 @@ export default {
         };
         ws.onmessage = function(e) {
           //接收服务器返回的数据
+          console.log("websocket 接收到数据：")
           console.log(e.data);
           let data = JSON.parse(e.data);
-          if (data.vid == this.vid) {
+          if (data.vid == that.vid) {
             that.total = data.total;
             that.accept = data.accept;
             that.reject = data.reject;

@@ -6,6 +6,9 @@
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  
 预览 -> https://www.bilibili.com/video/BV1DK411H7Ti/
 
+###### 2020.09.10
+修复同时进行多个投票时，没有对websocket传过来的数据进行区分的问题
+
 ###### 2020.08.13
 使用`docker-compose`代替`docker run`
 

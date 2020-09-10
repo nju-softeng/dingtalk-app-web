@@ -203,8 +203,8 @@ export default {
           console.log("获取投票详情数据");
           console.log(res.data);
           this.showAns = res.data.status;
+          this.vid = res.data.vid;
           if (this.showAns) {
-            this.vid = res.data.vid;
             this.accept = res.data.accept;
             this.reject = res.data.reject;
             this.total = res.data.total;

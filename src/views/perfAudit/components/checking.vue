@@ -80,6 +80,10 @@ export default {
           this.list.splice(this.index, 1);
           this.temp = this.list[this.index];
         }
+      } else if (val == 'close') {
+        getToChecked().then(res => {
+          this.list = res.data;
+        });
       }
       setTimeout(() => {
         this.loading = false;

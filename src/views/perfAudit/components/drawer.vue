@@ -197,6 +197,9 @@ export default {
   watch: {
     show() {
       this.visible = this.show;
+      if (this.visible == false) {
+        this.$emit("drawer-event", "close");
+      }
     },
     temp() {
       this.initData();

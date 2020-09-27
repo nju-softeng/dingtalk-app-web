@@ -1,10 +1,56 @@
+<style>
+.tabs-nav {
+  margin-right: 32px;
+  padding: 6px 0;
+  color: #666;
+  font-size: 12px;
+  background-color: transparent;
+}
+.tabs-nav .tab {
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 14px;
+  padding: 7px 1px;
+}
+
+.tabs-nav .tab:active {
+  color: black;
+  border-bottom: 2px solid #3e9bff;
+}
+
+.tabs-nav .tab:hover {
+  color: black;
+  border-bottom: 2px solid #3e9bff;
+}
+.tabs-nav .tab:after {
+
+  color: black;
+  border-bottom: 2px solid #3e9bff;
+}
+
+</style>
+
 <template>
   <div class="app-container">
     <div class="paper-box">
-      <div class="list">
-        <div class="action" style="margin-bottom:10px">
+      <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
+<!--        <div>-->
+<!--          <ul class="tabs-nav">-->
+<!--            <li class="tab">内部评审</li>-->
+<!--            <li class="tab">外部评审</li>-->
+<!--          </ul>-->
+
+
+<!--        </div>-->
+
+        <tab-nav></tab-nav>
+
+        <div style=" display:flex; justify-content: center; align-items: center; ">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
+      </div>
+      <div class="list">
+
         <el-table :data="list" class="tableClass">
           <el-table-column label="论文信息" width="335">
             <template slot-scope="scope">
@@ -233,6 +279,8 @@
 </template>
 <script>
 import { getUserList } from "@/api/common";
+import TabNav from "@/components/TabNav";
+
 import {
   addPaper,
   listPaper,
@@ -312,6 +360,9 @@ export default {
         ]
       }
     };
+  },
+  components:{
+    TabNav
   },
   created() {
     getUserList().then(res => {

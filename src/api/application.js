@@ -1,9 +1,16 @@
 import axios from '@/utils/request';
 
+const api = {
+  application: '/application',
+  applicationPager: '/application/page/',
+  getDate: '/getdate',
+  pendingAudit: '/pending_audit'
+}
+
 // 用户提交/更新绩效申请
 export function submitApplication(data) {
   return axios({
-    url: '/application',
+    url: api.application,
     method: 'post',
     data
   });
@@ -12,7 +19,7 @@ export function submitApplication(data) {
 // 用户获得已经申请的绩效
 export function getUserApplication(page, size) {
   return axios({
-    url: '/application/page/' + page + '/' + size,
+    url: api.applicationPager + page + '/' + size,
     method: 'get'
   });
 }
@@ -20,7 +27,7 @@ export function getUserApplication(page, size) {
 // 获取本周是本月第几周
 export function getWeek(data) {
   return axios({
-    url: '/getdate',
+    url: api.getDate,
     method: 'post',
     data
   });
@@ -29,7 +36,7 @@ export function getWeek(data) {
 //  审核人获取待审核绩效
 export function getAudit() {
   return axios({
-    url: '/pending_audit',
+    url: api.pendingAudit,
     method: 'get'
   });
 }

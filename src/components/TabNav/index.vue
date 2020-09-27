@@ -1,8 +1,7 @@
 <template>
   <div>
-    <ul class="tabs-nav" @toggle="toggle">
-      <li class="tab" :class="[active === 0 ? 'showActive' : '']">内部评审</li>
-      <li class="tab" :class="[active === 1 ? 'showActive' : '']">外部评审</li>
+    <ul class="tabs-nav" >
+      <li v-for="(item, index) in navlist" :key="index" @click="toggle(index)" class="tab" :class="{selected:index==active}">{{item}}-{{index}}</li>
     </ul>
   </div>
 </template>
@@ -10,15 +9,21 @@
 <script>
 export default {
   name: "TabNav",
-  data() {
-    return {
-      active: 0
-    };
+  model: {
+    prop: 'active',
+    event: 'toggle'
+  },
+  props:{
+    active: {
+      type: Number,
+      default: 0
+    },
+    navlist: Array
   },
   methods: {
-    toggle(tab) {
-      console.log(tab.index)
-      this.active = tab.index;
+    toggle(index) {
+      this.active = index;
+      this.$emit('toggle', this.active)
     }
   }
 };
@@ -39,7 +44,7 @@ export default {
   padding: 7px 1px;
 }
 
-.showActive {
+.selected {
   color: black;
   font-weight: bold;
   border-bottom: 2px solid #3e9bff;

@@ -34,17 +34,9 @@
   <div class="app-container">
     <div class="paper-box">
       <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
-<!--        <div>-->
-<!--          <ul class="tabs-nav">-->
-<!--            <li class="tab">内部评审</li>-->
-<!--            <li class="tab">外部评审</li>-->
-<!--          </ul>-->
 
-
-<!--        </div>-->
-
-        <tab-nav></tab-nav>
-
+        <tab-nav :navlist="[123, 1234]" v-model="test"></tab-nav>
+        {{test}}
         <div style=" display:flex; justify-content: center; align-items: center; ">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
@@ -319,6 +311,7 @@ const levels = [
 export default {
   data() {
     return {
+      test: 0,
       userlist: [],
       total: 0,
       resultDialog: false,

@@ -35,7 +35,14 @@
     <div class="paper-box">
       <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
 
-        <tab-nav :navlist="[123, 1234]" v-model="test"></tab-nav>
+<!--        <tab-nav :navlist="[123, 1234]" v-model="test"></tab-nav>-->
+<!--        {{test}}-->
+
+        <tabs v-model="test">
+          <tab-pane label="标签1" name="name1"></tab-pane>
+          <tab-pane label="标签1" name="name2"></tab-pane>
+          <tab-pane label="标签1" name="name3"></tab-pane>
+        </tabs>
         {{test}}
         <div style=" display:flex; justify-content: center; align-items: center; ">
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
@@ -272,6 +279,9 @@
 <script>
 import { getUserList } from "@/api/common";
 import TabNav from "@/components/TabNav";
+import Tabs from "@/components/TabNav/tabs"
+import TabPane from "@/components/TabNav/tabpane"
+
 
 import {
   addPaper,
@@ -355,7 +365,9 @@ export default {
     };
   },
   components:{
-    TabNav
+    TabNav,
+    Tabs,
+    TabPane
   },
   created() {
     getUserList().then(res => {

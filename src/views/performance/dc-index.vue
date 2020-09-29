@@ -24,7 +24,7 @@
         :header-cell-style="{ background: '#eef1f6' }"
         :default-sort ="{prop:'salary',order:'descending'}"
       >
-        <el-table-column fixed label="学号" align="center">
+        <el-table-column fixed label="学号" align="center" width="90">
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}
           </template>
@@ -60,7 +60,7 @@
             {{ row.week5 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="总DC" align="center" width="85" prop="week5" sortable>
+        <el-table-column label="总DC" align="center" width="80" prop="week5" sortable>
           <template slot-scope="{ row }">
             {{ row.total || '-' }}
           </template>

@@ -7,7 +7,7 @@
           <el-button @click="prev" icon="el-icon-arrow-left">上一月</el-button>
           <el-button @click="next">下一月<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </el-button-group>
-        <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+        <el-button :loading="downloadLoading" style="margin:0 0 5px 5px;"  icon="el-icon-document" @click="handleDownload">
           Export Excel
         </el-button>
       </div>
@@ -22,54 +22,55 @@
         style="margin-top:10px;"
         height="77.5vh"
         :header-cell-style="{ background: '#eef1f6' }"
+        :default-sort ="{prop:'salary',order:'descending'}"
       >
-        <el-table-column fixed label="学号" width="100" align="center">
+        <el-table-column fixed label="学号" align="center">
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}
           </template>
         </el-table-column>
-        <el-table-column fixed prop="name" label="姓名" align="center"> </el-table-column>
-        <el-table-column label="助研金" align="center">
+        <el-table-column fixed prop="name"  label="姓名" align="center"> </el-table-column>
+        <el-table-column label="助研金" align="center" width="82" prop="salary" sortable>
           <template slot-scope="{ row }">
             {{ row.salary || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第1周DC" align="center">
+        <el-table-column label="第1周DC" align="center" width="92" prop="week1" sortable>
           <template slot-scope="{ row }">
             {{ row.week1 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第2周DC" align="center">
+        <el-table-column label="第2周DC" align="center" width="92" prop="week2" sortable>
           <template slot-scope="{ row }">
             {{ row.week2 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第3周DC" align="center">
+        <el-table-column label="第3周DC" align="center" width="92" prop="week2" sortable>
           <template slot-scope="{ row }">
             {{ row.week3 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第4周DC" align="center">
+        <el-table-column label="第4周DC" align="center" width="92" prop="week3" sortable>
           <template slot-scope="{ row }">
             {{ row.week4 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第5周DC" align="center">
+        <el-table-column label="第5周DC" align="center" width="92" prop="week4" sortable>
           <template slot-scope="{ row }">
             {{ row.week5 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="本月总DC" align="center">
+        <el-table-column label="总DC" align="center" width="85" prop="week5" sortable>
           <template slot-scope="{ row }">
             {{ row.total || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="当前AC值" align="center">
+        <el-table-column label="当前AC" align="center" width="85" prop="ac" sortable>
           <template slot-scope="{ row }">
             {{ row.ac || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="Topup" align="center" width="140">
+        <el-table-column label="Topup" align="center" width="130">
           <template slot-scope="{ row }">
             <template v-if="!row.edit">
               {{ row.topup || 0 }}

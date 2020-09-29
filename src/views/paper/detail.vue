@@ -65,7 +65,7 @@
   </div>
 </template>
 <script>
-import { getPaper, getVoteDetail } from "@/api/paper";
+import { getPaper } from "@/api/paper";
 
 const levels = [
   {

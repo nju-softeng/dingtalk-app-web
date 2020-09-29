@@ -6,9 +6,14 @@
 
 <script>
 export default {
-  name: "app",
-  created() {
-    console.log(window.location.href);
-  }
+  name: "app"
 };
 </script>
+<style>
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+body .el-table colgroup.gutter{
+  display: table-cell!important;
+}
+</style>

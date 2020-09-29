@@ -1,16 +1,17 @@
 <template>
-  <!--tabs容器-->
-  <div>
-    {{value}}
-    <!--标签页容器-->
-    <div class="tabs-nav">
-      <!--标签页头label-->
-      <div class="tab" v-for="(item, index) in navList"  @click="handleChange(index)" :class="{selected:item.name==actived}" :key="index">
-        {{ item.label }}
-      </div>
+  <div class="tabs-nav">
+    <!--标签页头label-->
+    <div
+      class="tab"
+      v-for="(item, index) in navList"
+      @click="handleChange(index)"
+      :class="{ selected: item.name == actived }"
+      :key="index"
+    >
+      {{ item.label }}
     </div>
     <!--所有pane组件使用的slot容器-->
-    <div class="pane-content">
+    <div>
       <slot></slot>
     </div>
   </div>
@@ -19,14 +20,9 @@
 <script>
 export default {
   name: "Tabs",
-  props: {
-    value: {
-      type: [String, Number]
-    }
-  },
   model: {
-    prop: 'value',
-    event: 'handleChange'
+    prop: "actived",
+    event: "handleChange"
   },
   data() {
     return {
@@ -35,45 +31,41 @@ export default {
     };
   },
   provide() {
-    return {TabsInstance: this}
+    return { TabsInstance: this };
   },
   watch: {
-    value(val) {
-      this.actived = val
-    },
+    actived() {
+      // 通知父组件 actived 值被更新
+      this.$emit("handleChange", this.actived);
+    }
   },
   methods: {
     //改变activeKey，并监听activeKey重新更新显示状态
     handleChange(index) {
-      console.log(index)
-      const nav = this.navList[index]
-      this.actived = nav.name
-      console.log()
+      const nav = this.navList[index];
+      this.actived = nav.name;
     },
     //初始化更新
     initTabs() {
-      this.updateNav()
-    },
-    //获取tabs下的所有pane实例
-    getTabs() {
-      return this.$children.filter(item => item.$options.name === 'TabPane')
-    },
-    //获取所有pane组件用户传入的props
-    updateNav() {
-      this.navList = []
+      //获取所有pane组件用户传入的props
+      this.navList = [];
       this.getTabs().forEach((pane, index) => {
         this.navList.push({
           label: pane.label,
           name: pane.name || index
-        })
+        });
         //如果不传value,默认选中第一项
-        if (index === 0 && !this.activeKey) {
-          this.actived = pane.name
+        if (index === 0 && !this.actived) {
+          this.actived = pane.name;
         }
-      })
+      });
+    },
+    //获取tabs下的所有pane实例
+    getTabs() {
+      return this.$children.filter(item => item.$options.name === "TabPane");
     }
   }
-}
+};
 </script>
 
 <style scoped>

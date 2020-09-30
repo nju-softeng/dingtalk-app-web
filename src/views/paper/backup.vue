@@ -3,9 +3,9 @@
     <div class="paper-box">
       <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
 
-        <tabs v-model="activetab">
-          <tab-pane label="组内评审" name="paperInternal"></tab-pane>
-          <tab-pane label="组外评审" name="paperExternal"></tab-pane>
+        <tabs v-model="test">
+          <tab-pane label="组内评审" name="name1"></tab-pane>
+          <tab-pane label="组外评审" name="name2"></tab-pane>
         </tabs>
 
         <div style=" display:flex; justify-content: center; align-items: center; ">
@@ -15,126 +15,165 @@
           <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
       </div>
+      <div class="list">
 
+        <el-table :data="list" class="tableClass">
+          <el-table-column label="论文信息" width="335">
+            <template slot-scope="scope">
+              <div class="paper-item">
+                <div class="left-content">
+                  <div class="title">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">
+                      <router-link :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">
+                        <svg-icon icon-class="paper" /> {{ scope.row.title }}
+                      </router-link>
+                    </el-tooltip>
+                  </div>
+                  <div class="detail">
+                    <div class="journal">
+                      <svg-icon icon-class="school" /> {{ scope.row.journal }}
+                    </div>
+                    <el-tooltip class="item" effect="dark" content="会议/出刊时间" placement="top-start">
+                      <div class="time">
+                        <svg-icon icon-class="date" />
+                        {{ scope.row.issueDate }}
+                      </div>
+                    </el-tooltip>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="论文作者" align="center">
+            <template slot-scope="scope">
+              <div class="info-item">
+                <el-tooltip :disabled="scope.row.authors.length <= 3" class="item" effect="dark" placement="top-start">
+                  <div slot="content">
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>
+                  </div>
+                  <div class="namelist">
+                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>
+                  </div>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="投票结果" align="center" width="100">
+            <template slot-scope="scope">
+              <div class="info-item">
+                <el-link v-if="scope.row.v_status == undefined" type="primary" @click="newVote(scope.row)">
+                  发起投票</el-link>
 
-        <component v-bind:is="activetab"></component>
+                <router-link v-else-if="scope.row.v_status == false" :to="'/paper/detail/' + scope.row.id + '/vote'"
+                             class="link-type">
+                  <el-link type="success"> 前往投票</el-link>
+                </router-link>
+                <router-link v-else-if="scope.row.v_status == true" :to="'/paper/detail/' + scope.row.id + '/vote'"
+                             class="link-type">
+                  <el-tag class="paper-tag" type="success" v-if="scope.row.v_result == true">ACCEPT</el-tag>
+                  <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>
+                </router-link>
+              </div>
+            </template>
+          </el-table-column>
 
+          <el-table-column label="录用结果" align="center" width="100">
+            <template slot-scope="scope">
+              <div class="info-item">
+                <el-tag class="paper-tag" v-if="scope.row.result == 0">待内部投票</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 1">未提交</el-tag>
+                <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == 2">审稿中</el-tag>
+                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 3">REJECT</el-tag>
+                <el-tag class="paper-tag" v-else type="success">ACCEPT</el-tag>
+              </div>
+            </template>
+          </el-table-column>
 
+          <el-table-column label="操作" align="center" width="180">
+            <template slot-scope="scope">
+              <div class="info-item">
+                <div style="font-size:14px">
+                  <el-tooltip effect="dark" content="录用结果" placement="top">
+                    <svg-icon @click="updatePaperResult(scope.row)" icon-class="review" />
+                  </el-tooltip>
 
-<!--      <div class="list">-->
+                  <el-divider direction="vertical"></el-divider>
+                  <el-tooltip effect="dark" content="编辑" placement="top">
+                    <svg-icon @click="modifyPaper(scope.row)" icon-class="edit" />
+                  </el-tooltip>
 
-<!--        <el-table :data="list" class="tableClass">-->
-<!--          <el-table-column label="论文信息" width="335">-->
-<!--            <template slot-scope="scope">-->
-<!--              <div class="paper-item">-->
-<!--                <div class="left-content">-->
-<!--                  <div class="title">-->
-<!--                    <el-tooltip class="item" effect="dark" :content="scope.row.title" placement="top-start">-->
-<!--                      <router-link :to="'/paper/detail/' + scope.row.id + '/vote'" class="link-type">-->
-<!--                        <svg-icon icon-class="paper" /> {{ scope.row.title }}-->
-<!--                      </router-link>-->
-<!--                    </el-tooltip>-->
-<!--                  </div>-->
-<!--                  <div class="detail">-->
-<!--                    <div class="journal">-->
-<!--                      <svg-icon icon-class="school" /> {{ scope.row.journal }}-->
-<!--                    </div>-->
-<!--                    <el-tooltip class="item" effect="dark" content="会议/出刊时间" placement="top-start">-->
-<!--                      <div class="time">-->
-<!--                        <svg-icon icon-class="date" />-->
-<!--                        {{ scope.row.issueDate }}-->
-<!--                      </div>-->
-<!--                    </el-tooltip>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column label="论文作者" align="center">-->
-<!--            <template slot-scope="scope">-->
-<!--              <div class="info-item">-->
-<!--                <el-tooltip :disabled="scope.row.authors.length <= 3" class="item" effect="dark" placement="top-start">-->
-<!--                  <div slot="content">-->
-<!--                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>-->
-<!--                  </div>-->
-<!--                  <div class="namelist">-->
-<!--                    <span style="padding:5px;" v-for="(o, index) in scope.row.authors" :key="index">{{ o.name }}</span>-->
-<!--                  </div>-->
-<!--                </el-tooltip>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <el-table-column label="投票结果" align="center" width="100">-->
-<!--            <template slot-scope="scope">-->
-<!--              <div class="info-item">-->
-<!--                <el-link v-if="scope.row.v_status == undefined" type="primary" @click="newVote(scope.row)">-->
-<!--                  发起投票</el-link>-->
-
-<!--                <router-link v-else-if="scope.row.v_status == false" :to="'/paper/detail/' + scope.row.id + '/vote'"-->
-<!--                  class="link-type">-->
-<!--                  <el-link type="success"> 前往投票</el-link>-->
-<!--                </router-link>-->
-<!--                <router-link v-else-if="scope.row.v_status == true" :to="'/paper/detail/' + scope.row.id + '/vote'"-->
-<!--                  class="link-type">-->
-<!--                  <el-tag class="paper-tag" type="success" v-if="scope.row.v_result == true">ACCEPT</el-tag>-->
-<!--                  <el-tag class="paper-tag" type="danger" v-else>REJECT</el-tag>-->
-<!--                </router-link>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-
-<!--          <el-table-column label="录用结果" align="center" width="100">-->
-<!--            <template slot-scope="scope">-->
-<!--              <div class="info-item">-->
-<!--                <el-tag class="paper-tag" v-if="scope.row.result == 0">待内部投票</el-tag>-->
-<!--                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 1">未提交</el-tag>-->
-<!--                <el-tag class="paper-tag" type="info" v-else-if="scope.row.result == 2">审稿中</el-tag>-->
-<!--                <el-tag class="paper-tag" type="danger" v-else-if="scope.row.result == 3">REJECT</el-tag>-->
-<!--                <el-tag class="paper-tag" v-else type="success">ACCEPT</el-tag>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-
-<!--          <el-table-column label="操作" align="center" width="180">-->
-<!--            <template slot-scope="scope">-->
-<!--              <div class="info-item">-->
-<!--                <div style="font-size:14px">-->
-<!--                  <el-tooltip effect="dark" content="录用结果" placement="top">-->
-<!--                    <svg-icon @click="updatePaperResult(scope.row)" icon-class="review" />-->
-<!--                  </el-tooltip>-->
-
-<!--                  <el-divider direction="vertical"></el-divider>-->
-<!--                  <el-tooltip effect="dark" content="编辑" placement="top">-->
-<!--                    <svg-icon @click="modifyPaper(scope.row)" icon-class="edit" />-->
-<!--                  </el-tooltip>-->
-
-<!--                  <el-divider direction="vertical"></el-divider>-->
-<!--                  <el-tooltip effect="dark" content="删除" placement="top">-->
-<!--                    <svg-icon @click="removePaper(scope.row)" icon-class="remove" />-->
-<!--                  </el-tooltip>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--          <template slot="empty">-->
-<!--            <div style="height:200px;">-->
-<!--              <div style="margin-top:100px;">-->
-<!--                <svg-icon icon-class="null" style="font-size:32px" /> <br />-->
-<!--              </div>-->
-<!--              <div style="line-height: 10px;">-->
-<!--                <span>没有论文记录</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table>-->
-<!--      </div>-->
-<!--      <div style="margin-top:5px;display:flex; justify-content:center">-->
-<!--      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange"-->
-<!--                     background :current-page.sync="currentPage" :hide-on-single-page="total < 6 ? true : false" small-->
-<!--                     layout="prev, pager, next" :total="total" :page-size="6">-->
-<!--      </el-pagination>-->
-<!--    </div>-->
+                  <el-divider direction="vertical"></el-divider>
+                  <el-tooltip effect="dark" content="删除" placement="top">
+                    <svg-icon @click="removePaper(scope.row)" icon-class="remove" />
+                  </el-tooltip>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <template slot="empty">
+            <div style="height:200px;">
+              <div style="margin-top:100px;">
+                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              </div>
+              <div style="line-height: 10px;">
+                <span>没有论文记录</span>
+              </div>
+            </div>
+          </template>
+        </el-table>
+      </div>
+      <div style="margin-top:5px;display:flex; justify-content:center">
+        <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange"
+                       background :current-page.sync="currentPage" :hide-on-single-page="total < 6 ? true : false" small
+                       layout="prev, pager, next" :total="total" :page-size="6">
+        </el-pagination>
+      </div>
     </div>
+
+    <!-- 投稿结果  dialog -->
+    <el-dialog title="录用结果" width="30%" :visible.sync="resultDialog" :lock-scroll="false">
+      <div v-loading="loading">
+        <el-form>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 接收情况:
+            </span>
+            <el-radio-group v-model="resultForm.result">
+              <el-radio :label="true">接收</el-radio>
+              <el-radio :label="false">拒绝</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+        <div class="dialog-footer">
+          <el-button @click="resultDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitPaperResult()">确 定</el-button>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- 发起投票  dialog -->
+    <el-dialog title="发起投票" :visible.sync="voteDialog" :lock-scroll="false" width="40%">
+      <div v-loading="loading">
+        <el-form ref="voteform" :model="voteform">
+          <el-form-item prop="endTime" :rules="{
+              required: true,
+              message: '请选择截止时间',
+              trigger: 'change'
+            }">
+            <span slot="label">截止时间 </span>
+            <el-time-picker arrow-control v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
+                selectableRange: '07:00:00 - 21:30:00'
+              }" placeholder="选择时间">
+            </el-time-picker>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="voteDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitvote">确 定</el-button>
+        </span>
+      </div>
+    </el-dialog>
 
     <!-- 添加评审记录  dialog -->
     <el-dialog :visible.sync="dialog" top="10vh" :lock-scroll="false" @closed="closeDialog" width="75%" center>
@@ -173,7 +212,7 @@
               </el-form-item>
 
               <el-form-item v-for="(author, index) in paperform.authors" :prop="'authors.' + index + '.uid'"
-                :key="index" :rules="{
+                            :key="index" :rules="{
                   required: true,
                   message: '请选择学生作者',
                   trigger: 'change'
@@ -202,15 +241,13 @@
         </span>
       </div>
     </el-dialog>
-
   </div>
 </template>
 <script>
 import { getUserList } from "@/api/common";
+import TabNav from "@/components/TabNav";
 import Tabs from "@/components/TabNav/tabs"
 import TabPane from "@/components/TabNav/tabpane"
-import paperExternal from "@/views/paper/paperExternal";
-import paperInternal from "@/views/paper/paperInternal";
 
 
 import {
@@ -251,7 +288,6 @@ const levels = [
 export default {
   data() {
     return {
-      activetab:"paperInternal",
       test: 0,
       userlist: [],
       total: 0,
@@ -296,10 +332,9 @@ export default {
     };
   },
   components:{
+    TabNav,
     Tabs,
-    TabPane,
-    paperExternal,
-    paperInternal
+    TabPane
   },
   created() {
     getUserList().then(res => {
@@ -321,15 +356,15 @@ export default {
     fetchPaper(page) {
       return new Promise((resolve, reject) => {
         listPaper(page, 6)
-          .then(res => {
-            this.list = res.data.list;
-            this.total = res.data.total;
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch(err => {
-            reject(err);
-          });
+            .then(res => {
+              this.list = res.data.list;
+              this.total = res.data.total;
+              console.log(res.data);
+              resolve(res);
+            })
+            .catch(err => {
+              reject(err);
+            });
       });
     },
     // 分页前一页
@@ -362,19 +397,19 @@ export default {
         if (valid) {
           this.loading = true;
           createVote(this.voteform)
-            .then(() => {
-              this.voteDialog = false;
-              this.$notify({
-                message: "发起投票成功",
-                type: "success"
+              .then(() => {
+                this.voteDialog = false;
+                this.$notify({
+                  message: "发起投票成功",
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/paper/detail/" + this.voteform.paperid + "/vote"
+                });
+              })
+              .finally(() => {
+                this.loading = false;
               });
-              this.$router.push({
-                path: "/paper/detail/" + this.voteform.paperid + "/vote"
-              });
-            })
-            .finally(() => {
-              this.loading = false;
-            });
         }
       });
     },
@@ -384,20 +419,20 @@ export default {
         if (valid) {
           this.loading = true;
           addPaper(this.paperform)
-            .then(() => {
-              this.dialog = false;
-              this.loading = false;
-              this.$notify({
-                title: "成功",
-                message: "论文记录提交成功",
-                type: "success"
+              .then(() => {
+                this.dialog = false;
+                this.loading = false;
+                this.$notify({
+                  title: "成功",
+                  message: "论文记录提交成功",
+                  type: "success"
+                });
+                this.fetchPaper(1);
+                this.currentPage = 1;
+              })
+              .catch(() => {
+                this.loading = false;
               });
-              this.fetchPaper(1);
-              this.currentPage = 1;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
         } else {
           this.$notify({
             title: "提交失败",
@@ -439,9 +474,9 @@ export default {
     // 判断用户是否有修改论文记录的权限
     hasAuth(authors) {
       if (
-        this.role == "admin" ||
-        this.role == "auditor" ||
-        authors.map(item => item.uid).indexOf(eval(this.uid)) != -1
+          this.role == "admin" ||
+          this.role == "auditor" ||
+          authors.map(item => item.uid).indexOf(eval(this.uid)) != -1
       ) {
         return true;
       } else {
@@ -465,14 +500,14 @@ export default {
       if (this.resultForm.result != undefined) {
         this.loading = true;
         submitResult(this.resultForm.paperid, this.resultForm.result)
-          .then(res => {
-            console.log(res.data);
-            this.resultDialog = false;
-            this.fetchPaper(this.currentPage);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+            .then(res => {
+              console.log(res.data);
+              this.resultDialog = false;
+              this.fetchPaper(this.currentPage);
+            })
+            .finally(() => {
+              this.loading = false;
+            });
       } else {
         this.$message({
           message: "请选择结果",
@@ -502,29 +537,29 @@ export default {
     removePaper(item) {
       if (this.hasAuth(item.authors)) {
         this.$confirm(
-          "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }
+            "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
+            "提示",
+            {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            }
         )
-          .then(() => {
-            rmPaper(item.id).then(() => {
-              this.fetchPaper(this.currentPage);
+            .then(() => {
+              rmPaper(item.id).then(() => {
+                this.fetchPaper(this.currentPage);
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+              });
+            })
+            .catch(() => {
               this.$message({
-                type: "success",
-                message: "删除成功!"
+                type: "info",
+                message: "已取消删除"
               });
             });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除"
-            });
-          });
       } else {
         this.$message({
           message: "只有审核人，和论文作者才可以操作",

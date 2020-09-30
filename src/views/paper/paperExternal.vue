@@ -1,8 +1,22 @@
 <template>
   <div class="app-container">
     <div class="paper-box">
+      <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
 
+        <tabs v-model="test">
+          <tab-pane label="组内评审" name="name1"></tab-pane>
+          <tab-pane label="组外评审" name="name2"></tab-pane>
+        </tabs>
+
+        <div style=" display:flex; justify-content: center; align-items: center; ">
+          <el-input placeholder="请输入内容" style="margin-right: 5px">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
+          <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
+        </div>
+      </div>
       <div class="list">
+
         <el-table :data="list" class="tableClass">
           <el-table-column label="论文信息" width="335">
             <template slot-scope="scope">

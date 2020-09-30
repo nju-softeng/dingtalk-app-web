@@ -70,7 +70,6 @@ export default {
 
 <style scoped>
 .tabs-nav {
-  margin-right: 32px;
   padding: 6px 0;
   color: #666;
   font-size: 12px;

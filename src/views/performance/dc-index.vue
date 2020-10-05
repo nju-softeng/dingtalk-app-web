@@ -116,12 +116,6 @@ export default {
   },
   created() {
     this.fetchDcSummary(new Date());
-    this.$message({
-      message: '上月数据没有被正确显示，(前端问题)，正在紧急修复',
-      type: 'warning',
-      duration: 10000
-    });
-
   },
   computed: {
     ...mapGetters(['roles']),

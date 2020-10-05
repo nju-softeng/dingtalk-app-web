@@ -10,11 +10,12 @@
               <div class="info-item">投票开始时间</div>
               <div class="info-item">2020-10-05</div>
             </div>
-          <div class="action">
-            <div>
-                <svg-icon icon-class="review"/>
-              <svg-icon icon-class="review"/>
-            </div>
+          <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; ">
+
+              <div style="margin-right: 20px"><i class="el-icon-edit"></i></div>
+              <div style="margin-right: 20px"><i class="el-icon-share"></i></div>
+              <div style="margin-right: 20px"><i class="el-icon-delete"></i></div>
+
           </div>
         </div>
       </el-col>
@@ -60,8 +61,9 @@ export default {
     }
   }
   .action {
-    height: 48px;
-    background: #e5e9f2;
+    height: 40px;
+    border-top: 1px solid #e6ebf5;
+    //background: #e5e9f2;
   }
 
 }

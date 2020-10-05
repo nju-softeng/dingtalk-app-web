@@ -75,7 +75,7 @@
             <template v-if="!row.edit">
               {{ row.topup || 0 }}
 
-              <el-button type="text" v-if="roles.includes('admin')" icon="el-icon-edit" @click="row.edit = true" style="margin-left:16px"> </el-button>
+              <el-button type="text" v-if="roles.includes('auditor') || roles.includes('admin')" icon="el-icon-edit" @click="row.edit = true" style="margin-left:16px"> </el-button>
             </template>
             <template v-else>
               <el-input v-model="row.topup" placeholder="请输入内容"></el-input>

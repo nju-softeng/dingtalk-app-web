@@ -566,7 +566,6 @@ export default {
 .paper-item {
   padding: 3px 12px 3px 0;
   border-width: 0 0 1px 0;
-  //
   .left-content {
     font-size: 13px;
     display: flex;
@@ -607,6 +606,13 @@ export default {
   //  font-size: 13px;
   //  align-items: center;
   //}
+}
+
+.namelist {
+  min-width: 100px;
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 </style>

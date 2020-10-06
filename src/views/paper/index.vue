@@ -3,32 +3,35 @@
     <div class="paper-box">
       <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
 
-        <tabs v-model="activetab">
+        <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal"></tab-pane>
           <tab-pane label="组外评审" name="paperExternal"></tab-pane>
         </tabs>
 
         <div style=" display:flex; justify-content: center; align-items: center; ">
-          <el-button type="primary" @click="dialog = true" icon="el-icon-plus">添加论文</el-button>
+          <el-button type="primary" @click="addReviewDialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
       </div>
-      <component v-bind:is="activetab"></component>
+      <component v-bind:is="activeTab"></component>
     </div>
 
     <!-- 添加评审记录  dialog -->
-    <el-dialog :visible.sync="dialog" top="10vh" :lock-scroll="false" @closed="closeDialog"  center>
+    <el-dialog :visible.sync="addReviewDialog" top="10vh" :lock-scroll="false" @closed="closeAddReviewDialog"  center>
+      <!-- dialog 标题 -->
       <div slot="title" class="header-title">
         <span class="title-age"> 添加评审记录 </span>
       </div>
-      <div v-if="true" class="dialog-content">
-        <el-card shadow="hover" style="width: 25vh; height: 25vh;  margin:10px; text-align:center;">
-          组内评审
+      <!-- 评审类型选择菜单 -->
+      <div v-if="addReviewContent == undefined" class="dialog-content">
+        <el-card shadow="hover" class="card" @click.native="addReviewContent='internalReview'">
+          <div>组内评审</div>
         </el-card>
-        <el-card shadow="hover" style="width: 25vh; height: 25vh;  margin:10px; text-align:center; ">
-          组外评审
+        <el-card shadow="hover" class="card" @click.native="addReviewContent='externalReview'">
+          <div>组外评审</div>
         </el-card>
       </div>
-      <div v-if="false" v-loading="loading">
+      <!-- 添加内部评审 -->
+      <div v-if="addReviewContent == 'internalReview'" v-loading="loading">
         <div class="dialog-content">
           <div class="paper-form">
             <el-form ref="paperform" :rules="rules" :model="paperform" label-width="110px">
@@ -88,6 +91,8 @@
           <el-button @click="dialog = false">取 消</el-button>
         </span>
       </div>
+      <!-- 添加外部评审 -->
+      <div></div>
     </el-dialog>
 
   </div>
@@ -138,14 +143,13 @@ const levels = [
 export default {
   data() {
     return {
-      activetab:"paperInternal",
-      test: 0,
+      // 当前激活的选项卡，默认是 paperInternal
+      activeTab:"paperInternal",
+      // 用户列表
       userlist: [],
-      total: 0,
-      resultDialog: false,
-      dialog: false,
-      state: "",
-      currentPage: 1,
+      //
+      addReviewDialog: false,
+      addReviewContent: undefined,
       paperform: {
         id: null,
         title: null,
@@ -160,26 +164,42 @@ export default {
           }
         ]
       },
-      voteform: {
-        paperid: "",
-        endTime: ""
-      },
-      options: levels,
-      list: [],
-      loading: false,
-      voteDialog: false,
-      uid: "",
-      role: "",
-      resultForm: {
-        paperid: "",
-        result: ""
-      },
-      rules: {
-        title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
-        paperType: [
-          { required: true, message: "请选择论文分类", trigger: "change" }
-        ]
-      }
+
+
+
+
+
+
+
+
+      // test: 0,
+      // userlist: [],
+      // total: 0,
+      // resultDialog: false,
+      // dialog: false,
+      // state: "",
+      // currentPage: 1,
+
+      // voteform: {
+      //   paperid: "",
+      //   endTime: ""
+      // },
+      // options: levels,
+      // list: [],
+      // loading: false,
+      // voteDialog: false,
+      // uid: "",
+      // role: "",
+      // resultForm: {
+      //   paperid: "",
+      //   result: ""
+      // },
+      // rules: {
+      //   title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
+      //   paperType: [
+      //     { required: true, message: "请选择论文分类", trigger: "change" }
+      //   ]
+      // }
     };
   },
   components:{
@@ -193,78 +213,10 @@ export default {
       this.userlist = res.data;
     });
 
-    this.fetchPaper(1);
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
-
-    this.$message({
-      showClose: true,
-      duration: 1000,
-      message: "点击论文标题可以查看详情"
-    });
   },
   methods: {
-    // 分页获取论文信息
-    fetchPaper(page) {
-      return new Promise((resolve, reject) => {
-        listPaper(page, 6)
-          .then(res => {
-            this.list = res.data.list;
-            this.total = res.data.total;
-            console.log(res.data);
-            resolve(res);
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
-    },
-    // 分页前一页
-    handlePrev(val) {
-      this.fetchPaper(val);
-    },
-    // 分页下一页
-    handleNext(val) {
-      this.fetchPaper(val);
-    },
-    // 分页当前页
-    handleCurrentChange(val) {
-      this.fetchPaper(val);
-    },
-    // 创建投票，唤起dialog
-    newVote(item) {
-      this.voteform.paperid = item.id;
-      if (item.vote == undefined) {
-        console.log(item);
-        this.voteDialog = true;
-      } else {
-        this.$router.push({
-          path: "/paper/vote/" + item.id
-        });
-      }
-    },
-    // 提交新创建的投票
-    submitvote() {
-      this.$refs.voteform.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          createVote(this.voteform)
-            .then(() => {
-              this.voteDialog = false;
-              this.$notify({
-                message: "发起投票成功",
-                type: "success"
-              });
-              this.$router.push({
-                path: "/paper/detail/" + this.voteform.paperid + "/vote"
-              });
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        }
-      });
-    },
     // 提交论文评审记录
     submit(formName) {
       this.$refs[formName].validate(valid => {
@@ -295,7 +247,8 @@ export default {
       });
     },
     // 关闭前清空表单
-    closeDialog() {
+    closeAddReviewDialog() {
+      this.addReviewContent = undefined;
       this.$refs.paperform.resetFields();
       this.paperform.id = null;
       this.paperform.journal = "";
@@ -323,115 +276,23 @@ export default {
         this.paperform.authors.pop();
       }
     },
-    // 判断用户是否有修改论文记录的权限
-    hasAuth(authors) {
-      if (
-        this.role == "admin" ||
-        this.role == "auditor" ||
-        authors.map(item => item.uid).indexOf(eval(this.uid)) != -1
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    // 更新论文投稿结果, 唤醒dialog
-    updatePaperResult(item) {
-      this.resultForm.paperid = item.id;
-      if (this.hasAuth(item.authors)) {
-        this.resultDialog = true;
-      } else {
-        this.$message({
-          message: "只有审核人，和论文作者才可以操作",
-          type: "warning"
-        });
-      }
-    },
-    // 提交论文投稿结果
-    submitPaperResult() {
-      if (this.resultForm.result != undefined) {
-        this.loading = true;
-        submitResult(this.resultForm.paperid, this.resultForm.result)
-          .then(res => {
-            console.log(res.data);
-            this.resultDialog = false;
-            this.fetchPaper(this.currentPage);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-      } else {
-        this.$message({
-          message: "请选择结果",
-          type: "warning"
-        });
-      }
-    },
-    // 修改论文记录
-    modifyPaper(item) {
-      if (this.hasAuth(item.authors)) {
-        this.dialog = true;
-        this.paperform.id = item.id;
-        this.paperform.title = item.title;
-        this.paperform.journal = item.journal;
-        this.paperform.paperType = item.paperType;
-        this.paperform.issueDate = item.issueDate;
-        this.paperform.authors = item.authors;
-      } else {
-        this.$message({
-          message: "只有审核人，和论文作者才可以操作",
-          type: "warning"
-        });
-      }
-    },
-    // 删除论文记录
-    // todo 修改，太罗嗦了
-    removePaper(item) {
-      if (this.hasAuth(item.authors)) {
-        this.$confirm(
-          "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
-          "提示",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }
-        )
-          .then(() => {
-            rmPaper(item.id).then(() => {
-              this.fetchPaper(this.currentPage);
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-            });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除"
-            });
-          });
-      } else {
-        this.$message({
-          message: "只有审核人，和论文作者才可以操作",
-          type: "warning"
-        });
-      }
-    }
+
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.tableClass {
-  /deep/ .el-table__fixed-right {
-    height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
-  }
-  /deep/ .el-table__fixed-right::before {
-    height: 0px !important; //设置高优先，以覆盖内联样式
-  }
+
+.card {
+  width: 25vh;
+  height: 25vh;
+  margin:10px;
+  text-align:center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 .dialog-footer {
   display: flex;
@@ -461,73 +322,4 @@ export default {
   margin-right: auto;
 }
 
-.list {
-  min-height: 60px;
-  background: #fff;
-  padding: 20px 20px 0 20px;
-}
-
-.paper-item {
-  padding: 3px 12px 3px 0;
-  border-width: 0 0 1px 0;
-
-  .left-content {
-    font-size: 13px;
-    display: flex;
-    flex-direction: column;
-    .title {
-      a {
-        color: #0366d6;
-      }
-      color: #409eff;
-      font-weight: 500;
-      margin-bottom: 5px;
-      width: 330px;
-      overflow: hidden; /*超出部分隐藏*/
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .detail {
-      display: flex;
-      color: gray;
-      font-size: 13px;
-      padding-top: 7px;
-      .journal {
-        width: 180px;
-        overflow: hidden; /*超出部分隐藏*/
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      .time {
-        padding-left: 5px;
-      }
-    }
-  }
-
-  .info-item {
-    color: gray;
-    display: flex;
-    justify-content: flex-start;
-    font-size: 13px;
-    align-items: center;
-  }
-}
-
-.namelist {
-  min-width: 100px;
-  overflow: hidden; /*超出部分隐藏*/
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.content {
-  height: 50px;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.paper-tag {
-  width: 72px;
-  text-align: center;
-}
 </style>

@@ -2,70 +2,71 @@
   <div class="tabs-nav">
     <!--标签页头label-->
     <div
-      class="tab"
       v-for="(item, index) in navList"
-      @click="handleChange(index)"
-      :class="{ selected: item.name == actived }"
       :key="index"
+      class="tab"
+      :class="{ selected: item.name == actived }"
+      @click="handleChange(index)"
     >
       {{ item.label }}
     </div>
     <!--所有pane组件使用的slot容器-->
     <div>
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Tabs",
+  name: 'Tabs',
   model: {
-    prop: "actived",
-    event: "handleChange"
+    prop: 'actived',
+    event: 'handleChange'
   },
+  props: ['actived'],
   data() {
     return {
-      navList: [],
-      actived: this.value
-    };
+      navList: []
+    }
   },
   provide() {
-    return { TabsInstance: this };
+    return { TabsInstance: this }
   },
   watch: {
     actived() {
       // 通知父组件 actived 值被更新
-      this.$emit("handleChange", this.actived);
+      this.$emit('handleChange', this.actived)
+      console.log('uiuiuiuiuiui')
     }
   },
   methods: {
-    //改变activeKey，并监听activeKey重新更新显示状态
+    // 改变activeKey，并监听activeKey重新更新显示状态
     handleChange(index) {
-      const nav = this.navList[index];
-      this.actived = nav.name;
+      const nav = this.navList[index]
+      this.actived = nav.name
     },
-    //初始化更新
+    // 初始化更新
     initTabs() {
-      //获取所有pane组件用户传入的props
-      this.navList = [];
+      // 获取所有pane组件用户传入的props
+      this.navList = []
       this.getTabs().forEach((pane, index) => {
         this.navList.push({
           label: pane.label,
           name: pane.name || index
-        });
-        //如果不传value,默认选中第一项
+        })
+        // 如果不传value,默认选中第一项
         if (index === 0 && !this.actived) {
-          this.actived = pane.name;
+          this.actived = pane.name
         }
-      });
+      })
     },
-    //获取tabs下的所有pane实例
+    // 获取tabs下的所有pane实例
     getTabs() {
-      return this.$children.filter(item => item.$options.name === "TabPane");
+      return this.$children.filter(item => item.$options.name === 'TabPane')
     }
   }
-};
+}
 </script>
 
 <style scoped>

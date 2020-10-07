@@ -1,33 +1,33 @@
 <template>
   <div class="app-container">
     <div class="paper-box">
-      <div class="action" style="margin-bottom:10px; display: flex; justify-content: space-between; align-content: center">
-
+      <div class="action" style="">
+        <!--导航栏-->
         <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal"></tab-pane>
           <tab-pane label="组外评审" name="paperExternal"></tab-pane>
         </tabs>
-
+        <!--添加按钮-->
         <div style=" display:flex; justify-content: center; align-items: center; ">
           <el-button type="primary" @click="addReviewDialog = true" icon="el-icon-plus">添加论文</el-button>
         </div>
       </div>
-      <component v-bind:is="activeTab"></component>
+      <component ref="reviewTab" v-bind:is="activeTab"></component>
     </div>
 
     <!-- 添加评审记录  dialog -->
-    <el-dialog :visible.sync="addReviewDialog" top="10vh" :lock-scroll="false" @closed="closeAddReviewDialog"  center>
+    <el-dialog :visible.sync="addReviewDialog" top="16vh" :lock-scroll="false" :width="addReviewWidth" @closed="closeAddReviewDialog"  center>
       <!-- dialog 标题 -->
       <div slot="title" class="header-title">
-        <span class="title-age"> 添加评审记录 </span>
+        <span class="title-age"> {{addReviewDialogTitle}} </span>
       </div>
       <!-- 评审类型选择菜单 -->
       <div v-if="addReviewContent == undefined" class="dialog-content">
         <el-card shadow="hover" class="card" @click.native="addReviewContent='internalReview'">
-          <div>组内评审</div>
+          <div>内部评审</div>
         </el-card>
         <el-card shadow="hover" class="card" @click.native="addReviewContent='externalReview'">
-          <div>组外评审</div>
+          <div>外部评审</div>
         </el-card>
       </div>
       <!-- 添加内部评审 -->
@@ -88,11 +88,39 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="submit('paperform')">确 定</el-button>
-          <el-button @click="dialog = false">取 消</el-button>
+          <el-button @click="addReviewDialog = false">取 消</el-button>
         </span>
       </div>
       <!-- 添加外部评审 -->
-      <div></div>
+      <div v-if="addReviewContent == 'externalReview'">
+        <div class="dialog-content">
+          <div class="paper-form">
+            <el-form ref="paperform" :rules="rules" :model="paperform" label-width="110px">
+              <el-form-item prop="title">
+                <span slot="label">
+                  <svg-icon icon-class="paper" /> 论文名称</span>
+                <el-input v-model="paperform.title"></el-input>
+              </el-form-item>
+
+
+
+
+              <el-form-item>
+                <span slot="label">
+                  <svg-icon icon-class="school" /> 通知时间</span>
+                <el-date-picker style="width:193px" v-model="paperform.issueDate" type="date" placeholder="选择日期">
+                </el-date-picker>
+              </el-form-item>
+
+
+            </el-form>
+          </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submit('paperform')">确 定</el-button>
+          <el-button @click="addReviewDialog = false">取 消</el-button>
+        </span>
+      </div>
     </el-dialog>
 
   </div>
@@ -149,7 +177,12 @@ export default {
       userlist: [],
       //
       addReviewDialog: false,
+      addReviewWidth: '40%',
       addReviewContent: undefined,
+      addReviewDialogTitle: "请选择评审类型",
+
+      loading: false,
+      options: levels,
       paperform: {
         id: null,
         title: null,
@@ -165,42 +198,39 @@ export default {
         ]
       },
 
+      rules: {
+        title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
+        paperType: [
+          { required: true, message: "请选择论文分类", trigger: "change" }
+        ]
+      },
+
+      test : '30%'
 
 
 
-
-
-
-
-      // test: 0,
-      // userlist: [],
-      // total: 0,
-      // resultDialog: false,
-      // dialog: false,
-      // state: "",
-      // currentPage: 1,
-
-      // voteform: {
-      //   paperid: "",
-      //   endTime: ""
-      // },
-      // options: levels,
-      // list: [],
-      // loading: false,
-      // voteDialog: false,
       // uid: "",
       // role: "",
       // resultForm: {
       //   paperid: "",
       //   result: ""
       // },
-      // rules: {
-      //   title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
-      //   paperType: [
-      //     { required: true, message: "请选择论文分类", trigger: "change" }
-      //   ]
-      // }
+
     };
+  },
+  watch: {
+    addReviewContent(val) {
+      if (val == 'internalReview') {
+        this.addReviewDialogTitle = '内部评审'
+        this.addReviewWidth = '60%'
+      } else if (val == 'externalReview') {
+        this.addReviewDialogTitle = '外部评审'
+        this.addReviewWidth = '60%'
+      } else {
+        this.addReviewDialogTitle = '请选择评审类型'
+        this.addReviewWidth = '40%'
+      }
+    }
   },
   components:{
     Tabs,
@@ -215,6 +245,7 @@ export default {
 
     this.uid = sessionStorage.getItem("uid");
     this.role = sessionStorage.getItem("role");
+
   },
   methods: {
     // 提交论文评审记录
@@ -224,15 +255,16 @@ export default {
           this.loading = true;
           addPaper(this.paperform)
             .then(() => {
-              this.dialog = false;
+              this.addReviewDialog = false;
               this.loading = false;
+              this.$refs.reviewTab.fetchPaper(1);
+              this.$refs.reviewTab.currentPage = 1;
+
               this.$notify({
                 title: "成功",
                 message: "论文记录提交成功",
                 type: "success"
               });
-              this.fetchPaper(1);
-              this.currentPage = 1;
             })
             .catch(() => {
               this.loading = false;
@@ -250,17 +282,20 @@ export default {
     closeAddReviewDialog() {
       this.addReviewContent = undefined;
       this.$refs.paperform.resetFields();
-      this.paperform.id = null;
-      this.paperform.journal = "";
-      this.paperform.title = "";
-      this.paperform.issueDate = "";
-      this.paperform.paperType = "";
-      this.paperform.authors = [
-        {
-          num: 1,
-          uid: ""
-        }
-      ];
+      this.paperform = {
+        id: null,
+        title: null,
+        journal: null,
+        paperType: null,
+        issueDate: null,
+        authors: [
+          {
+            num: 1,
+            name: "",
+            uid: null
+          }
+        ]
+      }
     },
     // 添加论文作者
     addAuthor() {
@@ -282,6 +317,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.action {
+  margin-bottom:5px;
+  margin-right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center
+}
+
 
 .card {
   width: 25vh;

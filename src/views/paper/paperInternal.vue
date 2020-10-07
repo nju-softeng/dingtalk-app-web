@@ -229,7 +229,8 @@
       title="发起投票"
       :visible.sync="voteDialog"
       :lock-scroll="false"
-      width="40%"
+      width="30%"
+      top="24vh"
     >
       <div v-loading="loading">
         <el-form ref="voteform" :model="voteform">
@@ -561,6 +562,11 @@ export default {
   min-height: 60px;
   background: #fff;
   //padding: 20px 20px 0 20px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .paper-item {

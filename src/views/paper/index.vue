@@ -2,10 +2,6 @@
   <div class="app-container">
     <div class="paper-box">
       <div class="action" style="">
-
-        <el-button  type="primary" @click="test1">AAAA</el-button>
-        <el-button  type="primary" @click="test2">BBBB</el-button>
-        {{activeTab}}
         <!--导航栏-->
         <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal" />

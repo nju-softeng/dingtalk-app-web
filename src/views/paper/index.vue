@@ -3,6 +3,7 @@
     <div class="paper-box">
       <div class="action" style="">
         <!--导航栏-->
+        {{activeTab}}
         <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal"></tab-pane>
           <tab-pane label="组外评审" name="paperExternal"></tab-pane>
@@ -16,7 +17,7 @@
     </div>
 
     <!-- 添加评审记录  dialog -->
-    <el-dialog :visible.sync="addReviewDialog" top="16vh" :lock-scroll="false" :width="addReviewWidth" @closed="closeAddReviewDialog"  center>
+    <el-dialog :visible.sync="addReviewDialog" top="15vh" :lock-scroll="false" :width="addReviewWidth" @closed="closeAddReviewDialog"  center>
       <!-- dialog 标题 -->
       <div slot="title" class="header-title">
         <span class="title-age"> {{addReviewDialogTitle}} </span>
@@ -35,15 +36,27 @@
         <div class="dialog-content">
           <div class="paper-form">
             <el-form ref="paperform" :rules="rules" :model="paperform" label-width="110px">
-              <el-form-item prop="title">
+              <el-form-item prop="title" style="width: 500px">
                 <span slot="label">
                   <svg-icon icon-class="paper" /> 论文名称</span>
-                <el-input v-model="paperform.title"></el-input>
+<!--                <el-input v-model="paperform.title"></el-input>-->
+                <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="paperform.title">
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <span slot="label">
                   <svg-icon icon-class="school" /> 刊物/会议</span>
-                <el-input v-model="paperform.journal"></el-input>
+
+                <el-input
+                    type="textarea"
+                    :rows="1"
+                    placeholder="请输入内容"
+                    v-model="paperform.journal">
+                </el-input>
               </el-form-item>
 
               <el-form-item prop="paperType">
@@ -99,7 +112,13 @@
               <el-form-item prop="title">
                 <span slot="label">
                   <svg-icon icon-class="paper" /> 论文名称</span>
-                <el-input v-model="paperform.title"></el-input>
+                <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="externalPaperForm.title">
+                </el-input>
+<!--                <el-input v-model="paperform.title"></el-input>-->
               </el-form-item>
 
 
@@ -108,9 +127,17 @@
               <el-form-item>
                 <span slot="label">
                   <svg-icon icon-class="school" /> 通知时间</span>
-                <el-date-picker style="width:193px" v-model="paperform.issueDate" type="date" placeholder="选择日期">
-                </el-date-picker>
+                <el-time-picker
+                    is-range
+                    v-model="value1"
+                    range-separator="至"
+                    start-placeholder="开始时间"
+                    end-placeholder="结束时间"
+                    placeholder="选择时间范围">
+                </el-time-picker>
+
               </el-form-item>
+              {{value1}}
 
 
             </el-form>
@@ -197,6 +224,12 @@ export default {
           }
         ]
       },
+      externalPaperForm: {
+        id: null,
+        title: null,
+        votingPeriod: []
+      },
+      value1:"",
 
       rules: {
         title: [{ required: true, message: "请输入论文名称", trigger: "blur" }],
@@ -205,7 +238,6 @@ export default {
         ]
       },
 
-      test : '30%'
 
 
 
@@ -222,10 +254,10 @@ export default {
     addReviewContent(val) {
       if (val == 'internalReview') {
         this.addReviewDialogTitle = '内部评审'
-        this.addReviewWidth = '60%'
+        this.addReviewWidth = '56%'
       } else if (val == 'externalReview') {
         this.addReviewDialogTitle = '外部评审'
-        this.addReviewWidth = '60%'
+        this.addReviewWidth = '56%'
       } else {
         this.addReviewDialogTitle = '请选择评审类型'
         this.addReviewWidth = '40%'
@@ -260,6 +292,7 @@ export default {
               this.$refs.reviewTab.fetchPaper(1);
               this.$refs.reviewTab.currentPage = 1;
 
+              this.activeTab = 'paperInternal'
               this.$notify({
                 title: "成功",
                 message: "论文记录提交成功",
@@ -343,9 +376,7 @@ export default {
   justify-content: flex-end;
 }
 
-.el-form {
-  width: 618px;
-}
+
 .paper-form {
   display: flex;
 }

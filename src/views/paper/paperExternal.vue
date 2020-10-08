@@ -1,45 +1,77 @@
 <template>
   <div>
     <el-row :gutter="10">
-      <el-col :xs="24" :sm="8" :md="6" :lg="6">
+      <el-col v-for="(item,index) in list" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
-            <div class="title" >
-              How does grey literature feed in and contribute to software engineering research? Taking Stack Overflow as a case
-            </div>
-            <div class="info">
-              <div class="info-item">投票开始时间</div>
-              <div class="info-item">2020-10-05</div>
-            </div>
+
+          <div class="title" style="min-height: 53px">
+            {{ item.title }}
+          </div>
+          <div class="info">
+            <div class="info-item">投票时间</div>
+            <div class="info-item">{{ item.startTime | parseTime("{h}:{i}") }} ~ {{ item.endTime | parseTime("{h}:{i}") }}</div>
+          </div>
           <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; ">
 
-              <div style="margin-right: 20px"><i class="el-icon-edit"></i></div>
-              <div style="margin-right: 20px"><i class="el-icon-share"></i></div>
-              <div style="margin-right: 20px"><i class="el-icon-delete"></i></div>
+            <div style="margin-right: 20px"><i class="el-icon-edit" /></div>
+            <div style="margin-right: 20px"><i class="el-icon-share" /></div>
+            <div style="margin-right: 20px"><i class="el-icon-delete" /></div>
 
           </div>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="8" :md="6" :lg="6"
-        >
-        <div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px"></div
-      ></el-col>
-      <el-col :xs="24" :sm="8" :md="6" :lg="6"
-        >
-        <div class="grid-content bg-purple" style="height:165px;margin-bottom:10px"></div
-      ></el-col>
-      <el-col :xs="24" :sm="8" :md="6" :lg="6"
-        ><div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px"></div
-      ></el-col>
-
+      <el-col
+        :xs="24"
+        :sm="8"
+        :md="6"
+        :lg="6"
+      >
+        <div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px" /></el-col>
+      <el-col
+        :xs="24"
+        :sm="8"
+        :md="6"
+        :lg="6"
+      >
+        <div class="grid-content bg-purple" style="height:165px;margin-bottom:10px" /></el-col>
+      <el-col
+        :xs="24"
+        :sm="8"
+        :md="6"
+        :lg="6"
+      ><div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px" /></el-col>
 
     </el-row>
   </div>
 </template>
 
 <script>
+import { listExReview } from '@/api/ex-review'
+
 export default {
-  name: "paperExternal"
-};
+  name: 'PaperExternal',
+  data() {
+    return {
+      list: []
+    }
+  },
+  created() {
+    listExReview().then(res => {
+      this.list = res.data
+      console.log(this.list)
+    })
+    this.$message({
+      showClose: true,
+      message: '外部评审正在开发中，目前无法使用',
+      type: 'warning',
+      offset: '100',
+      duration: '5000'
+    });
+  },
+  mounted() {
+  }
+
+}
 </script>
 
 <style lang="scss" scoped>
@@ -67,7 +99,6 @@ export default {
   }
 
 }
-
 
 .title {
   overflow:hidden;

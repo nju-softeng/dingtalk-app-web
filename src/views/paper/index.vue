@@ -19,7 +19,7 @@
           </el-button>
         </div>
       </div>
-      <component :is="activeTab" ref="reviewTab" v-on:modifyInternal="modifyInternalReview" />
+      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview" />
     </div>
 
     <!-- 添加评审记录  dialog -->
@@ -50,6 +50,7 @@
           @click.native="addReviewContent = 'externalReview'"
         >
           <div>外部评审</div>
+          <div style="font-weight: lighter; padding-top:10px; font-size: 10px">正在开发中...</div>
         </el-card>
       </div>
       <!-- 添加内部评审 -->
@@ -155,19 +156,13 @@
                 @click="addAuthor"
               >添加作者
               </el-button>
-              <el-button
-                type="text"
-                style="margin-left:20px;"
-                icon="el-icon-minus"
-                @click="rmAuthor"
-              >减少作者
-              </el-button>
+              <el-button type="text" style="margin-left:20px;" icon="el-icon-minus" @click="rmAuthor">减少作者</el-button>
             </el-form>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="submit('internalPaperForm')">确 定</el-button>
-          <el-button @click="addReviewDialog = false">取 消</el-button>
+          <el-button @click="addReviewContent = undefined">取 消</el-button>
         </span>
       </div>
       <!-- 添加外部评审 -->
@@ -191,11 +186,11 @@
                 />
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item prop="period">
                 <span slot="label">
-                  <svg-icon icon-class="school" /> 通知时间</span>
+                  <svg-icon icon-class="school" /> 投票时间</span>
                 <el-time-picker
-                  v-model="externalPaperForm.votingPeriod"
+                  v-model="externalPaperForm.period"
                   is-range
                   range-separator="至"
                   start-placeholder="开始时间"
@@ -203,16 +198,15 @@
                   placeholder="选择时间范围"
                 />
               </el-form-item>
-              {{ externalPaperForm }}
             </el-form>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button
             type="primary"
-            @click="submit('internalPaperForm')"
+            @click="addExternalReview('externalPaperForm')"
           >确 定</el-button>
-          <el-button @click="addReviewDialog = false">取 消</el-button>
+          <el-button @click="addReviewContent = undefined">取 消</el-button>
         </span>
       </div>
     </el-dialog>
@@ -228,6 +222,8 @@ import paperInternal from '@/views/paper/paperInternal'
 import {
   addPaper
 } from '@/api/paper'
+
+import { addExReview } from '@/api/ex-review'
 
 const levels = [
   {
@@ -296,24 +292,14 @@ export default {
       externalPaperForm: {
         id: null,
         title: null,
-        votingPeriod: ''
+        period: ''
       },
 
       rules: {
         title: [{ required: true, message: '请输入论文名称', trigger: 'blur' }],
-        paperType: [
-          { required: true, message: '请选择论文分类', trigger: 'change' }
-        ]
-      },
-
-      test: 0
-
-      // uid: "",
-      // role: "",
-      // resultForm: {
-      //   paperid: "",
-      //   result: ""
-      // },
+        paperType: [{ required: true, message: '请选择论文分类', trigger: 'change' }],
+        period: [{ required: true, message: '请选择起止时间', trigger: 'blur' }]
+      }
     }
   },
   watch: {
@@ -323,7 +309,7 @@ export default {
         this.addReviewWidth = '56%'
       } else if (val === 'externalReview') {
         this.addReviewDialogTitle = '外部评审'
-        this.addReviewWidth = '56%'
+        this.addReviewWidth = '45%'
       } else {
         this.addReviewDialogTitle = '请选择评审类型'
         this.addReviewWidth = '40%'
@@ -339,17 +325,16 @@ export default {
     this.role = sessionStorage.getItem('role')
   },
   methods: {
-    // 提交论文评审记录
+    // 提交内部论文评审记录
     submit(formName) {
       this.$refs[formName].validate(valid => {
-        console.log('??????')
         if (valid) {
           this.loading = true
           addPaper(this.internalPaperForm)
             .then(() => {
               this.addReviewDialog = false
               this.loading = false
-              if (this.activeTab == 'paperInternal') {
+              if (this.activeTab === 'paperInternal') {
                 this.$refs.reviewTab.fetchPaper(1)
                 this.$refs.reviewTab.currentPage = 1
               } else {
@@ -362,9 +347,9 @@ export default {
               })
             })
             .catch(err => {
-              console.log('!!!')
               console.log(err)
               this.loading = false
+              this.$message.error('创建失败')
             })
         } else {
           this.$notify({
@@ -375,7 +360,40 @@ export default {
         }
       })
     },
+    // 添加外部论文评审记录
     addExternalReview(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+
+          this.loading = true
+          this.externalPaperForm.startTime = this.externalPaperForm.period[0]
+          this.externalPaperForm.endTime = this.externalPaperForm.period[1]
+
+          addExReview(this.externalPaperForm)
+            .then(() => {
+              this.addReviewDialog = false
+              this.loading = false
+              this.activeTab = 'paperExternal'
+
+              this.$notify({
+                title: '成功',
+                message: '外部评审创建成功',
+                type: 'success'
+              })
+            })
+            .catch(err => {
+              console.log(err)
+              this.loading = false
+              this.$message.error('创建失败')
+            })
+        } else {
+          this.$notify({
+            title: '提交失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
+      })
     },
     modifyInternalReview(form) {
       console.log('modify!!!')
@@ -411,7 +429,7 @@ export default {
       this.externalPaperForm = {
         id: null,
         title: null,
-        votingPeriod: ''
+        period: ''
       }
     },
     // 添加论文作者

@@ -37,7 +37,6 @@ export default {
     actived() {
       // 通知父组件 actived 值被更新
       this.$emit('handleChange', this.actived)
-      console.log('uiuiuiuiuiui')
     }
   },
   methods: {

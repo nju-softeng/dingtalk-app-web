@@ -19,7 +19,7 @@
           </el-button>
         </div>
       </div>
-      <component :is="activeTab" ref="reviewTab" />
+      <component :is="activeTab" ref="reviewTab" v-on:modifyInternal="modifyInternalReview" />
     </div>
 
     <!-- 添加评审记录  dialog -->
@@ -306,7 +306,7 @@ export default {
         ]
       },
 
-      test:0
+      test: 0
 
       // uid: "",
       // role: "",
@@ -339,13 +339,6 @@ export default {
     this.role = sessionStorage.getItem('role')
   },
   methods: {
-    test1() {
-      this.activeTab = 'paperInternal'
-    },
-    test2() {
-      this.activeTab = 'paperExternal'
-    },
-
     // 提交论文评审记录
     submit(formName) {
       this.$refs[formName].validate(valid => {
@@ -383,6 +376,19 @@ export default {
       })
     },
     addExternalReview(formName) {
+    },
+    modifyInternalReview(form) {
+      console.log('modify!!!')
+      console.log(form)
+      this.addReviewDialog = true
+      this.addReviewContent = 'internalReview'
+
+      this.internalPaperForm.id = form.id
+      this.internalPaperForm.title = form.title
+      this.internalPaperForm.journal = form.journal
+      this.internalPaperForm.paperType = form.paperType
+      this.internalPaperForm.issueDate = form.issueDate
+      this.internalPaperForm.authors = form.authors
     },
     // 关闭前清空表单
     closeAddReviewDialog() {

@@ -1,33 +1,32 @@
 <template>
   <div class="box-r">
-    <div class="md-container" style=" ">
-      <div style="margin-right:16px" class="hiden-xs">
-        <el-avatar :src="avatar"> {{ name }}</el-avatar>
-      </div>
-      <div>
-        <v-md-editor @save="save" v-model="value" mode="edit" height="280px" class="editor" style="width: 900px;" />
-        <el-button @click="submit" style="margin-top:8px"> 提交</el-button>
+<!--    <div>-->
+<!--      <div style="height: 100px; background-color: white; margin-bottom: 20px;"></div>-->
+<!--    </div>-->
+    <div class="md-container" >
+      <el-avatar style="margin-right:16px;" class="hiden-xs" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
+      <div  style="margin-bottom:24px">
+        <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 90vw; max-width: 900px" @save="save" />
+        <el-button style="margin-top:8px" @click="submit"> 提交</el-button>
       </div>
     </div>
-    <div style="overflow: auto; ">
-      <div class="md-container" v-for="(item, index) in list" :key="index" style="margin-bottoom:16px">
-        <div style=" margin-right:16px; margin-top:16px;" class="hiden-xs">
-          <el-avatar :src="item.user.avatar">{{ item.user.name }}</el-avatar>
-        </div>
+    <div style="overflow: auto; padding-bottom: 50px">
+      <div v-for="(item, index) in list" :key="index" class="md-container" style="margin-bottom:24px">
+        <el-avatar style="margin:16px 16px 0 0" class="hiden-xs" shape="square" size="medium" :src="item.user.avatar">{{ item.user.name }}</el-avatar>
         <div style="flex-grow:1">
-          <p>
+          <div  style="padding-top: 16px; padding-bottom: 8px">
             <span style="font-size:14px;">{{ item.user.name }} </span>
             <span style=" font-size:12px; color:#595959; padding:8px"> {{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             <template v-if="uid == item.user.id">
-              <el-button type="text" @click="item.edit = true" style="margin-right:4px">编辑</el-button>
-              <el-popconfirm confirmButtonText="好的" cancelButtonText="不用了" icon="el-icon-info" iconColor="red" title="确定删除吗？" @onConfirm="remove(item.id)">
+              <el-button type="text" style="margin-right:4px" @click="item.edit = true">编辑</el-button>
+              <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="确定删除吗？" @onConfirm="remove(item.id)">
                 <el-button slot="reference" type="text">删除</el-button>
               </el-popconfirm>
             </template>
-          </p>
+          </div>
           <div>
-            <v-md-editor v-model="item.md" :mode="item.edit == false ? 'preview' : 'edit'"></v-md-editor>
-            <div style="margin-top:8px" v-if="item.edit == true">
+            <v-md-editor v-model="item.md" style="width: 90vw; max-width: 900px" :mode="item.edit == false ? 'preview' : 'edit'" />
+            <div v-if="item.edit == true" style="margin-top:8px">
               <el-button @click="update(item)"> 提交</el-button>
               <el-button @click="fetchReview()"> 取消</el-button>
             </div>
@@ -39,8 +38,9 @@
 </template>
 
 <script>
-import { submitReview, listReview, updateReview, deleteReview } from '@/api/paper';
+import { submitReview, listReview, updateReview, deleteReview } from '@/api/paper'
 export default {
+  props: ['paperid'],
   data() {
     return {
       value: '',
@@ -48,31 +48,30 @@ export default {
       uid: null,
       avatar: '',
       name: ''
-    };
+    }
   },
   created() {
-    this.fetchReview();
-    this.value = localStorage.getItem('review-content') || '';
-    this.uid = sessionStorage.getItem('uid');
-    this.avatar = sessionStorage.getItem('avatar');
-    this.name = sessionStorage.getItem('name');
+    this.fetchReview()
+    this.value = localStorage.getItem('review-content') || ''
+    this.uid = sessionStorage.getItem('uid')
+    this.avatar = sessionStorage.getItem('avatar')
+    this.name = sessionStorage.getItem('name')
   },
-  props: ['paperid'],
   methods: {
     fetchReview() {
       listReview(this.paperid).then(res => {
-        this.list = res.data;
+        this.list = res.data
         this.list.forEach(item => {
-          this.$set(item, 'edit', false);
-        });
-      });
+          this.$set(item, 'edit', false)
+        })
+      })
     },
     edit(data) {
-      data.edit = true;
-      console.log(data);
+      data.edit = true
+      console.log(data)
     },
     save() {
-      localStorage.setItem('review-content', this.value);
+      localStorage.setItem('review-content', this.value)
     },
     submit() {
       if (this.value == '') {
@@ -80,43 +79,47 @@ export default {
           title: '内容不能为空',
           message: '这是一条成功的提示消息',
           type: 'warning'
-        });
-        return;
+        })
+        return
       }
       submitReview({
         paperid: this.paperid,
         md: this.value
       }).then(() => {
-        this.fetchReview();
-        this.value = '';
+        this.fetchReview()
+        this.value = ''
         this.$notify({
           title: '成功',
           message: '评审意见提交成功',
           type: 'success'
-        });
-      });
+        })
+      })
     },
     update(data) {
       updateReview(data, this.paperid).then(() => {
-        this.fetchReview();
-        this.value = '';
+        this.fetchReview()
+        this.value = ''
         this.$notify({
           title: '更新成功',
           type: 'success'
-        });
-      });
+        })
+      })
     },
     remove(id) {
       deleteReview(id).then(() => {
-        this.fetchReview();
-      });
+        this.fetchReview()
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .md-container {
   display: flex;
+}
+
+/deep/ .v-md-editor-preview {
+  padding: 0 20px;
 }
 
 .box-r {
@@ -126,15 +129,12 @@ export default {
   max-width: 1024px;
   margin-left: auto;
   margin-right: auto;
-  padding: 15px 20px 0;
+  padding: 10px 20px 0;
 }
 
-@media only screen and (max-width: 579px) {
+@media only screen and (max-width: 1024px) {
   .hiden-xs {
     display: none !important;
-  }
-  .editor {
-    width: 480px !important;
   }
 }
 

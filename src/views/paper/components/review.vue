@@ -6,7 +6,10 @@
     <div class="md-container" >
       <el-avatar style="margin-right:16px;" class="hiden-xs" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
       <div  style="margin-bottom:24px">
-        <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 90vw; max-width: 900px" @save="save" />
+        <div style="width: 90vw;max-width: 900px">
+          <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 100%; " @save="save" />
+        </div>
+
         <el-button style="margin-top:8px" @click="submit"> 提交</el-button>
       </div>
     </div>
@@ -25,7 +28,10 @@
             </template>
           </div>
           <div>
-            <v-md-editor v-model="item.md" style="width: 90vw; max-width: 900px" :mode="item.edit == false ? 'preview' : 'edit'" />
+            <div style="width: 90vw;max-width: 900px">
+              <v-md-editor v-model="item.md" :mode="item.edit == false ? 'preview' : 'edit'" />
+            </div>
+
             <div v-if="item.edit == true" style="margin-top:8px">
               <el-button @click="update(item)"> 提交</el-button>
               <el-button @click="fetchReview()"> 取消</el-button>

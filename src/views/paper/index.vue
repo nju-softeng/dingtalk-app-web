@@ -251,8 +251,8 @@ const levels = [
     label: 'Conference C'
   },
   {
-    value: 'Non-CCF',
-    label: 'Non-CCF'
+    value: 'Non_CCF',
+    label: 'Non_CCF'
   }
 
 ]

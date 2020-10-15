@@ -25,8 +25,11 @@
                 <p>
                   <span>
                     <svg-icon icon-class="people" /> 作者: </span>
-                  <span style="margin:6px" v-for="(p, index) in paper.paperDetails"
-                    :key="index">{{ p.user.name }}</span>
+                  <span
+                    v-for="(p, index) in paper.paperDetails"
+                    :key="index"
+                    style="margin:6px"
+                  >{{ p.user.name }}</span>
                 </p>
               </div>
 
@@ -51,7 +54,7 @@
             </div>
           </div>
         </div>
-        <el-menu @select="handleSelect" :default-active="activeTab" mode="horizontal">
+        <el-menu :default-active="activeTab" mode="horizontal" @select="handleSelect">
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
@@ -60,139 +63,143 @@
     </div>
 
     <div class="container">
-      <component v-bind:is="activeTab" :paperid="id"></component>
+      <component :is="activeTab" :paperid="id" />
     </div>
   </div>
 </template>
 <script>
-import { getPaper } from "@/api/paper";
+import { getPaper } from '@/api/paper'
 
 const levels = [
   {
-    value: "JOURNAL_A",
-    label: "Journal A"
+    value: 'JOURNAL_A',
+    label: 'Journal A'
   },
   {
-    value: "CONFERENCE_A",
-    label: "Conference A"
+    value: 'CONFERENCE_A',
+    label: 'Conference A'
   },
   {
-    value: "JOURNAL_B",
-    label: "Journal B"
+    value: 'JOURNAL_B',
+    label: 'Journal B'
   },
   {
-    value: "CONFERENCE_B",
-    label: "Conference B"
+    value: 'CONFERENCE_B',
+    label: 'Conference B'
   },
   {
-    value: "JOURNAL_C",
-    label: "Journal C"
+    value: 'JOURNAL_C',
+    label: 'Journal C'
   },
   {
-    value: "CONFERENCE_C",
-    label: "Conference C"
+    value: 'CONFERENCE_C',
+    label: 'Conference C'
+  },
+  {
+    value: 'Non_CCF',
+    label: 'Non_CCF'
   }
-];
+]
 
 export default {
+  components: {
+    review: () => import('./components/review'),
+    vote: () => import('./components/vote'),
+    acinfo: () => import('./components/acinfo')
+  },
   data() {
     return {
       level: levels,
       id: null,
       paper: {},
-      activeTab: "vote"
-    };
-  },
-  components: {
-    review: () => import("./components/review"),
-    vote: () => import("./components/vote"),
-    acinfo: () => import("./components/acinfo")
+      activeTab: 'vote'
+    }
   },
   computed: {
     getlevel() {
       return val => {
-        let tmp = this.level.find(item => item.value == val);
+        const tmp = this.level.find(item => item.value == val)
         if (tmp != undefined) {
-          return tmp.label;
+          return tmp.label
         }
-      };
+      }
     },
     // 投票状态标签
     getVoteResult() {
       return vote => {
         if (vote == undefined) {
           return {
-            type: "info",
-            content: "投票未发起"
-          };
+            type: 'info',
+            content: '投票未发起'
+          }
         } else if (vote.result == undefined) {
           return {
-            type: "",
-            content: "等待投票结果"
-          };
+            type: '',
+            content: '等待投票结果'
+          }
         } else if (vote.result == true) {
           return {
-            type: "success",
-            content: "ACCEPT"
-          };
+            type: 'success',
+            content: 'ACCEPT'
+          }
         } else if (vote.result == false) {
           return {
-            type: "danger",
-            content: "REJECT"
-          };
+            type: 'danger',
+            content: 'REJECT'
+          }
         }
-      };
+      }
     },
     // 论文状态标签
     getPaperResult() {
       return paper => {
         if (paper.result == 0) {
           return {
-            type: "info",
-            content: "等待内审中"
-          };
+            type: 'info',
+            content: '等待内审中'
+          }
         } else if (paper.result == 1) {
           return {
-            type: "info",
-            content: "内审未通过"
-          };
+            type: 'info',
+            content: '内审未通过'
+          }
         } else if (paper.result == 2) {
           return {
-            type: "info",
-            content: "等待中"
-          };
+            type: 'info',
+            content: '等待中'
+          }
         } else if (paper.result == 3) {
           return {
-            type: "danger",
-            content: "REJECT"
-          };
+            type: 'danger',
+            content: 'REJECT'
+          }
         } else if (paper.result == 4) {
           return {
-            type: "success",
-            content: "ACCEPT"
-          };
+            type: 'success',
+            content: 'ACCEPT'
+          }
         }
-      };
+      }
     }
   },
   created() {
-    this.id = this.$route.params.id;
-    this.activeTab = this.$route.params.tab || "vote";
+    this.id = this.$route.params.id
+    this.activeTab = this.$route.params.tab || 'vote'
     getPaper(this.id)
       .then(res => {
-        this.paper = res.data;
-        console.log(this.paper);
+        this.paper = res.data
+        console.log(this.paper)
       })
       .catch(() => {
-        this.$router.push({ path: "/404" });
-      });
+        this.$router.push({ path: '/404' })
+      })
   },
   methods: {
     handleSelect(val) {
-      this.activeTab = val;
+      this.activeTab = val
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

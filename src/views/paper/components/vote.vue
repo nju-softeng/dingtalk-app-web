@@ -240,16 +240,12 @@ export default {
         ws.onmessage = function(e) {
           //接收服务器返回的数据
           console.log("websocket 接收到数据：")
-          console.log(e.data);
           let data = JSON.parse(e.data);
-          console.log(data)
-          console.log(that)
           // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
           if (data.vid == that.vid) {
             that.total = data.total;
             that.accept = data.accept;
             that.reject = data.reject;
-            that.myresult = data.result;
             that.acceptlist = data.acceptnames;
             that.rejectlist = data.rejectnames;
           }

@@ -249,7 +249,12 @@ const levels = [
   {
     value: 'CONFERENCE_C',
     label: 'Conference C'
+  },
+  {
+    value: 'Non-CCF',
+    label: 'Non-CCF'
   }
+
 ]
 
 export default {
@@ -364,7 +369,6 @@ export default {
     addExternalReview(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-
           this.loading = true
           this.externalPaperForm.startTime = this.externalPaperForm.period[0]
           this.externalPaperForm.endTime = this.externalPaperForm.period[1]

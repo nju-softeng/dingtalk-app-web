@@ -6,17 +6,25 @@
         <p>发起投票</p>
       </div>
       <div v-loading="loading" style="display:flex; ">
-        <el-form style="width:240px" ref="voteform" :model="voteform">
-          <el-form-item prop="endTime" :rules="{
+        <el-form ref="voteform" style="width:240px" :model="voteform">
+          <el-form-item
+            prop="endTime"
+            :rules="{
               required: true,
               message: '请选择截止时间',
               trigger: 'change'
-            }">
+            }"
+          >
             <span slot="label">截止时间 </span>
-            <el-time-picker style="width:150px" v-model="voteform.endTime" value-format="HH:mm:ss" :picker-options="{
+            <el-time-picker
+              v-model="voteform.endTime"
+              style="width:150px"
+              value-format="HH:mm:ss"
+              :picker-options="{
                 selectableRange: '07:00:00 - 21:30:00'
-              }" placeholder="选择时间">
-            </el-time-picker>
+              }"
+              placeholder="选择时间"
+            />
           </el-form-item>
         </el-form>
         <div>
@@ -31,7 +39,7 @@
     </div>
 
     <!-- 投票div -->
-    <div v-else-if="showAns == false" class="poll" v-loading="loading">
+    <div v-else-if="showAns == false" v-loading="loading" class="poll">
       <div style="padding:10px; font-size:12px">
         <svg-icon icon-class="date" /> 投票截止
         {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
@@ -42,14 +50,14 @@
       </div>
       <div>
         <div class="choice">
-          <el-radio class="radio" v-model="pollform.result" border label="true">ACCEPT [接受]</el-radio>
+          <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
         </div>
         <div class="choice">
-          <el-radio class="radio" v-model="pollform.result" border label="false">REJECT [拒绝]</el-radio>
+          <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
         </div>
       </div>
       <div style="padding:10px">
-        <el-button style="width:100%" size="medium" @click="voting" type="primary">确认提交</el-button>
+        <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
       </div>
     </div>
     <!-- 投票结果 -->
@@ -66,51 +74,55 @@
             <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
           <span> {{ getNum(accept, total) }}% </span>
           <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success"></el-progress>
+          <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success" />
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
           {{ getNum(reject, total) }}%
           <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception"></el-progress>
+          <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception" />
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-user"></i> 参与人数 {{ total }} 人</span>
+            <i class="el-icon-user" /> 参与人数 {{ total }} 人</span>
           <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
           </span>
-          <el-link type="primary" :underline="false" @click="
+          <el-link
+            type="primary"
+            :underline="false"
+            @click="
               flag = true;
               fetchVoteDetail();
-            ">详情
+            "
+          >详情
           </el-link>
         </el-form-item>
       </el-form>
     </div>
-    <div class="poll" style="padding-top:0px" v-if="flag">
+    <div v-if="flag" class="poll" style="padding-top:0px">
       <el-form>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-circle-check"></i> 接收 {{ accept }} 票:
+            <i class="el-icon-circle-check" /> 接收 {{ accept }} 票:
           </span>
 
-          <el-tag style="margin:0px 4px;" v-for="(item, index) in acceptlist" :key="index">{{ item }}</el-tag>
+          <el-tag v-for="(item, index) in acceptlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-circle-close"></i> 拒绝 {{ reject }} 票:
+            <i class="el-icon-circle-close" /> 拒绝 {{ reject }} 票:
           </span>
 
-          <el-tag style="margin:0px 4px;" v-for="(item, index) in rejectlist" :key="index">{{ item }}</el-tag>
+          <el-tag v-for="(item, index) in rejectlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
         <el-form-item v-if="unvotelist.length > 0">
           <span slot="label">
-            <i class="el-icon-warning-outline"></i> 未投
+            <i class="el-icon-warning-outline" /> 未投
             {{ unvotelist.length }} 票:
           </span>
 
-          <el-tag type="info" style="margin:0px 4px;" v-for="(item, index) in unvotelist" :key="index">{{ item }}
+          <el-tag v-for="(item, index) in unvotelist" :key="index" type="info" style="margin:0px 4px;">{{ item }}
           </el-tag>
         </el-form-item>
       </el-form>
@@ -118,160 +130,34 @@
   </div>
 </template>
 <script>
-import { getPaperVote, getVoteDetail, createVote, addpoll } from "@/api/paper";
+import { getPaperVote, getVoteDetail, createVote, addpoll } from '@/api/paper'
 export default {
   data() {
     return {
       loading: false,
       voteform: {
-        paperid: "",
-        endTime: ""
+        paperid: '',
+        endTime: ''
       },
       pid: null,
       vote: {},
       pollform: {
-        result: "",
+        result: '',
         vote: {
-          id: ""
+          id: ''
         }
       },
       showAns: false,
-      vid:"",
-      accept: "",
-      reject: "",
-      isEnd: "false",
+      vid: '',
+      accept: '',
+      reject: '',
+      isEnd: 'false',
       acceptlist: [],
       rejectlist: [],
       unvotelist: [],
-      total: "",
+      total: '',
       myresult: undefined,
       flag: false
-    };
-  },
-
-  created() {
-    this.loading = true;
-    this.pid = this.$route.params.id;
-
-    //todo 修改， 拿论文对应的投票
-    getPaperVote(this.pid)
-      .then(res => {
-        this.vote = res.data;
-        console.log(this.vote);
-        this.isEnd = res.data.status;
-        if (this.vote.id != undefined) {
-          this.fetchVoteDetail().then(() => {
-            console.log("vid:   " + this.vid)
-            this.initWebSocket();
-          })
-        }
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 400);
-      });
-
-
-  },
-  destroyed() {
-    // 离开页面时关闭websocket连接
-    this.ws.close();
-  },
-  methods: {
-    // 创建的投票
-    submitvote() {
-      this.$refs.voteform.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          this.voteform.paperid = this.pid;
-          createVote(this.voteform)
-            .then(res => {
-              console.log(res.data);
-              this.vote = res.data;
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        }
-      });
-    },
-    //获取投票详情
-    fetchVoteDetail() {
-      return new Promise(((resolve, reject) => {
-        getVoteDetail(this.pid).then(res => {
-          console.log("获取投票详情数据");
-          console.log(res.data);
-          this.showAns = res.data.status;
-          this.vid = res.data.vid;
-          if (this.showAns) {
-            this.accept = res.data.accept;
-            this.reject = res.data.reject;
-            this.total = res.data.total;
-            this.myresult = res.data.result;
-            this.acceptlist = res.data.acceptnames;
-            this.rejectlist = res.data.rejectnames;
-            this.unvotelist = res.data.unvotenames || [];
-          }
-          resolve();
-        }).catch(error => {
-          reject(error);
-        });
-      }))
-    },
-
-    // 初始化websocket
-    initWebSocket() {
-      let that = this;
-      if (window.WebSocket) {
-        var url = "ws://" + location.host + "/wsapi";
-        console.log("location.host for websocket: " + url);
-        let ws = new WebSocket(url);
-        that.ws = ws;
-        ws.onopen = function() {
-          console.log("服务器连接成功: " + url);
-        };
-        ws.onclose = function() {
-          console.log("服务器连接关闭: " + url);
-        };
-        ws.onerror = function() {
-          console.log("服务器连接出错: " + url);
-        };
-        ws.onmessage = function(e) {
-          //接收服务器返回的数据
-          console.log("websocket 接收到数据：")
-          let data = JSON.parse(e.data);
-          // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
-          if (data.vid == that.vid) {
-            that.total = data.total;
-            that.accept = data.accept;
-            that.reject = data.reject;
-            that.acceptlist = data.acceptnames;
-            that.rejectlist = data.rejectnames;
-          }
-        };
-      }
-    },
-    voting() {
-      this.pollform.vote.id = this.vote.id;
-      this.loading = true;
-      addpoll(this.vote.id, this.pollform)
-        .then(res => {
-          this.showAns = true;
-          this.myresult = res.data.result;
-          this.accept = res.data.accept;
-          this.reject = res.data.reject;
-          this.total = res.data.total;
-        })
-        .catch(error => {
-          if (error.response.data.status == 409) {
-            this.fetchVoteDetail();
-            console.log("?????");
-          }
-        })
-        .finally(() => {
-          this.loading = false;
-        });
     }
   },
   computed: {
@@ -279,22 +165,146 @@ export default {
     getpercentage() {
       return (val, total) => {
         if (total == 0) {
-          return 0;
+          return 0
         }
-        return (val / total) * 100;
-      };
+        return (val / total) * 100
+      }
     },
     // 投票百分比数值
     getNum() {
       return (val, total) => {
         if (total == 0) {
-          return 0;
+          return 0
         }
-        return (val / total).toFixed(2) * 100;
-      };
+        return (val / total).toFixed(2) * 100
+      }
+    }
+  },
+
+  created() {
+    this.loading = true
+    this.pid = this.$route.params.id
+
+    // todo 修改， 拿论文对应的投票
+    getPaperVote(this.pid)
+      .then(res => {
+        this.vote = res.data
+        console.log(this.vote)
+        this.isEnd = res.data.status
+        if (this.vote.id != undefined) {
+          this.fetchVoteDetail().then(() => {
+            console.log('vid:   ' + this.vid)
+            this.initWebSocket()
+          })
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.loading = false
+        }, 400)
+      })
+  },
+  destroyed() {
+    // 离开页面时关闭websocket连接
+    this.ws.close()
+  },
+  methods: {
+    // 创建的投票
+    submitvote() {
+      this.$refs.voteform.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.voteform.paperid = this.pid
+          createVote(this.voteform)
+            .then(res => {
+              console.log(res.data)
+              this.vote = res.data
+            })
+            .finally(() => {
+              this.loading = false
+            })
+        }
+      })
+    },
+    // 获取投票详情
+    fetchVoteDetail() {
+      return new Promise((resolve, reject) => {
+        getVoteDetail(this.pid).then(res => {
+          console.log('获取投票详情数据')
+          console.log(res.data)
+          this.showAns = res.data.status
+          this.vid = res.data.vid
+          if (this.showAns) {
+            this.accept = res.data.accept
+            this.reject = res.data.reject
+            this.total = res.data.total
+            this.myresult = res.data.result
+            this.acceptlist = res.data.acceptnames
+            this.rejectlist = res.data.rejectnames
+            this.unvotelist = res.data.unvotenames || []
+          }
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 初始化websocket
+    initWebSocket() {
+      const that = this
+      if (window.WebSocket) {
+        var url = 'ws://' + location.host + '/wsapi'
+        console.log('location.host for websocket: ' + url)
+        const ws = new WebSocket(url)
+        that.ws = ws
+        ws.onopen = function() {
+          console.log('服务器连接成功: ' + url)
+        }
+        ws.onclose = function() {
+          console.log('服务器连接关闭: ' + url)
+        }
+        ws.onerror = function() {
+          console.log('服务器连接出错: ' + url)
+        }
+        ws.onmessage = function(e) {
+          // 接收服务器返回的数据
+          console.log('websocket 接收到数据：')
+          const data = JSON.parse(e.data)
+          // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
+          if (data.vid == that.vid) {
+            that.total = data.total
+            that.accept = data.accept
+            that.reject = data.reject
+            that.acceptlist = data.acceptnames
+            that.rejectlist = data.rejectnames
+          }
+        }
+      }
+    },
+    voting() {
+      this.pollform.vote.id = this.vote.id
+      this.loading = true
+      addpoll(this.vote.id, this.pollform)
+        .then(res => {
+          this.showAns = true
+          this.myresult = res.data.result
+          this.accept = res.data.accept
+          this.reject = res.data.reject
+          this.total = res.data.total
+        })
+        .catch(error => {
+          if (error.response.data.status == 409) {
+            this.fetchVoteDetail()
+            console.log('?????')
+          }
+        })
+        .finally(() => {
+          this.loading = false
+        })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .create {

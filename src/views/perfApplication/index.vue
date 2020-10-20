@@ -5,12 +5,17 @@
       <drawer :show.sync="show" :direction="direction" :tmp="tmp" :auditors="auditors" @submitted="submitted" />
       <div class="box">
         <!-- 申请按钮 -->
-        <el-button type="primary" @click="addApply()" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;">提交申请
+        <el-button type="primary" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;" @click="addApply()">提交申请
         </el-button>
         <!-- 已提的交申请 -->
         <div style="height:430px">
-          <el-table :data="list" fit highlight-current-row style="width: 100%"
-            :header-cell-style="{ background: '#eef1f6' }">
+          <el-table
+            :data="list"
+            fit
+            highlight-current-row
+            style="width: 100%"
+            :header-cell-style="{ background: '#eef1f6' }"
+          >
             <el-table-column width="30px" label="#" type="expand">
               <template slot-scope="props">
                 <el-form label-position="left" inline>
@@ -76,7 +81,7 @@
             <template slot="empty">
               <div style="height:280px;">
                 <div style="margin-top:100px;">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>没有已申请内容</span>
@@ -85,10 +90,17 @@
             </template>
           </el-table>
           <div style="text-align:center; margin-top:5px">
-            <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange"
-              background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next"
-              :total="total" :page-size="10">
-            </el-pagination>
+            <el-pagination
+              background
+              :hide-on-single-page="total < 10 ? true : false"
+              small
+              layout="prev, pager, next"
+              @prev-click="handlePrev"
+              :total="total"
+              @next-click="handleNext"
+              :page-size="10"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
         <!-- 分页 -->
@@ -98,86 +110,86 @@
 </template>
 
 <script>
-import { listAuditors } from "@/api/user";
-import { getUserApplication } from "@/api/application";
-import drawer from "./components/drawer";
+import { listAuditors } from '@/api/user'
+import { getUserApplication } from '@/api/application'
+import drawer from './components/drawer'
 export default {
+  components: { drawer },
   data: () => ({
     show: false,
     tmp: {},
     auditors: [],
     loading: false,
-    direction: "ltr",
+    direction: 'ltr',
     list: [],
     total: 0,
-    uid:"",
-    role:""
+    uid: '',
+    role: ''
   }),
-  components: { drawer },
-  created() {
-    listAuditors()
-      .then(res => {
-        this.auditors = res.data.auditorlist;
-      })
-      .then(() => {
-        this.fetchApplication(1);
-      });
-    this.uid = sessionStorage.getItem("uid");
-    this.role = sessionStorage.getItem("role")
-  },
-  computed:{
+  computed: {
     isAuditor() {
       return aid => {
         if (aid == this.uid && this.role == 'auditor') {
-          console.log("true")
-          return true;
+          console.log('true')
+          return true
         } else {
-          console.log("false")
-          return false;
+          console.log('false')
+          return false
         }
       }
     }
 
   },
+  created() {
+    listAuditors()
+      .then(res => {
+        this.auditors = res.data.auditorlist
+      })
+      .then(() => {
+        this.fetchApplication(1)
+      })
+    this.uid = sessionStorage.getItem('uid')
+    this.role = sessionStorage.getItem('role')
+  },
   methods: {
     // 获取申请记录
     fetchApplication(page) {
       getUserApplication(page, 10).then(res => {
-        this.list = res.data.list;
-        this.total = res.data.total;
-        console.log(this.list);
-      });
+        this.list = res.data.list
+        this.total = res.data.total
+        console.log(this.list)
+      })
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchApplication(val);
+      this.fetchApplication(val)
     },
     // 上一页
     handlePrev(val) {
-      this.fetchApplication(val);
+      this.fetchApplication(val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchApplication(val);
+      this.fetchApplication(val)
     },
     // 点击添加后调用
     addApply() {
-      this.tmp = null;
-      this.direction = "ltr";
-      this.show = true;
+      this.tmp = null
+      this.direction = 'ltr'
+      this.show = true
     },
     // 点击修改后调用
     addModify(row) {
-      this.tmp = row;
-      this.direction = "rtl";
-      this.show = true;
+      this.tmp = row
+      this.direction = 'rtl'
+      this.show = true
     },
     // 提交后刷新数据
     submitted() {
-      this.fetchApplication(1);
+      this.fetchApplication(1)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scope>

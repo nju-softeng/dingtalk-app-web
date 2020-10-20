@@ -4,7 +4,8 @@ const api = {
   application: '/application',
   applicationPager: '/application/page/',
   getDate: '/getdate',
-  pendingAudit: '/pending_audit'
+  pendingAudit: '/pending_audit',
+  getLatestAuditor: '/application/latestAuditor/'
 }
 
 // 用户提交/更新绩效申请
@@ -37,6 +38,15 @@ export function getWeek(data) {
 export function getAudit() {
   return axios({
     url: api.pendingAudit,
+    method: 'get'
+  });
+}
+
+
+// 查询申请人最近一次绩效申请的审核人是谁
+export function getLatestAuditor(uid) {
+  return axios({
+    url: api.getLatestAuditor + uid,
     method: 'get'
   });
 }

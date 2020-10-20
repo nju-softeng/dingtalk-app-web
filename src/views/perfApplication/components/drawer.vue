@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { submitApplication, getWeek } from '@/api/application'
+import { submitApplication, getWeek, getLatestAuditor } from '@/api/application'
 export default {
   props: {
     show: {
@@ -183,21 +183,22 @@ export default {
       this.visible = this.show
     },
     tmp() {
-      if (this.tmp != null) {
+      if (this.tmp != null) { // 修改绩效申请
         this.initModeify()
-        this.title = '更新绩效'
-      } else {
+        this.title = '更新绩效申请'
+      } else { // 创建绩效申请
         const uid = parseInt(sessionStorage.getItem('uid'))
         const aids = this.auditors.map(x => x.id)
         if (aids.indexOf(uid) > -1) {
           this.form.auditorid = uid
         }
+        this.fetchLatestAuditor(uid)
         console.log(this.form)
       }
     },
     'form.auditorid'() {
       const uid = parseInt(sessionStorage.getItem('uid'))
-      if (uid == this.form.auditorid) {
+      if (uid === this.form.auditorid) {
         this.showCvalue = true
       } else {
         this.showCvalue = false
@@ -205,6 +206,12 @@ export default {
     }
   },
   methods: {
+    // 获取申请人最近一次绩效申请的审核人是谁
+    fetchLatestAuditor(uid) {
+      getLatestAuditor(uid).then(res => {
+        this.form.auditorid = res.data.id
+      })
+    },
     // 清空表单
     emptyForm() {
       this.$refs['form'].resetFields()

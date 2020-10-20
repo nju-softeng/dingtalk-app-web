@@ -13,7 +13,7 @@
         <span style="padding-right:15px;color: #1890ff;">{{
           dc.yearmonth | formatWeek(dc.week)
         }}</span>
-        <span style="padding:10px;color: rgba(0, 0, 0, 0.45);">审核人:{{ dc.auditor.name }}</span>
+        <span style="padding:10px;color: rgba(0, 0, 0, 0.45);">审核人:{{ dc.auditorName }}</span>
 
         <div v-if="!dc.status" style="padding-top:10px">
           <span style="padding-right:10px">&bull; D值: {{ dc.dvalue }}</span>

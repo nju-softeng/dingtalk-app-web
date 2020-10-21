@@ -20,26 +20,7 @@
           </div>
         </div>
       </el-col>
-      <el-col
-        :xs="24"
-        :sm="8"
-        :md="6"
-        :lg="6"
-      >
-        <div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px" /></el-col>
-      <el-col
-        :xs="24"
-        :sm="8"
-        :md="6"
-        :lg="6"
-      >
-        <div class="grid-content bg-purple" style="height:165px;margin-bottom:10px" /></el-col>
-      <el-col
-        :xs="24"
-        :sm="8"
-        :md="6"
-        :lg="6"
-      ><div class="grid-content bg-purple-light" style="height:165px;margin-bottom:10px" /></el-col>
+
 
     </el-row>
   </div>

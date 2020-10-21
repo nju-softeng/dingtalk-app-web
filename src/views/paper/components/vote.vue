@@ -42,7 +42,7 @@
     <div v-else-if="showAns == false" v-loading="loading" class="poll">
       <div style="padding:10px; font-size:12px">
         <svg-icon icon-class="date" /> 投票截止
-        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
+        {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
         <el-tooltip content="截止时间后投票无效" placement="right">
           <svg-icon style="margin-left:8px" icon-class="hint" />
@@ -65,7 +65,7 @@
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
-        {{ vote.deadline | parseTime("{y}-{m}-{d} {h}:{i}") }}
+        {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
         <span v-if="isEnd"> [已结束]</span>
       </div>
       <el-form>
@@ -189,7 +189,7 @@ export default {
         this.vote = res.data
         console.log(this.vote)
         this.isEnd = res.data.status
-        if (this.vote.id != undefined) {
+        if (this.vote.id !== undefined) {
           this.fetchVoteDetail().then(() => {
             console.log('vid:   ' + this.vid)
             this.initWebSocket()

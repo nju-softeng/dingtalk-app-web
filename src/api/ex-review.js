@@ -1,8 +1,8 @@
 import axios from '@/utils/request'
 
 const api = {
-  addExReview: '/ex-review',
-  listExReview: '/ex-review/list'
+  addExReview: '/ex-paper',
+  listExReview: '/ex-paper/list'
 }
 
 // 添加外部评审

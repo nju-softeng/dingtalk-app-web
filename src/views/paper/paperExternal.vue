@@ -9,7 +9,7 @@
           </div>
           <div class="info">
             <div class="info-item">投票时间</div>
-            <div class="info-item">{{ item.startTime | parseTime("{h}:{i}") }} ~ {{ item.endTime | parseTime("{h}:{i}") }}</div>
+            <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
           </div>
           <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; ">
 

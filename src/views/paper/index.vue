@@ -191,6 +191,7 @@
                   <svg-icon icon-class="school" /> 投票时间</span>
                 <el-time-picker
                   v-model="externalPaperForm.period"
+                  value-format="yyyy-MM-ddTHH:mm:ss"
                   is-range
                   range-separator="至"
                   start-placeholder="开始时间"
@@ -199,6 +200,7 @@
                 />
               </el-form-item>
             </el-form>
+            {{externalPaperForm.period}}
           </div>
         </div>
         <span slot="footer" class="dialog-footer">

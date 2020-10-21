@@ -143,9 +143,7 @@ export default {
       vote: {},
       pollform: {
         result: '',
-        vote: {
-          id: ''
-        }
+        vid: ''
       },
       showAns: false,
       vid: '',
@@ -283,7 +281,7 @@ export default {
       }
     },
     voting() {
-      this.pollform.vote.id = this.vote.id
+      this.pollform.vid = this.vote.id
       this.loading = true
       addpoll(this.vote.id, this.pollform)
         .then(res => {

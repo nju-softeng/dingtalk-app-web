@@ -38,8 +38,8 @@
                   <span style="margin-right:8px">
                     <svg-icon icon-class="vote" /> 投票意见:
                   </span>
-                  <el-tag :type="getVoteResult(paper.internalVote).type">{{
-                    getVoteResult(paper.internalVote).content
+                  <el-tag :type="getVoteResult(paper.vote).type">{{
+                    getVoteResult(paper.vote).content
                   }}</el-tag>
                 </p>
                 <p>

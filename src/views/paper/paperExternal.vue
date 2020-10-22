@@ -79,6 +79,13 @@ export default {
       }
     },
     rmExPaper(id) {
+      if (!this.hasAuth()) {
+        this.$message({
+          message: '只有审核人才可以操作',
+          type: 'warning'
+        })
+        return;
+      }
       this.$confirm('对应的投票和AC记录也会被删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

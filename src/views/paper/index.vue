@@ -19,7 +19,7 @@
           </el-button>
         </div>
       </div>
-      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview" />
+      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview"  @modifyExternal="modifyExternalReview" />
     </div>
 
     <!-- 添加评审记录  dialog -->
@@ -200,7 +200,6 @@
                 />
               </el-form-item>
             </el-form>
-            {{externalPaperForm.period}}
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -225,7 +224,7 @@ import {
   addPaper
 } from '@/api/paper'
 
-import { addExReview } from '@/api/ex-review'
+import { addExReview } from '@/api/ex-paper'
 
 const levels = [
   {
@@ -379,7 +378,12 @@ export default {
             .then(() => {
               this.addReviewDialog = false
               this.loading = false
-              this.activeTab = 'paperExternal'
+
+              if (this.activeTab === 'paperExternal') {
+                this.$refs.reviewTab.fetchExPaper()
+              } else {
+                this.activeTab = 'paperExternal'
+              }
 
               this.$notify({
                 title: '成功',
@@ -413,6 +417,14 @@ export default {
       this.internalPaperForm.paperType = form.paperType
       this.internalPaperForm.issueDate = form.issueDate
       this.internalPaperForm.authors = form.authors
+    },
+    modifyExternalReview(item) {
+      this.addReviewDialog = true
+      this.addReviewContent = 'externalReview'
+
+      this.externalPaperForm.id = item.id
+      this.externalPaperForm.title = item.title
+      this.externalPaperForm.period = [item.vote.startTime, item.vote.endTime]
     },
     // 关闭前清空表单
     closeAddReviewDialog() {

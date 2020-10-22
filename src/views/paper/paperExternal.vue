@@ -3,53 +3,101 @@
     <el-row :gutter="10">
       <el-col v-for="(item,index) in list" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
-
-          <div class="title" style="min-height: 53px">
-            {{ item.title }}
+          <div>
+            <div class="title" style="min-height: 53px">
+              {{ item.title }}
+            </div>
+            <div class="info">
+              <div class="info-item">投票时间</div>
+              <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
+            </div>
           </div>
-          <div class="info">
-            <div class="info-item">投票时间</div>
-            <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
-          </div>
-          <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; ">
 
-            <div style="margin-right: 20px"><i class="el-icon-edit" /></div>
-            <div style="margin-right: 20px"><i class="el-icon-share" /></div>
-            <div style="margin-right: 20px"><i class="el-icon-delete" /></div>
+          <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
+            <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)"/>
+            <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
+            <!--            <div style="margin-right: 20px"><i class="el-icon-edit" /></div>-->
+            <!--            <div style="margin-right: 20px"><i class="el-icon-share" /></div>-->
+            <!--            <div style="margin-right: 20px"><i class="el-icon-delete" /></div>-->
 
           </div>
         </div>
       </el-col>
-
 
     </el-row>
   </div>
 </template>
 
 <script>
-import { listExReview } from '@/api/ex-review'
+import { listExPaper, deleteExPaper } from '@/api/ex-paper'
 
 export default {
   name: 'PaperExternal',
   data() {
     return {
-      list: []
+      list: [],
+      role: null
     }
   },
   created() {
-    listExReview().then(res => {
-      this.list = res.data
-      console.log(this.list)
-    })
+    this.fetchExPaper()
+    this.role = sessionStorage.getItem('role')
     this.$message({
       showClose: true,
       message: '外部评审正在开发中，目前无法使用',
       type: 'warning',
       offset: '100',
       duration: '5000'
-    });
+    })
   },
   mounted() {
+  },
+  methods: {
+    fetchExPaper() {
+      listExPaper().then(res => {
+        this.list = res.data
+        console.log(this.list)
+      })
+    },
+    // 是否有审核权限
+    hasAuth() {
+      if (this.role === 'admin' || this.role === 'auditor') {
+        return true
+      } else {
+        return false
+      }
+    },
+    // 修改论文记录
+    modifyExPaper(item) {
+      if (this.hasAuth()) {
+        this.$emit('modifyExternal', item)
+      } else {
+        this.$message({
+          message: '只有审核人才可以操作',
+          type: 'warning'
+        })
+      }
+    },
+    rmExPaper(id) {
+      this.$confirm('对应的投票和AC记录也会被删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteExPaper(id).then(() => {
+          this.fetchExPaper()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    }
   }
 
 }

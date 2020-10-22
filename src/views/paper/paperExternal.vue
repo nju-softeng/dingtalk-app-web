@@ -5,7 +5,9 @@
         <div class="card">
           <div>
             <div class="title" style="min-height: 53px">
+              <router-link :to="'/paper/ex-detail/' + item.id + '/vote'" class="link-type" >
               {{ item.title }}
+              </router-link>
             </div>
             <div class="info">
               <div class="info-item">投票时间</div>

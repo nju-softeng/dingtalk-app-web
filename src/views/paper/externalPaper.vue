@@ -3,11 +3,9 @@
     <el-row :gutter="10">
       <el-col v-for="(item,index) in list" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
-          <div>
+          <div style="cursor:pointer;" @click="goDetail(item.id)">
             <div class="title" style="min-height: 53px">
-              <router-link :to="'/paper/ex-detail/' + item.id + '/vote'" class="link-type" >
               {{ item.title }}
-              </router-link>
             </div>
             <div class="info">
               <div class="info-item">投票时间</div>
@@ -16,7 +14,7 @@
           </div>
 
           <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
-            <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)"/>
+            <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
             <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
           </div>
         </div>
@@ -51,6 +49,14 @@ export default {
   mounted() {
   },
   methods: {
+    goDetail(id) {
+      this.$router.push({
+        path: '/paper/ex-detail/' + id + '/vote',
+        query: {
+          type: 'external'
+        }
+      })
+    },
     fetchExPaper() {
       listExPaper().then(res => {
         this.list = res.data
@@ -82,7 +88,7 @@ export default {
           message: '只有审核人才可以操作',
           type: 'warning'
         })
-        return;
+        return
       }
       this.$confirm('对应的投票和AC记录也会被删除, 是否继续?', '提示', {
         confirmButtonText: '确定',

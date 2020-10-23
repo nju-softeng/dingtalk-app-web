@@ -182,31 +182,34 @@ export default {
   created() {
     this.loading = true
     this.pid = this.$route.params.id
+    const type = this.$route.query.type
 
-    // todo: 如果是内部论文投票，则需要先发起投票
+    if (type === 'internal') {
+      // todo: 如果是内部论文投票，则需要先发起投票
+      getPaperVote(this.pid)
+        .then(res => {
+          this.vote = res.data
+          console.log(this.vote)
+          this.isEnd = res.data.status
+          if (this.vote.id !== undefined) {
+            this.fetchVoteDetail().then(() => {
+              console.log('vid:   ' + this.vid)
+              this.initWebSocket()
+            })
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+          }, 400)
+        })
+    } else {
+      // todo: 如果是外部评审投票，则直接显示投票按钮
+
+    }
 
 
-    // todo: 如果是外部评审投票，则直接显示投票按钮
 
-
-    // todo 修改， 拿论文对应的投票
-    getPaperVote(this.pid)
-      .then(res => {
-        this.vote = res.data
-        console.log(this.vote)
-        this.isEnd = res.data.status
-        if (this.vote.id !== undefined) {
-          this.fetchVoteDetail().then(() => {
-            console.log('vid:   ' + this.vid)
-            this.initWebSocket()
-          })
-        }
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.loading = false
-        }, 400)
-      })
   },
   destroyed() {
     // 离开页面时关闭websocket连接

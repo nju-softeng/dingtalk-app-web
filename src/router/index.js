@@ -179,7 +179,7 @@ export const asyncRoutes = [{
   {
     path: 'detail/:id/:tab',
     component: () => import('@/views/paper/internalDetail'),
-    name: 'Detail',
+    name: 'internalDetail',
     meta: {
       title: '论文详细',
       noCache: true,
@@ -190,7 +190,7 @@ export const asyncRoutes = [{
   {
     path: 'ex-detail/:id/:tab',
     component: () => import('@/views/paper/externalDetail'),
-    name: 'Detail',
+    name: 'externalDetail',
     meta: {
       title: '论文详细',
       noCache: true,

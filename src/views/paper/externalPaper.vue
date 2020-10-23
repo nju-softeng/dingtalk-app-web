@@ -18,10 +18,6 @@
           <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
             <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)"/>
             <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
-            <!--            <div style="margin-right: 20px"><i class="el-icon-edit" /></div>-->
-            <!--            <div style="margin-right: 20px"><i class="el-icon-share" /></div>-->
-            <!--            <div style="margin-right: 20px"><i class="el-icon-delete" /></div>-->
-
           </div>
         </div>
       </el-col>

@@ -166,9 +166,9 @@ export const asyncRoutes = [{
 {
   path: '/paper',
   component: Layout,
-  redirect: '/paper/index',
+  redirect: '/paper/index/',
   children: [{
-    path: 'index',
+    path: 'index/:type',
     name: 'Paper',
     component: () => import('@/views/paper/index'),
     meta: {
@@ -178,7 +178,7 @@ export const asyncRoutes = [{
   },
   {
     path: 'detail/:id/:tab',
-    component: () => import('@/views/paper/detailInternal'),
+    component: () => import('@/views/paper/internalDetail'),
     name: 'Detail',
     meta: {
       title: '论文详细',
@@ -189,7 +189,7 @@ export const asyncRoutes = [{
   },
   {
     path: 'ex-detail/:id/:tab',
-    component: () => import('@/views/paper/detailExternal'),
+    component: () => import('@/views/paper/externalDetail'),
     name: 'Detail',
     meta: {
       title: '论文详细',

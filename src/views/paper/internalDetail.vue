@@ -4,7 +4,7 @@
       <div class="layout-container">
         <div class="groupInfo">
           <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px">
-            <el-breadcrumb-item :to="{ path: '/paper/index' }">论文列表</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/paper/index/internal' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
 
@@ -185,14 +185,14 @@ export default {
   created() {
     this.id = this.$route.params.id
     this.activeTab = this.$route.params.tab || 'vote'
-    // getPaper(this.id)
-    //   .then(res => {
-    //     this.paper = res.data
-    //     console.log(this.paper)
-    //   })
-    //   .catch(() => {
-    //     this.$router.push({ path: '/404' })
-    //   })
+    getPaper(this.id)
+      .then(res => {
+        this.paper = res.data
+        console.log(this.paper)
+      })
+      .catch(() => {
+        this.$router.push({ path: '/404' })
+      })
   },
   methods: {
     handleSelect(val) {

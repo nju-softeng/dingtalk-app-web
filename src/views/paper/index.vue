@@ -217,8 +217,8 @@
 import { getUserList } from '@/api/common'
 import Tabs from '@/components/TabNav/tabs'
 import TabPane from '@/components/TabNav/tabpane'
-import paperExternal from '@/views/paper/paperExternal'
-import paperInternal from '@/views/paper/paperInternal'
+import paperExternal from '@/views/paper/externalPaper'
+import paperInternal from '@/views/paper/internalPaper'
 
 import {
   addPaper
@@ -323,6 +323,12 @@ export default {
     }
   },
   created() {
+    // 根据路由的参数选择显示的tab
+    if (this.$route.params.type === 'external') {
+      this.activeTab = 'paperExternal'
+    } else {
+      this.activeTab = 'paperInternal'
+    }
     getUserList().then(res => {
       this.userlist = res.data
     })

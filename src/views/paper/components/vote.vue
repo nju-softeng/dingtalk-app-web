@@ -183,6 +183,12 @@ export default {
     this.loading = true
     this.pid = this.$route.params.id
 
+    // todo: 如果是内部论文投票，则需要先发起投票
+
+
+    // todo: 如果是外部评审投票，则直接显示投票按钮
+
+
     // todo 修改， 拿论文对应的投票
     getPaperVote(this.pid)
       .then(res => {

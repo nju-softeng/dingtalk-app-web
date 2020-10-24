@@ -38,7 +38,7 @@
                   <span style="margin-right:8px">
                     <svg-icon icon-class="vote" /> 投票意见:
                   </span>
-                  <el-tag :type="getVoteResult(paper.vote).type">{{
+                  <el-tag :type="getVoteResult(paper.vote).type ">{{
                     getVoteResult(paper.vote).content
                   }}</el-tag>
                 </p>
@@ -46,7 +46,7 @@
                   <span style="margin-right:8px">
                     <svg-icon icon-class="paper" /> 投稿结果:
                   </span>
-                  <el-tag :type="getPaperResult(paper).type">{{
+                  <el-tag :type="getPaperResult(paper).type ">{{
                     getPaperResult(paper).content
                   }}</el-tag>
                 </p>
@@ -119,7 +119,7 @@ export default {
     getlevel() {
       return val => {
         const tmp = this.level.find(item => item.value == val)
-        if (tmp != undefined) {
+        if (tmp !== undefined) {
           return tmp.label
         }
       }
@@ -127,22 +127,22 @@ export default {
     // 投票状态标签
     getVoteResult() {
       return vote => {
-        if (vote == undefined) {
+        if (vote === undefined) {
           return {
             type: 'info',
             content: '投票未发起'
           }
-        } else if (vote.result == undefined) {
+        } else if (vote.result === undefined) {
           return {
-            type: '',
+            type: 'info',
             content: '等待投票结果'
           }
-        } else if (vote.result == true) {
+        } else if (vote.result === true) {
           return {
             type: 'success',
             content: 'ACCEPT'
           }
-        } else if (vote.result == false) {
+        } else if (vote.result === false) {
           return {
             type: 'danger',
             content: 'REJECT'
@@ -153,30 +153,35 @@ export default {
     // 论文状态标签
     getPaperResult() {
       return paper => {
-        if (paper.result == 0) {
+        if (paper.result === 0) {
           return {
             type: 'info',
             content: '等待内审中'
           }
-        } else if (paper.result == 1) {
+        } else if (paper.result === 1) {
           return {
             type: 'info',
             content: '内审未通过'
           }
-        } else if (paper.result == 2) {
+        } else if (paper.result === 2) {
           return {
             type: 'info',
             content: '等待中'
           }
-        } else if (paper.result == 3) {
+        } else if (paper.result === 3) {
           return {
             type: 'danger',
             content: 'REJECT'
           }
-        } else if (paper.result == 4) {
+        } else if (paper.result === 4) {
           return {
             type: 'success',
             content: 'ACCEPT'
+          }
+        } else {
+          return {
+            type: 'info',
+            content: 'null'
           }
         }
       }

@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { getPaperVote, getVoteDetail, createVote, addpoll } from '@/api/paper'
+import { getPaperVote, getVoteDetailByVid, createVote, addpoll } from '@/api/paper'
 import { getExPaperVote } from '@/api/ex-paper'
 export default {
   data() {
@@ -141,7 +141,9 @@ export default {
         endTime: ''
       },
       pid: null,
-      vote: {},
+      vote: {
+        id: ''
+      },
       pollform: {
         result: '',
         vid: ''
@@ -182,9 +184,8 @@ export default {
   created() {
     this.loading = true
     this.pid = this.$route.params.id
-    const type = this.$route.query.type
 
-    if (type === 'external') {
+    if (this.$route.query.type === 'external') {
       // 如果是外部评审投票，则直接显示投票按钮
       getExPaperVote(this.pid)
         .then(res => {
@@ -246,7 +247,7 @@ export default {
     // 获取投票详情
     fetchVoteDetail() {
       return new Promise((resolve, reject) => {
-        getVoteDetail(this.pid).then(res => {
+        getVoteDetailByVid(this.vote.id).then(res => {
           console.log('获取投票详情数据')
           console.log(res.data)
           this.showAns = res.data.status

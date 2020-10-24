@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
-import { getPaper, getVoteDetail } from '@/api/paper'
+import { getPaper, getVoteDetailByPid } from '@/api/paper'
 export default {
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
 
       // todo 删除
       if (this.paper.result == 3 || this.paper.result == 4) {
-        getVoteDetail(this.id).then(res => {
+        getVoteDetailByPid(this.id).then(res => {
           this.acceptlist = res.data.acceptnames
           this.rejectlist = res.data.rejectnames
         })

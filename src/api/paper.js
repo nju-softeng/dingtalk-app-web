@@ -43,9 +43,17 @@ export function getPaperVote(pid) {
 }
 
 // 查询投票详情
-export function getVoteDetail(pid) {
+export function getVoteDetailByPid(pid) {
   return axios({
-    url: '/vote/' + pid + '/detail',
+    url: '/vote/paper/' + pid + '/detail',
+    method: 'get'
+  })
+}
+
+// 查询投票详情
+export function getVoteDetailByVid(vid) {
+  return axios({
+    url: '/vote/' + vid + '/detail',
     method: 'get'
   })
 }

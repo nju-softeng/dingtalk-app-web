@@ -184,15 +184,15 @@ export default {
   created() {
     this.loading = true
     this.pid = this.$route.params.id
+    const path = this.$route.path
 
-    if (this.$route.query.type === 'external') {
+    if (path.slice(7, 16) === 'ex-detail') {
       // 如果是外部评审投票，则直接显示投票按钮
       getExPaperVote(this.pid)
         .then(res => {
           this.vote = res.data
           console.log(this.vote)
           this.fetchVoteDetail().then(() => {
-            console.log('vid:   ' + this.vid)
             this.initWebSocket()
           })
         })
@@ -210,7 +210,6 @@ export default {
           this.isEnd = res.data.status
           if (this.vote.id !== undefined) {
             this.fetchVoteDetail().then(() => {
-              console.log('vid:   ' + this.vid)
               this.initWebSocket()
             })
           }
@@ -224,7 +223,10 @@ export default {
   },
   destroyed() {
     // 离开页面时关闭websocket连接
-    this.ws.close()
+    if (this.ws !== undefined) {
+      this.ws.close()
+    }
+
   },
   methods: {
     // 创建的投票

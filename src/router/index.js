@@ -177,7 +177,7 @@ export const asyncRoutes = [{
     }
   },
   {
-    path: 'detail/:id/:tab',
+    path: 'in-detail/:id/:tab',
     component: () => import('@/views/paper/internalDetail'),
     name: 'internalDetail',
     meta: {

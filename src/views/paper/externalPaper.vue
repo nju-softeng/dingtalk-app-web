@@ -51,10 +51,7 @@ export default {
   methods: {
     goDetail(id) {
       this.$router.push({
-        path: '/paper/ex-detail/' + id + '/vote',
-        query: {
-          type: 'external'
-        }
+        path: '/paper/ex-detail/' + id + '/vote'
       })
     },
     fetchExPaper() {

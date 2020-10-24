@@ -32,11 +32,10 @@ export function deleteExPaper(id) {
   })
 }
 
-// 查询指定id的论文
-export function getExPaper(id) {
+// 查询指定id的论文的投票
+export function getExPaperVote(pid) {
   return axios({
-    url: api.getExPaper + id,
+    url: '/ex-paper/' + pid + '/vote',
     method: 'get'
   })
 }
-

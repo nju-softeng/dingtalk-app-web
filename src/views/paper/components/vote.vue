@@ -131,6 +131,7 @@
 </template>
 <script>
 import { getPaperVote, getVoteDetail, createVote, addpoll } from '@/api/paper'
+import { getExPaperVote } from '@/api/ex-paper'
 export default {
   data() {
     return {
@@ -184,8 +185,24 @@ export default {
     this.pid = this.$route.params.id
     const type = this.$route.query.type
 
-    if (type === 'internal') {
-      // todo: 如果是内部论文投票，则需要先发起投票
+    if (type === 'external') {
+      // 如果是外部评审投票，则直接显示投票按钮
+      getExPaperVote(this.pid)
+        .then(res => {
+          this.vote = res.data
+          console.log(this.vote)
+          this.fetchVoteDetail().then(() => {
+            console.log('vid:   ' + this.vid)
+            this.initWebSocket()
+          })
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+          }, 300)
+        })
+    } else {
+      // 如果是内部论文投票，则需先发起投票
       getPaperVote(this.pid)
         .then(res => {
           this.vote = res.data
@@ -201,15 +218,9 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false
-          }, 400)
+          }, 300)
         })
-    } else {
-      // todo: 如果是外部评审投票，则直接显示投票按钮
-
     }
-
-
-
   },
   destroyed() {
     // 离开页面时关闭websocket连接

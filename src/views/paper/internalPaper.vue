@@ -388,7 +388,7 @@ export default {
                 type: 'success'
               })
               this.$router.push({
-                path: '/paper/detail/' + this.voteform.paperid + '/vote'
+                path: '/paper/in-detail/' + this.voteform.paperid + '/vote'
               })
             })
             .finally(() => {

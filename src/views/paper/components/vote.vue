@@ -179,7 +179,6 @@ export default {
       }
     }
   },
-
   created() {
     this.loading = true
     this.pid = this.$route.params.id

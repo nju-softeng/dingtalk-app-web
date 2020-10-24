@@ -39,3 +39,11 @@ export function getExPaperVote(pid) {
     method: 'get'
   })
 }
+
+// 查询指定id的论文
+export function getExPaper(id) {
+  return axios({
+    url: api.getExPaper + id,
+    method: 'get'
+  })
+}

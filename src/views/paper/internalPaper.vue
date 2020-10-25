@@ -423,7 +423,7 @@ export default {
     },
     // 提交论文投稿结果
     submitPaperResult() {
-      if (this.resultForm.result != undefined) {
+      if (this.resultForm.result !== undefined) {
         this.loading = true
         submitResult(this.resultForm.paperid, this.resultForm.result)
           .then(res => {

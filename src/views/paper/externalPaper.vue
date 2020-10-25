@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="10">
-      <el-col v-for="(item,index) in list" :xs="24" :sm="8" :md="6" :lg="6">
+      <el-col v-for="(item,index) in list" :key="index" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
           <div style="cursor:pointer;" @click="goDetail(item.id)">
             <div class="title" style="min-height: 53px">
@@ -14,6 +14,7 @@
           </div>
 
           <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
+            <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
             <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
             <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
           </div>
@@ -21,18 +22,53 @@
       </el-col>
 
     </el-row>
+
+    <!-- 投稿结果  dialog -->
+    <el-dialog
+      title="录用结果"
+      width="30%"
+      :visible.sync="resultDialog"
+      :lock-scroll="false"
+    >
+      <div v-loading="loading">
+        <el-form>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 接收情况:
+            </span>
+            <el-radio-group v-model="resultForm.result">
+              <el-radio :label="true">接收</el-radio>
+              <el-radio :label="false">拒绝</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+        <div class="dialog-footer">
+          <el-button @click="resultDialog = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="submitPaperResult"
+          >确 定</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listExPaper, deleteExPaper } from '@/api/ex-paper'
+import { listExPaper, deleteExPaper, addExpaperResult } from '@/api/ex-paper'
 
 export default {
   name: 'PaperExternal',
   data() {
     return {
       list: [],
-      role: null
+      role: null,
+      resultDialog: false,
+      loading: false,
+      resultForm: {
+        paperid: '',
+        result: ''
+      }
     }
   },
   created() {
@@ -45,8 +81,6 @@ export default {
       offset: '100',
       duration: '5000'
     })
-  },
-  mounted() {
   },
   methods: {
     goDetail(id) {
@@ -79,6 +113,7 @@ export default {
         })
       }
     },
+    // 删除外部评审论文
     rmExPaper(id) {
       if (!this.hasAuth()) {
         this.$message({
@@ -105,13 +140,48 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 更新论文投稿结果, 唤醒dialog
+    showPaperResultDialog(item) {
+      this.resultForm.paperid = item.id
+      if (this.hasAuth()) {
+        this.resultDialog = true
+      } else {
+        this.$message({
+          message: '只有审核人，和论文作者才可以操作',
+          type: 'warning'
+        })
+      }
+    },
+    // 提交论文投稿结果
+    submitPaperResult() {
+      if (this.resultForm.result !== undefined) {
+        this.loading = true
+        addExpaperResult(this.resultForm.paperid, this.resultForm.result)
+          .then(res => {
+            console.log(res.data)
+            this.resultDialog = false
+            this.fetchPaper(this.currentPage)
+          })
+          .finally(() => {
+            this.loading = false
+          })
+      } else {
+        this.$message({
+          message: '请选择结果',
+          type: 'warning'
+        })
+      }
     }
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
 
 .card {
   margin-bottom:10px;

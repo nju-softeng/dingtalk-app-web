@@ -47,3 +47,14 @@ export function getExPaper(id) {
     method: 'get'
   })
 }
+
+// 提交论文结果
+export function addExpaperResult(id, result) {
+  return axios({
+    url: '/ex-paper_result/' + id,
+    method: 'post',
+    data: {
+      data: result
+    }
+  })
+}

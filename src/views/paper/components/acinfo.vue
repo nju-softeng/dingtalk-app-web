@@ -42,6 +42,15 @@ export default {
   },
 
   created() {
+    // 获取路由的路径
+    const path = this.$route.path
+    if (path.slice(7, 16) === 'ex-detail') {
+      // 如果是外部评审
+      
+    } else {
+      // 如果是内部评审
+
+    }
     this.id = this.$route.params.id
     getPaper(this.id).then(res => {
       this.paper = res.data
@@ -56,7 +65,9 @@ export default {
       }
     })
   },
-  methods: {}
+  methods: {
+
+  }
 }
 </script>
 <style lang="scss" scoped>

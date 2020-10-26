@@ -13,7 +13,7 @@
             </div>
             <div v-else class="info">
               <div class="info-item">
-                <span>投票结果 : </span>
+                <span>投票意见 : </span>
                 <span>
                   <el-tag class="tag" v-if="item.vote.result === true" type="success">ACCEPT</el-tag>
                   <el-tag class="tag" v-else type="danger">REJECT</el-tag>
@@ -217,7 +217,7 @@ export default {
     height: 64px;
     .info-item {
       text-align:center;
-      padding-top:12px;
+      padding-top:10px;
       font-size: 13px;
     }
   }

@@ -226,7 +226,6 @@ export default {
     if (this.ws !== undefined) {
       this.ws.close()
     }
-
   },
   methods: {
     // 创建的投票

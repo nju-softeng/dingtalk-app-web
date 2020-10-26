@@ -7,9 +7,26 @@
             <div class="title" style="min-height: 53px">
               {{ item.title }}
             </div>
-            <div class="info">
+            <div v-if="item.vote.result === undefined " class="info">
               <div class="info-item">投票时间</div>
               <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
+            </div>
+            <div v-else class="info">
+              <div class="info-item">
+                <span>投票结果 : </span>
+                <span>
+                  <el-tag class="tag" v-if="item.vote.result === true" type="success">ACCEPT</el-tag>
+                  <el-tag class="tag" v-else type="danger">REJECT</el-tag>
+                </span>
+              </div>
+              <div class="info-item">
+                <span>录用结果 : </span>
+                <span>
+                  <el-tag class="tag" v-if="item.result === undefined" type="success">等待中</el-tag>
+                  <el-tag class="tag" v-else-if="item.result === true" type="success">ACCEPT</el-tag>
+                  <el-tag class="tag" v-else type="danger">REJECT</el-tag>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -178,6 +195,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tag {
+  line-height:14px;
+  height:14px;
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;

@@ -161,7 +161,7 @@ export default {
           .then(res => {
             console.log(res.data)
             this.resultDialog = false
-            this.fetchPaper(this.currentPage)
+            this.fetchExPaper()
           })
           .finally(() => {
             this.loading = false

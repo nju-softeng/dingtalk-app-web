@@ -19,7 +19,7 @@
           </el-button>
         </div>
       </div>
-      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview"  @modifyExternal="modifyExternalReview" />
+      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview" @modifyExternal="modifyExternalReview" />
     </div>
 
     <!-- 添加评审记录  dialog -->
@@ -400,7 +400,9 @@ export default {
             .catch(err => {
               console.log(err)
               this.loading = false
-              this.$message.error('创建失败')
+              if (this.externalPaperForm.id == null) {
+                this.$message.error('创建失败')
+              }
             })
         } else {
           this.$notify({

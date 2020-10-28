@@ -1,11 +1,11 @@
 <template>
   <div class="box-r">
-<!--    <div>-->
-<!--      <div style="height: 100px; background-color: white; margin-bottom: 20px;"></div>-->
-<!--    </div>-->
-    <div class="md-container" >
+    <!--    <div>-->
+    <!--      <div style="height: 100px; background-color: white; margin-bottom: 20px;"></div>-->
+    <!--    </div>-->
+    <div class="md-container">
       <el-avatar style="margin-right:16px;" class="hiden-xs" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
-      <div  style="margin-bottom:24px">
+      <div style="margin-bottom:24px">
         <div style="width: 90vw;max-width: 900px">
           <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 100%; " @save="save" />
         </div>
@@ -17,7 +17,7 @@
       <div v-for="(item, index) in list" :key="index" class="md-container" style="margin-bottom:24px">
         <el-avatar style="margin:16px 16px 0 0" class="hiden-xs" shape="square" size="medium" :src="item.user.avatar">{{ item.user.name }}</el-avatar>
         <div style="flex-grow:1">
-          <div  style="padding-top: 16px; padding-bottom: 8px">
+          <div style="padding-top: 16px; padding-bottom: 8px">
             <span style="font-size:14px;">{{ item.user.name }} </span>
             <span style=" font-size:12px; color:#595959; padding:8px"> {{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             <template v-if="uid == item.user.id">
@@ -44,11 +44,12 @@
 </template>
 
 <script>
-import { submitReview, listReview, updateReview, deleteReview } from '@/api/paper'
+import { submitReview, listReview, listExReview, updateReview, deleteReview } from '@/api/paper'
 export default {
   props: ['paperid'],
   data() {
     return {
+      isExternal: false,
       value: '',
       list: [],
       uid: null,
@@ -57,6 +58,9 @@ export default {
     }
   },
   created() {
+    const path = this.$route.path
+    this.isExternal = (path.slice(7, 16) === 'ex-detail')
+
     this.fetchReview()
     this.value = localStorage.getItem('review-content') || ''
     this.uid = sessionStorage.getItem('uid')
@@ -65,22 +69,31 @@ export default {
   },
   methods: {
     fetchReview() {
-      listReview(this.paperid).then(res => {
-        this.list = res.data
-        this.list.forEach(item => {
-          this.$set(item, 'edit', false)
+      if (this.isExternal) {
+        listReview(this.paperid).then(res => {
+          this.list = res.data
+          this.list.forEach(item => {
+            this.$set(item, 'edit', false)
+          })
         })
-      })
+      } else {
+        listExReview(this.paperid).then(res => {
+          this.list = res.data
+          this.list.forEach(item => {
+            this.$set(item, 'edit', false)
+          })
+        })
+      }
+
     },
     edit(data) {
       data.edit = true
-      console.log(data)
     },
     save() {
       localStorage.setItem('review-content', this.value)
     },
     submit() {
-      if (this.value == '') {
+      if (this.value === '') {
         this.$notify({
           title: '内容不能为空',
           message: '这是一条成功的提示消息',
@@ -90,7 +103,8 @@ export default {
       }
       submitReview({
         paperid: this.paperid,
-        md: this.value
+        md: this.value,
+        isExternal: this.isExternal
       }).then(() => {
         this.fetchReview()
         this.value = ''

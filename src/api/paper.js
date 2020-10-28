@@ -103,6 +103,13 @@ export function listReview(id) {
   })
 }
 
+export function listExReview(id) {
+  return axios({
+    url: '/ex-paper/' + id + '/review',
+    method: 'get'
+  })
+}
+
 // 更新论文评审建议
 export function updateReview(data, id) {
   return axios({

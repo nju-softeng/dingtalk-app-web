@@ -273,7 +273,7 @@ export default {
       userlist: [],
       //
       addReviewDialog: false,
-      addReviewWidth: '40%',
+      addReviewWidth: '52%',
       addReviewContent: undefined,
       addReviewDialogTitle: '请选择评审类型',
 
@@ -312,13 +312,13 @@ export default {
     addReviewContent(val) {
       if (val === 'internalReview') {
         this.addReviewDialogTitle = '内部评审'
-        this.addReviewWidth = '56%'
+        this.addReviewWidth = '64%'
       } else if (val === 'externalReview') {
         this.addReviewDialogTitle = '外部评审'
-        this.addReviewWidth = '45%'
+        this.addReviewWidth = '58%'
       } else {
         this.addReviewDialogTitle = '请选择评审类型'
-        this.addReviewWidth = '40%'
+        this.addReviewWidth = '52%'
       }
     }
   },

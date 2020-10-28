@@ -82,14 +82,14 @@
 
                 <router-link
                   v-else-if="scope.row.v_status == false"
-                  :to="'/paper/detail/' + scope.row.id + '/vote'"
+                  :to="'/paper/in-detail/' + scope.row.id + '/vote'"
                   class="link-type"
                 >
                   <el-link type="success"> 前往投票</el-link>
                 </router-link>
                 <router-link
                   v-else-if="scope.row.v_status == true"
-                  :to="'/paper/detail/' + scope.row.id + '/vote'"
+                  :to="'/paper/in-detail/' + scope.row.id + '/vote'"
                   class="link-type"
                 >
                   <el-tag

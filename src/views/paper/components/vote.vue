@@ -192,6 +192,7 @@ export default {
         .then(res => {
           this.vote = res.data
           console.log(this.vote)
+          this.isEnd = res.data.status
           this.fetchVoteDetail().then(() => {
             this.initWebSocket()
           })

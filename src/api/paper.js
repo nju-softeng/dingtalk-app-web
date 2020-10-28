@@ -42,7 +42,7 @@ export function getPaperVote(pid) {
   })
 }
 
-// 查询投票详情
+// 更具论文id,查询投票详情
 export function getVoteDetailByPid(pid) {
   return axios({
     url: '/vote/paper/' + pid + '/detail',
@@ -50,7 +50,7 @@ export function getVoteDetailByPid(pid) {
   })
 }
 
-// 查询投票详情
+// 更具vid，查询投票详情
 export function getVoteDetailByVid(vid) {
   return axios({
     url: '/vote/' + vid + '/detail',

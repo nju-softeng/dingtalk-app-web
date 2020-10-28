@@ -60,7 +60,7 @@ export default {
   created() {
     const path = this.$route.path
     this.isExternal = (path.slice(7, 16) === 'ex-detail')
-
+    console.log(this.isExternal)
     this.fetchReview()
     this.value = localStorage.getItem('review-content') || ''
     this.uid = sessionStorage.getItem('uid')
@@ -70,14 +70,14 @@ export default {
   methods: {
     fetchReview() {
       if (this.isExternal) {
-        listReview(this.paperid).then(res => {
+        listExReview(this.paperid).then(res => {
           this.list = res.data
           this.list.forEach(item => {
             this.$set(item, 'edit', false)
           })
         })
       } else {
-        listExReview(this.paperid).then(res => {
+        listReview(this.paperid).then(res => {
           this.list = res.data
           this.list.forEach(item => {
             this.$set(item, 'edit', false)
@@ -101,10 +101,11 @@ export default {
         })
         return
       }
+      console.log(this.isExternal)
       submitReview({
         paperid: this.paperid,
         md: this.value,
-        isExternal: this.isExternal
+        external: this.isExternal
       }).then(() => {
         this.fetchReview()
         this.value = ''

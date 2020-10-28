@@ -50,7 +50,6 @@
           @click.native="addReviewContent = 'externalReview'"
         >
           <div>外部评审</div>
-          <div style="font-weight: lighter; padding-top:10px; font-size: 10px">正在开发中...</div>
         </el-card>
       </div>
       <!-- 添加内部评审 -->

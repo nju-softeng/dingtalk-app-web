@@ -91,13 +91,6 @@ export default {
   created() {
     this.fetchExPaper()
     this.role = sessionStorage.getItem('role')
-    this.$message({
-      showClose: true,
-      message: '外部评审正在开发中，目前无法使用',
-      type: 'warning',
-      offset: '100',
-      duration: '5000'
-    })
   },
   methods: {
     goDetail(id) {

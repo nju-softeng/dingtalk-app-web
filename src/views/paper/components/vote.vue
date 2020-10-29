@@ -19,7 +19,8 @@
             <el-time-picker
               v-model="voteform.endTime"
               style="width:150px"
-              value-format="HH:mm:ss"
+              value-format="HH:mm"
+              format="HH:mm"
               :picker-options="{
                 selectableRange: '07:00:00 - 21:30:00'
               }"

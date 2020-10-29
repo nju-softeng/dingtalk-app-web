@@ -240,7 +240,8 @@
             <el-time-picker
               v-model="voteform.endTime"
               arrow-control
-              value-format="HH:mm:ss"
+              value-format="HH:mm"
+              format="HH:mm"
               :picker-options="{
                 selectableRange: '07:00:00 - 21:30:00'
               }"

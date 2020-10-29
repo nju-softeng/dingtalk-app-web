@@ -191,6 +191,7 @@
                 <el-time-picker
                   v-model="externalPaperForm.period"
                   value-format="yyyy-MM-ddTHH:mm:ss"
+                  format="HH:mm"
                   is-range
                   range-separator="至"
                   start-placeholder="开始时间"

@@ -1,6 +1,6 @@
 <template>
   <div class="menu" style="display:flex">
-    <div @click="go" class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;">
+    <div class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;" @click="go">
       <svg-icon icon-class="devops" style="margin:0 16px;" />
       <div style="font-size:12.5px">DevOps+</div>
     </div>
@@ -12,35 +12,35 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import TopbarItem from "./TopbarItem";
-import variables from "@/styles/variables.scss";
+import { mapGetters } from 'vuex'
+import TopbarItem from './TopbarItem'
+import variables from '@/styles/variables.scss'
 
 export default {
   components: { TopbarItem },
   computed: {
-    ...mapGetters(["permission_routes", "sidebar"]),
+    ...mapGetters(['permission_routes', 'sidebar']),
     activeMenu() {
-      const route = this.$route;
-      const { meta, path } = route;
+      const route = this.$route
+      const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
-        return meta.activeMenu;
+        return meta.activeMenu
       }
-      return path;
+      return path
     },
     variables() {
-      return variables;
+      return variables
     }
   },
   methods: {
     go() {
       this.$router.push({
-        path: "/"
-      });
+        path: '/'
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .logo:hover {

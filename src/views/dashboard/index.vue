@@ -5,23 +5,23 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import auditorDashboard from "./auditor";
-import studentDashboard from "./student";
+import { mapGetters } from 'vuex'
+import auditorDashboard from './auditor'
+import studentDashboard from './student'
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: { auditorDashboard, studentDashboard },
   data() {
     return {
-      currentRole: "studentDashboard"
-    };
+      currentRole: 'studentDashboard'
+    }
   },
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(['roles'])
   },
   created() {
-    if (!this.roles.includes("normal")) {
-      this.currentRole = "auditorDashboard";
+    if (!this.roles.includes('normal')) {
+      this.currentRole = 'auditorDashboard'
     }
   },
   mounted() {
@@ -34,5 +34,5 @@ export default {
     //   });
     // }
   }
-};
+}
 </script>

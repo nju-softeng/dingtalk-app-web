@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import Topbar from "./Topbar";
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import Topbar from './Topbar'
 
 export default {
   components: {
@@ -56,25 +56,25 @@ export default {
     Topbar
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", "name"])
+    ...mapGetters(['sidebar', 'avatar', 'device', 'name'])
   },
   created() {
-    console.log("头像");
-    if (this.avatar == "") {
-      console.log("null");
+    console.log('头像')
+    if (this.avatar == '') {
+      console.log('null')
     }
-    console.log(this.avatar);
+    console.log(this.avatar)
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch("user/logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -85,7 +85,7 @@ export default {
   background: #fff;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
   .navbar_wrap {
-    max-width: 1072px;
+    max-width: 1305px;
     margin-left: auto;
     margin-right: auto;
   }

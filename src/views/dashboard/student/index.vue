@@ -9,11 +9,11 @@
                 <el-avatar :icon="avatar" :src="avatar">{{ name }}</el-avatar>
               </div>
               <div class="hello-text">
-                {{ helloTime }}{{ name }}，祝你开心每一天！<br />
+                {{ helloTime }}{{ name }}，祝你开心每一天！<br>
                 <div class="day-text hiden-xs">
                   『 {{ yiyan.hitokoto }}』 —— 《{{ yiyan.from }}》
                   <a @click="getYiYan">
-                    <el-button type="text" icon="el-icon-refresh"></el-button>
+                    <el-button type="text" icon="el-icon-refresh" />
                   </a>
                 </div>
               </div>
@@ -54,13 +54,13 @@
                 </div>
               </div>
 
-              <div @click="goAc" class="h-card">
+              <div class="h-card" @click="goAc">
                 <div class="title">累计AC</div>
                 <div class="content">
                   {{ perf.acTotal }}
                 </div>
               </div>
-              <div @click="goBug" class="h-card">
+              <div class="h-card" @click="goBug">
                 <div class="title">未解决Bug</div>
                 <div class="content">
                   --
@@ -89,7 +89,7 @@
               </div>
               <!-- 消息内容 -->
               <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
-                <div class="message" v-for="(msg, index) in messages" :key="index">
+                <div v-for="(msg, index) in messages" :key="index" class="message">
                   <div class="title">{{ msg.title }}</div>
                   <div style="display:flex; justify-content:space-between;">
                     <div class="detail">
@@ -149,10 +149,10 @@
               <div slot="header" class="clearfix">
                 <span>AC排行</span>
               </div>
-              <el-table class="table" ref="table" height="83vh" :data="aclist" max-height="250" highlight-current-row  style="width: 100%" >
-                <el-table-column type="index" > </el-table-column>
-                <el-table-column prop="name" label="姓名"> </el-table-column>
-                <el-table-column prop="total" label="总AC" > </el-table-column>
+              <el-table ref="table" class="table" height="83vh" :data="aclist" max-height="250" highlight-current-row style="width: 100%">
+                <el-table-column type="index" />
+                <el-table-column prop="name" label="姓名" />
+                <el-table-column prop="total" label="总AC" />
               </el-table>
             </el-card>
 
@@ -180,7 +180,7 @@
                     <div class="reason" style="font-size:12.5px">
                       <span>变更原因：{{ item.reason }}</span>
                     </div>
-                    <div class="auditor" style="font-size:12.5px" v-if="item.auditorname != undefined">
+                    <div v-if="item.auditorname != undefined" class="auditor" style="font-size:12.5px">
                       <span>审核人: {{ item.auditorname }}</span>
                     </div>
                     <div style="padding-top:15px;font-size:12.5px">
@@ -198,12 +198,11 @@
 </template>
 
 <script>
-import { getMessages } from "@/api/message";
-import {lastAc, getPerformance, getAcSummary} from "@/api/performance";
-import { getUnCheckCnt } from "@/api/audit";
-import { showHelloTime } from "@/utils/index";
-import { getYiYan } from "@/api/common";
-
+import { getMessages } from '@/api/message'
+import { lastAc, getPerformance, getAcSummary } from '@/api/performance'
+import { getUnCheckCnt } from '@/api/audit'
+import { showHelloTime } from '@/utils/index'
+import { getYiYan } from '@/api/common'
 
 export default {
   data() {
@@ -211,76 +210,76 @@ export default {
       messages: [],
       lastAcs: [],
       unCheckCnt: 0,
-      aclist:[],
+      aclist: [],
       perf: {
-        dcTotal: "",
-        acTotal: "",
-        w1: "",
-        w2: "",
-        w3: "",
-        w4: "",
-        w5: ""
+        dcTotal: '',
+        acTotal: '',
+        w1: '',
+        w2: '',
+        w3: '',
+        w4: '',
+        w5: ''
       },
-      name: "",
+      name: '',
       avatar: null,
       count: 0,
       yiyan: {}
-    };
-  },
-  created() {
-    this.avatar = sessionStorage.getItem("avatar");
-    this.name = sessionStorage.getItem("name");
-    this.getYiYan();
-    // 消息
-    getMessages(0, 5).then(res => {
-      this.messages = res.data.content;
-    });
-    // 实验室最近AC变更
-    lastAc().then(res => {
-      this.lastAcs = res.data;
-    });
-    // 绩效
-    getPerformance().then(res => {
-      this.perf = res.data;
-    });
-    // 审核人未审核数
-    getUnCheckCnt().then(res => {
-      this.unCheckCnt = res.data;
-    });
-    // 获取ac排名
-    getAcSummary().then(res => {
-      this.aclist = res.data;
-    })
+    }
   },
   computed: {
     helloTime() {
-      return showHelloTime();
+      return showHelloTime()
     }
+  },
+  created() {
+    this.avatar = sessionStorage.getItem('avatar')
+    this.name = sessionStorage.getItem('name')
+    this.getYiYan()
+    // 消息
+    getMessages(0, 5).then(res => {
+      this.messages = res.data.content
+    })
+    // 实验室最近AC变更
+    lastAc().then(res => {
+      this.lastAcs = res.data
+    })
+    // 绩效
+    getPerformance().then(res => {
+      this.perf = res.data
+    })
+    // 审核人未审核数
+    getUnCheckCnt().then(res => {
+      this.unCheckCnt = res.data
+    })
+    // 获取ac排名
+    getAcSummary().then(res => {
+      this.aclist = res.data
+    })
   },
   methods: {
     getYiYan() {
       getYiYan().then(res => {
-        this.yiyan = res.data;
-      });
+        this.yiyan = res.data
+      })
     },
     goAc() {
       this.$router.push({
-        path: "/profile/index",
+        path: '/profile/index',
         query: {
-          tab: "actab"
+          tab: 'actab'
         }
-      });
+      })
     },
     goBug() {
       this.$router.push({
-        path: "/project/index",
+        path: '/project/index',
         query: {
-          tab: "userbug"
+          tab: 'userbug'
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

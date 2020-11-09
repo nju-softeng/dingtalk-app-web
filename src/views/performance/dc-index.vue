@@ -24,51 +24,51 @@
         :data="list"
         border
         style="margin-top:10px;"
-        height="77.5vh"
+        height="79vh"
         :header-cell-style="{ background: '#eef1f6' }"
       >
-        <el-table-column fixed label="学号" align="center" width="90">
+        <el-table-column fixed label="学号" align="center" >
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}
           </template>
         </el-table-column>
-        <el-table-column fixed prop="name" label="姓名" align="center" />
+        <el-table-column fixed prop="name" label="姓名" align="center" width="92" />
         <el-table-column label="助研金" align="center" width="82" prop="salary">
           <template slot-scope="{ row }">
             {{ row.salary || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第1周DC" align="center" width="92" prop="week1">
+        <el-table-column label="第1周DC" align="center"  prop="week1">
           <template slot-scope="{ row }">
             {{ row.week1 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第2周DC" align="center" width="92" prop="week2">
+        <el-table-column label="第2周DC" align="center"  prop="week2">
           <template slot-scope="{ row }">
             {{ row.week2 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第3周DC" align="center" width="92" prop="week2">
+        <el-table-column label="第3周DC" align="center"  prop="week2">
           <template slot-scope="{ row }">
             {{ row.week3 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第4周DC" align="center" width="92" prop="week3">
+        <el-table-column label="第4周DC" align="center"  prop="week3">
           <template slot-scope="{ row }">
             {{ row.week4 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第5周DC" align="center" width="92" prop="week4">
+        <el-table-column label="第5周DC" align="center"  prop="week4">
           <template slot-scope="{ row }">
             {{ row.week5 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="总DC" align="center" width="80" prop="week5">
+        <el-table-column label="总DC" align="center"  prop="week5">
           <template slot-scope="{ row }">
             {{ row.total || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="当前AC" align="center" width="85" prop="ac">
+        <el-table-column label="当前AC" align="center"  prop="ac">
           <template slot-scope="{ row }">
             {{ row.ac || '-' }}
           </template>
@@ -237,11 +237,18 @@ export default {
 }
 
 .box {
-  max-width: 1072px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;
   padding: 10px 15px;
   min-height: 89vh;
 }
+
+@media only screen and (min-width: 1501px) {
+  .box {
+    max-width: 1305px !important;
+  }
+}
+
 </style>

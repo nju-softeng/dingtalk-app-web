@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs tab-position="top" v-model="activeTab">
+      <el-tabs v-model="activeTab" tab-position="top">
         <el-tab-pane label="任务分配" name="assign" />
         <el-tab-pane label="bug管理" name="auditbug" />
         <el-tab-pane label="实验室所有项目" name="devlist" />
@@ -12,21 +12,21 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      activeTab: 'assign'
-    };
-  },
   components: {
     assign: () => import('../components/assign'),
     auditbug: () => import('../components/auditbug'),
     devlist: () => import('../components/devlist')
   },
+  data() {
+    return {
+      activeTab: 'assign'
+    }
+  },
   created() {
-    this.activeTab = this.$route.query.tab || 'assign';
+    this.activeTab = this.$route.query.tab || 'assign'
   },
   methods: {}
-};
+}
 </script>
 <style lang="scss" scoped>
 .dialog-content {
@@ -41,11 +41,18 @@ export default {
 }
 
 .box {
-  max-width: 1056px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   min-height: 530px;
   background: #fff;
   padding: 5px 20px 0 20px;
 }
+
+@media only screen and (min-width: 1501px) {
+  .box {
+    max-width: 1305px !important;
+  }
+}
+
 </style>

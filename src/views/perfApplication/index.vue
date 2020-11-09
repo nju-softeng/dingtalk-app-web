@@ -196,9 +196,15 @@ export default {
 .wrap1 {
   border: 1px solid #e8e8e8;
   border-radius: 2px;
-  max-width: 1056px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media only screen and (min-width: 1501px) {
+  .wrap1 {
+    max-width: 1305px !important;
+  }
 }
 
 .app-container {

@@ -3,23 +3,23 @@
     <div class="box-ac">
       <!-- AC排名 -->
       <el-card shadow="never" class="box-ac-card" style="width: 35%;">
-        <el-table class="table" ref="table" height="83vh" :data="list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" :header-cell-style="{ background: '#eef1f6' }">
-          <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="name" label="姓名"> </el-table-column>
-          <el-table-column prop="total" label="总AC"> </el-table-column>
+        <el-table ref="table" class="table" height="83vh" :data="list" highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }" @current-change="handleCurrentChange">
+          <el-table-column type="index" />
+          <el-table-column prop="name" label="姓名" />
+          <el-table-column prop="total" label="总AC" />
         </el-table>
       </el-card>
       <!-- 详细AC -->
-      <div class="box-ac-card" v-loading="loading" style="width: 65%;">
+      <div v-loading="loading" class="box-ac-card" style="width: 65%;">
         <!-- 标题 -->
         <div class="title">
           <span style="padding-right:20px">{{ name }} 的AC日志</span>
           <el-tag size="small">总AC: {{ ac }}</el-tag>
         </div>
         <!-- 详细AC -->
-        <el-scrollbar style="height: 93%;" v-if="aclist.length != 0">
+        <el-scrollbar v-if="aclist.length != 0" style="height: 93%;">
           <el-timeline>
-            <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in aclist" :key="index">
+            <el-timeline-item v-for="(item, index) in aclist" :key="index" :timestamp="item.create_time" placement="top">
               <div class="test">
                 <el-card shadow="never" class="ac-card">
                   <p>{{ item.reason }}</p>
@@ -34,7 +34,7 @@
             </el-timeline-item>
           </el-timeline>
         </el-scrollbar>
-        <div class="null" v-else>
+        <div v-else class="null">
           <svg-icon icon-class="null" style="font-size:32px" />
           <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
             无AC数据
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getAcSummary, listUserAc } from '@/api/performance';
+import { getAcSummary, listUserAc } from '@/api/performance'
 
 export default {
   data() {
@@ -56,47 +56,47 @@ export default {
       name: '',
       ac: '',
       aclist: []
-    };
+    }
   },
   computed: {
     getClassify() {
       return val => {
-        if (val == 0) return '周报申请';
-        else if (val == 1) return '项目AC';
-        else if (val == 2) return '论文AC';
-        else if (val == 4) return 'bug';
-        else return '投票AC';
-      };
+        if (val === 0) return '周报申请'
+        else if (val === 1) return '项目AC'
+        else if (val === 2) return '论文AC'
+        else if (val === 4) return 'bug'
+        else return '投票AC'
+      }
     }
   },
   created() {
     getAcSummary().then(res => {
-      this.list = res.data;
-      this.setCurrent(this.list[0]);
-      this.name = this.list[0].name;
-      this.ac = this.list[0].total;
+      this.list = res.data
+      this.setCurrent(this.list[0])
+      this.name = this.list[0].name
+      this.ac = this.list[0].total
       listUserAc(this.list[0].id).then(res => {
-        this.aclist = res.data;
-      });
-    });
+        this.aclist = res.data
+      })
+    })
   },
 
   methods: {
     setCurrent(row) {
-      this.$refs.table.setCurrentRow(row);
+      this.$refs.table.setCurrentRow(row)
     },
     handleCurrentChange(val) {
-      this.loading = true;
-      this.name = val.name;
-      this.ac = val.total;
+      this.loading = true
+      this.name = val.name
+      this.ac = val.total
       listUserAc(val.id).then(res => {
-        console.log(res.data);
-        this.aclist = res.data;
-        this.loading = false;
-      });
+        console.log(res.data)
+        this.aclist = res.data
+        this.loading = false
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .title {
@@ -104,8 +104,14 @@ export default {
   margin-bottom: 5px;
 }
 
+@media only screen and (min-width: 1501px) {
+  .box-ac {
+    max-width: 1305px !important;
+  }
+}
+
 .box-ac {
-  max-width: 1056px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   display: flex;

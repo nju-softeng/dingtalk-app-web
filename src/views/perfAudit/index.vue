@@ -3,26 +3,26 @@
     <div class="box">
       <el-tabs v-model="activetab">
         <el-tab-pane label="待审核" name="checking">
-          <span slot="label"><i class="el-icon-s-claim"></i> 待审核</span>
+          <span slot="label"><i class="el-icon-s-claim" /> 待审核</span>
         </el-tab-pane>
-        <el-tab-pane label="已审核" name="checked"> </el-tab-pane>
+        <el-tab-pane label="已审核" name="checked" />
       </el-tabs>
-      <component v-bind:is="activetab"></component>
+      <component :is="activetab" />
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      activetab: 'checking'
-    };
-  },
   components: {
     checking: () => import('./components/checking'),
     checked: () => import('./components/checked')
+  },
+  data() {
+    return {
+      activetab: 'checking'
+    }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -34,11 +34,18 @@ export default {
 }
 
 .box {
-  max-width: 1056px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;
   padding: 10px 15px;
   min-height: 530px;
 }
+
+@media only screen and (min-width: 1501px) {
+  .box {
+    max-width: 1305px !important;
+  }
+}
+
 </style>

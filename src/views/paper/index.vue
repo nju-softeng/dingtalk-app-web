@@ -515,8 +515,15 @@ export default {
 }
 
 .paper-box {
-  max-width: 1080px;
+  max-width: 1180px;
   margin-left: auto;
   margin-right: auto;
 }
+
+@media only screen and (min-width: 1501px) {
+  .paper-box  {
+    max-width: 1305px !important;
+  }
+}
+
 </style>

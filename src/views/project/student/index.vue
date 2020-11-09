@@ -43,11 +43,18 @@ export default {
 }
 
 .box {
-  max-width: 1056px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;
   padding: 5px 20px;
   min-height: 530px;
 }
+
+@media only screen and (min-width: 1501px) {
+  .box {
+    max-width: 1305px !important;
+  }
+}
+
 </style>

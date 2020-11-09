@@ -17,12 +17,12 @@
             <div v-for="(item, index) in report" :key="index" class="item">
               <h6>{{ item.key }}</h6>
               <p style="white-space: pre-line; font-size:14px">
-                <span v-html="formathtml(item.value)"></span>
+                <span v-html="formathtml(item.value)" />
               </p>
             </div>
             <div v-if="report == null" class="center">
               <div style="margin:8px 0px ">
-                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                <svg-icon icon-class="null" style="font-size:32px" /> <br>
               </div>
               <div style="margin-bottom:32px;color:#8c8c8c;font-size:12px;line-height:20px">
                 未获取到周报内容,可能原因：
@@ -33,7 +33,7 @@
             </div>
           </div>
 
-          <el-divider></el-divider>
+          <el-divider />
 
           <div class="ac-card">
             <el-table :data="form.acItems" tooltip-effect="dark">
@@ -49,7 +49,7 @@
                   <template v-if="row.edit">
                     <el-input v-model="row.ac" style="width:50px" />
                   </template>
-                  <span :class="{ text_span: !row.status }" v-else>{{
+                  <span v-else :class="{ text_span: !row.status }">{{
                     row.ac
                   }}</span>
                 </template>
@@ -87,7 +87,7 @@
           </div>
         </div>
 
-        <div style="height:78px;"></div>
+        <div style="height:78px;" />
 
         <div class="drawer_foot">
           <div style="padding:12px 8px 4px;font-size:12.5px">
@@ -100,11 +100,11 @@
           <div style="padding:8px 8px;font-size:12.5px">
             <span> C值：</span>
 
-            <el-input @input="valChange" v-model="form.cvalue" style="width:100px; margin-right:10px" placeholder="请输入内容"></el-input>
+            <el-input v-model="form.cvalue" style="width:100px; margin-right:10px" placeholder="请输入内容" @input="valChange" />
 
-            <el-button @click="submit" type="primary" size="mini">确认提交</el-button>
-            <el-button @click="prev" size="mini">上一条</el-button>
-            <el-button @click="next" size="mini">下一条</el-button>
+            <el-button type="primary" size="mini" @click="submit">确认提交</el-button>
+            <el-button size="mini" @click="prev">上一条</el-button>
+            <el-button size="mini" @click="next">下一条</el-button>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@
             <div v-else>
               <div style="height:100px;" class="center">
                 <div style="margin-top:10px; ">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>无AC申请</span>
@@ -151,8 +151,8 @@
 
         <div class="drawer_foot" style="height:48px">
           <div style="padding:8px 8px;font-size:12.5px">
-            <el-button @click="carryOn" type="primary" style="width:64%" size="mini">下一条</el-button>
-            <el-button @click="check = !check" style="width:33%" size="mini">编辑</el-button>
+            <el-button type="primary" style="width:64%" size="mini" @click="carryOn">下一条</el-button>
+            <el-button style="width:33%" size="mini" @click="check = !check">编辑</el-button>
           </div>
         </div>
       </div>
@@ -160,8 +160,21 @@
   </div>
 </template>
 <script>
-import { fetchReport, submitAudit } from "@/api/audit";
+import { fetchReport, submitAudit } from '@/api/audit'
 export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    temp: {
+      type: Object
+    },
+    load: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       visible: this.show,
@@ -177,125 +190,112 @@ export default {
         acItems: []
       },
       rules: {
-        cvalue: [{ required: true, message: "请输入C值", trigger: "blur" }]
+        cvalue: [{ required: true, message: '请输入C值', trigger: 'blur' }]
       }
-    };
-  },
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    temp: {
-      type: Object
-    },
-    load: {
-      type: Boolean,
-      default: false
-    }
-  },
-  watch: {
-    show() {
-      this.visible = this.show;
-      if (this.visible == false) {
-        this.$emit("drawer-event", "close");
-      }
-    },
-    temp() {
-      this.initData();
-      this.check = true;
     }
   },
   computed: {
     activeAcItems() {
-      return this.form.acItems.filter(item => item.status);
+      return this.form.acItems.filter(item => item.status)
+    }
+  },
+  watch: {
+    show() {
+      this.visible = this.show
+      if (this.visible === false) {
+        this.$emit('drawer-event', 'close')
+      }
+    },
+    temp() {
+      this.initData()
+      this.check = true
     }
   },
   methods: {
     formathtml(str) {
-      return str.replace(/\r\n\r\n/g, "<br/>");
+      return str.replace(/\r\n\r\n/g, '<br/>')
     },
     valChange() {
-      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
+      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4))
     },
     submit() {
-      console.log(this.form);
-      var regPos = /^\d+(\.\d+)?$/; // 正则表达式，是否为数字
+      console.log(this.form)
+      var regPos = /^\d+(\.\d+)?$/ // 正则表达式，是否为数字
       if (!regPos.test(this.form.cvalue)) {
         this.$message({
           showClose: true,
-          message: "请输入正确 C值",
-          type: "error"
-        });
-        return;
+          message: '请输入正确 C值',
+          type: 'error'
+        })
+        return
       }
       submitAudit(this.form).then(() => {
-        this.check = false;
-        this.$emit("drawer-event", "submit");
-      });
+        this.check = false
+        this.$emit('drawer-event', 'submit')
+      })
     },
     carryOn() {
-      this.$emit("drawer-event", "continue");
+      this.$emit('drawer-event', 'continue')
     },
     next() {
-      this.$emit("drawer-event", "next");
+      this.$emit('drawer-event', 'next')
     },
     prev() {
-      this.$emit("drawer-event", "prev");
+      this.$emit('drawer-event', 'prev')
     },
     initData() {
-      this.form.cvalue = this.temp.cvalue;
-      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4));
-      this.form.id = this.temp.id;
+      this.form.cvalue = this.temp.cvalue
+      this.form.dc = Number((this.form.cvalue * this.temp.dvalue).toFixed(4))
+      this.form.id = this.temp.id
       // 深拷贝
-      let tmp = JSON.parse(JSON.stringify(this.temp.acItems));
+      const tmp = JSON.parse(JSON.stringify(this.temp.acItems))
       // 给每一条ac申请添加编辑和拒绝属性
       this.form.acItems = tmp.map(v => {
-        this.$set(v, "edit", false);
-        this.$set(v, "reject", false);
-        v.originalAc = v.ac;
-        v.status = true;
-        return v;
-      });
+        this.$set(v, 'edit', false)
+        this.$set(v, 'reject', false)
+        v.originalAc = v.ac
+        v.status = true
+        return v
+      })
       this.form.ac = this.form.acItems
         .filter(item => item.status === true)
-        .reduce((sum, item) => sum + item.ac, 0);
-      this.form.ac = Number(this.form.ac.toFixed(4));
+        .reduce((sum, item) => sum + item.ac, 0)
+      this.form.ac = Number(this.form.ac.toFixed(4))
       fetchReport(this.temp.uid, this.temp.weekdate).then(res => {
-        this.report = res.data.contents;
-      });
+        this.report = res.data.contents
+      })
     },
     cancelEdit(row) {
-      row.ac = row.originalAc;
-      row.edit = false;
+      row.ac = row.originalAc
+      row.edit = false
       this.$message({
-        message: "The title has been restored to the AC value",
-        type: "warning"
-      });
+        message: 'The title has been restored to the AC value',
+        type: 'warning'
+      })
     },
     confirmEdit(row) {
-      row.edit = false;
-      row.ac *= 1;
-      row.originalAc = row.ac;
+      row.edit = false
+      row.ac *= 1
+      row.originalAc = row.ac
       this.form.ac = this.form.acItems
         .filter(item => item.status === true)
-        .reduce((sum, item) => sum + item.ac, 0);
-      this.form.ac = Number(this.form.ac.toFixed(4));
+        .reduce((sum, item) => sum + item.ac, 0)
+      this.form.ac = Number(this.form.ac.toFixed(4))
       this.$message({
-        message: "The AC has been edited",
-        type: "success"
-      });
+        message: 'The AC has been edited',
+        type: 'success'
+      })
     },
     rejectAcRow(row) {
-      row.reject = !row.reject;
-      row.status = !row.status;
+      row.reject = !row.reject
+      row.status = !row.status
       this.form.ac = this.form.acItems
         .filter(item => item.status === true)
-        .reduce((sum, item) => sum + item.ac, 0);
-      this.form.ac = Number(this.form.ac.toFixed(4));
+        .reduce((sum, item) => sum + item.ac, 0)
+      this.form.ac = Number(this.form.ac.toFixed(4))
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

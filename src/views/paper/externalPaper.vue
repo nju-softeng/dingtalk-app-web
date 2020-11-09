@@ -37,9 +37,11 @@
           </div>
         </div>
       </el-col>
-
     </el-row>
-
+    <div style="height:200px;text-align:center;margin-top: 180px">
+      <svg-icon icon-class="null" style="font-size:32px" />
+      <div style="font-size: 12px; color: #97a8be">空空如也~</div>
+    </div>
     <!-- 投稿结果  dialog -->
     <el-dialog
       title="录用结果"

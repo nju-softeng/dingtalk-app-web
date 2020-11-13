@@ -12,6 +12,56 @@
 
 <h1 align="center">Dingtalk Vue</h1>
 
+## 目标与期望
+
+基于钉钉微应用开发的实验室绩效管理系统，实现实验室的绩效、学分、论文评审管理与钉钉对接。  
+主要功能有：绩效、学分申请与审核，论文评审投票及学分管理，项目开发学分管理，实验室助研金计算等。
+
+## 涉及的技术
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://vuejs.org" target="_blank">
+          <img width="50px" src="https://vuejs.org/images/logo.png">
+        </a>
+        <p>Vue</p>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://nginx.org/en/docs/">
+          <img width="50px" src="https://avatars0.githubusercontent.com/u/1412239?s=200&v=4">
+        </a>
+        <p>MySQL 8</p>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://ding-doc.dingtalk.com/doc#/dev/swk0bg" target="_blank">
+          <img width="50px" src="https://i.loli.net/2020/11/13/DVpc9nF2JToQyHg.png">
+        </a>
+        <p>Dingtalk JSAPI</p>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://docs.docker.com/" target="_blank">
+          <img width="50px" src="https://i.loli.net/2020/11/13/27eyNzt698aoilM.png">
+        </a>
+        <p>Docker</p>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://docs.docker.com/compose/" target="_blank">
+          <img width="50px" src="https://i.loli.net/2020/11/13/TcewOXGMWHLiNtE.jpg">
+        </a>
+        <p>Docker Compose</p>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://github.com/features/actions" target="_blank">
+          <img width="50px" src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4">
+        </a>
+        <p>Github Actions</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  

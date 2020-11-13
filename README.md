@@ -32,7 +32,7 @@
         <a href="https://nginx.org/en/docs/">
           <img width="50px" src="https://avatars0.githubusercontent.com/u/1412239?s=200&v=4">
         </a>
-        <p>MySQL 8</p>
+        <p>Nginx</p>
       </td>
       <td align="center" valign="middle">
         <a href="https://ding-doc.dingtalk.com/doc#/dev/swk0bg" target="_blank">
@@ -61,6 +61,7 @@
     </tr>
   </tbody>
 </table>
+
 
 
 

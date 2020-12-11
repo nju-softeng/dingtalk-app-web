@@ -111,7 +111,7 @@
                 </div>
 
                 <div class="item">
-                  <router-link to="/paper/index">
+                  <router-link to="/paper/index/in-detail">
                     <el-button plain class="btn">论文管理</el-button>
                   </router-link>
                 </div>

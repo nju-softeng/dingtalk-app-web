@@ -87,7 +87,7 @@
             <el-card class="box-card" shadow="never" style="margin-bottom: 5px; ">
               <div class="shortcut">
                 <div class="item">
-                  <div style="padding: 5px 0; font-size: 14px">快捷导航 : </div>
+                  <div style="padding: 5px 0; font-size: 14px">快捷导航 >> </div>
                 </div>
                 <div class="item">
                   <router-link to="/performance/perfAudit">

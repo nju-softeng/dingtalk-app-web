@@ -78,6 +78,40 @@
       <div class="wrap">
         <el-row :gutter="5">
           <el-col :xs="24" :sm="16" :lg="16">
+            <!-- 快捷导航 -->
+            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+              <div class="shortcut">
+                <div class="item">
+                  <div style="padding: 5px 0; font-size: 14px">快捷导航 : </div>
+                </div>
+                <div class="item">
+                  <router-link to="/performance/perfApplication">
+                    <el-button plain class="btn">绩效申请</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/performance/performance_dc">
+                    <el-button plain class="btn">绩效汇总</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/performance/performance_ac">
+                    <el-button plain class="btn">AC汇总</el-button>
+                  </router-link>
+                </div>
+                <div class="item">
+                  <router-link to="/project/index">
+                    <el-button plain class="btn">迭代任务</el-button>
+                  </router-link>
+                </div>
+
+                <div class="item">
+                  <router-link to="/paper/index">
+                    <el-button plain class="btn">论文管理</el-button>
+                  </router-link>
+                </div>
+              </div>
+            </el-card>
             <!-- 消息面板 -->
             <el-card class="box-card" shadow="never">
               <!-- 消息卡片头 -->
@@ -109,48 +143,10 @@
             </el-card>
           </el-col>
           <el-col :xs="24" :sm="8" :lg="8">
-            <!-- 快捷导航 -->
-            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
-              <div slot="header" class="clearfix">
-                <span>快捷导航</span>
-              </div>
-              <div class="shortcut">
-                <div class="item">
-                  <router-link to="/performance/perfApplication">
-                    <el-button plain class="btn">绩效申请</el-button>
-                  </router-link>
-                </div>
-                <div class="item">
-                  <router-link to="/performance/performance_dc">
-                    <el-button plain class="btn">绩效汇总</el-button>
-                  </router-link>
-                </div>
-                <div class="item">
-                  <router-link to="/performance/performance_ac">
-                    <el-button plain class="btn">AC汇总</el-button>
-                  </router-link>
-                </div>
-                <div class="item">
-                  <router-link to="/project/index">
-                    <el-button plain class="btn">迭代任务</el-button>
-                  </router-link>
-                </div>
-
-                <div class="item">
-                  <router-link to="/paper/index">
-                    <el-button plain class="btn">论文管理</el-button>
-                  </router-link>
-                </div>
-              </div>
-            </el-card>
-
             <!-- AC排行 -->
             <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
-              <div slot="header" class="clearfix">
-                <span>AC排行</span>
-              </div>
               <el-table ref="table" class="table" height="83vh" :data="aclist" max-height="250" highlight-current-row style="width: 100%">
-                <el-table-column type="index" />
+                <el-table-column type="index" label="AC排行" width="90" align="center" />
                 <el-table-column prop="name" label="姓名" />
                 <el-table-column prop="total" label="总AC" />
               </el-table>
@@ -403,7 +399,7 @@ export default {
     padding-right: 15px;
   }
   .btn {
-    width: 82px;
+    width: 90px;
   }
 }
 

@@ -167,7 +167,7 @@
                   <el-button style="float: right; padding:0" type="text">查看详情</el-button>
                 </router-link>
               </div>
-              <el-carousel indicator-position="none" trigger="click" height="150px">
+              <el-carousel indicator-position="none" trigger="click" height="166px">
                 <el-carousel-item v-for="(item, index) in lastAcs" :key="index">
                   <div class="ac-card">
                     <div class="ac-head">

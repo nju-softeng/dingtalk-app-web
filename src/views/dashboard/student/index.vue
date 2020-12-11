@@ -81,10 +81,10 @@
             <!-- 快捷导航 -->
             <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
               <div class="shortcut">
-                <div class="item">
+                <div class="item hiden-s" >
                   <div style="padding: 5px 0; font-size: 14px">快捷导航 >> </div>
                 </div>
-                <div class="item">
+                <div class="item"  >
                   <router-link to="/performance/perfApplication">
                     <el-button plain class="btn">绩效申请</el-button>
                   </router-link>
@@ -340,6 +340,12 @@ export default {
   }
   .hello-text {
     padding-top: 0px !important;
+  }
+}
+
+@media only screen and (max-width: 940px) {
+  .hiden-s {
+    display: none !important;
   }
 }
 

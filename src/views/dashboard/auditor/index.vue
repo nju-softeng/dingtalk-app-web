@@ -86,7 +86,7 @@
             <!-- 快捷导航 -->
             <el-card class="box-card" shadow="never" style="margin-bottom: 5px; ">
               <div class="shortcut">
-                <div class="item">
+                <div class="item hiden-s">
                   <div style="padding: 5px 0; font-size: 14px">快捷导航 >> </div>
                 </div>
                 <div class="item">
@@ -360,6 +360,13 @@ export default {
   }
 
 }
+
+@media only screen and (max-width: 940px) {
+  .hiden-s {
+    display: none !important;
+  }
+}
+
 
 @media only screen and (min-width: 768px) {
   .auto {

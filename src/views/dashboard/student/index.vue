@@ -399,7 +399,7 @@ export default {
     padding-right: 15px;
   }
   .btn {
-    width: 90px;
+    width: 100%;
   }
 }
 

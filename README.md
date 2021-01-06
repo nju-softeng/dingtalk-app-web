@@ -24,13 +24,13 @@
     <tr>
       <td align="center" valign="middle">
         <a href="https://vuejs.org" target="_blank">
-          <img width="50px" src="https://vuejs.org/images/logo.png">
+          <img width="50px" src="https://i.loli.net/2021/01/06/gb8fl3B9hwvm2PZ.png">
         </a>
         <p>Vue</p>
       </td>
       <td align="center" valign="middle">
         <a href="https://nginx.org/en/docs/">
-          <img width="50px" src="https://avatars0.githubusercontent.com/u/1412239?s=200&v=4">
+          <img width="50px" src="https://i.loli.net/2021/01/06/S3N8E9xHfvb4hsC.png">
         </a>
         <p>Nginx</p>
       </td>
@@ -54,7 +54,7 @@
       </td>
       <td align="center" valign="middle">
         <a href="https://github.com/features/actions" target="_blank">
-          <img width="50px" src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4">
+          <img width="50px" src="https://i.loli.net/2021/01/06/EcsNSzQZl2TPyB6.png">
         </a>
         <p>Github Actions</p>
       </td>

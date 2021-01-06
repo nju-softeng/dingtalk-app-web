@@ -62,7 +62,7 @@
   </tbody>
 </table>
 
-+ jsapi 鉴权部分代码：https://github.com/zhanyeye/dingtalk-vue/blob/master/src/utils/dingtalk.js
++ jsapi 鉴权部分代码：[dingtalk.js](https://github.com/zhanyeye/dingtalk-vue/blob/master/src/utils/dingtalk.js)
 
 + 后端代码：https://github.com/zhanyeye/dingtalk-springboot
 

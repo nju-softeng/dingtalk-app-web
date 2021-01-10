@@ -36,8 +36,7 @@ export default {
 
 .app-container {
   padding: 16px;
-  background-color: #f5f5f5;
-  min-height: 95vh;
+  background-color: #fafafa;
 }
 
 .box {

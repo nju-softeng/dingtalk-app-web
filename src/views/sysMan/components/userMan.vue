@@ -20,7 +20,7 @@
         {{ item.name }}
       </span>
       <span
-        v-if="auditors.length == 0"
+        v-if="auditors.length === 0"
         style="margin:0 5px; font-size:13px;color: #999999"
       >
         未设置
@@ -82,7 +82,7 @@
       >
         <el-table-column label="学号" align="center">
           <template slot-scope="{ row }">
-            <span v-if="row.stuNum == undefined">未设置</span>
+            <span v-if="row.stuNum === undefined">未设置</span>
             <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
@@ -94,12 +94,12 @@
         <el-table-column align="center" label="职位">
           <template slot-scope="{ row }">
             {{ row.position }}
-            <span v-if="row.position == undefined">未设置</span>
+            <span v-if="row.position === undefined">未设置</span>
           </template>
         </el-table-column>
         <el-table-column prop="role" align="center" label="权限">
           <template slot-scope="{ row }">
-            <el-tag v-if="row.authority == 0" type="info">普通用户</el-tag>
+            <el-tag v-if="row.authority === 0" type="info">普通用户</el-tag>
             <el-tag v-else type="success">评审人</el-tag>
           </template>
         </el-table-column>
@@ -356,7 +356,7 @@ export default {
       this.fetchUserList(val - 1)
     },
     fetchUserList(page) {
-      if (page == undefined) {
+      if (page === undefined) {
         page = 0
       }
       queryUser(this.queryForm, page).then(res => {

@@ -129,7 +129,7 @@ export default {
   computed: {
     isAuditor() {
       return aid => {
-        if (aid == this.uid && this.role == 'auditor') {
+        if (aid === this.uid && this.role === 'auditor') {
           console.log('true')
           return true
         } else {
@@ -210,7 +210,6 @@ export default {
 .app-container {
   padding: 12px;
   background-color: #fafafa;
-  min-height: 92vh;
   border-radius: 0;
 }
 

@@ -345,7 +345,7 @@ export default {
 }
 .vote {
   background: #fff;
-  min-height: 80vh;
+  min-height: calc(100vh - 280px);
 }
 
 @media only screen and (max-width: 767px) {

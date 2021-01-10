@@ -398,7 +398,6 @@ export default {
 
 .dashboard-container {
   padding: 12px;
-  min-height: 92vh;
   background-color: #fafafa;
 
   /deep/ .el-card__body {

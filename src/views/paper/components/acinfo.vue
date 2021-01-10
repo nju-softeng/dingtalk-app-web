@@ -96,7 +96,7 @@ export default {
 <style lang="scss" scoped>
 .acinfo {
   background: #fff;
-  min-height: 80vh;
+  min-height: calc(100vh - 280px);
   padding: 20px;
   max-width: 1024px;
   margin-left: auto;

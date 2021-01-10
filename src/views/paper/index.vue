@@ -510,8 +510,7 @@ export default {
 }
 
 .app-container {
-  background-color: #f5f5f5;
-  min-height: 95vh;
+  background-color: #fafafa;
 }
 
 .paper-box {

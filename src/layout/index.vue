@@ -7,12 +7,13 @@
         <navbar />
       </div>
       <app-main />
+      <app-footer />
     </div>
   </div>
 </template>
 
 <script>
-import { AppMain, Navbar, Sidebar } from './components'
+import { AppMain, Navbar, Sidebar, AppFooter } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 
@@ -20,6 +21,7 @@ export default {
   name: 'Layout',
   components: {
     AppMain,
+    AppFooter,
     Navbar,
     Sidebar
   },
@@ -58,6 +60,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
+  background-color: #fafafa;
 
   &.mobile.openSidebar {
     position: fixed;

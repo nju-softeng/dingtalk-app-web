@@ -9,9 +9,9 @@
         <el-col :span="17" :xs="24">
           <div class="card">
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="周绩效日志" name="dctab"> </el-tab-pane>
-              <el-tab-pane label="AC日志" name="actab"> </el-tab-pane>
-              <el-tab-pane label="消息记录" name="msg"> </el-tab-pane>
+              <el-tab-pane label="周绩效日志" name="dctab" />
+              <el-tab-pane label="AC日志" name="actab" />
+              <el-tab-pane label="消息记录" name="msg" />
             </el-tabs>
             <component :is="activeTab" />
           </div>
@@ -22,43 +22,43 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import UserCard from "./components/UserCard";
+import { mapGetters } from 'vuex'
+import UserCard from './components/UserCard'
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   components: {
     UserCard,
-    dctab: () => import("./components/DcTab"),
-    actab: () => import("./components/AcTab"),
-    msg: () => import("./components/Message")
+    dctab: () => import('./components/DcTab'),
+    actab: () => import('./components/AcTab'),
+    msg: () => import('./components/Message')
   },
   data() {
     return {
       user: {},
-      activeTab: "dctab"
-    };
+      activeTab: 'dctab'
+    }
   },
   computed: {
-    ...mapGetters(["name", "avatar", "roles"])
+    ...mapGetters(['name', 'avatar', 'roles'])
   },
   created() {
-    this.getUser();
-    console.log(this.$route.query.tab);
-    this.activeTab = this.$route.query.tab || "dctab";
+    this.getUser()
+    console.log(this.$route.query.tab)
+    this.activeTab = this.$route.query.tab || 'dctab'
   },
   methods: {
     getUser() {
       this.user = {
         name: this.name,
         // role: this.roles.join(" | "),
-        email: "admin@test.com",
+        email: 'admin@test.com',
         avatar: this.avatar
-      };
-      console.log(this.user);
+      }
+      console.log(this.user)
     }
   }
-};
+}
 </script>
 <style lang="scss">
 .card {

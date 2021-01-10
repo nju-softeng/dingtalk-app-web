@@ -15,16 +15,16 @@
               <div class="info-item">
                 <span>投票意见 : </span>
                 <span>
-                  <el-tag class="tag" v-if="item.vote.result === true" type="success">ACCEPT</el-tag>
-                  <el-tag class="tag" v-else type="danger">REJECT</el-tag>
+                  <el-tag v-if="item.vote.result === true" class="tag" type="success">ACCEPT</el-tag>
+                  <el-tag v-else class="tag" type="danger">REJECT</el-tag>
                 </span>
               </div>
               <div class="info-item">
                 <span>录用结果 : </span>
                 <span>
-                  <el-tag class="tag" v-if="item.result === undefined" type="success">等待中</el-tag>
-                  <el-tag class="tag" v-else-if="item.result === true" type="success">ACCEPT</el-tag>
-                  <el-tag class="tag" v-else type="danger">REJECT</el-tag>
+                  <el-tag v-if="item.result === undefined" class="tag" type="success">等待中</el-tag>
+                  <el-tag v-else-if="item.result === true" class="tag" type="success">ACCEPT</el-tag>
+                  <el-tag v-else class="tag" type="danger">REJECT</el-tag>
                 </span>
               </div>
             </div>

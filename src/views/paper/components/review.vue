@@ -84,7 +84,6 @@ export default {
           })
         })
       }
-
     },
     edit(data) {
       data.edit = true

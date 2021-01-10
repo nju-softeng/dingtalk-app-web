@@ -4,18 +4,18 @@
       <el-aside width="170px" style="background-color:#fff; padding:0px">
         <el-menu default-active="userMan" class="menu" @select="handleSelect">
           <el-menu-item index="userMan">
-            <i class="el-icon-user"></i>
+            <i class="el-icon-user" />
             <span slot="title">用户管理</span>
           </el-menu-item>
 
           <el-menu-item index="confMan">
-            <i class="el-icon-menu"></i>
+            <i class="el-icon-menu" />
             <span slot="title">参数设置</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main style="padding-top:0px">
-        <component v-bind:is="activeName"></component>
+        <component :is="activeName" />
       </el-main>
     </el-container>
   </div>
@@ -23,24 +23,24 @@
 
 <script>
 export default {
-  name: "Tab",
-  data() {
-    return {
-      activeName: "userMan"
-    };
-  },
+  name: 'Tab',
 
   components: {
-    userMan: () => import("./components/userMan"),
-    confMan: () => import("./components/confMan")
+    userMan: () => import('./components/userMan'),
+    confMan: () => import('./components/confMan')
+  },
+  data() {
+    return {
+      activeName: 'userMan'
+    }
   },
   created() {},
   methods: {
     handleSelect(val) {
-      this.activeName = val;
+      this.activeName = val
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

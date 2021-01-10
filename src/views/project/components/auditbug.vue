@@ -3,10 +3,10 @@
     <div>
       <!-- 切换按钮 -->
       <div style="margin-bottom:10px;">
-        <el-radio-group v-model="radio" @change="changeRadio" size="mini">
-          <el-radio-button label="全部"></el-radio-button>
-          <el-radio-button label="待处理"></el-radio-button>
-          <el-radio-button label="已处理"></el-radio-button>
+        <el-radio-group v-model="radio" size="mini" @change="changeRadio">
+          <el-radio-button label="全部" />
+          <el-radio-button label="待处理" />
+          <el-radio-button label="已处理" />
         </el-radio-group>
       </div>
       <!-- bug表格 -->
@@ -39,7 +39,7 @@
               </span>
               <span v-if="scope.row.status">
                 bug责任人：
-                <el-tag effect="plain" v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" effect="plain" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
               </span>
             </p>
           </template>
@@ -48,7 +48,7 @@
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              <svg-icon icon-class="null" style="font-size:32px" /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>没有bug记录</span>
@@ -57,7 +57,7 @@
         </template>
       </el-table>
       <!-- 操作drawer -->
-      <el-drawer :visible.sync="drawer" @close="closeDrawer" :modal="false" direction="rtl" size="40%">
+      <el-drawer :visible.sync="drawer" :modal="false" direction="rtl" size="40%" @close="closeDrawer">
         <div slot="title">{{ tmp.title }}</div>
         <div class="content">
           <!-- bug 描述 -->
@@ -65,12 +65,11 @@
             <label style="color: #72767b;">bug 描述</label>
             <p>{{ tmp.description }}</p>
           </div>
-          <el-divider></el-divider>
+          <el-divider />
           <div style="margin-top:20px">
             <div>
               <label style="font-size:14px;"> bug 是否存在: </label>
-              <el-switch style="margin-right:10px" v-model="checkform.status" active-color="#ff4949" inactive-color="#13ce66">
-              </el-switch>
+              <el-switch v-model="checkform.status" style="margin-right:10px" active-color="#ff4949" inactive-color="#13ce66" />
               <el-tag v-if="checkform.status == true">存在bug</el-tag>
               <el-tag v-else>无bug</el-tag>
             </div>
@@ -79,15 +78,14 @@
                 <label style="font-size:14px;"> bug 所属迭代: </label>
 
                 <el-select v-model="iteration" placeholder="请选择">
-                  <el-option v-for="item in iterations" :key="item.id" :label="'第' + item.cnt + '次迭代'" :value="item">
-                  </el-option>
+                  <el-option v-for="item in iterations" :key="item.id" :label="'第' + item.cnt + '次迭代'" :value="item" />
                 </el-select>
               </div>
               <div>
                 <label style="font-size:14px;"> bug 主要负责人: </label>
                 <div style="margin:10px 0">
                   <el-radio-group v-model="principalradio">
-                    <el-radio :label="o.user.id" v-for="(o, index) in iteration.iterationDetails" :key="index">{{ o.user.name }}</el-radio>
+                    <el-radio v-for="(o, index) in iteration.iterationDetails" :key="index" :label="o.user.id">{{ o.user.name }}</el-radio>
                   </el-radio-group>
                 </div>
                 <el-alert type="info">
@@ -107,7 +105,7 @@
             </template>
           </div>
           <div class="drawer-footer">
-            <el-button style="width:50%" type="primary" @click="submitCheckBug" :loading="loading">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
+            <el-button style="width:50%" type="primary" :loading="loading" @click="submitCheckBug">{{ loading ? "提交中 ..." : "确 定" }}</el-button>
             <el-button style="width:50%" @click="drawer = false">取 消</el-button>
           </div>
         </div>
@@ -116,108 +114,108 @@
   </div>
 </template>
 <script>
-import { listAuditorBug, checkBug } from "@/api/bug.js";
-import { listProjectIteration } from "@/api/project.js";
+import { listAuditorBug, checkBug } from '@/api/bug.js'
+import { listProjectIteration } from '@/api/project.js'
 export default {
   data() {
     return {
-      uid: "",
+      uid: '',
       list: [],
       alllist: [],
       checklist: [],
       unchecklist: [],
-      radio: "全部",
+      radio: '全部',
       drawer: false,
       tmp: {},
-      principalradio: "",
+      principalradio: '',
       options: [],
       iterations: [],
       iteration: [],
       loading: false,
       checkform: {
-        id: "",
+        id: '',
         status: true,
-        iterationId: "",
-        uid: ""
+        iterationId: '',
+        uid: ''
       }
-    };
+    }
   },
   created() {
-    this.uid = sessionStorage.getItem("uid");
-    this.fetchAuditorBug();
+    this.uid = sessionStorage.getItem('uid')
+    this.fetchAuditorBug()
   },
   methods: {
     fetchAuditorBug() {
       listAuditorBug(this.uid).then(res => {
-        this.alllist = res.data;
-        this.checklist = res.data.filter(item => item.status != undefined);
-        this.unchecklist = res.data.filter(item => item.status == undefined);
-        if (this.radio == "全部") {
-          this.list = this.alllist;
-        } else if (this.radio == "待处理") {
-          this.list = this.unchecklist;
+        this.alllist = res.data
+        this.checklist = res.data.filter(item => item.status != undefined)
+        this.unchecklist = res.data.filter(item => item.status == undefined)
+        if (this.radio == '全部') {
+          this.list = this.alllist
+        } else if (this.radio == '待处理') {
+          this.list = this.unchecklist
         } else {
-          this.list = this.checklist;
+          this.list = this.checklist
         }
-      });
+      })
     },
     rowClick(val) {
-      this.drawer = true;
-      this.tmp = val;
-      this.checkform.id = this.tmp.id;
+      this.drawer = true
+      this.tmp = val
+      this.checkform.id = this.tmp.id
       listProjectIteration(val.project.id).then(res => {
-        this.iterations = res.data;
-      });
+        this.iterations = res.data
+      })
     },
     changeRadio(val) {
-      if (val == "全部") {
-        this.list = this.alllist;
-      } else if (val == "待处理") {
-        this.list = this.unchecklist;
+      if (val == '全部') {
+        this.list = this.alllist
+      } else if (val == '待处理') {
+        this.list = this.unchecklist
       } else {
-        this.list = this.checklist;
+        this.list = this.checklist
       }
     },
     submitCheckBug() {
-      console.log(this.iteration.id, this.principalradio);
+      console.log(this.iteration.id, this.principalradio)
 
       if (this.checkform.status == false) {
         checkBug(this.checkform).then(() => {
           this.fetchAuditorBug().then(() => {
             this.$message({
-              message: "提交成功",
-              type: "success"
-            });
-          });
-        });
+              message: '提交成功',
+              type: 'success'
+            })
+          })
+        })
       } else {
         if (this.iteration && this.principalradio) {
-          this.checkform.iterationId = this.iteration.id;
-          this.checkform.uid = this.principalradio;
+          this.checkform.iterationId = this.iteration.id
+          this.checkform.uid = this.principalradio
           this.$message({
-            message: "提交成功",
-            type: "success"
-          });
+            message: '提交成功',
+            type: 'success'
+          })
           checkBug(this.checkform).then(() => {
             this.fetchAuditorBug().then(() => {
               this.$message({
-                message: "提交成功",
-                type: "success"
-              });
-            });
-          });
+                message: '提交成功',
+                type: 'success'
+              })
+            })
+          })
         } else {
           this.$message({
             showClose: true,
-            message: "请将表单填写完整",
-            type: "error"
-          });
+            message: '请将表单填写完整',
+            type: 'error'
+          })
         }
       }
     },
     closeDrawer() {}
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .btable {

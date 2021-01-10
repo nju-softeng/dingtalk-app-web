@@ -149,7 +149,6 @@
           </el-col>
           <el-col :xs="24" :sm="8" :lg="8">
 
-
             <!-- AC排行 -->
             <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
               <el-table ref="table" class="table" height="83vh" :data="aclist" max-height="250" highlight-current-row style="width: 100%">
@@ -366,7 +365,6 @@ export default {
     display: none !important;
   }
 }
-
 
 @media only screen and (min-width: 768px) {
   .auto {

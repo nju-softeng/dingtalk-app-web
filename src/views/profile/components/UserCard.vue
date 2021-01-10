@@ -16,22 +16,27 @@
           </template>
           <template v-else>
             <div class="user-name text-center">
-              <el-input v-model="user.name" style="width:180px" placeholder="姓名"></el-input>
-              <el-input v-model="user.stuNum" style="width:180px;padding-top:10px" placeholder="学号"></el-input>
+              <el-input v-model="user.name" style="width:180px" placeholder="姓名" />
+              <el-input v-model="user.stuNum" style="width:180px;padding-top:10px" placeholder="学号" />
             </div>
           </template>
 
           <div class="text-center text-muted" style="padding-top:16px">
-            <el-button size="mini" style="width:180px" v-if="edit == false" @click="edit = true">编辑资料</el-button>
-            <el-button size="mini" style="width:180px" v-else @click="
+            <el-button v-if="edit == false" size="mini" style="width:180px" @click="edit = true">编辑资料</el-button>
+            <el-button
+              v-else
+              size="mini"
+              style="width:180px"
+              @click="
                 edit = false;
                 submitUserinfo();
-              ">确认</el-button>
+              "
+            >确认</el-button>
           </div>
         </div>
       </div>
 
-      <el-divider></el-divider>
+      <el-divider />
 
       <div style="height:100px">
         <div style="padding-left:30px;padding-top:20px;">
@@ -56,59 +61,59 @@
 </template>
 
 <script>
-import { getUserDetail, updateUserInfo } from "@/api/user";
-import { getPerformance } from "@/api/performance";
+import { getUserDetail, updateUserInfo } from '@/api/user'
+import { getPerformance } from '@/api/performance'
 export default {
   data() {
     return {
       edit: false,
       user: {
-        name: "",
-        avatar: "",
-        position: "",
-        stuNum: ""
+        name: '',
+        avatar: '',
+        position: '',
+        stuNum: ''
       },
       acTotal: null
-    };
+    }
   },
   created() {
-    this.avatar = sessionStorage.getItem("avatar");
+    this.avatar = sessionStorage.getItem('avatar')
     getUserDetail().then(res => {
-      this.user = res.data;
-    });
+      this.user = res.data
+    })
     getPerformance().then(res => {
-      this.acTotal = res.data.acTotal;
-    });
+      this.acTotal = res.data.acTotal
+    })
   },
   methods: {
     submitUserinfo() {
-      if (this.user.name == "") {
+      if (this.user.name == '') {
         this.$message({
           showClose: true,
-          message: "请填写必要信息",
-          type: "warning"
-        });
+          message: '请填写必要信息',
+          type: 'warning'
+        })
         getUserDetail().then(res => {
-          this.user = res.data;
-        });
-        return;
+          this.user = res.data
+        })
+        return
       }
       updateUserInfo(this.user)
         .then(() => {
           this.$message({
             showClose: true,
-            message: "更新成功",
-            type: "success"
-          });
+            message: '更新成功',
+            type: 'success'
+          })
         })
         .finally(() => {
           getUserDetail().then(res => {
-            this.user = res.data;
-          });
-        });
+            this.user = res.data
+          })
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

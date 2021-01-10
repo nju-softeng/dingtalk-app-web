@@ -44,8 +44,6 @@
 <script>
 import { getExPaper } from '@/api/ex-paper'
 
-
-
 export default {
   components: {
     review: () => import('./components/review'),
@@ -85,7 +83,7 @@ export default {
           }
         }
       }
-    },
+    }
   },
   created() {
     this.id = this.$route.params.id

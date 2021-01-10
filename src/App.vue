@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: "app"
-};
+  name: 'App'
+}
 </script>
 <style>
 body .el-table th.gutter{

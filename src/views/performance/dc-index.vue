@@ -27,7 +27,7 @@
         height="79vh"
         :header-cell-style="{ background: '#eef1f6' }"
       >
-        <el-table-column fixed label="学号" align="center" >
+        <el-table-column fixed label="学号" align="center">
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}
           </template>
@@ -38,37 +38,37 @@
             {{ row.salary || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第1周DC" align="center"  prop="week1">
+        <el-table-column label="第1周DC" align="center" prop="week1">
           <template slot-scope="{ row }">
             {{ row.week1 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第2周DC" align="center"  prop="week2">
+        <el-table-column label="第2周DC" align="center" prop="week2">
           <template slot-scope="{ row }">
             {{ row.week2 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第3周DC" align="center"  prop="week2">
+        <el-table-column label="第3周DC" align="center" prop="week2">
           <template slot-scope="{ row }">
             {{ row.week3 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第4周DC" align="center"  prop="week3">
+        <el-table-column label="第4周DC" align="center" prop="week3">
           <template slot-scope="{ row }">
             {{ row.week4 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第5周DC" align="center"  prop="week4">
+        <el-table-column label="第5周DC" align="center" prop="week4">
           <template slot-scope="{ row }">
             {{ row.week5 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="总DC" align="center"  prop="week5">
+        <el-table-column label="总DC" align="center" prop="week5">
           <template slot-scope="{ row }">
             {{ row.total || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="当前AC" align="center"  prop="ac">
+        <el-table-column label="当前AC" align="center" prop="ac">
           <template slot-scope="{ row }">
             {{ row.ac || '-' }}
           </template>
@@ -128,10 +128,10 @@ export default {
   },
   methods: {
     desc() {
-      this.fetchDcSummary(this.date, true);
+      this.fetchDcSummary(this.date, true)
     },
     asc() {
-      this.fetchDcSummary(this.date, false);
+      this.fetchDcSummary(this.date, false)
     },
     handleDownload() {
       this.downloadLoading = true

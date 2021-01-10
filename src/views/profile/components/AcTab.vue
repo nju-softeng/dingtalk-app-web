@@ -22,31 +22,31 @@
 </template>
 
 <script>
-import { listUserAc } from "@/api/performance";
+import { listUserAc } from '@/api/performance'
 export default {
   data() {
     return {
       list: []
-    };
+    }
   },
   computed: {
     getClassify() {
       return val => {
-        if (val == 0) return "周报申请";
-        else if (val == 1) return "项目AC";
-        else if (val == 2) return "论文AC";
-        else if (val == 4) return "bug 扣除AC";
-        else return "投票AC";
-      };
+        if (val == 0) return '周报申请'
+        else if (val == 1) return '项目AC'
+        else if (val == 2) return '论文AC'
+        else if (val == 4) return 'bug 扣除AC'
+        else return '投票AC'
+      }
     }
   },
   created() {
-    let uid = sessionStorage.getItem("uid");
+    const uid = sessionStorage.getItem('uid')
     listUserAc(uid).then(res => {
-      this.list = res.data;
-    });
+      this.list = res.data
+    })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

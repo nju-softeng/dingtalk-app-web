@@ -1,33 +1,33 @@
 <template>
   <div id="editor">
-    <mavon-editor style="height: 100%"></mavon-editor>
+    <mavon-editor style="height: 100%" />
   </div>
 </template>
 
 <script>
-import { mavonEditor } from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 export default {
-  name: "editor",
+  name: 'Editor',
   components: {
-    mavonEditor,
-  },
-  data() {
-    return {
-      visible: this.show,
-      childData: {},
-    };
+    mavonEditor
   },
   props: {
     show: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
+  },
+  data() {
+    return {
+      visible: this.show,
+      childData: {}
+    }
   },
   watch: {
     show() {
-      this.visible = this.show;
-    },
-  },
-};
+      this.visible = this.show
+    }
+  }
+}
 </script>

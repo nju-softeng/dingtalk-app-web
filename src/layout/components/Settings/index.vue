@@ -19,41 +19,41 @@
 <script>
 export default {
   data() {
-    return {};
+    return {}
   },
   computed: {
     fixedHeader: {
       get() {
-        return this.$store.state.settings.fixedHeader;
+        return this.$store.state.settings.fixedHeader
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "fixedHeader",
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'fixedHeader',
           value: val
-        });
+        })
       }
     },
     sidebarLogo: {
       get() {
-        return this.$store.state.settings.sidebarLogo;
+        return this.$store.state.settings.sidebarLogo
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "sidebarLogo",
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'sidebarLogo',
           value: val
-        });
+        })
       }
     }
   },
   methods: {
     themeChange(val) {
-      this.$store.dispatch("settings/changeSetting", {
-        key: "theme",
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'theme',
         value: val
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

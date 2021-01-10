@@ -7,38 +7,37 @@
         content="用户进入应用时会自动导入，权限默认为普通用户"
         placement="right"
       >
-        <el-button @click="refreshUser" type="primary">拉取钉钉用户</el-button>
+        <el-button type="primary" @click="refreshUser">拉取钉钉用户</el-button>
       </el-tooltip>
-      <span style="padding-left:100px;color: #999999; font-size:13px"
-        >当前评审人:</span
-      >
       <span
-        style="margin:0 5px; font-size:13px;color: #999999"
+        style="padding-left:100px;color: #999999; font-size:13px"
+      >当前评审人:</span>
+      <span
         v-for="(item, index) in auditors"
         :key="index"
+        style="margin:0 5px; font-size:13px;color: #999999"
       >
         {{ item.name }}
       </span>
       <span
-        style="margin:0 5px; font-size:13px;color: #999999"
         v-if="auditors.length == 0"
+        style="margin:0 5px; font-size:13px;color: #999999"
       >
         未设置
       </span>
     </div>
-    <el-divider></el-divider>
+    <el-divider />
     <div class="filtrate">
       <el-input
-        @change="search"
-        placeholder="姓名"
         v-model="queryForm.name"
+        placeholder="姓名"
         style="width:160px"
         clearable
-      >
-      </el-input>
+        @change="search"
+      />
       <el-select
-        style="margin-left:5px; width:160px"
         v-model="queryForm.position"
+        style="margin-left:5px; width:160px"
         clearable
         placeholder="在读学历"
       >
@@ -47,21 +46,19 @@
           :key="index"
           :label="item"
           :value="item"
-        >
-        </el-option>
+        />
       </el-select>
       <el-button
-        @click="search"
         style="margin-left:5px"
         size="mini"
         icon="el-icon-search"
-        >搜索</el-button
-      >
+        @click="search"
+      >搜索</el-button>
       <el-button
-        @click="refresh"
         size="mini"
         icon="el-icon-refresh-right"
         style="margin-left:5px"
+        @click="refresh"
       >
         重置
       </el-button>
@@ -70,8 +67,8 @@
         type="success"
         plain
         icon="el-icon-s-release"
-        @click="showDisableUser"
         style="float:right"
+        @click="showDisableUser"
       >
         停用名单
       </el-button>
@@ -110,23 +107,24 @@
           <template slot-scope="{ row }">
             <el-button
               type="text"
-              @click="editUserInfo(row)"
               style="padding-right:8px"
-              >编辑</el-button
-            >
+              @click="editUserInfo(row)"
+            >编辑</el-button>
 
             <el-popover
+              v-model="row.visible"
               placement="top"
               title="停用后用户将移除绩效列表"
               width="195"
               style="font-size:13px"
               trigger="click"
-              v-model="row.visible"
             >
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="row.visible = false"
-                  >取消</el-button
-                >
+                <el-button
+                  size="mini"
+                  type="text"
+                  @click="row.visible = false"
+                >取消</el-button>
                 <el-button
                   type="primary"
                   size="mini"
@@ -134,17 +132,16 @@
                     row.visible = false;
                     disableU(row.id);
                   "
-                  >确定</el-button
-                >
+                >确定</el-button>
               </div>
-              <el-button type="text" slot="reference">停用</el-button>
+              <el-button slot="reference" type="text">停用</el-button>
             </el-popover>
           </template>
         </el-table-column>
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              <svg-icon icon-class="null" style="font-size:32px" /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>无记录</span>
@@ -155,17 +152,16 @@
 
       <div style="margin-top:5px;display:flex; justify-content:center">
         <el-pagination
-          @prev-click="handlePrev"
-          @next-click="handleNext"
-          @current-change="handleCurrentChange"
           :hide-on-single-page="total < 10 ? true : false"
           small
           background
           layout="prev, pager, next"
           :total="total"
           :page-size="10"
-        >
-        </el-pagination>
+          @prev-click="handlePrev"
+          @next-click="handleNext"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
 
@@ -190,7 +186,7 @@
               v-model="userForm.stuNum"
               style="width:200px"
               placeholder="请输入学号"
-            ></el-input>
+            />
           </el-form-item>
           <el-form-item label="在读学位">
             <el-select
@@ -203,8 +199,7 @@
                 :key="index"
                 :label="item"
                 :value="item"
-              >
-              </el-option>
+              />
             </el-select>
           </el-form-item>
 
@@ -219,8 +214,7 @@
                 :key="index"
                 :label="item.label"
                 :value="item.value"
-              >
-              </el-option>
+              />
             </el-select>
           </el-form-item>
         </el-form>
@@ -244,7 +238,7 @@
             <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="name" label="姓名"></el-table-column>
+        <el-table-column property="name" label="姓名" />
         <el-table-column prop="role" label="权限">
           <template slot-scope="{ row }">
             <el-tag v-if="row.authority == 0" type="info">普通用户</el-tag>
@@ -268,8 +262,8 @@ import {
   disableUser,
   enableUser,
   queryDisableUser
-} from "@/api/system";
-import { listAuditors } from "@/api/user";
+} from '@/api/system'
+import { listAuditors } from '@/api/user'
 export default {
   data() {
     return {
@@ -282,117 +276,117 @@ export default {
       list: [],
       disablelist: [],
       queryForm: {
-        stuNum: "",
-        name: "",
-        position: "",
+        stuNum: '',
+        name: '',
+        position: '',
         authority: null
       },
       page: 0,
-      options: ["本科生", "硕士生", "博士生", "待定"],
+      options: ['本科生', '硕士生', '博士生', '待定'],
       authorityList: [
-        { label: "普通用户", value: 0 },
-        { label: "评审人", value: 1 }
+        { label: '普通用户', value: 0 },
+        { label: '评审人', value: 1 }
       ]
-    };
+    }
   },
   created() {
-    this.fetchUserList(0);
+    this.fetchUserList(0)
     listAuditors().then(res => {
-      this.auditors = res.data.auditorlist;
-    });
+      this.auditors = res.data.auditorlist
+    })
   },
   methods: {
     showDisableUser() {
-      this.disableDialog = true;
+      this.disableDialog = true
       queryDisableUser().then(res => {
-        this.disablelist = res.data;
-      });
+        this.disablelist = res.data
+      })
     },
     recoverU(uid) {
       enableUser(uid).then(() => {
         queryDisableUser().then(res => {
-          this.disablelist = res.data;
-        });
-        this.fetchUserList(this.page);
+          this.disablelist = res.data
+        })
+        this.fetchUserList(this.page)
         this.$message({
           showClose: true,
-          message: "恢复成功",
-          type: "success"
-        });
-      });
+          message: '恢复成功',
+          type: 'success'
+        })
+      })
     },
     disableU(uid) {
       disableUser(uid).then(() => {
-        this.fetchUserList(this.page);
+        this.fetchUserList(this.page)
         this.$message({
           showClose: true,
-          message: "禁用成功",
-          type: "success"
-        });
-      });
+          message: '禁用成功',
+          type: 'success'
+        })
+      })
     },
     editUserInfo(data) {
-      this.userForm = data;
-      this.dialog = true;
+      this.userForm = data
+      this.dialog = true
     },
     submitUserInfo() {
-      this.loading = true;
+      this.loading = true
       updateUserInfo(this.userForm).then(() => {
-        this.loading = false;
-        this.dialog = false;
-        this.fetchUserList(this.page);
+        this.loading = false
+        this.dialog = false
+        this.fetchUserList(this.page)
         this.$notify({
-          title: "成功",
-          message: this.userForm.name + " 的信息保存成功",
-          position: "bottom-right",
-          type: "success"
-        });
-      });
+          title: '成功',
+          message: this.userForm.name + ' 的信息保存成功',
+          position: 'bottom-right',
+          type: 'success'
+        })
+      })
     },
 
     // 分页获取数据
     handleCurrentChange(val) {
-      this.page = val - 1;
-      this.fetchUserList(val - 1);
+      this.page = val - 1
+      this.fetchUserList(val - 1)
     },
     handlePrev(val) {
-      this.fetchUserList(val - 1);
+      this.fetchUserList(val - 1)
     },
     handleNext(val) {
-      this.fetchUserList(val - 1);
+      this.fetchUserList(val - 1)
     },
     fetchUserList(page) {
       if (page == undefined) {
-        page = 0;
+        page = 0
       }
       queryUser(this.queryForm, page).then(res => {
-        this.list = res.data.content;
-        this.total = res.data.total;
-        console.log(this.list);
-      });
+        this.list = res.data.content
+        this.total = res.data.total
+        console.log(this.list)
+      })
     },
     search() {
-      this.fetchUserList(0);
+      this.fetchUserList(0)
     },
     refresh() {
       this.queryForm = {
-        name: "",
-        position: ""
-      };
-      this.fetchUserList(0);
+        name: '',
+        position: ''
+      }
+      this.fetchUserList(0)
     },
     // 拉取用户信息
     refreshUser() {
       fetchAllUser().then(() => {
         this.$message({
-          message: "拉取成功",
-          type: "success"
-        });
-        this.fetchUserList(0);
-      });
+          message: '拉取成功',
+          type: 'success'
+        })
+        this.fetchUserList(0)
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .filtrate {

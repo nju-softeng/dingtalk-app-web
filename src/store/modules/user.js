@@ -1,60 +1,60 @@
 import {
   login,
   getInfo
-} from "@/api/user";
+} from '@/api/user'
 import {
   test_login
-} from "@/api/user"; //测试登陆
+} from '@/api/user' // 测试登陆
 
-//import router, { resetRouter } from "@/router";
+// import router, { resetRouter } from "@/router";
 
 const state = {
-  token: sessionStorage.getItem("token") ? sessionStorage.getItem("token") : "", // 认证凭证'
-  name: "",
-  uid: "",
+  token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '', // 认证凭证'
+  name: '',
+  uid: '',
   roles: [],
-  avatar: "",
-  introduce: ""
-};
+  avatar: '',
+  introduce: ''
+}
 
 const mutations = {
   SET_TOKEN: (state, token) => {
-    state.token = token;
-    sessionStorage.setItem("token", token);
+    state.token = token
+    sessionStorage.setItem('token', token)
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
-    sessionStorage.setItem("avatar", avatar);
+    state.avatar = avatar
+    sessionStorage.setItem('avatar', avatar)
   },
   SET_UID: (state, uid) => {
-    state.uid = uid;
+    state.uid = uid
   },
   SET_ROLES: (state, roles) => {
-    state.roles = roles;
+    state.roles = roles
   },
   SET_NAME: (state, name) => {
-    state.name = name;
-    sessionStorage.setItem("name", name);
+    state.name = name
+    sessionStorage.setItem('name', name)
   },
   SET_INTRODUCE: (state, payload) => {
-    state.introduce = payload;
+    state.introduce = payload
   },
   DEL_TOKEN: state => {
-    state.token = "";
-    state.name = "";
-    state.roles = "";
-    state.introduce = "";
-    sessionStorage.removeItem("token");
+    state.token = ''
+    state.name = ''
+    state.roles = ''
+    state.introduce = ''
+    sessionStorage.removeItem('token')
   }
-};
+}
 
 function getRoles(role) {
-  if (role === "6983f953b49c88210cb9") {
-    return "admin"; // 管理员
-  } else if (role === "bb63e5f7e0f2ffae845c") {
-    return "normal"; // 研究生
+  if (role === '6983f953b49c88210cb9') {
+    return 'admin' // 管理员
+  } else if (role === 'bb63e5f7e0f2ffae845c') {
+    return 'normal' // 研究生
   } else {
-    return "auditor"; // 博士生，管理员
+    return 'auditor' // 博士生，管理员
   }
 }
 
@@ -63,24 +63,24 @@ const actions = {
   _login({
     commit
   }, authcode) {
-    console.log("action login");
+    console.log('action login')
     return new Promise((resolve, reject) => {
       login(authcode)
         .then(response => {
-          if (response.headers["token"] != null) {
-            commit("SET_TOKEN", response.headers.token);
-            commit("SET_UID", response.headers.uid);
+          if (response.headers['token'] != null) {
+            commit('SET_TOKEN', response.headers.token)
+            commit('SET_UID', response.headers.uid)
 
-            sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
-            sessionStorage.setItem("role", getRoles(response.headers["role"]));
-            sessionStorage.setItem("uid", response.headers["uid"]);
-            resolve();
+            sessionStorage.setItem('token', response.headers['token']) // 登录成功后将token存储在sessionStorage中
+            sessionStorage.setItem('role', getRoles(response.headers['role']))
+            sessionStorage.setItem('uid', response.headers['uid'])
+            resolve()
           }
         })
         .catch(error => {
-          reject(error);
-        });
-    });
+          reject(error)
+        })
+    })
   },
   // get user info
   _getInfo({
@@ -92,48 +92,48 @@ const actions = {
         .then(response => {
           const {
             data
-          } = response;
+          } = response
 
-          if (!data) reject("Verification failed, please Login again.");
+          if (!data) reject('Verification failed, please Login again.')
 
-          commit("SET_NAME", data.name);
-          commit("SET_AVATAR", data.avatar);
-          commit("SET_ROLES", sessionStorage.getItem("role"));
-          resolve();
+          commit('SET_NAME', data.name)
+          commit('SET_AVATAR', data.avatar)
+          commit('SET_ROLES', sessionStorage.getItem('role'))
+          resolve()
         })
         .catch(error => {
-          console.log("getinfo error");
-          reject(error);
-        });
-    });
+          console.log('getinfo error')
+          reject(error)
+        })
+    })
   },
 
   test_login({
     commit
   }, uid) {
-    console.log("test login");
+    console.log('test login')
     return new Promise((resolve, reject) => {
       test_login(uid)
         .then(response => {
-          if (response.headers["token"] != null) {
-            commit("SET_TOKEN", response.headers.token);
-            sessionStorage.setItem("token", response.headers["token"]); // 登录成功后将token存储在sessionStorage中
-            sessionStorage.setItem("role", getRoles(response.headers["role"]));
-            console.log(sessionStorage.getItem("role"));
-            sessionStorage.setItem("uid", response.headers["uid"]);
-            resolve();
+          if (response.headers['token'] != null) {
+            commit('SET_TOKEN', response.headers.token)
+            sessionStorage.setItem('token', response.headers['token']) // 登录成功后将token存储在sessionStorage中
+            sessionStorage.setItem('role', getRoles(response.headers['role']))
+            console.log(sessionStorage.getItem('role'))
+            sessionStorage.setItem('uid', response.headers['uid'])
+            resolve()
           }
         })
         .catch(error => {
-          reject(error);
-        });
-    });
+          reject(error)
+        })
+    })
   }
-};
+}
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions
-};
+}

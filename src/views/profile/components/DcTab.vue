@@ -8,7 +8,7 @@
     </template>
 
     <!-- 内容列表 -->
-    <div class="post" v-for="(dc, index) in list" :key="index" style="display:flex; justify-content:space-between">
+    <div v-for="(dc, index) in list" :key="index" class="post" style="display:flex; justify-content:space-between">
       <div>
         <span style="padding-right:15px;color: #1890ff;">{{
           dc.yearmonth | formatWeek(dc.week)
@@ -32,50 +32,49 @@
 
     <!-- 分页按钮 -->
     <div style=" text-align:center">
-      <el-pagination @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next" :total="total" :page-size="10">
-      </el-pagination>
+      <el-pagination background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next" :total="total" :page-size="10" @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
 
 <script>
-import { getUserApplication } from "@/api/application";
+import { getUserApplication } from '@/api/application'
 
 export default {
   data() {
     return {
       list: [],
       total: 0
-    };
+    }
   },
   created() {
     getUserApplication(1, 10).then(res => {
-      this.list = res.data.list || [];
-      this.total = res.data.total || 0;
-      console.log(this.total);
-      console.log(this.list);
-    });
+      this.list = res.data.list || []
+      this.total = res.data.total || 0
+      console.log(this.total)
+      console.log(this.list)
+    })
   },
 
   methods: {
     // 分页获取数据
     handleCurrentChange(val) {
       getUserApplication(val, 10).then(res => {
-        this.list = res.data.list;
-      });
+        this.list = res.data.list
+      })
     },
     handlePrev(val) {
       getUserApplication(val, 10).then(res => {
-        this.list = res.data.list;
-      });
+        this.list = res.data.list
+      })
     },
     handleNext(val) {
       getUserApplication(val, 10).then(res => {
-        this.list = res.data.list;
-      });
+        this.list = res.data.list
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

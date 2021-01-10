@@ -95,10 +95,10 @@
               :hide-on-single-page="total < 10 ? true : false"
               small
               layout="prev, pager, next"
-              @prev-click="handlePrev"
               :total="total"
-              @next-click="handleNext"
               :page-size="10"
+              @prev-click="handlePrev"
+              @next-click="handleNext"
               @current-change="handleCurrentChange"
             />
           </div>

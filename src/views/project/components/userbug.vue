@@ -31,7 +31,7 @@
               </span>
               <span v-if="scope.row.status">
                 bug责任人：
-                <el-tag effect="plain" v-for="(item, index) in scope.row.bugDetails" :key="index" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" effect="plain" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
               </span>
             </p>
           </template>
@@ -40,7 +40,7 @@
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              <svg-icon icon-class="null" style="font-size:32px" /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>没有bug记录</span>
@@ -52,24 +52,24 @@
   </div>
 </template>
 <script>
-import { listUserBug } from "@/api/bug.js";
+import { listUserBug } from '@/api/bug.js'
 export default {
   data() {
     return {
       list: []
-    };
+    }
   },
   created() {
-    this.fetchUserBug();
+    this.fetchUserBug()
   },
   methods: {
     fetchUserBug() {
       listUserBug().then(res => {
-        this.list = res.data;
-      });
+        this.list = res.data
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .btable {

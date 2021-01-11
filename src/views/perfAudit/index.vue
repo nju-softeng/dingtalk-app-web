@@ -29,7 +29,6 @@ export default {
 .app-container {
   padding: 10px 12px;
   background-color: #fafafa;
-  min-height: 92vh;
   border-radius: 0;
 }
 

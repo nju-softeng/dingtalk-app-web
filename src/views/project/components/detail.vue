@@ -378,7 +378,7 @@ export default {
 .app-container {
   padding: 10px 20px;
   background-color: #f5f5f5;
-  min-height: 92vh;
+  //min-height: 92vh;
 }
 
 .content {

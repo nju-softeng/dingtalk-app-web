@@ -377,7 +377,7 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   padding: 10px 20px;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
   //min-height: 92vh;
 }
 

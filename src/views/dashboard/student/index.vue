@@ -356,13 +356,13 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1200px) and (max-width:1500px) {
+@media only screen and (min-width: 1200px) and (max-width:1400px) {
   .wrap {
     max-width: 96%;
   }
 }
 
-@media only screen and (min-width: 1501px) {
+@media only screen and (min-width: 1401px) {
   .wrap {
     max-width: 1305px;
   }

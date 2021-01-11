@@ -48,7 +48,7 @@ export default {
   padding: 5px 20px 0 20px;
 }
 
-@media only screen and (min-width: 1501px) {
+@media only screen and (min-width: 1400px) {
   .box {
     max-width: 1305px !important;
   }

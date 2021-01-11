@@ -41,7 +41,7 @@ export default {
   min-height: 530px;
 }
 
-@media only screen and (min-width: 1501px) {
+@media only screen and (min-width: 1400px) {
   .box {
     max-width: 1305px !important;
   }

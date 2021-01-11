@@ -166,7 +166,7 @@ export default {
     // 投票百分比
     getpercentage() {
       return (val, total) => {
-        if (total == 0) {
+        if (total === 0) {
           return 0
         }
         return (val / total) * 100
@@ -175,7 +175,7 @@ export default {
     // 投票百分比数值
     getNum() {
       return (val, total) => {
-        if (total == 0) {
+        if (total === 0) {
           return 0
         }
         return (val / total).toFixed(2) * 100
@@ -293,7 +293,7 @@ export default {
           console.log('websocket 接收到数据：')
           const data = JSON.parse(e.data)
           // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
-          if (data.vid == that.vid) {
+          if (data.vid === that.vid) {
             that.total = data.total
             that.accept = data.accept
             that.reject = data.reject
@@ -315,7 +315,7 @@ export default {
           this.total = res.data.total
         })
         .catch(error => {
-          if (error.response.data.status == 409) {
+          if (error.response.data.status === 409) {
             this.fetchVoteDetail()
             console.log('?????')
           }

@@ -201,7 +201,7 @@ export default {
   margin-right: auto;
 }
 
-@media only screen and (min-width: 1501px) {
+@media only screen and (min-width: 1400px) {
   .wrap1 {
     max-width: 1305px !important;
   }

@@ -118,7 +118,7 @@ export default {
   computed: {
     getlevel() {
       return val => {
-        const tmp = this.level.find(item => item.value == val)
+        const tmp = this.level.find(item => item.value === val)
         if (tmp !== undefined) {
           return tmp.label
         }

@@ -84,11 +84,25 @@
 
 ![dc-performance.png](https://i.loli.net/2021/01/11/FtAC8vXzpsLOd5P.png)
 
-![image.png](https://i.loli.net/2020/12/12/IvsNdQ9KkZBlpT8.png)
+![ac-performance.png](https://i.loli.net/2021/01/11/5feZ8Fq9orXByjW.png)
 
-![image.png](https://i.loli.net/2020/12/12/cG7tL5e94HihkAF.png)
+![dev.png](https://i.loli.net/2021/01/11/dCVWusnbYPhSy6t.png)
 
-![image.png](https://i.loli.net/2020/12/12/mIoQOu7rX9kp8Na.png)
+![project-detail-1.png](https://i.loli.net/2021/01/11/w8Tr7lUkK1pOaL9.png)
+
+![project-detail-2.png](https://i.loli.net/2021/01/11/UihclBsEJA5wZab.png)
+
+![internal-paper.png](https://i.loli.net/2021/01/11/9DGUjCxaEtwLiXB.png)
+
+![external-paper.png](https://i.loli.net/2021/01/11/q9o5SJebyzXTnxc.png)
+
+![paper-vote.png](https://i.loli.net/2021/01/11/tw93lMKudijVUoC.png)
+
+![paper-review.png](https://i.loli.net/2021/01/11/BOLgIvl83eGtkEp.png)
+
+![sys-user.png](https://i.loli.net/2021/01/11/Tj58pg2qlW4ROtu.png)
+
+![sys-settings.png](https://i.loli.net/2021/01/11/6vDWPdhtonur4Tf.png)
 
 <img align="left" width="250" height="auto" src="https://i.loli.net/2020/12/12/j4s6RKzX7JTqyiM.png"/> 
 <img align="left" width="250" height="auto" src="https://i.loli.net/2020/12/12/FTiDv3c1HGk5eKM.png"/> 

@@ -259,7 +259,7 @@ export default {
   },
   computed: {
     permission() {
-      return this.authorid == this.uid
+      return this.authorid === this.uid
     }
   },
   created() {
@@ -304,7 +304,7 @@ export default {
       })
     },
     newIteration() {
-      if (this.ilist.length == 0 || this.ilist[0].status) {
+      if (this.ilist.length === 0 || this.ilist[0].status) {
         this.tmp = null
         this.idialog_show = true
       } else {

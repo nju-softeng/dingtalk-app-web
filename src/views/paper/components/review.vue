@@ -20,7 +20,7 @@
           <div style="padding-top: 16px; padding-bottom: 8px">
             <span style="font-size:14px;">{{ item.user.name }} </span>
             <span style=" font-size:12px; color:#595959; padding:8px"> {{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-            <template v-if="uid === item.user.id">
+            <template v-if="uid == item.user.id">
               <el-button type="text" style="margin-right:4px" @click="item.edit = true">编辑</el-button>
               <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="确定删除吗？" @onConfirm="remove(item.id)">
                 <el-button slot="reference" type="text">删除</el-button>

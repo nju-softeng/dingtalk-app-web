@@ -102,7 +102,7 @@
                   <el-button type="text" @click="modifyIterate(scope.$index, scope.row)">修改</el-button>
                 </template>
 
-                <el-popconfirm confirm-button-type="danger" confirm-button-text="删除" cancel-button-text="取消" icon="el-icon-info" icon-color="red" title="AC记录也会被删除,谨慎操作" @onConfirm="handledDelete(scope.$index, scope.row)">
+                <el-popconfirm confirm-button-type="danger" confirm-button-text="删除" cancel-button-text="取消" icon="el-icon-info" icon-color="red" title="AC记录也会被删除,谨慎操作" @confirm="handledDelete(scope.$index, scope.row)">
                   <el-button slot="reference" style="margin-left:10px;" type="text">删除</el-button>
                 </el-popconfirm>
               </template>

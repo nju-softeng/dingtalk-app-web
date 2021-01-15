@@ -79,7 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  height: 48px;
   overflow: hidden;
   position: relative;
   background: #fff;
@@ -91,7 +91,7 @@ export default {
   }
 
   .hamburger-container {
-    line-height: 50px;
+    line-height: 48px;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -115,7 +115,7 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
+    line-height: 48px;
 
     &:focus {
       outline: none;

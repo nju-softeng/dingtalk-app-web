@@ -98,8 +98,8 @@ export default {
 .menu-item {
   text-align: center;
 
-  height: 50px;
-  line-height: 50px;
+  height: 48px;
+  line-height: 48px;
 }
 .svg-icon {
   margin-right: 5px;

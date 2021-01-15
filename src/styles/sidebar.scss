@@ -8,8 +8,8 @@
 
   .el-submenu__title {
     font-size: 14px;
-    height: 50px;
-    line-height: 50px;
+    height: 48px;
+    line-height: 48px;
   }
 
   .sidebar-container {
@@ -47,7 +47,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 48px);
       }
     }
 
@@ -78,8 +78,8 @@
         background-color: $menuHover !important;
       }
 
-      height: 50px;
-      line-height: 50px;
+      height: 48px;
+      line-height: 48px;
     }
 
     .is-active>.el-submenu__title {

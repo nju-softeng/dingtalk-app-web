@@ -19,7 +19,6 @@ jobs:
           script: |
             cd ~/dingtalk/dingtalk-vue/
             git pull origin test
-            npm install -g cnpm --registry=https://registry.npm.taobao.org
             cnpm install
             npm run build:stage
             cd ~/dingtalk

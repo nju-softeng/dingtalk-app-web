@@ -187,7 +187,7 @@ export default {
         if (total === 0) {
           return 0
         }
-        return (val / total).toFixed(2) * 100
+        return (val / total * 100).toFixed(1)
       }
     }
   },

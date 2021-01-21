@@ -40,7 +40,7 @@
     </div>
 
     <!-- 投票div -->
-    <div v-else-if="showAns == false" v-loading="loading" class="poll">
+    <div v-else-if="showAns  == false " v-loading="loading" class="poll">
       <div style="padding:10px; font-size:12px">
         <svg-icon icon-class="date" /> 投票截止
         {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
@@ -49,17 +49,25 @@
           <svg-icon style="margin-left:8px" icon-class="hint" />
         </el-tooltip>
       </div>
-      <div>
-        <div class="choice">
-          <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
+      <div v-if="!isVoted">
+        <div>
+          <div class="choice">
+            <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
+          </div>
+          <div class="choice">
+            <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
+          </div>
         </div>
-        <div class="choice">
-          <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
+        <div style="padding:10px">
+          <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
         </div>
       </div>
-      <div style="padding:10px">
-        <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
+      <div v-else>
+        <div style="padding:10px">
+          <el-button style="width:100%" size="medium" type="success" plain >您的投票结果: {{ myresult ? "Accept" : "Reject" }}, 请耐心等待</el-button>
+        </div>
       </div>
+
     </div>
     <!-- 投票结果 -->
     <div v-if="showAns == true" class="poll">
@@ -131,7 +139,7 @@
   </div>
 </template>
 <script>
-import { getPaperVote, getVoteDetailByVid, createVote, addpoll } from '@/api/paper'
+import { getPaperVote, getVoteDetailByVid, createVote, addPoll } from '@/api/paper'
 import { getExPaperVote } from '@/api/ex-paper'
 export default {
   data() {
@@ -153,7 +161,8 @@ export default {
       vid: '',
       accept: '',
       reject: '',
-      isEnd: 'false',
+      isEnd: false,
+      isVoted: false,
       acceptlist: [],
       rejectlist: [],
       unvotelist: [],
@@ -253,17 +262,19 @@ export default {
         getVoteDetailByVid(this.vote.id).then(res => {
           console.log('获取投票详情数据')
           console.log(res.data)
+          this.isVoted = res.data.myresult !== undefined
           this.showAns = res.data.status
           this.vid = res.data.vid
           if (this.showAns) {
             this.accept = res.data.accept
             this.reject = res.data.reject
             this.total = res.data.total
-            this.myresult = res.data.result
+            this.myresult = res.data.myresult
             this.acceptlist = res.data.acceptnames
             this.rejectlist = res.data.rejectnames
             this.unvotelist = res.data.unvotenames || []
           }
+          console.log(this.isVoted)
           resolve()
         }).catch(error => {
           reject(error)
@@ -294,6 +305,10 @@ export default {
           const data = JSON.parse(e.data)
           // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
           if (data.vid === that.vid) {
+            if (data.isEnd) {
+              that.fetchVoteDetail()
+              return
+            }
             that.total = data.total
             that.accept = data.accept
             that.reject = data.reject
@@ -306,18 +321,18 @@ export default {
     voting() {
       this.pollform.vid = this.vote.id
       this.loading = true
-      addpoll(this.vote.id, this.pollform)
+      addPoll(this.vote.id, this.pollform)
         .then(res => {
-          this.showAns = true
-          this.myresult = res.data.result
+          // this.showAns = true
+          this.myresult = res.data.myresult
           this.accept = res.data.accept
           this.reject = res.data.reject
           this.total = res.data.total
+          this.isVoted = true
         })
         .catch(error => {
           if (error.response.data.status === 409) {
             this.fetchVoteDetail()
-            console.log('?????')
           }
         })
         .finally(() => {

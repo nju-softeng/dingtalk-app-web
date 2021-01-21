@@ -1,9 +1,21 @@
 import axios from '@/utils/request'
 
+const api = {
+  addPaper: '/paper',
+  listPaper: (page, size) => `/paper/page/${page}/${size}`,
+  getPaper: id => `/paper/${id}`,
+  createVote: '/vote',
+  getPaperVote: pid => `/paper/${pid}/vote`,
+  getVoteDetailByPid: pid => `/vote/paper/${pid}/detail`,
+  getVoteDetailByVid: vid => `/vote/${vid}/detail`,
+  addPoll: vid => `/vote/${vid}`
+
+}
+
 // 添加论文
 export function addPaper(data) {
   return axios({
-    url: '/paper',
+    url: api.addPaper,
     method: 'post',
     data
   })
@@ -12,7 +24,7 @@ export function addPaper(data) {
 // 分页查询论文
 export function listPaper(page, size) {
   return axios({
-    url: '/paper/page/' + page + '/' + size,
+    url: api.listPaper(page, size),
     method: 'get'
   })
 }
@@ -20,7 +32,7 @@ export function listPaper(page, size) {
 // 获取某个论文的详细信息
 export function getPaper(id) {
   return axios({
-    url: '/paper/' + id,
+    url: api.getPaper(id),
     method: 'get'
   })
 }
@@ -28,7 +40,7 @@ export function getPaper(id) {
 // 创建投票
 export function createVote(data) {
   return axios({
-    url: '/vote',
+    url: api.createVote,
     method: 'post',
     data
   })
@@ -37,7 +49,7 @@ export function createVote(data) {
 // 查询论文对应的投票
 export function getPaperVote(pid) {
   return axios({
-    url: '/paper/' + pid + '/vote',
+    url: api.getPaperVote(pid),
     method: 'get'
   })
 }
@@ -45,7 +57,7 @@ export function getPaperVote(pid) {
 // 更具论文id,查询投票详情
 export function getVoteDetailByPid(pid) {
   return axios({
-    url: '/vote/paper/' + pid + '/detail',
+    url: api.getVoteDetailByPid(pid),
     method: 'get'
   })
 }
@@ -53,15 +65,15 @@ export function getVoteDetailByPid(pid) {
 // 更具vid，查询投票详情
 export function getVoteDetailByVid(vid) {
   return axios({
-    url: '/vote/' + vid + '/detail',
+    url: api.getVoteDetailByVid(vid),
     method: 'get'
   })
 }
 
 // 用户投票
-export function addpoll(vid, data) {
+export function addPoll(vid, data) {
   return axios({
-    url: '/vote/' + vid,
+    url: api.addPoll(vid),
     method: 'post',
     data
   })

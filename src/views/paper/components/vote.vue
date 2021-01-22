@@ -265,6 +265,7 @@ export default {
           this.isVoted = res.data.myresult !== undefined
           this.showAns = res.data.status
           this.vid = res.data.vid
+          this.myresult = res.data.myresult
           if (this.showAns) {
             this.accept = res.data.accept
             this.reject = res.data.reject

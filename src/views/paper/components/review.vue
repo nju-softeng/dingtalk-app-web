@@ -1,10 +1,8 @@
 <template>
   <div class="box-r">
-    <!--    <div>-->
-    <!--      <div style="height: 100px; background-color: white; margin-bottom: 20px;"></div>-->
-    <!--    </div>-->
-    <div class="md-container">
-      <el-avatar style="margin-right:16px;" class="hiden-xs" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
+    <el-alert  class="display-xs" title="请在PC客户端上提交 review" type="success" />
+    <div class="md-container hiden-xs">
+      <el-avatar style="margin-right:16px;" class="hiden-sm" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
       <div style="margin-bottom:24px">
         <div style="width: 90vw;max-width: 900px">
           <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 100%; " @save="save" />
@@ -15,7 +13,7 @@
     </div>
     <div style="overflow: auto; padding-bottom: 50px">
       <div v-for="(item, index) in list" :key="index" class="md-container" style="margin-bottom:24px">
-        <el-avatar style="margin:16px 16px 0 0" class="hiden-xs" shape="square" size="medium" :src="item.user.avatar">{{ item.user.name }}</el-avatar>
+        <el-avatar style="margin:16px 16px 0 0" class="hiden-sm" shape="square" size="medium" :src="item.user.avatar">{{ item.user.name }}</el-avatar>
         <div style="flex-grow:1">
           <div style="padding-top: 16px; padding-bottom: 8px">
             <span style="font-size:14px;">{{ item.user.name }} </span>
@@ -126,7 +124,6 @@ export default {
       })
     },
     remove(id) {
-      console.log("???????")
       deleteReview(id).then(() => {
         this.fetchReview()
       })
@@ -154,17 +151,31 @@ export default {
 }
 
 @media only screen and (max-width: 1024px) {
-  .hiden-xs {
+  .hiden-sm {
     display: none !important;
   }
 }
 
 @media only screen and (min-width: 560px) and (max-width: 899px) {
-  .hiden-xs {
+  .hiden-sm {
     display: none !important;
   }
   .editor {
     width: 820px !important;
   }
 }
+
+@media only screen and (max-width: 559px) {
+  .hiden-xs {
+    display: none !important;
+  }
+  .display-xs {
+    display: block !important;
+  }
+}
+
+.display-xs {
+  display: none;
+}
+
 </style>

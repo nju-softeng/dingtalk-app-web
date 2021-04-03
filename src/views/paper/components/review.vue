@@ -1,7 +1,7 @@
 <template>
   <div class="box-r">
-    <el-alert  class="display-xs" title="请在PC客户端上提交 review" type="success" />
-    <div class="md-container hiden-xs">
+    <el-alert class="display-xs" v-if="device === 'mobile'" title="请在PC客户端上提交 review" type="success" />
+    <div class="md-container hiden-xs" v-if="device !== 'mobile'">
       <el-avatar style="margin-right:16px;" class="hiden-sm" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
       <div style="margin-bottom:24px">
         <div style="width: 90vw;max-width: 900px">
@@ -43,6 +43,7 @@
 
 <script>
 import { submitReview, listReview, listExReview, updateReview, deleteReview } from '@/api/paper'
+import { mapState } from 'vuex'
 export default {
   props: ['paperid'],
   data() {
@@ -64,6 +65,11 @@ export default {
     this.uid = sessionStorage.getItem('uid')
     this.avatar = sessionStorage.getItem('avatar')
     this.name = sessionStorage.getItem('name')
+  },
+  computed: {
+    ...mapState({
+      device: state => state.app.device
+    })
   },
   methods: {
     fetchReview() {
@@ -157,25 +163,16 @@ export default {
 }
 
 @media only screen and (min-width: 560px) and (max-width: 899px) {
-  .hiden-sm {
-    display: none !important;
-  }
   .editor {
     width: 820px !important;
   }
-}
-
-@media only screen and (max-width: 559px) {
-  .hiden-xs {
-    display: none !important;
-  }
   .display-xs {
-    display: block !important;
+    display: none;
   }
 }
 
 .display-xs {
-  display: none;
+  display: block;
 }
 
 </style>

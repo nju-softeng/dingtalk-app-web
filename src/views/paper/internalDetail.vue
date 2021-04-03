@@ -246,4 +246,11 @@ export default {
   margin-right: auto;
   padding: 15px 20px 0;
 }
+
+@media only screen and (max-width: 855px) {
+  .container {
+    padding: 0px;
+  }
+}
+
 </style>

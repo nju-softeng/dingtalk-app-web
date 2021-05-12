@@ -11,8 +11,8 @@
           <el-button icon="el-icon-bottom-right" @click="desc" />
           <el-button icon="el-icon-top-right" @click="asc" />
         </el-button-group>
-        <el-button :loading="downloadLoading" style="margin:0 0 5px 5px;" icon="el-icon-document" @click="handleDownload">
-          Export Excel
+        <el-button type="primary" :loading="downloadLoading" style="margin:0 0 5px 5px;" icon="el-icon-document" @click="handleDownload">
+          导出 Excel
         </el-button>
       </div>
 
@@ -143,7 +143,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.filename,
+          filename: this.filename.slice(0, 7),
           autoWidth: true,
           bookType: 'xlsx'
         })
@@ -231,17 +231,15 @@ export default {
 
 .app-container {
   padding: 12px;
-  background-color: #fafafa;
+  /*background-color: #fafafa;*/
   border-radius: 0;
 }
 
 .box {
-  max-width: 1200px;
+  /*max-width: 1200px;*/
   margin-left: auto;
   margin-right: auto;
-  background: #fff;
-  padding: 10px 15px;
-  min-height: 89vh;
+  padding: 10px 15px 0;
 }
 
 @media only screen and (min-width: 1400px) {

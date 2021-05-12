@@ -196,16 +196,29 @@
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
-      <div v-loading="loading">
+      <div v-loading="loading" style="padding-left: 10px">
         <el-form>
           <el-form-item>
             <span slot="label">
-              <svg-icon icon-class="paper" /> 接收情况:
+              <svg-icon icon-class="paper" /> 接收情况 :
             </span>
             <el-radio-group v-model="resultForm.result">
               <el-radio :label="true">接收</el-radio>
               <el-radio :label="false">拒绝</el-radio>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 确认时间 :
+            </span>
+            <el-date-picker
+                value-format="yyyy-MM-dd"
+              v-model="resultForm.updateDate"
+              style="width:193px"
+              type="date"
+              placeholder="选择日期"
+            />
+
           </el-form-item>
         </el-form>
         <div class="dialog-footer">
@@ -317,12 +330,12 @@ export default {
       role: '',
       resultForm: {
         paperid: '',
-        result: ''
+        result: null,
+        updateDate: null
       }
     }
   },
   created() {
-    console.log("created")
     getUserList().then(res => {
       this.userlist = res.data
     })
@@ -427,13 +440,23 @@ export default {
     },
     // 提交论文投稿结果
     submitPaperResult() {
-      if (this.resultForm.result !== undefined) {
+      if (this.resultForm.result !== null && this.resultForm.updateDate !== null) {
         this.loading = true
-        submitResult(this.resultForm.paperid, this.resultForm.result)
+        console.log(this.resultForm.paperid)
+        submitResult(this.resultForm.paperid, this.resultForm)
           .then(res => {
-            console.log(res.data)
             this.resultDialog = false
             this.fetchPaper(this.currentPage)
+            this.$notify({
+              title: '更新成功',
+              message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+              type: 'success'
+            })
+          }).catch(err => {
+            this.$message({
+              message: err.message,
+              type: 'warning'
+            })
           })
           .finally(() => {
             this.loading = false

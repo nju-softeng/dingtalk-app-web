@@ -80,13 +80,11 @@ export function addPoll(vid, data) {
 }
 
 // 提交论文结果
-export function submitResult(id, result) {
+export function submitResult(id, data) {
   return axios({
     url: '/paper_result/' + id,
     method: 'post',
-    data: {
-      data: result
-    }
+    data: data
   })
 }
 

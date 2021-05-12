@@ -368,8 +368,8 @@ export default {
   .poll {
     margin-left: auto;
     margin-right: auto;
-    padding-top: 20px;
-    width: 300px;
+    padding: 20px;
+    max-width: 480px;
     .vote-item {
       padding-inline-start: 0px;
       > li {
@@ -386,8 +386,8 @@ export default {
   .poll {
     margin-left: auto;
     margin-right: auto;
-    padding-top: 20px;
-    width: 400px;
+    padding: 20px;
+    max-width: 1200px;
     .vote-item {
       padding-inline-start: 0px;
       > li {

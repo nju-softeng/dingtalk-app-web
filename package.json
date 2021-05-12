@@ -14,7 +14,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.4.4",
     "dingtalk-jsapi": "^2.13.9",
-    "element-ui": "^2.14.1",
+    "element-ui": "^2.15.1",
     "file-saver": "^2.0.2",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",

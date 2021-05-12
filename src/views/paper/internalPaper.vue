@@ -2,7 +2,7 @@
   <div>
     <div class="paper-box">
       <!-- 论文列表 -->
-      <div class="list">
+      <div class="list" style="height: 500px">
         <el-table :data="list" class="tableClass">
           <el-table-column label="论文信息" width="335">
             <template slot-scope="scope">
@@ -322,14 +322,14 @@ export default {
     }
   },
   created() {
+    console.log("created")
     getUserList().then(res => {
       this.userlist = res.data
     })
-
-    this.fetchPaper(1)
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.fetchPaper(this.currentPage)
     this.uid = sessionStorage.getItem('uid')
     this.role = sessionStorage.getItem('role')
-
     this.$message({
       showClose: true,
       duration: 1000,
@@ -355,14 +355,17 @@ export default {
     // 分页前一页
     handlePrev(val) {
       this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页下一页
     handleNext(val) {
       this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页当前页
     handleCurrentChange(val) {
       this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 创建投票，唤起dialog
     newVote(item) {
@@ -493,7 +496,7 @@ export default {
 
 <style lang="scss" scoped>
 .pagination {
-  margin-top:5px;
+  margin-top:16px;
   display:flex;
   justify-content:center;
 }
@@ -508,9 +511,7 @@ export default {
 }
 
 .list {
-  min-height: 60px;
-  background: #fff;
-  //padding: 20px 20px 0 20px;
+  min-height: 500px;
 }
 
 .dialog-footer {

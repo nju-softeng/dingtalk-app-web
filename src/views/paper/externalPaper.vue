@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="10">
+    <el-row :gutter="10" style="min-height: 500px;">
       <el-col v-for="(item,index) in list" :key="index" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
           <div style="cursor:pointer;" @click="goDetail(item.id)">

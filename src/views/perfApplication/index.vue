@@ -89,8 +89,10 @@
               </div>
             </template>
           </el-table>
-          <div style="text-align:center; margin-top:5px">
-            <el-pagination
+        </div>
+        <!-- 分页 -->
+        <div style="text-align:center; margin-top:5px">
+          <el-pagination
               background
               :hide-on-single-page="total < 10 ? true : false"
               small
@@ -100,10 +102,8 @@
               @prev-click="handlePrev"
               @next-click="handleNext"
               @current-change="handleCurrentChange"
-            />
-          </div>
+          />
         </div>
-        <!-- 分页 -->
       </div>
     </div>
   </div>

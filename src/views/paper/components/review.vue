@@ -150,7 +150,7 @@ export default {
   min-height: 80vh;
   overflow: auto;
   border-radius: 2px;
-  max-width: 1024px;
+  max-width: 1230px;
   margin-left: auto;
   margin-right: auto;
   padding: 10px 20px 0;

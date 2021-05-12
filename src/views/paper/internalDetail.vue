@@ -8,7 +8,7 @@
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
 
-          <div>
+          <div style="padding-left: 16px; padding-right: 16px">
             <p style="margin-bottom:0px">
               <span style="font-size:18px;color:#0366d6;font-weight: 500;">
                 {{ paper.title }}</span>
@@ -215,7 +215,7 @@ export default {
 }
 
 .layout-container {
-  max-width: 1024px;
+  max-width: 1256px;
   padding-left: 16px;
   padding-right: 16px;
   margin-left: auto;

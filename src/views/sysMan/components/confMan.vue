@@ -26,7 +26,7 @@
       </el-table>
     </el-card>
 
-    <el-card class="box-card" style="width:50%; height: 450px;" shadow="never">
+    <el-card class="box-card" style="width:50%; height: 500px;" shadow="never">
       <div slot="header">
         <span>论文AC标准</span>
         <el-button v-if="flag2" style="float: right; padding: 3px 0" type="text" @click="flag2 = false">编辑</el-button>

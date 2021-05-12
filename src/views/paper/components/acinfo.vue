@@ -98,7 +98,7 @@ export default {
   background: #fff;
   min-height: calc(100vh - 280px);
   padding: 20px;
-  max-width: 1024px;
+  max-width: 1256px;
   margin-left: auto;
   margin-right: auto;
   padding: 10px 20px 0;

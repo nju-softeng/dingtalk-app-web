@@ -4,7 +4,7 @@
     <div v-if="device !== 'mobile'" class="md-container hiden-xs">
       <el-avatar style="margin-right:16px;" class="hiden-sm" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
       <div style="margin-bottom:24px">
-        <div style="width: 90vw;max-width: 900px">
+        <div style="width: 90vw;max-width: 1100px">
           <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 100%; " @save="save" />
         </div>
 
@@ -26,7 +26,7 @@
             </template>
           </div>
           <div>
-            <div style="width: 90vw;max-width: 900px">
+            <div style="width: 90vw;max-width: 1100px">
               <v-md-editor v-model="item.md" :mode="item.edit === false ? 'preview' : 'edit'" />
             </div>
 
@@ -156,7 +156,7 @@ export default {
   padding: 10px 20px 0;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1215px) {
   .hiden-sm {
     display: none !important;
   }

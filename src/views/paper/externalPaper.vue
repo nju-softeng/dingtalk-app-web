@@ -30,10 +30,16 @@
             </div>
           </div>
 
-          <div class="action" style=" display:flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
-            <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
-            <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
-            <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
+          <div class="action" style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px">
+            <div style="font-size: 12px;color: gray;">
+              更新日期：{{item.updateDate || '未设置'}}
+            </div>
+            <div style="display: flex">
+              <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
+              <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
+              <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
+            </div>
+
           </div>
         </div>
       </el-col>
@@ -49,23 +55,36 @@
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
-      <div v-loading="loading">
+      <div v-loading="loading" style="padding-left: 10px">
         <el-form>
           <el-form-item>
             <span slot="label">
-              <svg-icon icon-class="paper" /> 接收情况:
+              <svg-icon icon-class="paper" /> 接收情况 :
             </span>
             <el-radio-group v-model="resultForm.result">
               <el-radio :label="true">接收</el-radio>
               <el-radio :label="false">拒绝</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item>
+            <span slot="label">
+              <svg-icon icon-class="paper" /> 确认时间 :
+            </span>
+            <el-date-picker
+              v-model="resultForm.updateDate"
+              value-format="yyyy-MM-dd"
+              style="width:193px"
+              type="date"
+              placeholder="选择日期"
+            />
+
+          </el-form-item>
         </el-form>
         <div class="dialog-footer">
           <el-button @click="resultDialog = false">取 消</el-button>
           <el-button
             type="primary"
-            @click="submitPaperResult"
+            @click="submitPaperResult()"
           >确 定</el-button>
         </div>
       </div>
@@ -85,8 +104,9 @@ export default {
       resultDialog: false,
       loading: false,
       resultForm: {
-        paperid: '',
-        result: ''
+        paperId: '',
+        result: null,
+        updateDate: null
       }
     }
   },
@@ -155,7 +175,7 @@ export default {
     },
     // 更新论文投稿结果, 唤醒dialog
     showPaperResultDialog(item) {
-      this.resultForm.paperid = item.id
+      this.resultForm.paperId = item.id
       if (this.hasAuth()) {
         this.resultDialog = true
       } else {
@@ -167,13 +187,22 @@ export default {
     },
     // 提交论文投稿结果
     submitPaperResult() {
-      if (this.resultForm.result !== undefined) {
+      if (this.resultForm.result !== null && this.resultForm.updateDate !== null) {
         this.loading = true
-        addExpaperResult(this.resultForm.paperid, this.resultForm.result)
+        addExpaperResult(this.resultForm.paperId, this.resultForm)
           .then(res => {
-            console.log(res.data)
             this.resultDialog = false
             this.fetchExPaper()
+            this.$notify({
+              title: '更新成功',
+              message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+              type: 'success'
+            })
+          }).catch(err => {
+            this.$message({
+              message: err.message,
+              type: 'warning'
+            })
           })
           .finally(() => {
             this.loading = false

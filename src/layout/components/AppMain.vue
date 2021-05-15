@@ -29,7 +29,7 @@ export default {
 <style lang="scss" scoped>
 
 .footer {
-  margin-top: 20px;
+  padding: 20px;
   height: 100%;
   display:flex;
   justify-content: center;

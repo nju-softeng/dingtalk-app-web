@@ -150,7 +150,7 @@
         </template>
       </el-table>
 
-      <div style="margin-top:20px;display:flex; justify-content:center">
+      <div style="margin-top:25px; display:flex; justify-content:center">
         <el-pagination
           :hide-on-single-page="total < 10 ? true : false"
           small

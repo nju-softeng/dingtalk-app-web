@@ -30,7 +30,7 @@
                     <el-tooltip
                       class="item"
                       effect="dark"
-                      content="会议/出刊时间"
+                      content="更新时间"
                       placement="top-start"
                     >
                       <div v-if="scope.row.issueDate != undefined" class="time">
@@ -442,7 +442,6 @@ export default {
     submitPaperResult() {
       if (this.resultForm.result !== null && this.resultForm.updateDate !== null) {
         this.loading = true
-        console.log(this.resultForm.paperid)
         submitResult(this.resultForm.paperid, this.resultForm)
           .then(res => {
             this.resultDialog = false

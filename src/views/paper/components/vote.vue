@@ -41,6 +41,7 @@
 
     <!-- 投票div -->
     <div v-else-if="showAns  == false " v-loading="loading" class="poll">
+      <div style="max-width: 500px; margin-left: auto; margin-right: auto">
       <div style="padding:10px; font-size:12px">
         <svg-icon icon-class="date" /> 投票截止
         {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
@@ -67,7 +68,7 @@
           <el-button style="width:100%" size="medium" type="success" plain >您的投票结果: {{ myresult ? "Accept" : "Reject" }}, 请耐心等待</el-button>
         </div>
       </div>
-
+      </div>
     </div>
     <!-- 投票结果 -->
     <div v-if="showAns == true" class="poll">
@@ -78,14 +79,14 @@
         <span v-if="isEnd"> [已结束]</span>
       </div>
       <el-form>
-        <el-form-item>
+        <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
           <span> {{ getNum(accept, total) }}% </span>
           <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
           <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
           {{ getNum(reject, total) }}%

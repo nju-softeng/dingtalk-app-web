@@ -49,12 +49,10 @@ export function getExPaper(id) {
 }
 
 // 提交论文结果
-export function addExpaperResult(id, result) {
+export function addExpaperResult(id, data) {
   return axios({
     url: '/ex-paper_result/' + id,
     method: 'post',
-    data: {
-      data: result
-    }
+    data: data
   })
 }

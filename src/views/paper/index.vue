@@ -100,17 +100,6 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item>
-                <span slot="label">
-                  <svg-icon icon-class="school" /> 通知时间</span>
-                <el-date-picker
-                  v-model="internalPaperForm.issueDate"
-                  style="width:193px"
-                  type="date"
-                  placeholder="选择日期"
-                />
-              </el-form-item>
-
               <el-form-item
                 v-for="(author, index) in internalPaperForm.authors"
                 :key="index"
@@ -285,7 +274,6 @@ export default {
         title: null,
         journal: null,
         paperType: null,
-        issueDate: null,
         authors: [
           {
             num: 1,

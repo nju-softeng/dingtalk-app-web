@@ -74,7 +74,7 @@ export default {
 
 .content {
   margin-top: 8px;
-  max-width: 1000px;
+  max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
 }

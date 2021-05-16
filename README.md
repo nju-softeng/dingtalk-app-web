@@ -114,8 +114,6 @@
 
 ![audit-checked.png](https://i.loli.net/2021/01/12/qtLzCHo8vijuxIf.png)
 
-![dc-performance.png](https://i.loli.net/2021/01/11/FtAC8vXzpsLOd5P.png)
-
 ![project-detail-1.png](https://i.loli.net/2021/01/11/w8Tr7lUkK1pOaL9.png)
 
 ![project-detail-2.png](https://i.loli.net/2021/01/11/UihclBsEJA5wZab.png)

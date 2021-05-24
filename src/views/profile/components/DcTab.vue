@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getUserApplication } from '@/api/application'
+import { listApplication } from '@/api/application'
 
 export default {
   data() {
@@ -48,7 +48,7 @@ export default {
     }
   },
   created() {
-    getUserApplication(1, 10).then(res => {
+    listApplication(1, 10).then(res => {
       this.list = res.data.list || []
       this.total = res.data.total || 0
       console.log(this.total)
@@ -59,17 +59,17 @@ export default {
   methods: {
     // 分页获取数据
     handleCurrentChange(val) {
-      getUserApplication(val, 10).then(res => {
+      listApplication(val, 10).then(res => {
         this.list = res.data.list
       })
     },
     handlePrev(val) {
-      getUserApplication(val, 10).then(res => {
+      listApplication(val, 10).then(res => {
         this.list = res.data.list
       })
     },
     handleNext(val) {
-      getUserApplication(val, 10).then(res => {
+      listApplication(val, 10).then(res => {
         this.list = res.data.list
       })
     }

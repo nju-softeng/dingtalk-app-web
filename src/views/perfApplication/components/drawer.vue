@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { submitApplication, getWeek, getLatestAuditor } from '@/api/application'
+import { addApplication, updateApplication, getWeek, getLatestAuditor } from '@/api/application'
 export default {
   props: {
     show: {
@@ -275,23 +275,41 @@ export default {
           this.form.acItems = this.form.acItems.filter(item => item.ac != null)
           this.loading = true
 
-          submitApplication(this.form)
-            .then(res => {
-              console.log(res.data)
-              // 通知父组件刷新
-              this.$emit('submitted', 'true')
-              this.loading = false
-              this.visible = false
-              this.$notify({
-                title: '成功',
-                message: '申请提交成功',
-                type: 'success'
+          if (this.form.id == null) {
+            addApplication(this.form)
+              .then(res => {
+                // 通知父组件刷新
+                this.$emit('submitted', 'true')
+                this.loading = false
+                this.visible = false
+                this.$notify({
+                  title: '成功',
+                  message: '申请提交成功',
+                  type: 'success'
+                })
+                this.drawer = false
               })
-              this.drawer = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
+              .catch(() => {
+                this.loading = false
+              })
+          } else {
+            updateApplication(this.form.id, this.form)
+              .then(res => {
+                // 通知父组件刷新
+                this.$emit('submitted', 'true')
+                this.loading = false
+                this.visible = false
+                this.$notify({
+                  title: '成功',
+                  message: '申请提交成功',
+                  type: 'success'
+                })
+                this.drawer = false
+              })
+              .catch(() => {
+                this.loading = false
+              })
+          }
         } else {
           this.$notify({
             title: '提交失败',

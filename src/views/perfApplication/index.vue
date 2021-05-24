@@ -111,7 +111,7 @@
 
 <script>
 import { listAuditors } from '@/api/user'
-import { getUserApplication } from '@/api/application'
+import { listApplication } from '@/api/application'
 import drawer from './components/drawer'
 export default {
   components: { drawer },
@@ -154,7 +154,7 @@ export default {
   methods: {
     // 获取申请记录
     fetchApplication(page) {
-      getUserApplication(page, 10).then(res => {
+      listApplication(page, 10).then(res => {
         this.list = res.data.list
         this.total = res.data.total
         console.log(this.list)

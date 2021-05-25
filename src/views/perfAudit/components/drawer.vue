@@ -261,7 +261,7 @@ export default {
         .filter(item => item.status === true)
         .reduce((sum, item) => sum + item.ac, 0)
       this.form.ac = Number(this.form.ac.toFixed(4))
-      fetchReport(this.temp.uid, this.temp.weekdate).then(res => {
+      fetchReport(this.temp.uid, new Date(this.temp.weekdate)).then(res => {
         this.report = res.data.contents
       })
     },

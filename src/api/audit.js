@@ -6,15 +6,16 @@ const api = {
   checkedPager: '/audit/checked/page/',
   checkedByDate: '/audit/checked/date',
   pendingAudit: '/audit/pending',
-  uncheckCnt: '/audit/uncheckcnt'
+  uncheckCnt: '/audit/uncheck_cnt'
 }
 
 // 获取单个周报
 export function fetchReport(uid, date) {
+  console.log("LLLLLL" + date)
   return axios({
     url: api.fetchReport + uid,
     method: 'post',
-    data: { date: date }
+    data: date
   })
 }
 
@@ -40,9 +41,7 @@ export function getCheckedByDate(date) {
   return axios({
     url: api.checkedByDate,
     method: 'post',
-    data: {
-      date: date
-    }
+    data: date
   })
 }
 

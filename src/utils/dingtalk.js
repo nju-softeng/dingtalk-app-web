@@ -4,6 +4,7 @@ import {
 import * as dd from 'dingtalk-jsapi/entry/union' // 按需应用，微应用部分
 import requestAuthCode from 'dingtalk-jsapi/api/runtime/permission/requestAuthCode' // 登陆用临时授权码
 import choose from 'dingtalk-jsapi/api/biz/contact/choose' // PC 通讯录选人
+import downloadFile from 'dingtalk-jsapi/api/biz/util/downloadFile' // 钉钉下载文件
 
 /**
  * 鉴权
@@ -56,5 +57,12 @@ export function contactChoose(url, userids) {
 export function getAuthCode(corpId) {
   return requestAuthCode({
     corpId: corpId
+  })
+}
+
+export function downloadFileByDingTalk(url, fileName) {
+  return downloadFile({
+    url: url,
+    name: fileName
   })
 }

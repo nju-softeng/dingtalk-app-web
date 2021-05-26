@@ -69,6 +69,7 @@
 
 <script>
 import { getAcSummary, listUserAc } from '@/api/performance'
+import { downloadFileByDingTalk } from '@/utils/dingtalk'
 import { downloadAcData } from '@/api/excel'
 import fileDownload from 'js-file-download'
 
@@ -122,17 +123,18 @@ export default {
       })
     },
     download() {
-      const dateValue = new Date(this.date)
-      downloadAcData(dateValue).then(res => {
-        if (this.date != null) {
-          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '.xlsx')
-          this.dialog = false
-        } else {
-          this.$message('请选择日期')
-        }
-      }).catch(err => {
-        this.$message.error('下载失败')
-      })
+      const url = '/excel/ac_data?date=' + this.date
+      downloadFileByDingTalk(url, this.date.substr(0, 7) + '.xlsx')
+      // downloadAcData(this.date).then(res => {
+      //   if (this.date != null) {
+      //     fileDownload(res.data, this.date.substr(0, 7) + '.xlsx')
+      //     this.dialog = false
+      //   } else {
+      //     this.$message('请选择日期')
+      //   }
+      // }).catch(err => {
+      //   this.$message.error('下载失败')
+      // })
     }
   }
 }

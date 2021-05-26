@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
     <div class="box-ac">
+      <el-button type="primary" style="margin-bottom: 8px; margin-left: 2px" icon="el-icon-document" @click="dialog = true">
+        导出AC数据
+      </el-button>
+
+    </div>
+    <div class="box-ac">
       <!-- AC排名 -->
       <el-card shadow="never" class="box-ac-card" style="width: 35%;">
         <el-table ref="table" class="table" height="83vh" :data="list" highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }" @current-change="handleCurrentChange">
@@ -22,7 +28,7 @@
             <el-timeline-item v-for="(item, index) in aclist" :key="index" :timestamp="item.create_time" placement="top">
               <div class="test">
                 <el-card shadow="never" class="ac-card">
-                  <p>{{ item.reason }}</p>
+                  <p style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ item.reason }}</p>
                   <p>
                     <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
                     <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
@@ -42,20 +48,40 @@
         </div>
       </div>
     </div>
+
+    <!-- 投稿结果  dialog -->
+    <el-dialog class="download" title="导出AC数据" :lock-scroll="false" width="380px" :visible.sync="dialog" @submit.native.prevent>
+      <el-date-picker
+        v-model="date"
+        style="width:100%; margin-bottom: 0px"
+        type="month"
+        value-format="yyyy-MM-dd"
+        placeholder="选择导出的月份"
+      />
+
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" style="width:100%" @click="download"> 下 载 </el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getAcSummary, listUserAc } from '@/api/performance'
+import { downloadAcData } from '@/api/excel'
+import fileDownload from 'js-file-download'
 
 export default {
   data() {
     return {
+      dialog: false,
       loading: false,
       list: [],
       name: '',
       ac: '',
-      aclist: []
+      aclist: [],
+      date: null
     }
   },
   computed: {
@@ -94,11 +120,28 @@ export default {
         this.aclist = res.data
         this.loading = false
       })
+    },
+    download() {
+      const dateValue = new Date(this.date)
+      downloadAcData(dateValue).then(res => {
+        if (this.date != null) {
+          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '.xlsx')
+          this.dialog = false
+        } else {
+          this.$message('请选择日期')
+        }
+      }).catch(err => {
+        this.$message.error('下载失败')
+      })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.download /deep/ .el-dialog__body {
+  padding-bottom: 8px;
+}
+
 .title {
   padding: 5px 40px;
   margin-bottom: 5px;

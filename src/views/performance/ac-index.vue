@@ -154,7 +154,7 @@ export default {
 }
 
 .box-ac {
-  max-width: 1200px;
+  max-width: 1305px;
   margin-left: auto;
   margin-right: auto;
   display: flex;

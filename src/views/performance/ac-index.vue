@@ -49,8 +49,8 @@
       </div>
     </div>
 
-    <!-- 投稿结果  dialog -->
-    <el-dialog class="download" title="导出AC数据" :lock-scroll="false" width="380px" :visible.sync="dialog" @submit.native.prevent>
+    <!-- 导出AC数据  dialog -->
+    <el-dialog class="download" title="导出AC数据" :lock-scroll="false" width="360px" :visible.sync="dialog" @submit.native.prevent>
       <el-date-picker
         v-model="date"
         style="width:100%; margin-bottom: 0px"

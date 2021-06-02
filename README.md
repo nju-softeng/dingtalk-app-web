@@ -83,7 +83,7 @@
 
 ![02](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093431.png)
 
-![03](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093514.png)·
+![03](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093514.png)
 
 ![04](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093441.png)
 
@@ -119,10 +119,6 @@
 
 
 
-
-
-
-
 ![project-detail-1.png](https://i.loli.net/2021/01/11/w8Tr7lUkK1pOaL9.png)
 
 ![project-detail-2.png](https://i.loli.net/2021/01/11/UihclBsEJA5wZab.png)
@@ -136,8 +132,5 @@
 | <img src="https://i.loli.net/2020/12/12/j4s6RKzX7JTqyiM.png"/> | <img src="https://i.loli.net/2020/12/12/FTiDv3c1HGk5eKM.png"/> | <img src="https://i.loli.net/2020/12/12/GqWDFnU4dLmwXa7.png"/> |
 
   
-
-
-
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  

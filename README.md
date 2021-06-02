@@ -1,5 +1,6 @@
 <p align="center">
-  <img width="100" src="https://i.loli.net/2020/11/12/8pP5y6eHwX1VfLd.png" alt="logo"></p>
+  <img width="100" src="https://i.loli.net/2020/11/12/8pP5y6eHwX1VfLd.png" alt="logo">
+</p>
 <p align="center">
   <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AProd">
     <img src="https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg" alt="Prod Status">

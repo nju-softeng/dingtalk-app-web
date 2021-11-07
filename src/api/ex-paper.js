@@ -2,7 +2,7 @@ import axios from '@/utils/request'
 
 const api = {
   addExPaper: '/ex-paper',
-  listExPaper: '/ex-paper/list',
+  listExPaper: (page, size) => `/ex-paper/page/${page}/size/${size}`,
   deleteExPaper: '/ex-paper/rm/',
   getExPaper: '/ex-papper/'
 }
@@ -17,9 +17,9 @@ export function addExReview(data) {
 }
 
 // 查询所有外部论文
-export function listExPaper() {
+export function listExPaper(page, size) {
   return axios({
-    url: api.listExPaper,
+    url: api.listExPaper(page, size),
     method: 'get'
   })
 }

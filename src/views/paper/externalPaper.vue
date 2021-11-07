@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="10" style="min-height: 500px;">
+    <el-row :gutter="10" style="min-height: 400px;">
       <el-col v-for="(item,index) in list" :key="index" :xs="24" :sm="8" :md="6" :lg="6">
         <div class="card">
           <div style="cursor:pointer;" @click="goDetail(item.id)">
@@ -44,9 +44,25 @@
         </div>
       </el-col>
     </el-row>
+    <!-- 论文列表 -->
     <div v-if="list.length === 0" style="height:200px;text-align:center;margin-top: 180px">
       <svg-icon icon-class="null" style="font-size:32px" />
       <div style="font-size: 11px; color: #97a8be">空空如也~</div>
+    </div>
+    <!-- 分页 -->
+    <div class="pagination">
+      <el-pagination
+          background
+          :current-page.sync="currentPage"
+          :hide-on-single-page="total < 8 ? true : false"
+          small
+          layout="prev, pager, next"
+          :total="total"
+          :page-size="8"
+          @prev-click="handlePrev"
+          @next-click="handleNext"
+          @current-change="handleCurrentChange"
+      />
     </div>
     <!-- 投稿结果  dialog -->
     <el-dialog
@@ -99,6 +115,8 @@ export default {
   name: 'PaperExternal',
   data() {
     return {
+      currentPage: 1,
+      total: 0,
       list: [],
       role: null,
       resultDialog: false,
@@ -111,19 +129,38 @@ export default {
     }
   },
   created() {
-    this.fetchExPaper()
     this.role = sessionStorage.getItem('role')
+    this.currentPage = parseInt(sessionStorage.getItem('external-cur-page')) || 1
+    this.fetchExPaper(this.currentPage)
   },
   methods: {
+    // 分页前一页
+    handlePrev(val) {
+      this.fetchExPaper(val)
+      sessionStorage.setItem('external-cur-page', val)
+    },
+    // 分页下一页
+    handleNext(val) {
+      this.fetchExPaper(val)
+      sessionStorage.setItem('external-cur-page', val)
+    },
+    // 分页当前页
+    handleCurrentChange(val) {
+      this.fetchExPaper(val)
+      sessionStorage.setItem('external-cur-page', val)
+    },
     goDetail(id) {
       this.$router.push({
         path: '/paper/ex-detail/' + id + '/vote'
       })
     },
-    fetchExPaper() {
-      listExPaper().then(res => {
-        this.list = res.data
-        console.log(this.list)
+    fetchExPaper(page) {
+      listExPaper(page, 8).then(res => {
+        this.list = res.data.list
+        this.total = res.data.total
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
       })
     },
     // 是否有审核权限
@@ -160,7 +197,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteExPaper(id).then(() => {
-          this.fetchExPaper()
+          this.fetchExPaper(this.currentPage)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -192,7 +229,7 @@ export default {
         addExpaperResult(this.resultForm.paperId, this.resultForm)
           .then(res => {
             this.resultDialog = false
-            this.fetchExPaper()
+            this.fetchExPaper(this.currentPage)
             this.$notify({
               title: '更新成功',
               message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
@@ -219,6 +256,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.pagination {
+  display:flex;
+  justify-content:center;
+}
+
 .tag {
   line-height:14px;
   height:14px;

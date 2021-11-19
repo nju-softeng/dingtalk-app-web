@@ -1,11 +1,12 @@
 <p align="center">
-  <img width="100" src="https://i.loli.net/2020/11/12/8pP5y6eHwX1VfLd.png" alt="logo"></p>
+  <img width="100" src="https://i.loli.net/2020/11/12/8pP5y6eHwX1VfLd.png" alt="logo">
+</p>
 <p align="center">
-  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AProd">
-    <img src="https://github.com/zhanyeye/dingtalk-vue/workflows/Prod/badge.svg" alt="Prod Status">
+  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AMain">
+    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/main.yml/badge.svg?branch=main">
   </a>
-  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3ATest"> 
-    <img src="https://github.com/zhanyeye/dingtalk-vue/workflows/Test/badge.svg">
+  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AFeature"> 
+    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/feature.yml/badge.svg?branch=feature">
   </a>
 </p>
 
@@ -15,7 +16,7 @@
 ## 目标与期望
 
 基于钉钉微应用开发的实验室绩效管理系统，实现实验室的绩效、学分、论文评审管理与钉钉对接。  
-主要功能有：绩效、学分申请与审核，论文评审投票及学分管理，项目开发学分管理，实验室助研金计算等。
+主要功能：绩效、学分申请与审核，论文评审投票及学分管理，项目开发学分管理，实验室助研金计算等。
 
 ## 涉及的技术
 
@@ -78,23 +79,45 @@
 
 + 后端代码：[dingtalk-springboot](https://github.com/zhanyeye/dingtalk-springboot)
 
-![dashboard.png](https://i.loli.net/2021/01/11/LaSl2o4r8nNfIce.png)
+![01](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093121.png)
 
-![application.png](https://i.loli.net/2021/01/11/cR5Is784ijBrGD6.png)
+![02](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093431.png)
 
-![audit-uncheck.png](https://i.loli.net/2021/01/12/xVZGNgcljkf2EyA.png)
+![03](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093514.png)
 
-![audit-report.png](https://i.loli.net/2021/01/12/tSKMruUXjiV5Zwo.png)
+![04](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093441.png)
 
-![audit-next.png](https://i.loli.net/2021/01/12/Xc9RUsIuH7rmYa2.png)
+![05](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093452.png)
 
-![audit-checked.png](https://i.loli.net/2021/01/12/qtLzCHo8vijuxIf.png)
+![06](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093502.png)
 
-![dc-performance.png](https://i.loli.net/2021/01/11/FtAC8vXzpsLOd5P.png)
+![07](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093234.png)
 
-![ac-performance.png](https://i.loli.net/2021/01/11/5feZ8Fq9orXByjW.png)
+![08](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093258.png)
 
-![dev.png](https://i.loli.net/2021/01/11/dCVWusnbYPhSy6t.png)
+![09](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516130529.png)
+
+![10](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516130436.png)
+
+![11](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516130546.png)
+
+![12](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516130546.png)
+
+![13](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516130612.png)
+
+![14](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093335.png)
+
+![15](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093409.png)
+
+![16](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093418.png)
+
+![17](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093523.png)
+
+![18](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093536.png)
+
+![19](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516131332.png)
+
+
 
 ![project-detail-1.png](https://i.loli.net/2021/01/11/w8Tr7lUkK1pOaL9.png)
 
@@ -102,25 +125,12 @@
 
 ![bug.png](https://i.loli.net/2021/01/11/vDEKX5PjBLq7Vu6.png)
 
-![internal-paper.png](https://i.loli.net/2021/01/11/9DGUjCxaEtwLiXB.png)
-
-![external-paper.png](https://i.loli.net/2021/01/11/q9o5SJebyzXTnxc.png)
-
-![paper-vote.png](https://i.loli.net/2021/01/11/tw93lMKudijVUoC.png)
-
-![paper-review.png](https://i.loli.net/2021/01/11/BOLgIvl83eGtkEp.png)
-
-![sys-user.png](https://i.loli.net/2021/01/12/1m2iSzI7ucEfNOL.png)
-
-![sys-settings.png](https://i.loli.net/2021/01/11/6vDWPdhtonur4Tf.png)
-
-![user.png](https://i.loli.net/2021/01/12/mElirHPOKWTMFfB.png)
-
-<img align="left" width="250" height="auto" src="https://i.loli.net/2020/12/12/j4s6RKzX7JTqyiM.png"/> 
-<img align="left" width="250" height="auto" src="https://i.loli.net/2020/12/12/FTiDv3c1HGk5eKM.png"/> 
-<img align="center" width="250" height="auto" src="https://i.loli.net/2020/12/12/GqWDFnU4dLmwXa7.png"/> 
 
 
+|                                                        |                                                        |                                                        |
+| ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ |
+| <img src="https://i.loli.net/2020/12/12/j4s6RKzX7JTqyiM.png"/> | <img src="https://i.loli.net/2020/12/12/FTiDv3c1HGk5eKM.png"/> | <img src="https://i.loli.net/2020/12/12/GqWDFnU4dLmwXa7.png"/> |
+
+  
 
 参考[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)  
-

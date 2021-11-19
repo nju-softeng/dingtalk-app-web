@@ -502,7 +502,7 @@ export default {
 }
 
 .paper-box {
-  max-width: 1180px;
+  max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
 }

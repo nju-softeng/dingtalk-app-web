@@ -10,6 +10,9 @@ on:
     paths:
       - 'src/**'
       - '.github/workflows/**'
+      - 'package.json'
+      - 'mysite.template'
+      - 'Dockerfile'
 
 jobs:
   deploy:

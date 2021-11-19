@@ -1,9 +1,9 @@
 name: Test
 on:
   push:
-    branches: [test]
+    branches: [feature]
   pull_request:
-    branches: [test]
+    branches: [feature]
 
 jobs:
   deploy:

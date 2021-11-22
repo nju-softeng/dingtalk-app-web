@@ -21,15 +21,15 @@ jobs:
       - name: Pull Docker And Run Container With SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USER }}
+          key: ${{ secrets.TEST_KEY }}
           port: ${{ secrets.PORT }}
           script: |
             cd ~/dingtalk/dingtalk-vue/
-            git pull origin master
+            git pull origin test
             cnpm install
-            npm run build
+            npm run build:stage
             cd ~/dingtalk
             docker-compose build
             docker-compose up -d

@@ -1,12 +1,12 @@
-name: Feature
+name: Release
 on:
   push:
-    branches: [feature]
+    branches: [release]
     paths:
       - 'src/**'
       - '.github/workflows/**'
   pull_request:
-    branches: [feature]
+    branches: [release]
     paths:
       - 'src/**'
       - '.github/workflows/**'
@@ -21,15 +21,15 @@ jobs:
       - name: Pull Docker And Run Container With SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.TEST_HOST }}
-          username: ${{ secrets.TEST_USER }}
-          key: ${{ secrets.TEST_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
             cd ~/dingtalk/dingtalk-vue/
-            git pull origin test
+            git pull origin master
             cnpm install
-            npm run build:stage
+            npm run build
             cd ~/dingtalk
             docker-compose build
             docker-compose up -d

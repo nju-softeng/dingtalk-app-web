@@ -2,11 +2,11 @@
   <img width="100" src="https://i.loli.net/2020/11/12/8pP5y6eHwX1VfLd.png" alt="logo">
 </p>
 <p align="center">
-  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AMain">
-    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/main.yml/badge.svg?branch=main">
+  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3ARelease">
+    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/release.yml/badge.svg?branch=release">
   </a>
-  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AFeature"> 
-    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/feature.yml/badge.svg?branch=feature">
+  <a href="https://github.com/zhanyeye/dingtalk-vue/actions?query=workflow%3AMain"> 
+    <img src="https://github.com/nju-softeng/dingtalk-app-font-end/actions/workflows/main.yml/badge.svg?branch=main">
   </a>
 </p>
 

@@ -75,9 +75,9 @@
   </tbody>
 </table>
 
-+ jsapi 鉴权部分代码：[dingtalk.js](https://github.com/zhanyeye/dingtalk-vue/blob/master/src/utils/dingtalk.js)
++ jsapi 鉴权部分代码：[dingtalk.js](https://github.com/nju-softeng/dingtalk-app-web/blob/main/src/utils/dingtalk.js)
 
-+ 后端代码：[dingtalk-springboot](https://github.com/zhanyeye/dingtalk-springboot)
++ 后端代码：[dingtalk-springboot](https://github.com/nju-softeng/dingtalk-app-server)
 
 ![01](https://raw.githubusercontent.com/zhanyeye/Figure-bed/win-pic/img/20210516093121.png)
 

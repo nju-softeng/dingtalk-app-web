@@ -40,7 +40,7 @@
     </div>
 
     <!-- 投票div -->
-    <div v-else-if="showAns  == false " v-loading="loading" class="poll">
+    <div v-else-if="vote_detail.status === false" v-loading="loading" class="poll">
       <div style="max-width: 500px; margin-left: auto; margin-right: auto">
       <div style="padding:10px; font-size:12px">
         <svg-icon icon-class="date" /> 投票截止
@@ -65,13 +65,13 @@
       </div>
       <div v-else>
         <div style="padding:10px">
-          <el-button style="width:100%" size="medium" type="success" plain >您的投票结果: {{ myresult ? "Accept" : "Reject" }}, 请耐心等待</el-button>
+          <el-button style="width:100%" size="medium" type="success" plain >您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
         </div>
       </div>
       </div>
     </div>
     <!-- 投票结果 -->
-    <div v-if="showAns == true" class="poll">
+    <div v-if="vote_detail.status === true" class="poll">
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
@@ -81,22 +81,22 @@
       <el-form>
         <el-form-item style="max-width: 360px">
           <span slot="label">
-            <svg-icon icon-class="paper" /> Accept {{ accept }} 票</span>
-          <span> {{ getNum(accept, total) }}% </span>
-          <span v-if="myresult == true" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(accept, total)" status="success" />
+            <svg-icon icon-class="paper" /> Accept {{ vote_detail.accept }} 票</span>
+          <span> {{ getNum(vote_detail.acceptedPercentage) }}% </span>
+          <span v-if="vote_detail.myvote === 'accept'" style="color:#409EFF; font-weight:500">[已选]</span>
+          <el-progress class="progress" :percentage="getNum(vote_detail.acceptedPercentage)" status="success" />
         </el-form-item>
         <el-form-item style="max-width: 360px">
           <span slot="label">
-            <svg-icon icon-class="paper" /> Reject {{ reject }} 票</span>
-          {{ getNum(reject, total) }}%
-          <span v-if="myresult == false" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getpercentage(reject, total)" status="exception" />
+            <svg-icon icon-class="paper" /> Reject {{ vote_detail.reject }} 票</span>
+          {{ getNum(1.0 - vote_detail.acceptedPercentage) }}%
+          <span v-if="vote_detail.myvote === 'reject'" style="color:#409EFF; font-weight:500">[已选]</span>
+          <el-progress class="progress" :percentage="getNum(1.0 - vote_detail.acceptedPercentage)" status="exception" />
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-user" /> 参与人数 {{ total }} 人</span>
-          <span v-if="myresult == undefined" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+            <i class="el-icon-user" /> 参与人数 {{ vote_detail.total }} 人</span>
+          <span v-if="vote_detail.myvote === 'unvote'" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
           </span>
           <el-link
             type="primary"
@@ -114,25 +114,25 @@
       <el-form>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-circle-check" /> 接收 {{ accept }} 票:
+            <i class="el-icon-circle-check" /> 接收 {{ vote_detail.accept }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in acceptlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag v-for="(item, index) in vote_detail.acceptnames" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-circle-close" /> 拒绝 {{ reject }} 票:
+            <i class="el-icon-circle-close" /> 拒绝 {{ vote_detail.reject }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in rejectlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag v-for="(item, index) in vote_detail.rejectnames" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
-        <el-form-item v-if="unvotelist.length > 0">
+        <el-form-item v-if="vote_detail.unvotenames.length > 0">
           <span slot="label">
             <i class="el-icon-warning-outline" /> 未投
-            {{ unvotelist.length }} 票:
+            {{ vote_detail.unvotenames.length }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in unvotelist" :key="index" type="info" style="margin:0px 4px;">{{ item }}
+          <el-tag v-for="(item, index) in vote_detail.unvotenames" :key="index" type="info" style="margin:0px 4px;">{{ item }}
           </el-tag>
         </el-form-item>
       </el-form>
@@ -145,6 +145,18 @@ import { getExPaperVote } from '@/api/ex-paper'
 export default {
   data() {
     return {
+      vote_detail: {
+        vid: '',
+        status: '',
+        accept: '',
+        total: '',
+        reject: '',
+        myvote: '',
+        acceptnames: [],
+        rejectnames: [],
+        unvotenames: [],
+        acceptedPercentage: ''
+      },
       loading: false,
       voteform: {
         paperid: '',
@@ -158,37 +170,15 @@ export default {
         result: '',
         vid: ''
       },
-      showAns: false,
-      vid: '',
-      accept: '',
-      reject: '',
       isEnd: false,
-      isVoted: false,
-      acceptlist: [],
-      rejectlist: [],
-      unvotelist: [],
-      total: '',
-      myresult: undefined,
       flag: false
     }
   },
   computed: {
-    // 投票百分比
-    getpercentage() {
-      return (val, total) => {
-        if (total === 0) {
-          return 0
-        }
-        return (val / total) * 100
-      }
-    },
     // 投票百分比数值
     getNum() {
-      return (val, total) => {
-        if (total === 0) {
-          return 0
-        }
-        return (val / total * 100).toFixed(1)
+      return (val) => {
+        return (val * 100.0).toFixed(1)
       }
     }
   },
@@ -263,19 +253,7 @@ export default {
         getVoteDetailByVid(this.vote.id).then(res => {
           console.log('获取投票详情数据')
           console.log(res.data)
-          this.isVoted = res.data.myresult !== undefined
-          this.showAns = res.data.status
-          this.vid = res.data.vid
-          this.myresult = res.data.myresult
-          if (this.showAns) {
-            this.accept = res.data.accept
-            this.reject = res.data.reject
-            this.total = res.data.total
-            this.myresult = res.data.myresult
-            this.acceptlist = res.data.acceptnames
-            this.rejectlist = res.data.rejectnames
-            this.unvotelist = res.data.unvotenames || []
-          }
+          this.vote_detail = res.data
           console.log(this.isVoted)
           resolve()
         }).catch(error => {

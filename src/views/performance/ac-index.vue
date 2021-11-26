@@ -138,7 +138,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.download /deep/ .el-dialog__body {
+.download ::v-deep .el-dialog__body {
   padding-bottom: 8px;
 }
 
@@ -170,11 +170,11 @@ export default {
 .ac-card {
   width: 90%;
 }
-.box-ac-card /deep/ .el-card__body {
+.box-ac-card ::v-deep .el-card__body {
   padding: 0px 20px;
 }
 
-.box-ac-card /deep/ .el-scrollbar__wrap {
+.box-ac-card ::v-deep .el-scrollbar__wrap {
   overflow-x: hidden;
 }
 
@@ -187,11 +187,11 @@ export default {
 }
 
 //滚动条的宽度
-.table /deep/ .el-table__body-wrapper::-webkit-scrollbar {
+.table ::v-deep .el-table__body-wrapper::-webkit-scrollbar {
   width: 5px;
 }
 //滚动条的滑块
-.table /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+.table ::v-deep .el-table__body-wrapper::-webkit-scrollbar-thumb {
   background-color: #d3d3d3;
   border-radius: 3px;
 }

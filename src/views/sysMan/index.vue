@@ -47,19 +47,19 @@ export default {
 .menu {
   width: 170px;
   min-height: 550px;
-  /deep/ .el-menu {
+  ::v-deep .el-menu {
     border-right: 1px solid #f0f0f0;
   }
-  /deep/ .el-submenu .el-menu-item,
+  ::v-deep .el-submenu .el-menu-item,
   .el-submenu__title {
     min-width: 170px;
   }
-  /deep/ .el-menu-item,
+  ::v-deep .el-menu-item,
   .el-submenu__title {
     height: 40px;
     line-height: 40px;
   }
-  /deep/ .el-menu-item.is-active {
+  ::v-deep .el-menu-item.is-active {
     background-color: #e6f7ff;
     border-right: 2.5px #409eff solid;
   }

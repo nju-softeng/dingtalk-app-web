@@ -115,7 +115,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .box-card {
-  /deep/ .el-card__body {
+  ::v-deep .el-card__body {
     padding: 5px 20px 10px;
     font-size: 14px;
   }

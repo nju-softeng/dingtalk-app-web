@@ -135,11 +135,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.dialog /deep/ .el-dialog__body {
+.dialog ::v-deep .el-dialog__body {
   padding-top: 10px;
   padding-bottom: 0px;
 }
-.dialog /deep/ .el-dialog__title {
+.dialog ::v-deep .el-dialog__title {
   font-size: 13px;
 }
 </style>

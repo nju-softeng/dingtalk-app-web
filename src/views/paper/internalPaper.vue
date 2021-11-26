@@ -524,10 +524,10 @@ export default {
 }
 
 .tableClass {
-  /deep/ .el-table__fixed-right {
+  ::v-deep .el-table__fixed-right {
     height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
   }
-  /deep/ .el-table__fixed-right::before {
+  ::v-deep .el-table__fixed-right::before {
     height: 0px !important; //设置高优先，以覆盖内联样式
   }
 }

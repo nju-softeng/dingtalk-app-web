@@ -242,20 +242,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.drawer /deep/ .el-drawer > header > span:focus {
+.drawer ::v-deep .el-drawer > header > span:focus {
   outline-color: white;
 }
-.drawer /deep/ .el-drawer__title {
+.drawer ::v-deep .el-drawer__title {
   margin-bottom: 0px;
 }
 
-.drawer /deep/ .el-drawer__header {
+.drawer ::v-deep .el-drawer__header {
   margin-bottom: 15px;
 }
-.drawer /deep/ .el-drawer > header > button:focus {
+.drawer ::v-deep .el-drawer > header > button:focus {
   outline-color: white;
 }
-.drawer /deep/ .el-drawer > header > button:hover {
+.drawer ::v-deep .el-drawer > header > button:hover {
   outline-color: white;
 }
 

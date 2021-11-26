@@ -18,6 +18,14 @@ module.exports = {
   productionSourceMap: false,
   filenameHashing: true,
 
+  // replace node-sass with dart-sass
+  css: {
+    loaderOptions: {
+      sass: {
+        implementation: require('sass') // This line must in sass option
+      }
+    }
+  },
 
   devServer: {
     disableHostCheck: true, // 解决 Invalid Host header

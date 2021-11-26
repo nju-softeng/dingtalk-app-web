@@ -105,11 +105,11 @@ export default {
   margin-right: 5px;
 }
 
-.container /deep/ .el-menu-item.is-active {
+.container ::v-deep .el-menu-item.is-active {
   border-bottom: 2px solid #409eff !important;
 }
 
-.container /deep/ .el-submenu.is-active {
+.container ::v-deep .el-submenu.is-active {
   border-bottom: 2px solid #409eff !important;
 }
 </style>

@@ -142,7 +142,7 @@ export default {
   display: flex;
 }
 
-/deep/ .v-md-editor-preview {
+::v-deep .v-md-editor-preview {
   padding: 0 20px;
 }
 

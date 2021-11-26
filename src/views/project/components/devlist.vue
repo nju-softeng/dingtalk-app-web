@@ -133,11 +133,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.project /deep/ .el-dialog__body {
+.project ::v-deep .el-dialog__body {
   padding-top: 5px;
 }
 
-.project /deep/ .el-card__body {
+.project ::v-deep .el-card__body {
   padding: 15px;
 }
 

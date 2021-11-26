@@ -299,7 +299,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ac-card /deep/ .el-table__row > td {
+.ac-card ::v-deep .el-table__row > td {
   border: none;
 }
 
@@ -309,7 +309,7 @@ export default {
   flex-direction: column;
 }
 
-.audit /deep/ .el-drawer__header {
+.audit ::v-deep .el-drawer__header {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 10px;
@@ -344,7 +344,7 @@ export default {
   color: #d9d9d9;
 }
 
-/deep/ ::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 0px;
 }
 

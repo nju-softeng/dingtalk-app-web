@@ -326,7 +326,7 @@ export default {
     }
   }
 
-  /deep/ .el-menu.el-menu--horizontal {
+  ::v-deep .el-menu.el-menu--horizontal {
     border-bottom: solid 0px #e6e6e6;
   }
 }
@@ -383,7 +383,7 @@ export default {
   padding: 12px;
   background-color: #fafafa;
 
-  /deep/ .el-card__body {
+  ::v-deep .el-card__body {
     padding: 5px 20px 5px;
     font-size: 14px;
   }

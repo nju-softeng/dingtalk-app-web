@@ -241,14 +241,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.project /deep/ .el-dialog__body {
+.project ::v-deep .el-dialog__body {
   padding-top: 10px;
   padding-bottom: 0px;
 }
-.project /deep/ .el-dialog__title {
+.project ::v-deep .el-dialog__title {
   font-size: 14px;
 }
-.list /deep/ .el-card__body {
+.list ::v-deep .el-card__body {
   padding-right: 15px;
 }
 

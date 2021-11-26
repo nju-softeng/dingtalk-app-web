@@ -323,7 +323,7 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-.apply /deep/ .el-drawer__body {
+.apply ::v-deep .el-drawer__body {
   padding: 20px;
   flex-direction: column;
   display: flex;

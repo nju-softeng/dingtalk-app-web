@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.block /deep/ .el-card__body {
+.block ::v-deep .el-card__body {
   padding: 0px 20px 5px;
 }
 </style>

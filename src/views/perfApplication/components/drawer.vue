@@ -323,7 +323,7 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-.apply ::v-deep .el-drawer__body {
+.el-drawer__body {
   padding: 20px;
   flex-direction: column;
   display: flex;
@@ -333,12 +333,10 @@ export default {
 .drawer-content {
   display: flex;
   flex-direction: column;
-  /* background-color: yellow; */
   flex-grow: 2;
 }
 
 .drawer-footer {
-  /* background-color: beige; */
   margin: 5px 0;
   display: flex;
 }

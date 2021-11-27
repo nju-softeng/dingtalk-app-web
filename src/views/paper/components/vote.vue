@@ -26,6 +26,7 @@
               }"
               placeholder="选择时间"
             />
+            {{voteform.endTime}}}
           </el-form-item>
         </el-form>
         <div>

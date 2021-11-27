@@ -120,6 +120,7 @@ export default {
     font-size: 14px;
   }
 }
+
 li {
   padding-bottom: 4px;
   font-size: 12px;

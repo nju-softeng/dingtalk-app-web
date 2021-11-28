@@ -30,7 +30,7 @@ jobs:
               git clone git@github.com:nju-softeng/dingtalk-app-build.git
             fi
             git checkout main
-            git pull origin main
+            git pull origin
             cd dingtalk-app-build
             chmod +x build.sh
             ./build.sh -b main

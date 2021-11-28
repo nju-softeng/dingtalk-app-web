@@ -26,11 +26,12 @@ jobs:
           key: ${{ secrets.TEST_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd ~/dingtalk/dingtalk-vue/
-            git pull origin test
-            cnpm install
-            npm run build:stage
-            cd ~/dingtalk
-            docker-compose build
-            docker-compose up -d
-            docker image prune -f
+            if [ ! -d "dingtalk-app-build" ]; then
+              git clone git@github.com:nju-softeng/dingtalk-app-build.git
+            fi
+            git checkout main
+            git pull origin main
+            cd dingtalk-app-build
+            chmod +x build.sh
+            ./build.sh -b main
+            

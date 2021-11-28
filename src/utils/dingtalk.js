@@ -4,6 +4,7 @@ import {
 import * as dd from 'dingtalk-jsapi/entry/union' // 按需应用，微应用部分
 import requestAuthCode from 'dingtalk-jsapi/api/runtime/permission/requestAuthCode' // 登陆用临时授权码
 import choose from 'dingtalk-jsapi/api/biz/contact/choose' // PC 通讯录选人
+import { CORP_ID } from '../../public/env'
 
 /**
  * 鉴权
@@ -39,7 +40,7 @@ export function contactChoose(url, userids) {
         choose({
           users: userids,
           multiple: true, // 是否多选：true多选 false单选； 默认true
-          corpId: process.env.VUE_APP_CORPID, // 企业id
+          corpId: process.env.NODE_ENV === 'production' ? CORP_ID : process.env.VUE_APP_CORPID, // 企业id
           max: 10 // 人数限制，当multiple为true才生效，可选范围1-1500
         }).then(res => {
           res = JSON.parse(JSON.stringify(res).replace(/emplId/g, 'userid'))

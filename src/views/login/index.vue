@@ -19,6 +19,7 @@
 <script>
 import { getAuthCode } from '@/utils/dingtalk'
 import { Message } from 'element-ui'
+import { CORP_ID } from '../../../public/env'
 export default {
   data: () => ({
     loading: true,
@@ -41,7 +42,6 @@ export default {
     }
   },
   created() {
-    console.log(process.env.NODE_ENV)
     if (process.env.NODE_ENV === 'development') {
       // 配置测试状态无需钉钉登陆;
       this.$store
@@ -60,7 +60,7 @@ export default {
         })
     } else {
       // 获取钉钉临时授权码
-      getAuthCode(process.env.VUE_APP_CORPID)
+      getAuthCode(CORP_ID)
         .then(res => {
           this.code.authCode = res.code // 获取authcode
           this.$store

@@ -50,7 +50,7 @@
           <svg-icon style="margin-left:8px" icon-class="hint" />
         </el-tooltip>
       </div>
-      <div v-if="!isVoted">
+      <div v-if="!hasVoted">
         <div>
           <div class="choice">
             <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
@@ -180,6 +180,9 @@ export default {
       return (val) => {
         return (val * 100.0).toFixed(1)
       }
+    },
+    hasVoted() {
+      return this.vote_detail.myvote !== 'unvote'
     }
   },
   created() {

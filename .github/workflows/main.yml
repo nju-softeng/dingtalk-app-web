@@ -18,7 +18,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull Docker And Run Container With SSH
+      - name: Build Docker With SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.TEST_HOST }}
@@ -26,8 +26,8 @@ jobs:
           key: ${{ secrets.TEST_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            if [ ! -d "dingtalk-app-build" ]; then
-              git clone git@github.com:nju-softeng/dingtalk-app-build.git
+            if [ ! -d "dingtalk-app-main" ]; then
+              git clone git@github.com:nju-softeng/dingtalk-app-build.git dingtalk-app-main
             fi
             git checkout main
             git pull origin

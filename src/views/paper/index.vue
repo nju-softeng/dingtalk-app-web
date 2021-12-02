@@ -374,7 +374,7 @@ export default {
               this.loading = false
 
               if (this.activeTab === 'paperExternal') {
-                this.$refs.reviewTab.fetchExPaper()
+                this.$refs.reviewTab.fetchExPaper(1)
               } else {
                 this.activeTab = 'paperExternal'
               }

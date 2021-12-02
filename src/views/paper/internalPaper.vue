@@ -397,6 +397,7 @@ export default {
       this.$refs.voteform.validate(valid => {
         if (valid) {
           this.loading = true
+          this.voteform.endTime = new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
           createVote(this.voteform)
             .then(() => {
               this.voteDialog = false

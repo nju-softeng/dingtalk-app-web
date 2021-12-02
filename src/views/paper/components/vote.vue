@@ -236,6 +236,7 @@ export default {
         if (valid) {
           this.loading = true
           this.voteform.paperid = this.pid
+          this.voteform.endTime = new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
           createVote(this.voteform)
             .then(res => {
               console.log(res.data)

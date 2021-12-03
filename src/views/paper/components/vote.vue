@@ -307,12 +307,7 @@ export default {
       this.loading = true
       addPoll(this.vote.id, this.pollform)
         .then(res => {
-          // this.showAns = true
-          this.myresult = res.data.myresult
-          this.accept = res.data.accept
-          this.reject = res.data.reject
-          this.total = res.data.total
-          this.isVoted = true
+          this.vote_detail = res.data
         })
         .catch(error => {
           if (error.response.data.status === 409) {

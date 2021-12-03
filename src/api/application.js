@@ -37,7 +37,6 @@ export function updateApplication(id, data) {
   })
 }
 
-
 // 用户获得已经申请的绩效
 export function listApplication(page, size) {
   return axios({
@@ -53,9 +52,6 @@ export function getLatestAuditor(uid) {
     method: 'get'
   })
 }
-
-
-
 
 //  审核人获取待审核绩效
 export function getAudit() {

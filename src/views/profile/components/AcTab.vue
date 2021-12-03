@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <template v-if="list.length == 0">
+    <template v-if="list.length === 0">
       <div style="height:200px;text-align:center;padding-top:70px;">
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>
@@ -12,7 +12,7 @@
           <p>
             <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
             <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
-            <span v-if="item.classify == 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+            <span v-if="item.classify === 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
             <el-tag>{{ getClassify(item.classify) }}</el-tag>
           </p>
         </el-card>
@@ -32,10 +32,10 @@ export default {
   computed: {
     getClassify() {
       return val => {
-        if (val == 0) return '周报申请'
-        else if (val == 1) return '项目AC'
-        else if (val == 2) return '论文AC'
-        else if (val == 4) return 'bug 扣除AC'
+        if (val === 0) return '周报申请'
+        else if (val === 1) return '项目AC'
+        else if (val === 2) return '论文AC'
+        else if (val === 4) return 'bug 扣除AC'
         else return '投票AC'
       }
     }

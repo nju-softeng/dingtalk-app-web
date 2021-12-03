@@ -20,7 +20,7 @@
                 <span v-html="formathtml(item.value)" />
               </p>
             </div>
-            <div v-if="report == null" class="center">
+            <div v-if="report === null" class="center">
               <div style="margin:8px 0px ">
                 <svg-icon icon-class="null" style="font-size:32px" /> <br>
               </div>

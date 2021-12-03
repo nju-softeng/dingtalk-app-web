@@ -3,7 +3,7 @@
     <!-- 项目列表 -->
     <div v-loading="loading" class="list">
       <!-- 无数据提示  -->
-      <div v-if="list.length == 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
+      <div v-if="list.length === 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>
       <!-- 项目卡片 -->
@@ -21,7 +21,7 @@
           </div>
         </div>
         <!-- 无迭代时提示信息 -->
-        <template v-if="item.cnt == 0">
+        <template v-if="item.cnt === 0">
           <p style="color: #586069">尚未创建迭代</p>
           <p>
             <span style="padding-right:15px; color: #586069">项目创建者：{{ item.name }}</span>

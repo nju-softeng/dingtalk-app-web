@@ -16,7 +16,7 @@
       <el-table-column width="30px" type="expand">
         <template slot-scope="props">
           <div>
-            <span v-if="props.row.acItems.length == 0">无AC申请数据</span>
+            <span v-if="props.row.acItems.length === 0">无AC申请数据</span>
             <template v-else>
               <li v-for="(o, index) in props.row.acItems" :key="index">{{ o.reason }}, ac值: {{ o.ac }}</li>
             </template>
@@ -130,19 +130,19 @@ export default {
     },
     handleDrawer(val) {
       this.loading = true
-      if (val == 'prev') {
+      if (val === 'prev') {
         // 上一个
         if (this.index !== 0) {
           this.index--
           this.temp = this.list[this.index]
         }
-      } else if (val == 'next' || val == 'continue') {
+      } else if (val === 'next' || val === 'continue') {
         // 下一个
         if (this.index !== this.list.length - 1) {
           this.index++
           this.temp = this.list[this.index]
         }
-      } else if (val == 'submit') {
+      } else if (val === 'submit') {
         this.fetchChecked(this.currentPage - 1)
       }
       setTimeout(() => {
@@ -156,7 +156,7 @@ export default {
     },
     // 筛选数据
     filterData() {
-      if (this.date == null) {
+      if (this.date === null) {
         this.$message.error('错了哦，日期不能为空')
       } else {
         getCheckedByDate(this.date).then(res => {

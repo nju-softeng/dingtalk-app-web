@@ -1,7 +1,7 @@
 <template>
   <div class="user-activity">
     <!-- 列表为null提示 -->
-    <template v-if="list.length == 0">
+    <template v-if="list.length === 0">
       <div style="height:200px;text-align:center;padding-top:70px;">
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>

@@ -234,14 +234,14 @@
       <el-table :data="disablelist">
         <el-table-column label="学号">
           <template slot-scope="{ row }">
-            <span v-if="row.stuNum == undefined">未设置</span>
+            <span v-if="row.stuNum === undefined">未设置</span>
             <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
         <el-table-column property="name" label="姓名" />
         <el-table-column prop="role" label="权限">
           <template slot-scope="{ row }">
-            <el-tag v-if="row.authority == 0" type="info">普通用户</el-tag>
+            <el-tag v-if="row.authority === 0" type="info">普通用户</el-tag>
             <el-tag v-else type="success">评审人</el-tag>
           </template>
         </el-table-column>

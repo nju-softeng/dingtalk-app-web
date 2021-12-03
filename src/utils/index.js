@@ -8,7 +8,7 @@ export function isExternal(path) {
 
 export const showHelloTime = (time) => {
   let time_format = ''
-  if (time == undefined) {
+  if (time === undefined) {
     time = new Date()
   }
   const hr = time.getHours()
@@ -110,10 +110,10 @@ export function formatTime(time, option) {
 }
 
 export function formatWeek(yearmonth, week) {
-  if (yearmonth == undefined || week == undefined) {
+  if (yearmonth === undefined || week === undefined) {
     return
   }
-  if (yearmonth.toString()[4] == 0) {
+  if (yearmonth.toString()[4] === 0) {
     return yearmonth.toString().slice(5, 7) + ' 月 第 ' + week + ' 周'
   } else {
     return yearmonth.toString().slice(4, 7) + ' 月 第 ' + week + ' 周'

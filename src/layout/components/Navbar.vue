@@ -60,7 +60,7 @@ export default {
   },
   created() {
     console.log('头像')
-    if (this.avatar == '') {
+    if (this.avatar === '') {
       console.log('null')
     }
     console.log(this.avatar)

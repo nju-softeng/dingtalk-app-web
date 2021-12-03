@@ -74,26 +74,26 @@
             <template slot-scope="scope">
               <div class="info-item">
                 <el-link
-                  v-if="scope.row.v_status == undefined"
+                  v-if="scope.row.v_status === undefined"
                   type="primary"
                   @click="newVote(scope.row)"
                 >
                   发起投票</el-link>
 
                 <router-link
-                  v-else-if="scope.row.v_status == false"
+                  v-else-if="scope.row.v_status === false"
                   :to="'/paper/in-detail/' + scope.row.id + '/vote'"
                   class="link-type"
                 >
                   <el-link type="success"> 前往投票</el-link>
                 </router-link>
                 <router-link
-                  v-else-if="scope.row.v_status == true"
+                  v-else-if="scope.row.v_status === true"
                   :to="'/paper/in-detail/' + scope.row.id + '/vote'"
                   class="link-type"
                 >
                   <el-tag
-                    v-if="scope.row.v_result == true"
+                    v-if="scope.row.v_result === true"
                     class="paper-tag"
                     type="success"
                   >ACCEPT</el-tag>
@@ -107,21 +107,21 @@
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tag
-                  v-if="scope.row.result == 0"
+                  v-if="scope.row.result === 0"
                   class="paper-tag"
                 >待内部投票</el-tag>
                 <el-tag
-                  v-else-if="scope.row.result == 1"
+                  v-else-if="scope.row.result === 1"
                   class="paper-tag"
                   type="danger"
                 >未提交</el-tag>
                 <el-tag
-                  v-else-if="scope.row.result == 2"
+                  v-else-if="scope.row.result === 2"
                   class="paper-tag"
                   type="info"
                 >审稿中</el-tag>
                 <el-tag
-                  v-else-if="scope.row.result == 3"
+                  v-else-if="scope.row.result === 3"
                   class="paper-tag"
                   type="danger"
                 >REJECT</el-tag>
@@ -212,8 +212,8 @@
               <svg-icon icon-class="paper" /> 确认时间 :
             </span>
             <el-date-picker
-                value-format="yyyy-MM-dd"
               v-model="resultForm.updateDate"
+              value-format="yyyy-MM-dd"
               style="width:193px"
               type="date"
               placeholder="选择日期"

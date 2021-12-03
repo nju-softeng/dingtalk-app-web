@@ -11,7 +11,6 @@ const api = {
 
 // 获取单个周报
 export function fetchReport(uid, date) {
-  console.log("LLLLLL" + date)
   return axios({
     url: api.fetchReport + uid,
     method: 'post',

@@ -275,7 +275,7 @@ export default {
           this.form.acItems = this.form.acItems.filter(item => item.ac != null)
           this.loading = true
 
-          if (this.form.id == null) {
+          if (this.form.id === null) {
             addApplication(this.form)
               .then(res => {
                 // 通知父组件刷新

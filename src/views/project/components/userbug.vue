@@ -25,7 +25,7 @@
               <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
               <span style="margin: 0 8px">
                 状态：
-                <el-tag v-if="scope.row.status == undefined"> 待确认</el-tag>
+                <el-tag v-if="scope.row.status === undefined"> 待确认</el-tag>
                 <el-tag v-else-if="scope.row.status">bug成立</el-tag>
                 <el-tag v-else>bug不成立</el-tag>
               </span>

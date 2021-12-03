@@ -5,7 +5,7 @@
       v-for="(item, index) in navList"
       :key="index"
       class="tab"
-      :class="{ selected: item.name == actived }"
+      :class="{ selected: item.name === actived }"
       @click="handleChange(index)"
     >
       {{ item.label }}

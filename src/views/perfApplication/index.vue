@@ -20,7 +20,7 @@
               <template slot-scope="props">
                 <el-form label-position="left" inline>
                   <el-form-item label="AC申请：">
-                    <span v-if="props.row.acItems.length == 0"> 无 </span>
+                    <span v-if="props.row.acItems.length === 0"> 无 </span>
                     <div v-else>
                       <li v-for="(item, index) in props.row.acItems" :key="index">
                         申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
@@ -93,15 +93,15 @@
         <!-- 分页 -->
         <div style="text-align:center; margin-top:5px">
           <el-pagination
-              background
-              :hide-on-single-page="total < 10 ? true : false"
-              small
-              layout="prev, pager, next"
-              :total="total"
-              :page-size="10"
-              @prev-click="handlePrev"
-              @next-click="handleNext"
-              @current-change="handleCurrentChange"
+            background
+            :hide-on-single-page="total < 10 ? true : false"
+            small
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="10"
+            @prev-click="handlePrev"
+            @next-click="handleNext"
+            @current-change="handleCurrentChange"
           />
         </div>
       </div>

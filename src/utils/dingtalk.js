@@ -5,7 +5,6 @@ import * as dd from 'dingtalk-jsapi/entry/union' // 按需应用，微应用部�
 import requestAuthCode from 'dingtalk-jsapi/api/runtime/permission/requestAuthCode' // 登陆用临时授权码
 import choose from 'dingtalk-jsapi/api/biz/contact/choose' // PC 通讯录选人
 
-
 /**
  * 鉴权
  * @param url 前端当前的url

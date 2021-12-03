@@ -12,7 +12,7 @@
     <!-- 项目列表 -->
     <div v-loading="loading" class="list">
       <!-- 无数据提示  -->
-      <div v-if="list.length == 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
+      <div v-if="list.length === 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
         <svg-icon icon-class="null" style="font-size:32px" />
       </div>
       <!-- 项目卡片 -->
@@ -40,9 +40,9 @@
           </div>
         </div>
         <!-- 无迭代时提示信息 -->
-        <template v-if="item.cnt == 0">
+        <template v-if="item.cnt === 0">
           <p style="font-size:12.5px;color: #586069">请新建迭代</p>
-          <el-button v-if="item.cnt == 0" style="float:right" size="mini" @click="newIterate(item)">新建迭代</el-button>
+          <el-button v-if="item.cnt === 0" style="float:right" size="mini" @click="newIterate(item)">新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else-if="!item.status">

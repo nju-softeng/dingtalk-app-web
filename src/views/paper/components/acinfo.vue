@@ -11,17 +11,17 @@
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿支持者：</span>
-<!--          <span>-->
-<!--            <span v-if="internalPaper.result == 4">+ 1 : </span>-->
-<!--            <span v-else>- 1 : </span>-->
-<!--          </span>-->
+          <!--          <span>-->
+          <!--            <span v-if="internalPaper.result === 4">+ 1 : </span>-->
+          <!--            <span v-else>- 1 : </span>-->
+          <!--          </span>-->
           <el-tag v-for="(item, index) in acceptlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿反对者：</span>
-<!--          <span v-if="internalPaper.result == 3">+ 1 : </span>-->
-<!--          <span v-else>- 1 : </span>-->
+          <!--          <span v-if="internalPaper.result === 3">+ 1 : </span>-->
+          <!--          <span v-else>- 1 : </span>-->
           <el-tag v-for="(item, index) in rejectlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
       </el-form>

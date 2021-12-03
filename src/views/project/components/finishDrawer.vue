@@ -110,7 +110,7 @@
         </el-card>
         <!-- 未确定完成时间的空提示 -->
         <el-card
-          v-show="finishdate == undefined"
+          v-show="finishdate === undefined"
           shadow="never"
           style="width:100%; display:flex; justify-content: center;
         align-items: center; "

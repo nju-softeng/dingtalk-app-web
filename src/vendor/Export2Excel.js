@@ -15,7 +15,7 @@ function generateArray(table) {
       var colspan = cell.getAttribute('colspan');
       var rowspan = cell.getAttribute('rowspan');
       var cellValue = cell.innerText;
-      if (cellValue !== "" && cellValue == +cellValue) cellValue = +cellValue;
+      if (cellValue !== "" && cellValue === +cellValue) cellValue = +cellValue;
 
       //Skip ranges
       ranges.forEach(function (range) {
@@ -79,7 +79,7 @@ function sheet_from_array_of_arrays(data, opts) {
       var cell = {
         v: data[R][C]
       };
-      if (cell.v == null) continue;
+      if (cell.v === null) continue;
       var cell_ref = XLSX.utils.encode_cell({
         c: C,
         r: R
@@ -177,7 +177,7 @@ export function export_json_to_excel({
     /*设置worksheet每列的最大宽度*/
     const colWidth = data.map(row => row.map(val => {
       /*先判断是否为null/undefined*/
-      if (val == null) {
+      if (val === null) {
         return {
           'wch': 10
         };

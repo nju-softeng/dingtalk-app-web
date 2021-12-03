@@ -42,7 +42,7 @@
           <div>
             完成时间
           </div>
-          <template v-if="scope.row.status == false">
+          <template v-if="scope.row.status === false">
             <el-tag type="info">进行中</el-tag>
           </template>
           <template v-else>
@@ -61,7 +61,7 @@
           <div>
             <div style="padding-left:10px">开发者</div>
             <div style="min-width:300px;">
-              <template v-if="scope.row.status == false">
+              <template v-if="scope.row.status === false">
                 <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }}</el-tag>
               </template>
               <template v-else>
@@ -73,7 +73,7 @@
       </el-table-column>
 
       <el-table-column fixed="right" min-width="120">
-        <template slot-scope="scope">
+        <template>
           ---(设计中)
         </template>
       </el-table-column>
@@ -114,9 +114,9 @@ export default {
         this.totallist = res.data
         this.donelist = res.data.filter(item => item.status)
         this.undonelist = res.data.filter(item => !item.status)
-        if (this.radio == '进行中') {
+        if (this.radio === '进行中') {
           this.list = this.undonelist
-        } else if (this.radio == '已结束') {
+        } else if (this.radio === '已结束') {
           this.list = this.donelist
         } else {
           this.list = this.totallist
@@ -128,9 +128,9 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 500)
-      if (val == '进行中') {
+      if (val === '进行中') {
         this.list = this.undonelist
-      } else if (val == '已结束') {
+      } else if (val === '已结束') {
         this.list = this.donelist
       } else {
         this.list = this.totallist

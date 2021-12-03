@@ -36,7 +36,7 @@
         <span class="title-age"> {{ addReviewDialogTitle }} </span>
       </div>
       <!-- 评审类型选择菜单 -->
-      <div v-if="addReviewContent == undefined" class="dialog-content">
+      <div v-if="addReviewContent === undefined" class="dialog-content">
         <el-card
           shadow="hover"
           class="card"
@@ -53,7 +53,7 @@
         </el-card>
       </div>
       <!-- 添加内部评审 -->
-      <div v-if="addReviewContent == 'internalReview'" v-loading="loading">
+      <div v-if="addReviewContent === 'internalReview'" v-loading="loading">
         <div class="dialog-content">
           <div class="paper-form">
             <el-form
@@ -154,7 +154,7 @@
         </span>
       </div>
       <!-- 添加外部评审 -->
-      <div v-if="addReviewContent == 'externalReview'">
+      <div v-if="addReviewContent === 'externalReview'">
         <div class="dialog-content">
           <div class="paper-form">
             <el-form
@@ -388,7 +388,7 @@ export default {
             .catch(err => {
               console.log(err)
               this.loading = false
-              if (this.externalPaperForm.id == null) {
+              if (this.externalPaperForm.id === null) {
                 this.$message.error('创建失败')
               }
             })

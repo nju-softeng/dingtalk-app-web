@@ -32,7 +32,7 @@
 
           <div class="action" style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px">
             <div style="font-size: 12px;color: gray;">
-              更新日期：{{item.updateDate || '未设置'}}
+              更新日期：{{ item.updateDate || '未设置' }}
             </div>
             <div style="display: flex">
               <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
@@ -52,16 +52,16 @@
     <!-- 分页 -->
     <div class="pagination">
       <el-pagination
-          background
-          :current-page.sync="currentPage"
-          :hide-on-single-page="total < 8 ? true : false"
-          small
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="8"
-          @prev-click="handlePrev"
-          @next-click="handleNext"
-          @current-change="handleCurrentChange"
+        background
+        :current-page.sync="currentPage"
+        :hide-on-single-page="total < 8 ? true : false"
+        small
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="8"
+        @prev-click="handlePrev"
+        @next-click="handleNext"
+        @current-change="handleCurrentChange"
       />
     </div>
     <!-- 投稿结果  dialog -->

@@ -33,7 +33,7 @@
               <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
               <span style="margin: 0 8px">
                 状态：
-                <el-tag v-if="scope.row.status == undefined"> 待确认</el-tag>
+                <el-tag v-if="scope.row.status === undefined"> 待确认</el-tag>
                 <el-tag v-else-if="scope.row.status">bug成立</el-tag>
                 <el-tag v-else>bug不成立</el-tag>
               </span>
@@ -70,7 +70,7 @@
             <div>
               <label style="font-size:14px;"> bug 是否存在: </label>
               <el-switch v-model="checkform.status" style="margin-right:10px" active-color="#ff4949" inactive-color="#13ce66" />
-              <el-tag v-if="checkform.status == true">存在bug</el-tag>
+              <el-tag v-if="checkform.status === true">存在bug</el-tag>
               <el-tag v-else>无bug</el-tag>
             </div>
             <template v-if="checkform.status">
@@ -149,10 +149,10 @@ export default {
       listAuditorBug(this.uid).then(res => {
         this.alllist = res.data
         this.checklist = res.data.filter(item => item.status != undefined)
-        this.unchecklist = res.data.filter(item => item.status == undefined)
-        if (this.radio == '全部') {
+        this.unchecklist = res.data.filter(item => item.status === undefined)
+        if (this.radio === '全部') {
           this.list = this.alllist
-        } else if (this.radio == '待处理') {
+        } else if (this.radio === '待处理') {
           this.list = this.unchecklist
         } else {
           this.list = this.checklist
@@ -168,9 +168,9 @@ export default {
       })
     },
     changeRadio(val) {
-      if (val == '全部') {
+      if (val === '全部') {
         this.list = this.alllist
-      } else if (val == '待处理') {
+      } else if (val === '待处理') {
         this.list = this.unchecklist
       } else {
         this.list = this.checklist
@@ -179,7 +179,7 @@ export default {
     submitCheckBug() {
       console.log(this.iteration.id, this.principalradio)
 
-      if (this.checkform.status == false) {
+      if (this.checkform.status === false) {
         checkBug(this.checkform).then(() => {
           this.fetchAuditorBug().then(() => {
             this.$message({

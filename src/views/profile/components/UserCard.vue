@@ -8,7 +8,7 @@
           }}</el-avatar>
         </div>
         <div class="box-center" style="height:100px">
-          <template v-if="edit == false">
+          <template v-if="edit === false">
             <div class="user-name text-center">{{ user.name }}</div>
             <div class="user-role text-center text-muted">
               {{ user.stuNum }}
@@ -22,7 +22,7 @@
           </template>
 
           <div class="text-center text-muted" style="padding-top:16px">
-            <el-button v-if="edit == false" size="mini" style="width:180px" @click="edit = true">编辑资料</el-button>
+            <el-button v-if="edit === false" size="mini" style="width:180px" @click="edit = true">编辑资料</el-button>
             <el-button
               v-else
               size="mini"
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     submitUserinfo() {
-      if (this.user.name == '') {
+      if (this.user.name === '') {
         this.$message({
           showClose: true,
           message: '请填写必要信息',

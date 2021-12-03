@@ -1,7 +1,7 @@
 <template>
   <div class="vote" :v-loading="loading">
     <!-- 创建投票 -->
-    <div v-if="vote == ''" class="create">
+    <div v-if="vote === ''" class="create">
       <div>
         <p>发起投票</p>
       </div>
@@ -42,32 +42,32 @@
     <!-- 投票div -->
     <div v-else-if="vote_detail.status === false" v-loading="loading" class="poll">
       <div style="max-width: 500px; margin-left: auto; margin-right: auto">
-      <div style="padding:10px; font-size:12px">
-        <svg-icon icon-class="date" /> 投票截止
-        {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
-        <span v-if="isEnd"> [已结束]</span>
-        <el-tooltip content="截止时间后投票无效" placement="right">
-          <svg-icon style="margin-left:8px" icon-class="hint" />
-        </el-tooltip>
-      </div>
-      <div v-if="!hasVoted">
-        <div>
-          <div class="choice">
-            <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
+        <div style="padding:10px; font-size:12px">
+          <svg-icon icon-class="date" /> 投票截止
+          {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
+          <span v-if="isEnd"> [已结束]</span>
+          <el-tooltip content="截止时间后投票无效" placement="right">
+            <svg-icon style="margin-left:8px" icon-class="hint" />
+          </el-tooltip>
+        </div>
+        <div v-if="!hasVoted">
+          <div>
+            <div class="choice">
+              <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
+            </div>
+            <div class="choice">
+              <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
+            </div>
           </div>
-          <div class="choice">
-            <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
+          <div style="padding:10px">
+            <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
           </div>
         </div>
-        <div style="padding:10px">
-          <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
+        <div v-else>
+          <div style="padding:10px">
+            <el-button style="width:100%" size="medium" type="success" plain>您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
+          </div>
         </div>
-      </div>
-      <div v-else>
-        <div style="padding:10px">
-          <el-button style="width:100%" size="medium" type="success" plain >您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
-        </div>
-      </div>
       </div>
     </div>
     <!-- 投票结果 -->

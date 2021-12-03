@@ -35,11 +35,11 @@
             <el-radio-button label="迭代" />
             <el-radio-button label="bug" />
           </el-radio-group>
-          <el-button v-if="radio == 'bug'" style="float:right" type="primary" icon="el-icon-plus" @click="bugDialog = true">报告bug</el-button>
-          <el-button v-if="permission && radio == '迭代'" style="float:right" type="primary" icon="el-icon-plus" @click="newIteration">新建迭代</el-button>
+          <el-button v-if="radio === 'bug'" style="float:right" type="primary" icon="el-icon-plus" @click="bugDialog = true">报告bug</el-button>
+          <el-button v-if="permission && radio === '迭代'" style="float:right" type="primary" icon="el-icon-plus" @click="newIteration">新建迭代</el-button>
         </div>
         <!-- 迭代表格 -->
-        <div v-if="radio == '迭代'">
+        <div v-if="radio === '迭代'">
           <el-table key="iteration" :show-header="false" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
             <el-table-column width="200">
               <template slot-scope="scope">
@@ -62,7 +62,7 @@
                 <div>
                   完成时间
                 </div>
-                <template v-if="scope.row.status == false">
+                <template v-if="scope.row.status === false">
                   <el-tag type="info">进行中</el-tag>
                 </template>
                 <template v-else>
@@ -81,7 +81,7 @@
                 <div>
                   <div style="padding-left:10px">开发者</div>
                   <div style="min-width:300px;">
-                    <template v-if="scope.row.status == false">
+                    <template v-if="scope.row.status === false">
                       <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }}</el-tag>
                     </template>
                     <template v-else>
@@ -93,8 +93,8 @@
             </el-table-column>
 
             <el-table-column v-if="permission" fixed="right" width="120">
-              <template v-if="scope.$index == 0" slot-scope="scope">
-                <template v-if="scope.row.status == false">
+              <template v-if="scope.$index === 0" slot-scope="scope">
+                <template v-if="scope.row.status === false">
                   <el-button type="text" @click="finishIterate(scope.$index, scope.row)">完成</el-button>
                   <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                 </template>
@@ -143,7 +143,7 @@
                   <span>提交与 {{ scope.row.insertTime | formatDate }}</span>
                   <span style="margin: 0 8px">
                     状态：
-                    <el-tag v-if="scope.row.status == undefined">
+                    <el-tag v-if="scope.row.status === undefined">
                       待确认</el-tag>
                     <el-tag v-else-if="scope.row.status">bug成立</el-tag>
                     <el-tag v-else>bug不成立</el-tag>
@@ -158,8 +158,8 @@
 
             <el-table-column label="tttt" fixed="right" width="100px">
               <template slot-scope="scope">
-                <template v-if="scope.row.status == undefined">
-                  <template v-if="uid == scope.row.reporterid">
+                <template v-if="scope.row.status === undefined">
+                  <template v-if="uid === scope.row.reporterid">
                     <el-button type="text" size="small" icon="el-icon-edit" @click="editBug(scope.row)" />
                     <el-button type="text" size="small" icon="el-icon-delete" @click="deleteBug(scope.row.id)" />
                   </template>

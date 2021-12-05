@@ -6,7 +6,7 @@
           <span slot="label">
             <svg-icon icon-class="paper" /> 作者AC变化</span>
           <span v-for="(item, index) in internalPaper.paperDetails" :key="index" style="padding:6px">{{ item.user.name }}:
-            {{ item.ac }}</span>
+            {{ item.acRecord.ac }}</span>
         </el-form-item>
         <el-form-item>
           <span slot="label">

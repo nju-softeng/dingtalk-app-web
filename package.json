@@ -16,15 +16,13 @@
     "core-js": "^3.19.2",
     "dingtalk-jsapi": "^2.13.53",
     "element-ui": "^2.15.7",
-    "file-saver": "^2.0.5",
     "js-file-download": "^0.4.12",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "path-to-regexp": "6.2.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.3",
-    "vuex": "^3.6.2",
-    "xlsx": "^0.17.4"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",

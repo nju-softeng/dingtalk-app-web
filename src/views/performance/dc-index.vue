@@ -107,6 +107,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getDcSummary, updateTopup } from '@/api/performance'
+import { downloadDcSummaryData } from '@/api/excel'
+import fileDownload from 'js-file-download'
+
 
 export default {
   data() {
@@ -134,21 +137,16 @@ export default {
       this.fetchDcSummary(this.date, false)
     },
     handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['学号', '姓名', '补贴总金额', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '第一周DC值', '本月总DC值', '当前AC值', 'Topup']
-        const filterVal = ['stu_num', 'name', 'salary', 'week1', 'week2', 'week3', 'week4', 'week5', 'total', 'ac', 'topup']
-        const list = this.list
-        const data = this.formatJson(filterVal, list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: this.filename.slice(0, 7),
-          autoWidth: true,
-          bookType: 'xlsx'
-        })
-        this.downloadLoading = false
-        console.log(data)
+      const dateValue = new Date(this.date)
+      downloadDcSummaryData(dateValue).then(res => {
+        if (this.date != null) {
+          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '.xlsx')
+          this.dialog = false
+        } else {
+          this.$message('请选择日期')
+        }
+      }).catch(() => {
+        this.$message.error('下载失败')
       })
     },
     formatJson(filterVal, jsonData) {

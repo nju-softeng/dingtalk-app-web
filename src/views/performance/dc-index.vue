@@ -140,7 +140,7 @@ export default {
       const dateValue = new Date(this.date)
       downloadDcSummaryData(dateValue).then(res => {
         if (this.date != null) {
-          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '.xlsx')
+          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '-dc.xlsx')
           this.dialog = false
         } else {
           this.$message('请选择日期')

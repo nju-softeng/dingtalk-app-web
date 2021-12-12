@@ -125,7 +125,7 @@ export default {
       const dateValue = new Date(this.date)
       downloadAcData(dateValue).then(res => {
         if (this.date != null) {
-          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '.xlsx')
+          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '-ac.xlsx')
           this.dialog = false
         } else {
           this.$message('请选择日期')

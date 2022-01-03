@@ -21,9 +21,9 @@ jobs:
       - name: Pull Docker And Run Container With SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DINGTALK_REALEASE_HOST }}
-          username: ${{ secrets.DINGTALK_REALEASE_USERNAME }}
-          key: ${{ secrets.DINGTALK_REALEASE_KEY }}
+          host: ${{ secrets.DINGTALK_RELEASE_HOST }}
+          username: ${{ secrets.DINGTALK_RELEASE_USERNAME }}
+          key: ${{ secrets.DINGTALK_RELEASE_KEY }}
           port: ${{ secrets.DINGTALK_HOST_PORT }}
           script: |
             cd ~/dingtalk/dingtalk-vue/

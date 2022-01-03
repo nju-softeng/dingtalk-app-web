@@ -18,19 +18,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Docker With SSH
+      - name: Pull Docker And Run Container With SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_KEY }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.DINGTALK_REALEASE_HOST }}
+          username: ${{ secrets.DINGTALK_REALEASE_USERNAME }}
+          key: ${{ secrets.DINGTALK_REALEASE_KEY }}
+          port: ${{ secrets.DINGTALK_HOST_PORT }}
           script: |
-            if [ ! -d "dingtalk-app-release" ]; then
-              git clone git@github.com:nju-softeng/dingtalk-app-build.git dingtalk-app-release
-            fi
-            git checkout release
-            git pull origin
-            cd dingtalk-app-release
-            chmod +x build.sh
-            ./build.sh -b main -t web
+            cd ~/dingtalk/dingtalk-vue/
+            git pull origin master
+            cnpm install
+            npm run build
+            cd ~/dingtalk
+            docker-compose build
+            docker-compose up -d
+            docker image prune -f

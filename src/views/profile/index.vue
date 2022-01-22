@@ -12,6 +12,7 @@
               <el-tab-pane label="周绩效日志" name="dctab" />
               <el-tab-pane label="AC日志" name="actab" />
               <el-tab-pane label="消息记录" name="msg" />
+              <el-tab-pane label="个人信息" name="personalInfo" />
             </el-tabs>
             <component :is="activeTab" />
           </div>

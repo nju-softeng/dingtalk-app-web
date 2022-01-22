@@ -6,6 +6,7 @@
         <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal" />
           <tab-pane label="组外评审" name="paperExternal" />
+          <tab-pane label="非学生一作" name="paperByProfessor" />
         </tabs>
         <!--添加按钮-->
         <div
@@ -50,6 +51,13 @@
           @click.native="addReviewContent = 'externalReview'"
         >
           <div>外部评审</div>
+        </el-card>
+        <el-card
+          shadow="hover"
+          class="card"
+          @click.native="addReviewContent = 'paperByProfessorReview'"
+        >
+          <div>非学生一作</div>
         </el-card>
       </div>
       <!-- 添加内部评审 -->
@@ -199,6 +207,7 @@
           <el-button @click="addReviewContent = undefined">取 消</el-button>
         </span>
       </div>
+      <div v-if="addReviewContent === 'paperByProfessorReview'" />
     </el-dialog>
   </div>
 </template>
@@ -304,6 +313,9 @@ export default {
       } else if (val === 'externalReview') {
         this.addReviewDialogTitle = '外部评审'
         this.addReviewWidth = '58%'
+      } else if (val === 'paperByProfessorReview') {
+        this.addReviewDialogTitle = '非学生一作'
+        this.addReviewWidth = '58%'
       } else {
         this.addReviewDialogTitle = '请选择评审类型'
         this.addReviewWidth = '52%'
@@ -314,8 +326,10 @@ export default {
     // 根据路由的参数选择显示的tab
     if (this.$route.params.type === 'external') {
       this.activeTab = 'paperExternal'
-    } else {
+    } else if (this.$route.params.type === 'internal') {
       this.activeTab = 'paperInternal'
+    } else if (this.$route.params.type === 'paperByProfessor') {
+      this.activeTab = 'paperByProfessor'
     }
     getUserList().then(res => {
       this.userlist = res.data

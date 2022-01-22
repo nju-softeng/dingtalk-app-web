@@ -217,7 +217,7 @@ import Tabs from '@/components/TabNav/tabs'
 import TabPane from '@/components/TabNav/tabpane'
 import paperExternal from '@/views/paper/externalPaper'
 import paperInternal from '@/views/paper/internalPaper'
-
+import paperByProfessor from '@/views/paper/paperByProfessor'
 import {
   addPaper
 } from '@/api/paper'
@@ -261,7 +261,8 @@ export default {
     Tabs,
     TabPane,
     paperExternal,
-    paperInternal
+    paperInternal,
+    paperByProfessor
   },
   data() {
     return {

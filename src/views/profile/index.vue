@@ -32,7 +32,8 @@ export default {
     UserCard,
     dctab: () => import('./components/DcTab'),
     actab: () => import('./components/AcTab'),
-    msg: () => import('./components/Message')
+    msg: () => import('./components/Message'),
+    personalInfo: () => import('./components/personalInfo')
   },
   data() {
     return {

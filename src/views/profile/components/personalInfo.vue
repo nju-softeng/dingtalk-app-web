@@ -80,18 +80,15 @@ export default {
   methods: {
     confirmModify() {
       console.log(this.personalInfoForm)
-      if (this.user.name === '') {
+      if (this.personalInfoForm.name === '') {
         this.$message({
           showClose: true,
           message: '请填写必要信息',
           type: 'warning'
         })
-        getUserDetail().then(res => {
-          this.user = res.data
-        })
         return
       }
-      updateUserInfo(this.user)
+      updateUserInfo(this.personalInfoForm)
         .then(() => {
           this.$message({
             showClose: true,
@@ -101,7 +98,7 @@ export default {
         })
         .finally(() => {
           getUserDetail().then(res => {
-            this.user = res.data
+            this.personalInfoForm = res.data
           })
         })
     }

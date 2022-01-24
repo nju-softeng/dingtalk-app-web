@@ -20,24 +20,24 @@
               <el-input v-model="personalInfoForm.identityCardId" />
             </el-form-item>
           </el-col>
-          <el-col span="7">
+          <el-col :span="7">
             <el-form-item label="银行卡号" >
               <el-input v-model="personalInfoForm.bankCardId"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col span="6">
+          <el-col :span="6">
             <el-form-item label="本科学校" >
               <el-input v-model="personalInfoForm.undergraduateSchool"/>
             </el-form-item>
           </el-col>
-          <el-col span="6">
+          <el-col :span="6">
             <el-form-item label="硕士学校" >
               <el-input v-model="personalInfoForm.masterSchool"/>
             </el-form-item>
           </el-col>
-          <el-col span="5">
+          <el-col :span="5">
             <el-form-item label="当前状态" >
               <el-select v-model="personalInfoForm.state" placeholder="请选择">
                 <el-option value="实习">实习</el-option>

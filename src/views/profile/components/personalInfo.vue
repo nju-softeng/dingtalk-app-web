@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { getUserDetail } from '@/api/user'
+import { getUserDetail, updateUserInfo } from '@/api/user'
 export default {
   name: 'PersonalInfo',
   data() {
@@ -80,6 +80,30 @@ export default {
   methods: {
     confirmModify() {
       console.log(this.personalInfoForm)
+      if (this.user.name === '') {
+        this.$message({
+          showClose: true,
+          message: '请填写必要信息',
+          type: 'warning'
+        })
+        getUserDetail().then(res => {
+          this.user = res.data
+        })
+        return
+      }
+      updateUserInfo(this.user)
+        .then(() => {
+          this.$message({
+            showClose: true,
+            message: '更新成功',
+            type: 'success'
+          })
+        })
+        .finally(() => {
+          getUserDetail().then(res => {
+            this.user = res.data
+          })
+        })
     }
   }
 }

@@ -56,9 +56,7 @@
       </el-form>
     </div>
     <el-row type="flex" justify="center">
-      <el-col :span="8">
-        <el-button type="primary"  size="large" @click="confirmModify" >确认修改</el-button>
-      </el-col>
+        <el-button type="primary"  size="medium" @click="confirmModify" >确认修改</el-button>
     </el-row>
   </div>
 </template>

@@ -121,7 +121,7 @@
           <el-input v-model="modifyPrizeForm.remark" />
         </el-form-item>
       </el-form>
-        <span slot="footer">
+      <span slot="footer">
         <el-button @click="modifyPrizeDialogueVisible = false">取 消</el-button>
         <el-button type="primary" @click="modifyPrize">添加</el-button>
       </span>
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { getUserPrizes } from '@/api/user'
+import { getUserPrizes, addPrize } from '@/api/user'
 
 export default {
   name: 'Prize',
@@ -149,17 +149,22 @@ export default {
     }
   },
   created() {
-    // getUserPrizes().then(res => {
-    //   console.log(res)
-    //   this.prizeList = res
-    // })
+    getUserPrizes().then(res => {
+      console.log(res)
+      this.prizeList = res
+    })
   },
   methods: {
     addPrize() {
-      console.log(this.addPrizeForm)
+      addPrize(this.addPrizeForm).then(res => {
+        console.log('新增奖项', this.addPrizeForm)
+      })
+      getUserPrizes().then(res => {
+        this.prizeList = res
+      })
     },
     modifyPrize(data) {
-        console.log(data)
+      console.log(data)
       this.modifyPrizeDialogueVisible = true
       this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
     }

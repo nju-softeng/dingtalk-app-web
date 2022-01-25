@@ -75,3 +75,19 @@ export function updateUserInfo(data) {
     data
   })
 }
+// 查询用户奖项
+export function getUserPrizes() {
+  return axios({
+    url: '/prizeList',
+    method: 'get'
+  })
+}
+// 新建用户奖项
+export function addPrize(data) {
+  return axios({
+    url: '/prize/add',
+    method: 'post',
+    data
+  })
+}
+

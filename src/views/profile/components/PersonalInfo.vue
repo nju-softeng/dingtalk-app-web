@@ -2,7 +2,7 @@
   <div>
     <div class="personalInfoForm">
       <el-form ref="form" :model="personalInfoForm" label-width="80px">
-<!--        基本信息-->
+        <!--        基本信息-->
         <div class="basicInfo">
           <el-row style="margin-bottom: 15px">基本信息</el-row>
           <el-row>
@@ -50,7 +50,7 @@
             </el-col>
           </el-row>
         </div>
-<!--        住房信息-->
+        <!--        住房信息-->
         <div class="rentingInfo">
           <el-row style="margin-bottom: 15px">住房信息</el-row>
           <el-row>
@@ -60,8 +60,8 @@
                   v-model="personalInfoForm.rentingStart"
                   type="date"
                   placeholder="选择日期"
-                  style="width: 150px">
-                </el-date-picker>
+                  style="width: 150px"
+                />
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -70,7 +70,8 @@
                   v-model="personalInfoForm.rentingEnd"
                   type="date"
                   placeholder="选择日期"
-                  style="width: 150px"/>
+                  style="width: 150px"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -82,7 +83,7 @@
             </el-col>
           </el-row>
         </div>
-<!--        备注信息-->
+        <!--        备注信息-->
         <div class="remarkInfo">
           <el-row style="margin-bottom: 15px">备注信息</el-row>
           <el-row>
@@ -97,7 +98,7 @@
       </el-form>
     </div>
     <el-row type="flex" justify="center">
-        <el-button type="primary"  size="medium" @click="confirmModify" style="margin-bottom: 10px">确认修改</el-button>
+      <el-button type="primary" size="medium" style="margin-bottom: 10px" @click="confirmModify">确认修改</el-button>
     </el-row>
   </div>
 </template>

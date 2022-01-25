@@ -13,6 +13,8 @@
               <el-tab-pane label="AC日志" name="actab" />
               <el-tab-pane label="消息记录" name="msg" />
               <el-tab-pane label="个人信息" name="personalInfo" />
+              <el-tab-pane label="获奖情况" name="prize" />
+              <el-tab-pane label="固定资产" name="property" />
             </el-tabs>
             <component :is="activeTab" />
           </div>
@@ -33,7 +35,9 @@ export default {
     dctab: () => import('./components/DcTab'),
     actab: () => import('./components/AcTab'),
     msg: () => import('./components/Message'),
-    personalInfo: () => import('./components/personalInfo')
+    personalInfo: () => import('./components/PersonalInfo'),
+    prize: () => import('./components/Prize'),
+    property: () => import('./components/Property')
   },
   data() {
     return {

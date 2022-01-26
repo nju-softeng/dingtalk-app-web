@@ -91,3 +91,54 @@ export function addPrize(data) {
   })
 }
 
+// 删除用户奖项
+export function deletePrize(data) {
+  return axios({
+    url: '/prize',
+    method: 'delete',
+    data
+  })
+}
+
+// 修改用户奖项
+export function updatePrize(data) {
+  return axios({
+    url: '/prize/update',
+    method: 'post',
+    data
+  })
+}
+
+// 查询用户固定资产
+export function getUserProperties() {
+  return axios({
+    url: '/propertyList',
+    method: 'get'
+  })
+}
+// 新建用户查询用户固定资产
+export function addProperty(data) {
+  return axios({
+    url: '/property',
+    method: 'put',
+    data
+  })
+}
+
+// 删除用户查询用户固定资产
+export function deleteProperty(data) {
+  return axios({
+    url: '/property',
+    method: 'delete',
+    data
+  })
+}
+
+// 修改用户查询用户固定资产
+export function updateProperty(data) {
+  return axios({
+    url: '/property/update',
+    method: 'post',
+    data
+  })
+}

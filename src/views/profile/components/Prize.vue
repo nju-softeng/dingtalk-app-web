@@ -27,7 +27,11 @@
           prop="level"
           label="级别"
           width="100"
-        />
+        >
+          <template slot-scope="scope">
+            {{ levelConvertor[scope.row.level] }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="remark"
           label="备注"
@@ -38,8 +42,8 @@
           width="200"
         >
           <template slot-scope="scope">
-            <el-button type="primary" @click="modifyPrize(scope.row)">修改</el-button>
-            <el-button type="danger" @click="deletePrize(scope.row)">删除</el-button>
+            <el-button type="primary" @click="modifyPrizeClick(scope.row)">修改</el-button>
+            <el-button type="danger" @click="deletePrizeClick(scope.row)">删除</el-button>
           </template>
 
         </el-table-column>
@@ -61,6 +65,7 @@
           <el-col :span="12">
             <el-date-picker
               v-model="addPrizeForm.prizeTime"
+              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期"
               style="width: 150px"
@@ -101,6 +106,7 @@
           <el-col :span="12">
             <el-date-picker
               v-model="modifyPrizeForm.prizeTime"
+              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期"
               style="width: 150px"
@@ -123,15 +129,14 @@
       </el-form>
       <span slot="footer">
         <el-button @click="modifyPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="modifyPrize">添加</el-button>
+        <el-button type="primary" @click="confirmModifyPrize">确认</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserPrizes, addPrize } from '@/api/user'
-
+import { getUserPrizes, addPrize, deletePrize, updatePrize } from '@/api/user'
 export default {
   name: 'Prize',
   data() {
@@ -144,6 +149,7 @@ export default {
         level: '12',
         remark: '12414'
       }],
+      levelConvertor: ['校级', '省级', '国家级', '国际级'],
       addPrizeForm: {},
       modifyPrizeForm: {}
     }
@@ -155,18 +161,50 @@ export default {
     })
   },
   methods: {
-    addPrize() {
-      addPrize(this.addPrizeForm).then(res => {
-        console.log('新增奖项', this.addPrizeForm)
+    async addPrize() {
+      var res = await addPrize(this.addPrizeForm)
+      this.addPrizeForm = {}
+      if (res) {
+        this.$message({
+          showClose: true,
+          message: '奖项信息添加成功！',
+          type: 'success'
+        })
+      }
+      getUserPrizes().then(res => {
+        this.prizeList = res.data
       })
+      this.addPrizeDialogueVisible = false
+    },
+    modifyPrizeClick(data) {
+      console.log(data)
+      this.modifyPrizeDialogueVisible = true
+      this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
+    },
+    async confirmModifyPrize() {
+      var res = await updatePrize(this.modifyPrizeForm)
+      if (res) {
+        this.$message({
+          showClose: true,
+          message: '奖项信息修改成功！',
+          type: 'success'
+        })
+      }
+      this.modifyPrizeDialogueVisible = false
       getUserPrizes().then(res => {
         this.prizeList = res.data
       })
     },
-    modifyPrize(data) {
-      console.log(data)
-      this.modifyPrizeDialogueVisible = true
-      this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
+    async deletePrizeClick(data) {
+      await deletePrize(data.id)
+      this.$message({
+        showClose: true,
+        message: '奖项信息删除成功！',
+        type: 'success'
+      })
+      getUserPrizes().then(res => {
+        this.prizeList = res.data
+      })
     }
   }
 }

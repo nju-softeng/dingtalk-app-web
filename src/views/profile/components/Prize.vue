@@ -151,7 +151,7 @@ export default {
   created() {
     getUserPrizes().then(res => {
       console.log(res)
-      this.prizeList = res
+      this.prizeList = res.data
     })
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
         console.log('新增奖项', this.addPrizeForm)
       })
       getUserPrizes().then(res => {
-        this.prizeList = res
+        this.prizeList = res.data
       })
     },
     modifyPrize(data) {

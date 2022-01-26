@@ -85,8 +85,8 @@ export function getUserPrizes() {
 // 新建用户奖项
 export function addPrize(data) {
   return axios({
-    url: '/prize/add',
-    method: 'post',
+    url: '/prize',
+    method: 'put',
     data
   })
 }

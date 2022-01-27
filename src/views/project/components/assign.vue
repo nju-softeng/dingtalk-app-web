@@ -1,8 +1,15 @@
 <template>
   <div class="project">
     <!-- 添加button  -->
-    <div class="action" style="margin-bottom:10px">
-      <el-button type="primary" icon="el-icon-plus" @click="projectDialog = true">创建项目</el-button>
+    <div
+      class="action"
+      style="margin-bottom:10px"
+    >
+      <el-button
+        type="primary"
+        icon="el-icon-plus"
+        @click="projectDialog = true"
+      >创建项目</el-button>
       <!-- <el-select style="width:100px;float:right;margin-right:10px">
         <el-option label="进行中" value="true"> </el-option>
         <el-option label="已结束" value="false"> </el-option>
@@ -10,13 +17,27 @@
     </div>
 
     <!-- 项目列表 -->
-    <div v-loading="loading" class="list">
+    <div
+      v-loading="loading"
+      class="list"
+    >
       <!-- 无数据提示  -->
-      <div v-if="list.length === 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
-        <svg-icon icon-class="null" style="font-size:32px" />
+      <div
+        v-if="list.length === 0"
+        style="margin-left: auto;margin-right: auto; padding-top:100px"
+      >
+        <svg-icon
+          icon-class="null"
+          style="font-size:32px"
+        />
       </div>
       <!-- 项目卡片 -->
-      <el-card v-for="(item, index) in list" :key="index" class="item" shadow="never">
+      <el-card
+        v-for="(item, index) in list"
+        :key="index"
+        class="item"
+        shadow="never"
+      >
         <div>
           <!-- 下拉菜单 -->
           <div style="float:right">
@@ -25,78 +46,165 @@
                 <i class="el-icon-more " />
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-edit" @click.native="modifyProject(item)">修改项目</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-error" @click.native="rmProject(item)">删除项目</el-dropdown-item>
+                <el-dropdown-item
+                  icon="el-icon-edit"
+                  @click.native="modifyProject(item)"
+                >修改项目</el-dropdown-item>
+                <el-dropdown-item
+                  icon="el-icon-error"
+                  @click.native="rmProject(item)"
+                >删除项目</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
           <!-- 标题 -->
           <div style="margin-bottom:17px">
-            <svg-icon icon-class="git" style="font-size:16px; color:#586069" />
-            <router-link :to="'/project/detail/' + item.id" class="link-type">
+            <svg-icon
+              icon-class="git"
+              style="font-size:16px; color:#586069"
+            />
+            <router-link
+              :to="'/project/detail/' + item.id"
+              class="link-type"
+            >
               <a> {{ item.title }}</a>
-              <el-tag v-if="item.cnt != 0" type="info" style="margin-left:10px;" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
+              <el-tag
+                v-if="item.cnt != 0"
+                type="info"
+                style="margin-left:10px;"
+                effect="plain"
+              >第 {{ item.cnt }} 次迭代</el-tag>
             </router-link>
           </div>
         </div>
         <!-- 无迭代时提示信息 -->
         <template v-if="item.cnt === 0">
           <p style="font-size:12.5px;color: #586069">请新建迭代</p>
-          <el-button v-if="item.cnt === 0" style="float:right" size="mini" @click="newIterate(item)">新建迭代</el-button>
+          <el-button
+            v-if="item.cnt === 0"
+            style="float:right"
+            size="mini"
+            @click="newIterate(item)"
+          >新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else-if="!item.status">
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;"> <i class="el-icon-time" /> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
-            <span v-if="getRemainDay(item.end_time) >= 0" style="color:#67C23A">
+            <span
+              class="date"
+              style="padding-right:15px;"
+            > <i class="el-icon-time" /> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
+            <span
+              v-if="getRemainDay(item.end_time) >= 0"
+              style="color:#67C23A"
+            >
               剩余:
               {{ getRemainDay(item.end_time) }} 天</span>
-            <span v-else style="color:#F56C6C"> 延期: {{ -getRemainDay(item.end_time) }} 天</span>
+            <span
+              v-else
+              style="color:#F56C6C"
+            > 延期: {{ -getRemainDay(item.end_time) }} 天</span>
           </p>
           <div style="font-size:12px;color:#bfbfbf;line-height:28px;">
             <span style="padding-right:15px; ">预期AC：{{ item.expectedac }}</span>
             <!-- <span>按时交付: {{ item.success_cnt }} 次</span> -->
 
-            <el-button style="float:right" size="mini" @click="finishIterate(item)">确认完成</el-button>
+            <el-button
+              style="float:right"
+              size="mini"
+              @click="finishIterate(item)"
+            >确认完成</el-button>
           </div>
         </template>
         <template v-else>
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;"> <i class="el-icon-time" /> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
-            <span v-if="compareTime(item.end_time, item.finish_time)" style="color:#67C23A">
+            <span
+              class="date"
+              style="padding-right:15px;"
+            > <i class="el-icon-time" /> : {{ item.begin_time }} ~ {{ item.end_time }}</span>
+            <span
+              v-if="compareTime(item.end_time, item.finish_time)"
+              style="color:#67C23A"
+            >
               按时完成
             </span>
-            <span v-else style="color:#F56C6C"> 延期完成</span>
+            <span
+              v-else
+              style="color:#F56C6C"
+            > 延期完成</span>
           </p>
           <div style="font-size:12px;color:#bfbfbf;line-height:28px;">
             <span style="padding-right:15px; color:#bfbfbf;">
-              <router-link :to="'/project/detail/' + item.id" class="link-type">
+              <router-link
+                :to="'/project/detail/' + item.id"
+                class="link-type"
+              >
                 查看详情
               </router-link>
             </span>
 
-            <el-button style="float:right" size="mini" @click="newIterate(item)">新建迭代</el-button>
+            <el-button
+              style="float:right"
+              size="mini"
+              @click="newIterate(item)"
+            >新建迭代</el-button>
           </div>
         </template>
       </el-card>
     </div>
 
     <!-- 创建项目dialog -->
-    <el-dialog title="项目" :lock-scroll="false" :visible.sync="projectDialog" width="32%" @submit.native.prevent @close="clearProjectForm">
-      <el-form ref="projectform" v-loading="loading" style="width:100%" :rules="rules" :model="projectform">
+    <el-dialog
+      title="项目"
+      :lock-scroll="false"
+      :visible.sync="projectDialog"
+      width="32%"
+      @submit.native.prevent
+      @close="clearProjectForm"
+    >
+      <el-form
+        ref="projectform"
+        v-loading="loading"
+        style="width:100%"
+        :rules="rules"
+        :model="projectform"
+      >
         <el-form-item prop="title">
-          <el-input v-model="projectform.title" style="width:100% !important" placeholder="项目名称" />
+          <el-input
+            v-model="projectform.title"
+            style="width:100% !important"
+            placeholder="项目名称"
+          />
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" style="width:100%" @click="submitProject">确 定</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          style="width:100%"
+          @click="submitProject"
+        >确 定</el-button>
       </span>
     </el-dialog>
 
     <!-- 添加迭代dialog -->
-    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="iteationDialog" @submitted="handleSubmit" />
+    <iterate-dialog
+      :pid="pid"
+      :title="title"
+      :cnt="cnt"
+      :show.sync="iteationDialog"
+      @submitted="handleSubmit"
+    />
     <!-- 完成迭代dialog -->
-    <finish-drawer :iterate="tmp" :show.sync="bdrawer_show" :title="title" :serial="serial" @submitted="handleSubmit" />
+    <finish-drawer
+      :iterate="tmp"
+      :show.sync="bdrawer_show"
+      :title="title"
+      :serial="serial"
+      @submitted="handleSubmit"
+    />
   </div>
 </template>
 <script>

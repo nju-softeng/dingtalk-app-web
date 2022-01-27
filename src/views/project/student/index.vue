@@ -1,10 +1,22 @@
 <template>
   <div class="app-container">
     <div class="box">
-      <el-tabs v-model="activeTab" tab-position="top">
-        <el-tab-pane label="我参与的" name="myIteration" />
-        <el-tab-pane label="我的bug" name="userbug" />
-        <el-tab-pane label="所有项目" name="devlist" />
+      <el-tabs
+        v-model="activeTab"
+        tab-position="top"
+      >
+        <el-tab-pane
+          label="我参与的"
+          name="myIteration"
+        />
+        <el-tab-pane
+          label="我的bug"
+          name="userbug"
+        />
+        <el-tab-pane
+          label="所有项目"
+          name="devlist"
+        />
       </el-tabs>
 
       <component :is="activeTab" />

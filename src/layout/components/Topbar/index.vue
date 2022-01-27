@@ -1,12 +1,33 @@
 <template>
-  <div class="menu" style="display:flex">
-    <div class="logo" style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;" @click="go">
-      <svg-icon icon-class="devops" style="margin:0 16px;" />
+  <div
+    class="menu"
+    style="display:flex"
+  >
+    <div
+      class="logo"
+      style="display:flex; justify-content: center; align-items: center;margin-left:16px;margin-right:16px;"
+      @click="go"
+    >
+      <svg-icon
+        icon-class="devops"
+        style="margin:0 16px;"
+      />
       <div style="font-size:12.5px">DevOps+</div>
     </div>
 
-    <el-menu :default-active="activeMenu" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
-      <topbar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
+    <el-menu
+      :default-active="activeMenu"
+      :text-color="variables.menuText"
+      :unique-opened="false"
+      :active-text-color="variables.menuActiveText"
+      mode="horizontal"
+    >
+      <topbar-item
+        v-for="route in permission_routes"
+        :key="route.index"
+        :item="route"
+        :base-path="route.path"
+      />
     </el-menu>
   </div>
 </template>

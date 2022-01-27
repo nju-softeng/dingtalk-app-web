@@ -3,11 +3,19 @@
     <div class="card">
       <div class="user-profile">
         <div class="box-center">
-          <el-avatar class="avatar" shape="square" :size="60" :src="avatar">{{
+          <el-avatar
+            class="avatar"
+            shape="square"
+            :size="60"
+            :src="avatar"
+          >{{
             user.name
           }}</el-avatar>
         </div>
-        <div class="box-center" style="height:100px">
+        <div
+          class="box-center"
+          style="height:100px"
+        >
           <template v-if="edit === false">
             <div class="user-name text-center">{{ user.name }}</div>
             <div class="user-role text-center text-muted">
@@ -16,13 +24,29 @@
           </template>
           <template v-else>
             <div class="user-name text-center">
-              <el-input v-model="user.name" style="width:180px" placeholder="姓名" />
-              <el-input v-model="user.stuNum" style="width:180px;padding-top:10px" placeholder="学号" />
+              <el-input
+                v-model="user.name"
+                style="width:180px"
+                placeholder="姓名"
+              />
+              <el-input
+                v-model="user.stuNum"
+                style="width:180px;padding-top:10px"
+                placeholder="学号"
+              />
             </div>
           </template>
 
-          <div class="text-center text-muted" style="padding-top:16px">
-            <el-button v-if="edit === false" size="mini" style="width:180px" @click="edit = true">编辑资料</el-button>
+          <div
+            class="text-center text-muted"
+            style="padding-top:16px"
+          >
+            <el-button
+              v-if="edit === false"
+              size="mini"
+              style="width:180px"
+              @click="edit = true"
+            >编辑资料</el-button>
             <el-button
               v-else
               size="mini"

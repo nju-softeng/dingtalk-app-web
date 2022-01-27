@@ -1,13 +1,22 @@
 <template>
   <div>
     <div style="margin-bottom:5px">
-      <el-radio-group v-model="radio" size="mini" @change="changeRadio">
+      <el-radio-group
+        v-model="radio"
+        size="mini"
+        @change="changeRadio"
+      >
         <el-radio-button label="进行中" />
         <el-radio-button label="已结束" />
         <el-radio-button label="全部" />
       </el-radio-group>
     </div>
-    <el-table v-loading="loading" :show-header="false" :data="list" class="tableClass">
+    <el-table
+      v-loading="loading"
+      :show-header="false"
+      :data="list"
+      class="tableClass"
+    >
       <el-table-column width="250">
         <template slot-scope="scope">
           <div style="height:80px; display:flex; justify-content: center; flex-direction:column;">
@@ -37,7 +46,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="radio != '进行中'" align="center" min-width="200px">
+      <el-table-column
+        v-if="radio != '进行中'"
+        align="center"
+        min-width="200px"
+      >
         <template slot-scope="scope">
           <div>
             完成时间
@@ -46,10 +59,16 @@
             <el-tag type="info">进行中</el-tag>
           </template>
           <template v-else>
-            <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">
+            <el-tag
+              v-if="scope.row.finishTime <= scope.row.endTime"
+              type="success"
+            >
               <i class="el-icon-time" />
               {{ scope.row.finishTime }} 按时完成</el-tag>
-            <el-tag v-else type="danger">
+            <el-tag
+              v-else
+              type="danger"
+            >
               {{ scope.row.finishTime }} 延期完成
             </el-tag>
           </template>
@@ -62,17 +81,32 @@
             <div style="padding-left:10px">开发者</div>
             <div style="min-width:300px;">
               <template v-if="scope.row.status === false">
-                <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }}</el-tag>
+                <el-tag
+                  v-for="(o, index) in scope.row.iterationDetails"
+                  :key="index"
+                  style="margin:0 4px"
+                  effect="plain"
+                  size="small"
+                >{{ o.user.name }}</el-tag>
               </template>
               <template v-else>
-                <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }} AC: {{ o.ac }}</el-tag>
+                <el-tag
+                  v-for="(o, index) in scope.row.iterationDetails"
+                  :key="index"
+                  style="margin:0 4px"
+                  effect="plain"
+                  size="small"
+                >{{ o.user.name }} AC: {{ o.ac }}</el-tag>
               </template>
             </div>
           </div>
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" min-width="120">
+      <el-table-column
+        fixed="right"
+        min-width="120"
+      >
         <template>
           ---(设计中)
         </template>
@@ -81,7 +115,10 @@
       <template slot="empty">
         <div style="height:200px;">
           <div style="margin-top:100px;">
-            <svg-icon icon-class="null" style="font-size:32px" /> <br>
+            <svg-icon
+              icon-class="null"
+              style="font-size:32px"
+            /> <br>
           </div>
           <div style="line-height: 10px;">
             <span>没有迭代记录</span>

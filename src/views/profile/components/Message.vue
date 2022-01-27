@@ -1,7 +1,14 @@
 <template>
   <div>
-    <div v-if="messages.length != 0" style="min-height:200px">
-      <div v-for="(msg, index) in messages" :key="index" class="message">
+    <div
+      v-if="messages.length != 0"
+      style="min-height:200px"
+    >
+      <div
+        v-for="(msg, index) in messages"
+        :key="index"
+        class="message"
+      >
         <div class="title">{{ msg.title }}</div>
         <div style="display:flex; justify-content:space-between;">
           <div class="detail">
@@ -16,11 +23,24 @@
     </div>
     <template v-else>
       <div style="height:200px;text-align:center;padding-top:70px;">
-        <svg-icon icon-class="null" style="font-size:32px" />
+        <svg-icon
+          icon-class="null"
+          style="font-size:32px"
+        />
       </div>
     </template>
     <div style="text-align:center">
-      <el-pagination background :hide-on-single-page="total < 10 ? true : false" small layout="prev, pager, next" :total="total" :page-size="10" @prev-click="handlePrev" @next-click="handleNext" @current-change="handleCurrentChange" />
+      <el-pagination
+        background
+        :hide-on-single-page="total < 10 ? true : false"
+        small
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="10"
+        @prev-click="handlePrev"
+        @next-click="handleNext"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>

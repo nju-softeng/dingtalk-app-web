@@ -2,10 +2,16 @@
   <div class="app-container">
     <div class="box">
       <el-tabs v-model="activetab">
-        <el-tab-pane label="待审核" name="checking">
+        <el-tab-pane
+          label="待审核"
+          name="checking"
+        >
           <span slot="label"><i class="el-icon-s-claim" /> 待审核</span>
         </el-tab-pane>
-        <el-tab-pane label="已审核" name="checked" />
+        <el-tab-pane
+          label="已审核"
+          name="checked"
+        />
       </el-tabs>
       <component :is="activetab" />
     </div>

@@ -8,7 +8,10 @@
       @close="$emit('update:show', false)"
       @closed="emptyForm"
     >
-      <div slot="title" style="font-size:14px">{{ title }}</div>
+      <div
+        slot="title"
+        style="font-size:14px"
+      >{{ title }}</div>
 
       <div class="drawer-content">
         <!-- dc表单 -->
@@ -36,11 +39,20 @@
           </el-form-item>
           <el-form-item prop="dvalue">
             <span slot="label"> <svg-icon icon-class="dvalue" /> D值</span>
-            <el-input v-model="form.dvalue" style="width:210px" />
+            <el-input
+              v-model="form.dvalue"
+              style="width:210px"
+            />
           </el-form-item>
-          <el-form-item v-if="showCvalue" prop="cvalue">
+          <el-form-item
+            v-if="showCvalue"
+            prop="cvalue"
+          >
             <span slot="label"> <svg-icon icon-class="dvalue" /> C值</span>
-            <el-input v-model="form.cvalue" style="width:210px" />
+            <el-input
+              v-model="form.cvalue"
+              style="width:210px"
+            />
           </el-form-item>
           <el-form-item prop="date">
             <span slot="label"> <svg-icon icon-class="week" /> 申请周</span>
@@ -112,7 +124,10 @@
       </div>
 
       <div class="drawer-footer">
-        <el-button style="width:50%" @click="visible = false">取 消</el-button>
+        <el-button
+          style="width:50%"
+          @click="visible = false"
+        >取 消</el-button>
         <el-button
           style="width:50%"
           type="primary"

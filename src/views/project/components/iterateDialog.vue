@@ -1,28 +1,64 @@
 <template>
   <div class="dialog">
     <!-- 添加迭代dialog -->
-    <el-dialog :visible.sync="visible" width="60%" @open="toOpen" @close="$emit('update:show', false)" @closed="handleClosed">
+    <el-dialog
+      :visible.sync="visible"
+      width="60%"
+      @open="toOpen"
+      @close="$emit('update:show', false)"
+      @closed="handleClosed"
+    >
       <div slot="title">{{ title }} - 第 {{ cnt + 1 }} 次迭代</div>
       <!-- 表单 -->
-      <el-form ref="iterateform" v-loading="loading" style="width:100%" :rules="rules" :model="iterateform">
+      <el-form
+        ref="iterateform"
+        v-loading="loading"
+        style="width:100%"
+        :rules="rules"
+        :model="iterateform"
+      >
         <el-form-item prop="dates">
           <span slot="label">
             <svg-icon icon-class="paper" /> 起止时间: </span>
-          <el-date-picker v-model="iterateform.dates" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
+          <el-date-picker
+            v-model="iterateform.dates"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
         </el-form-item>
         <el-form-item prop="dingIds">
           <span slot="label">
             <svg-icon icon-class="paper" /> 分配任务: </span>
-          <el-tag v-for="(u, index) in userlist" :key="index" size="medium" closable style="margin: 0 2px" @close="closeTag(u)">{{ u.name }}</el-tag>
-          <el-button style="margin-left:2px" size="mini" @click="choose()">
+          <el-tag
+            v-for="(u, index) in userlist"
+            :key="index"
+            size="medium"
+            closable
+            style="margin: 0 2px"
+            @close="closeTag(u)"
+          >{{ u.name }}</el-tag>
+          <el-button
+            style="margin-left:2px"
+            size="mini"
+            @click="choose()"
+          >
             <i>
               <svg-icon icon-class="addperson" /> </i> 添加</el-button>
         </el-form-item>
       </el-form>
       <!-- 确认按钮 -->
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="visible = false">取 消</el-button>
-        <el-button type="primary" @click="submitIterate()">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitIterate()"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>

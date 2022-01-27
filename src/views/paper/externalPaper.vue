@@ -1,43 +1,106 @@
 <template>
   <div>
-    <el-row :gutter="10" style="min-height: 400px;">
-      <el-col v-for="(item,index) in list" :key="index" :xs="24" :sm="8" :md="6" :lg="6">
+    <el-row
+      :gutter="10"
+      style="min-height: 400px;"
+    >
+      <el-col
+        v-for="(item,index) in list"
+        :key="index"
+        :xs="24"
+        :sm="8"
+        :md="6"
+        :lg="6"
+      >
         <div class="card">
-          <div style="cursor:pointer;" @click="goDetail(item.id)">
-            <div class="title" style="min-height: 53px">
+          <div
+            style="cursor:pointer;"
+            @click="goDetail(item.id)"
+          >
+            <div
+              class="title"
+              style="min-height: 53px"
+            >
               {{ item.title }}
             </div>
-            <div v-if="item.vote.result === undefined " class="info">
+            <div
+              v-if="item.vote.result === undefined "
+              class="info"
+            >
               <div class="info-item">投票时间</div>
               <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
             </div>
-            <div v-else class="info">
+            <div
+              v-else
+              class="info"
+            >
               <div class="info-item">
                 <span>投票意见 : </span>
                 <span>
-                  <el-tag v-if="item.vote.result === true" class="tag" type="success">ACCEPT</el-tag>
-                  <el-tag v-else class="tag" type="danger">REJECT</el-tag>
+                  <el-tag
+                    v-if="item.vote.result === true"
+                    class="tag"
+                    type="success"
+                  >ACCEPT</el-tag>
+                  <el-tag
+                    v-else
+                    class="tag"
+                    type="danger"
+                  >REJECT</el-tag>
                 </span>
               </div>
               <div class="info-item">
                 <span>录用结果 : </span>
                 <span>
-                  <el-tag v-if="item.result === undefined" class="tag" type="success">等待中</el-tag>
-                  <el-tag v-else-if="item.result === true" class="tag" type="success">ACCEPT</el-tag>
-                  <el-tag v-else class="tag" type="danger">REJECT</el-tag>
+                  <el-tag
+                    v-if="item.result === undefined"
+                    class="tag"
+                    type="success"
+                  >等待中</el-tag>
+                  <el-tag
+                    v-else-if="item.result === true"
+                    class="tag"
+                    type="success"
+                  >ACCEPT</el-tag>
+                  <el-tag
+                    v-else
+                    class="tag"
+                    type="danger"
+                  >REJECT</el-tag>
                 </span>
               </div>
             </div>
           </div>
 
-          <div class="action" style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px">
+          <div
+            class="action"
+            style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px"
+          >
             <div style="font-size: 12px;color: gray;">
               更新日期：{{ item.updateDate || '未设置' }}
             </div>
             <div style="display: flex">
-              <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
-              <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
-              <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
+              <el-button
+                circle
+                plain
+                type="primary"
+                icon="el-icon-check"
+                @click="showPaperResultDialog(item)"
+              />
+              <el-button
+                circle
+                plain
+                type="primary"
+                icon="el-icon-edit"
+                @click="modifyExPaper(item)"
+              />
+              <el-button
+                circle
+                plain
+                type="danger"
+                icon="el-icon-delete"
+                @click="rmExPaper(item.id)"
+              />
             </div>
 
           </div>
@@ -45,8 +108,14 @@
       </el-col>
     </el-row>
     <!-- 论文列表 -->
-    <div v-if="list.length === 0" style="height:200px;text-align:center;margin-top: 180px">
-      <svg-icon icon-class="null" style="font-size:32px" />
+    <div
+      v-if="list.length === 0"
+      style="height:200px;text-align:center;margin-top: 180px"
+    >
+      <svg-icon
+        icon-class="null"
+        style="font-size:32px"
+      />
       <div style="font-size: 11px; color: #97a8be">空空如也~</div>
     </div>
     <!-- 分页 -->
@@ -71,7 +140,10 @@
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
-      <div v-loading="loading" style="padding-left: 10px">
+      <div
+        v-loading="loading"
+        style="padding-left: 10px"
+      >
         <el-form>
           <el-form-item>
             <span slot="label">

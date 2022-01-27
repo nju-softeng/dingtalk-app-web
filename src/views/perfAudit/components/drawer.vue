@@ -1,6 +1,11 @@
 <template>
   <div class="audit">
-    <el-drawer :visible.sync="visible" size="50%" :modal="false" @close="$emit('update:show', false)">
+    <el-drawer
+      :visible.sync="visible"
+      size="50%"
+      :modal="false"
+      @close="$emit('update:show', false)"
+    >
       <!-- 标题 -->
       <div slot="title">
         <transition name="fade">
@@ -14,15 +19,25 @@
         <div v-loading="load">
           <!-- 周报 -->
           <div class="report">
-            <div v-for="(item, index) in report" :key="index" class="item">
+            <div
+              v-for="(item, index) in report"
+              :key="index"
+              class="item"
+            >
               <h6>{{ item.key }}</h6>
               <p style="white-space: pre-line; font-size:14px">
                 <span v-html="formathtml(item.value)" />
               </p>
             </div>
-            <div v-if="report === null" class="center">
+            <div
+              v-if="report === null"
+              class="center"
+            >
               <div style="margin:8px 0px ">
-                <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                <svg-icon
+                  icon-class="null"
+                  style="font-size:32px"
+                /> <br>
               </div>
               <div style="margin-bottom:32px;color:#8c8c8c;font-size:12px;line-height:20px">
                 未获取到周报内容,可能原因：
@@ -36,7 +51,10 @@
           <el-divider />
 
           <div class="ac-card">
-            <el-table :data="form.acItems" tooltip-effect="dark">
+            <el-table
+              :data="form.acItems"
+              tooltip-effect="dark"
+            >
               <el-table-column label="AC申请理由">
                 <template slot-scope="{ row }">
                   <span :class="{ text_span: !row.status }">{{
@@ -44,12 +62,21 @@
                   }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="AC" align="center">
+              <el-table-column
+                label="AC"
+                align="center"
+              >
                 <template slot-scope="{ row }">
                   <template v-if="row.edit">
-                    <el-input v-model="row.ac" style="width:50px" />
+                    <el-input
+                      v-model="row.ac"
+                      style="width:50px"
+                    />
                   </template>
-                  <span v-else :class="{ text_span: !row.status }">{{
+                  <span
+                    v-else
+                    :class="{ text_span: !row.status }"
+                  >{{
                     row.ac
                   }}</span>
                 </template>
@@ -57,26 +84,54 @@
               <el-table-column label="操作">
                 <template slot-scope="{ row }">
                   <template v-if="row.edit">
-                    <el-button type="text" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">
+                    <el-button
+                      type="text"
+                      size="small"
+                      icon="el-icon-circle-check-outline"
+                      @click="confirmEdit(row)"
+                    >
                       确定
                     </el-button>
-                    <el-button type="text" size="small" @click="cancelEdit(row)">
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="cancelEdit(row)"
+                    >
                       取消
                     </el-button>
                   </template>
                   <template v-else>
-                    <el-button type="text" :disabled="row.reject" size="small" icon="el-icon-edit" @click="row.edit = !row.edit">
+                    <el-button
+                      type="text"
+                      :disabled="row.reject"
+                      size="small"
+                      icon="el-icon-edit"
+                      @click="row.edit = !row.edit"
+                    >
                       修改
                     </el-button>
-                    <el-button v-if="!row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">拒绝</el-button>
-                    <el-button v-if="row.reject" type="text" size="small" @click.native.prevent="rejectAcRow(row)">恢复</el-button>
+                    <el-button
+                      v-if="!row.reject"
+                      type="text"
+                      size="small"
+                      @click.native.prevent="rejectAcRow(row)"
+                    >拒绝</el-button>
+                    <el-button
+                      v-if="row.reject"
+                      type="text"
+                      size="small"
+                      @click.native.prevent="rejectAcRow(row)"
+                    >恢复</el-button>
                   </template>
                 </template>
               </el-table-column>
               <template slot="empty">
                 <div style="height:100px;">
                   <div style="margin-top:10px;">
-                    <svg-icon icon-class="null" style="font-size:32px" />
+                    <svg-icon
+                      icon-class="null"
+                      style="font-size:32px"
+                    />
                   </div>
                   <div style="line-height: 10px;">
                     <span>没有AC申请</span>
@@ -100,11 +155,26 @@
           <div style="padding:8px 8px;font-size:12.5px">
             <span> C值：</span>
 
-            <el-input v-model="form.cvalue" style="width:100px; margin-right:10px" placeholder="请输入内容" @input="valChange" />
+            <el-input
+              v-model="form.cvalue"
+              style="width:100px; margin-right:10px"
+              placeholder="请输入内容"
+              @input="valChange"
+            />
 
-            <el-button type="primary" size="mini" @click="submit">确认提交</el-button>
-            <el-button size="mini" @click="prev">上一条</el-button>
-            <el-button size="mini" @click="next">下一条</el-button>
+            <el-button
+              type="primary"
+              size="mini"
+              @click="submit"
+            >确认提交</el-button>
+            <el-button
+              size="mini"
+              @click="prev"
+            >上一条</el-button>
+            <el-button
+              size="mini"
+              @click="next"
+            >下一条</el-button>
           </div>
         </div>
       </div>
@@ -113,7 +183,10 @@
         <div class="submitted">
           <div style="margin-top:48px; text-align:center">
             <div style="text-align:center;padding-bottom:16px">
-              <svg-icon icon-class="success" style="font-size:32px;" />
+              <svg-icon
+                icon-class="success"
+                style="font-size:32px;"
+              />
             </div>
             <div style="font-size:15px">
               {{ temp.name }}
@@ -132,14 +205,23 @@
             <div v-if="activeAcItems.length != 0">
               <span> 通过的ac申请:</span>
 
-              <li v-for="(item, index) in activeAcItems" :key="index">
+              <li
+                v-for="(item, index) in activeAcItems"
+                :key="index"
+              >
                 {{ item.reason }} - - - - {{ item.ac }}
               </li>
             </div>
             <div v-else>
-              <div style="height:100px;" class="center">
+              <div
+                style="height:100px;"
+                class="center"
+              >
                 <div style="margin-top:10px; ">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                  <svg-icon
+                    icon-class="null"
+                    style="font-size:32px"
+                  /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>无AC申请</span>
@@ -149,10 +231,22 @@
           </div>
         </div>
 
-        <div class="drawer_foot" style="height:48px">
+        <div
+          class="drawer_foot"
+          style="height:48px"
+        >
           <div style="padding:8px 8px;font-size:12.5px">
-            <el-button type="primary" style="width:64%" size="mini" @click="carryOn">下一条</el-button>
-            <el-button style="width:33%" size="mini" @click="check = !check">编辑</el-button>
+            <el-button
+              type="primary"
+              style="width:64%"
+              size="mini"
+              @click="carryOn"
+            >下一条</el-button>
+            <el-button
+              style="width:33%"
+              size="mini"
+              @click="check = !check"
+            >编辑</el-button>
           </div>
         </div>
       </div>

@@ -3,7 +3,10 @@
     <div class="wrap-head">
       <div class="layout-container">
         <div class="groupInfo">
-          <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px">
+          <el-breadcrumb
+            separator-class="el-icon-arrow-right"
+            style="font-size:13px"
+          >
             <el-breadcrumb-item :to="{ path: '/paper/index/internal' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
@@ -33,7 +36,10 @@
                 </p>
               </div>
 
-              <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
+              <div
+                v-show="activeTab != 'vote'"
+                style="font-size:13px;color:#595959;"
+              >
                 <p>
                   <span style="margin-right:8px">
                     <svg-icon icon-class="vote" /> 投票意见:
@@ -54,7 +60,11 @@
             </div>
           </div>
         </div>
-        <el-menu :default-active="activeTab" mode="horizontal" @select="handleSelect">
+        <el-menu
+          :default-active="activeTab"
+          mode="horizontal"
+          @select="handleSelect"
+        >
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
@@ -63,7 +73,10 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" />
+      <component
+        :is="activeTab"
+        :paperid="id"
+      />
     </div>
   </div>
 </template>

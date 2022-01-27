@@ -2,10 +2,21 @@
   <div class="app-container">
     <div class="wrap1">
       <!-- 周绩效申请 drawer -->
-      <drawer :show.sync="show" :direction="direction" :tmp="tmp" :auditors="auditors" @submitted="submitted" />
+      <drawer
+        :show.sync="show"
+        :direction="direction"
+        :tmp="tmp"
+        :auditors="auditors"
+        @submitted="submitted"
+      />
       <div class="box">
         <!-- 申请按钮 -->
-        <el-button type="primary" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;" @click="addApply()">提交申请
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          style="margin : 0px 0px 10px 0px;"
+          @click="addApply()"
+        >提交申请
         </el-button>
         <!-- 已提的交申请 -->
         <div style="height:430px">
@@ -16,13 +27,23 @@
             style="width: 100%"
             :header-cell-style="{ background: '#eef1f6' }"
           >
-            <el-table-column width="30px" label="#" type="expand">
+            <el-table-column
+              width="30px"
+              label="#"
+              type="expand"
+            >
               <template slot-scope="props">
-                <el-form label-position="left" inline>
+                <el-form
+                  label-position="left"
+                  inline
+                >
                   <el-form-item label="AC申请：">
                     <span v-if="props.row.acItems.length === 0"> 无 </span>
                     <div v-else>
-                      <li v-for="(item, index) in props.row.acItems" :key="index">
+                      <li
+                        v-for="(item, index) in props.row.acItems"
+                        :key="index"
+                      >
                         申请值: {{ item.ac }} / 申请理由：{{ item.reason }}
                       </li>
                     </div>
@@ -31,7 +52,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column width="140px" align="center" label="提交日期">
+            <el-table-column
+              width="140px"
+              align="center"
+              label="提交日期"
+            >
               <template slot-scope="{ row }">
                 <span>{{
                   row.insertTime | parseTime("{y}-{m}-{d} {h}:{i}")
@@ -39,25 +64,39 @@
               </template>
             </el-table-column>
 
-            <el-table-column width="140px" align="center" label="报表月周">
+            <el-table-column
+              width="140px"
+              align="center"
+              label="报表月周"
+            >
               <template slot-scope="{ row }">
                 <span>{{ row.yearmonth | formatWeek(row.week) }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column width="90px" align="center" label="审核人">
+            <el-table-column
+              width="90px"
+              align="center"
+              label="审核人"
+            >
               <template slot-scope="{ row }">
                 <span>{{ row.auditorName }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column width="80px" label="D值">
+            <el-table-column
+              width="80px"
+              label="D值"
+            >
               <template slot-scope="{ row }">
                 <span>{{ row.dvalue }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column min-width="200px" label="审核结果">
+            <el-table-column
+              min-width="200px"
+              label="审核结果"
+            >
               <template slot-scope="{ row }">
                 <template v-if="row.status">
                   <el-tag style="margin-right:5px">C值: {{ row.cvalue }}</el-tag>
@@ -70,18 +109,33 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" label="操作">
+            <el-table-column
+              align="center"
+              label="操作"
+            >
               <template slot-scope="{ row }">
-                <el-button v-if="!row.status || isAuditor(row.auditorid)" type="text" size="mini" icon="el-icon-edit" @click="addModify(row)">修改
+                <el-button
+                  v-if="!row.status || isAuditor(row.auditorid)"
+                  type="text"
+                  size="mini"
+                  icon="el-icon-edit"
+                  @click="addModify(row)"
+                >修改
                 </el-button>
-                <el-tag v-else type="info">已审核</el-tag>
+                <el-tag
+                  v-else
+                  type="info"
+                >已审核</el-tag>
                 <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="drawer = true">重新申请</el-button> -->
               </template>
             </el-table-column>
             <template slot="empty">
               <div style="height:280px;">
                 <div style="margin-top:100px;">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                  <svg-icon
+                    icon-class="null"
+                    style="font-size:32px"
+                  /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>没有已申请内容</span>

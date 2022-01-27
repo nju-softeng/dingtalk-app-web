@@ -2,11 +2,20 @@
   <div>
     <div>
       <!-- bug表格 -->
-      <el-table :data="list" class="btable" :show-header="false">
+      <el-table
+        :data="list"
+        class="btable"
+        :show-header="false"
+      >
         <el-table-column>
           <template slot-scope="scope">
             <p>
-              <el-popover placement="bottom" title="标题" width="358" trigger="hover">
+              <el-popover
+                placement="bottom"
+                title="标题"
+                width="358"
+                trigger="hover"
+              >
                 <div>
                   <p>
                     {{ scope.row.description }}
@@ -31,7 +40,12 @@
               </span>
               <span v-if="scope.row.status">
                 bug责任人：
-                <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" effect="plain" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                <el-tag
+                  v-for="(item, index) in scope.row.bugDetails"
+                  :key="index"
+                  effect="plain"
+                  style="margin:0 8px"
+                >{{ item.user.name }} AC: {{ item.ac }}</el-tag>
               </span>
             </p>
           </template>
@@ -40,7 +54,10 @@
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br>
+              <svg-icon
+                icon-class="null"
+                style="font-size:32px"
+              /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>没有bug记录</span>

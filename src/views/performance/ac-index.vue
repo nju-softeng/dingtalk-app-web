@@ -1,38 +1,86 @@
 <template>
   <div class="app-container">
     <div class="box-ac">
-      <el-button type="primary" style="margin-bottom: 8px; margin-left: 2px" icon="el-icon-document" @click="dialog = true">
+      <el-button
+        type="primary"
+        style="margin-bottom: 8px; margin-left: 2px"
+        icon="el-icon-document"
+        @click="dialog = true"
+      >
         导出AC数据
       </el-button>
 
     </div>
     <div class="box-ac">
       <!-- AC排名 -->
-      <el-card shadow="never" class="box-ac-card" style="width: 35%;">
-        <el-table ref="table" class="table" height="83vh" :data="list" highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }" @current-change="handleCurrentChange">
+      <el-card
+        shadow="never"
+        class="box-ac-card"
+        style="width: 35%;"
+      >
+        <el-table
+          ref="table"
+          class="table"
+          height="83vh"
+          :data="list"
+          highlight-current-row
+          style="width: 100%"
+          :header-cell-style="{ background: '#eef1f6' }"
+          @current-change="handleCurrentChange"
+        >
           <el-table-column type="index" />
-          <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="total" label="总AC" />
+          <el-table-column
+            prop="name"
+            label="姓名"
+          />
+          <el-table-column
+            prop="total"
+            label="总AC"
+          />
         </el-table>
       </el-card>
       <!-- 详细AC -->
-      <div v-loading="loading" class="box-ac-card" style="width: 65%;">
+      <div
+        v-loading="loading"
+        class="box-ac-card"
+        style="width: 65%;"
+      >
         <!-- 标题 -->
         <div class="title">
           <span style="padding-right:20px">{{ name }} 的AC日志</span>
           <el-tag size="small">总AC: {{ ac }}</el-tag>
         </div>
         <!-- 详细AC -->
-        <el-scrollbar v-if="aclist.length != 0" style="height: 93%;">
+        <el-scrollbar
+          v-if="aclist.length != 0"
+          style="height: 93%;"
+        >
           <el-timeline>
-            <el-timeline-item v-for="(item, index) in aclist" :key="index" :timestamp="item.create_time" placement="top">
+            <el-timeline-item
+              v-for="(item, index) in aclist"
+              :key="index"
+              :timestamp="item.create_time"
+              placement="top"
+            >
               <div class="test">
-                <el-card shadow="never" class="ac-card">
+                <el-card
+                  shadow="never"
+                  class="ac-card"
+                >
                   <p style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ item.reason }}</p>
                   <p>
-                    <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
-                    <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
-                    <span v-if="item.classify === 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+                    <span
+                      v-if="item.ac > 0"
+                      style="padding-right:20px"
+                    >AC值变化：+ {{ item.ac }}</span>
+                    <span
+                      v-else
+                      style="padding-right:20px"
+                    >AC值变化： {{ item.ac }}</span>
+                    <span
+                      v-if="item.classify === 0"
+                      style="padding-right:20px"
+                    >审核人: {{ item.auditor }}</span>
                     <el-tag>{{ getClassify(item.classify) }}</el-tag>
                   </p>
                 </el-card>
@@ -40,8 +88,14 @@
             </el-timeline-item>
           </el-timeline>
         </el-scrollbar>
-        <div v-else class="null">
-          <svg-icon icon-class="null" style="font-size:32px" />
+        <div
+          v-else
+          class="null"
+        >
+          <svg-icon
+            icon-class="null"
+            style="font-size:32px"
+          />
           <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
             无AC数据
           </div>
@@ -50,7 +104,14 @@
     </div>
 
     <!-- 导出AC数据  dialog -->
-    <el-dialog class="download" title="导出AC数据" :lock-scroll="false" width="360px" :visible.sync="dialog" @submit.native.prevent>
+    <el-dialog
+      class="download"
+      title="导出AC数据"
+      :lock-scroll="false"
+      width="360px"
+      :visible.sync="dialog"
+      @submit.native.prevent
+    >
       <el-date-picker
         v-model="date"
         style="width:100%; margin-bottom: 0px"
@@ -59,8 +120,15 @@
         placeholder="选择导出的月份"
       />
 
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" style="width:100%" @click="download"> 下 载 </el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          style="width:100%"
+          @click="download"
+        > 下 载 </el-button>
       </span>
     </el-dialog>
 

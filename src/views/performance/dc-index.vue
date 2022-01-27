@@ -2,16 +2,40 @@
   <div class="app-container">
     <div class="box">
       <div>
-        <el-date-picker v-model="date" size="mini" :clearable="false" value-format="yyyy-MM-dd" type="month" style="width:120px" placeholder="选择月" @change="filtrate" />
+        <el-date-picker
+          v-model="date"
+          size="mini"
+          :clearable="false"
+          value-format="yyyy-MM-dd"
+          type="month"
+          style="width:120px"
+          placeholder="选择月"
+          @change="filtrate"
+        />
         <el-button-group style="margin-left:5px">
-          <el-button icon="el-icon-arrow-left" @click="prev">上一月</el-button>
+          <el-button
+            icon="el-icon-arrow-left"
+            @click="prev"
+          >上一月</el-button>
           <el-button @click="next">下一月<i class="el-icon-arrow-right el-icon--right" /></el-button>
         </el-button-group>
         <el-button-group style="margin-left:5px">
-          <el-button icon="el-icon-bottom-right" @click="desc" />
-          <el-button icon="el-icon-top-right" @click="asc" />
+          <el-button
+            icon="el-icon-bottom-right"
+            @click="desc"
+          />
+          <el-button
+            icon="el-icon-top-right"
+            @click="asc"
+          />
         </el-button-group>
-        <el-button type="primary" :loading="downloadLoading" style="margin:0 0 5px 5px;" icon="el-icon-document" @click="handleDownload">
+        <el-button
+          type="primary"
+          :loading="downloadLoading"
+          style="margin:0 0 5px 5px;"
+          icon="el-icon-document"
+          @click="handleDownload"
+        >
           导出 Excel
         </el-button>
       </div>
@@ -27,61 +51,117 @@
         height="79vh"
         :header-cell-style="{ background: '#eef1f6' }"
       >
-        <el-table-column fixed label="学号" align="center">
+        <el-table-column
+          fixed
+          label="学号"
+          align="center"
+        >
           <template slot-scope="{ row }">
             {{ row.stu_num || '未设置' }}
           </template>
         </el-table-column>
-        <el-table-column fixed prop="name" label="姓名" align="center" width="92" />
-        <el-table-column label="助研金" align="center" width="82" prop="salary">
+        <el-table-column
+          fixed
+          prop="name"
+          label="姓名"
+          align="center"
+          width="92"
+        />
+        <el-table-column
+          label="助研金"
+          align="center"
+          width="82"
+          prop="salary"
+        >
           <template slot-scope="{ row }">
             {{ row.salary || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第1周DC" align="center" prop="week1">
+        <el-table-column
+          label="第1周DC"
+          align="center"
+          prop="week1"
+        >
           <template slot-scope="{ row }">
             {{ row.week1 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第2周DC" align="center" prop="week2">
+        <el-table-column
+          label="第2周DC"
+          align="center"
+          prop="week2"
+        >
           <template slot-scope="{ row }">
             {{ row.week2 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第3周DC" align="center" prop="week2">
+        <el-table-column
+          label="第3周DC"
+          align="center"
+          prop="week2"
+        >
           <template slot-scope="{ row }">
             {{ row.week3 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第4周DC" align="center" prop="week3">
+        <el-table-column
+          label="第4周DC"
+          align="center"
+          prop="week3"
+        >
           <template slot-scope="{ row }">
             {{ row.week4 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="第5周DC" align="center" prop="week4">
+        <el-table-column
+          label="第5周DC"
+          align="center"
+          prop="week4"
+        >
           <template slot-scope="{ row }">
             {{ row.week5 || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="总DC" align="center" prop="week5">
+        <el-table-column
+          label="总DC"
+          align="center"
+          prop="week5"
+        >
           <template slot-scope="{ row }">
             {{ row.total || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="当前AC" align="center" prop="ac">
+        <el-table-column
+          label="当前AC"
+          align="center"
+          prop="ac"
+        >
           <template slot-scope="{ row }">
             {{ row.ac || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="Topup" align="center" width="130">
+        <el-table-column
+          label="Topup"
+          align="center"
+          width="130"
+        >
           <template slot-scope="{ row }">
             <template v-if="!row.edit">
               {{ row.topup || 0 }}
 
-              <el-button v-if="roles.includes('auditor') || roles.includes('admin')" type="text" icon="el-icon-edit" style="margin-left:16px" @click="row.edit = true" />
+              <el-button
+                v-if="roles.includes('auditor') || roles.includes('admin')"
+                type="text"
+                icon="el-icon-edit"
+                style="margin-left:16px"
+                @click="row.edit = true"
+              />
             </template>
             <template v-else>
-              <el-input v-model="row.topup" placeholder="请输入内容" />
+              <el-input
+                v-model="row.topup"
+                placeholder="请输入内容"
+              />
               <el-button
                 type="text"
                 icon="el-icon-check"
@@ -93,7 +173,12 @@
               >
                 确认
               </el-button>
-              <el-button type="text" icon="el-icon-close" style="margin-left:8px" @click="row.edit = false">
+              <el-button
+                type="text"
+                icon="el-icon-close"
+                style="margin-left:8px"
+                @click="row.edit = false"
+              >
                 取消
               </el-button>
             </template>
@@ -109,7 +194,6 @@ import { mapGetters } from 'vuex'
 import { getDcSummary, updateTopup } from '@/api/performance'
 import { downloadDcSummaryData } from '@/api/excel'
 import fileDownload from 'js-file-download'
-
 
 export default {
   data() {

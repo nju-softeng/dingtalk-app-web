@@ -1,12 +1,25 @@
 <template>
-  <div class="vote" :v-loading="loading">
+  <div
+    class="vote"
+    :v-loading="loading"
+  >
     <!-- 创建投票 -->
-    <div v-if="vote === ''" class="create">
+    <div
+      v-if="vote === ''"
+      class="create"
+    >
       <div>
         <p>发起投票</p>
       </div>
-      <div v-loading="loading" style="display:flex; ">
-        <el-form ref="voteform" style="width:240px" :model="voteform">
+      <div
+        v-loading="loading"
+        style="display:flex; "
+      >
+        <el-form
+          ref="voteform"
+          style="width:240px"
+          :model="voteform"
+        >
           <el-form-item
             prop="endTime"
             :rules="{
@@ -29,7 +42,10 @@
           </el-form-item>
         </el-form>
         <div>
-          <el-button type="primary" @click="submitvote">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="submitvote"
+          >确 定</el-button>
         </div>
       </div>
       <span style="font-size:12px">
@@ -40,38 +56,71 @@
     </div>
 
     <!-- 投票div -->
-    <div v-else-if="vote_detail.status === false" v-loading="loading" class="poll">
+    <div
+      v-else-if="vote_detail.status === false"
+      v-loading="loading"
+      class="poll"
+    >
       <div style="max-width: 500px; margin-left: auto; margin-right: auto">
         <div style="padding:10px; font-size:12px">
           <svg-icon icon-class="date" /> 投票截止
           {{ vote.endTime | parseTime("{y}-{m}-{d} {h}:{i}") }}
           <span v-if="isEnd"> [已结束]</span>
-          <el-tooltip content="截止时间后投票无效" placement="right">
-            <svg-icon style="margin-left:8px" icon-class="hint" />
+          <el-tooltip
+            content="截止时间后投票无效"
+            placement="right"
+          >
+            <svg-icon
+              style="margin-left:8px"
+              icon-class="hint"
+            />
           </el-tooltip>
         </div>
         <div v-if="!hasVoted">
           <div>
             <div class="choice">
-              <el-radio v-model="pollform.result" class="radio" border label="true">ACCEPT [接受]</el-radio>
+              <el-radio
+                v-model="pollform.result"
+                class="radio"
+                border
+                label="true"
+              >ACCEPT [接受]</el-radio>
             </div>
             <div class="choice">
-              <el-radio v-model="pollform.result" class="radio" border label="false">REJECT [拒绝]</el-radio>
+              <el-radio
+                v-model="pollform.result"
+                class="radio"
+                border
+                label="false"
+              >REJECT [拒绝]</el-radio>
             </div>
           </div>
           <div style="padding:10px">
-            <el-button style="width:100%" size="medium" type="primary" @click="voting">确认提交</el-button>
+            <el-button
+              style="width:100%"
+              size="medium"
+              type="primary"
+              @click="voting"
+            >确认提交</el-button>
           </div>
         </div>
         <div v-else>
           <div style="padding:10px">
-            <el-button style="width:100%" size="medium" type="success" plain>您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
+            <el-button
+              style="width:100%"
+              size="medium"
+              type="success"
+              plain
+            >您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
           </div>
         </div>
       </div>
     </div>
     <!-- 投票结果 -->
-    <div v-if="vote_detail.status === true" class="poll">
+    <div
+      v-if="vote_detail.status === true"
+      class="poll"
+    >
       <div style="padding-bottom:10px; font-size:12px; color:#8c8c8c">
         <span slot="label">
           <svg-icon icon-class="date" /> 投票截止</span>
@@ -83,20 +132,37 @@
           <span slot="label">
             <svg-icon icon-class="paper" /> Accept {{ vote_detail.accept }} 票</span>
           <span> {{ getNum(vote_detail.acceptedPercentage) }}% </span>
-          <span v-if="vote_detail.myvote === 'accept'" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getNum(vote_detail.acceptedPercentage)" status="success" />
+          <span
+            v-if="vote_detail.myvote === 'accept'"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
+          <el-progress
+            class="progress"
+            :percentage="getNum(vote_detail.acceptedPercentage)"
+            status="success"
+          />
         </el-form-item>
         <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject {{ vote_detail.reject }} 票</span>
           {{ getNum(1.0 - vote_detail.acceptedPercentage) }}%
-          <span v-if="vote_detail.myvote === 'reject'" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getNum(1.0 - vote_detail.acceptedPercentage)" status="exception" />
+          <span
+            v-if="vote_detail.myvote === 'reject'"
+            style="color:#409EFF; font-weight:500"
+          >[已选]</span>
+          <el-progress
+            class="progress"
+            :percentage="getNum(1.0 - vote_detail.acceptedPercentage)"
+            status="exception"
+          />
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <i class="el-icon-user" /> 参与人数 {{ vote_detail.total }} 人</span>
-          <span v-if="vote_detail.myvote === 'unvote'" style="color:#409EFF; font-weight:500;margin-right:5px">[您未参与投票]
+          <span
+            v-if="vote_detail.myvote === 'unvote'"
+            style="color:#409EFF; font-weight:500;margin-right:5px"
+          >[您未参与投票]
           </span>
           <el-link
             type="primary"
@@ -110,21 +176,33 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="flag" class="poll" style="padding-top:0px">
+    <div
+      v-if="flag"
+      class="poll"
+      style="padding-top:0px"
+    >
       <el-form>
         <el-form-item>
           <span slot="label">
             <i class="el-icon-circle-check" /> 接收 {{ vote_detail.accept }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in vote_detail.acceptnames" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag
+            v-for="(item, index) in vote_detail.acceptnames"
+            :key="index"
+            style="margin:0px 4px;"
+          >{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <i class="el-icon-circle-close" /> 拒绝 {{ vote_detail.reject }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in vote_detail.rejectnames" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag
+            v-for="(item, index) in vote_detail.rejectnames"
+            :key="index"
+            style="margin:0px 4px;"
+          >{{ item }}</el-tag>
         </el-form-item>
         <el-form-item v-if="vote_detail.unvotenames.length > 0">
           <span slot="label">
@@ -132,7 +210,12 @@
             {{ vote_detail.unvotenames.length }} 票:
           </span>
 
-          <el-tag v-for="(item, index) in vote_detail.unvotenames" :key="index" type="info" style="margin:0px 4px;">{{ item }}
+          <el-tag
+            v-for="(item, index) in vote_detail.unvotenames"
+            :key="index"
+            type="info"
+            style="margin:0px 4px;"
+          >{{ item }}
           </el-tag>
         </el-form-item>
       </el-form>

@@ -2,16 +2,31 @@
   <div class="app-container">
     <div class="content">
       <el-row :gutter="8">
-        <el-col :span="7" :xs="24">
+        <el-col
+          :span="7"
+          :xs="24"
+        >
           <user-card :user="user" />
         </el-col>
 
-        <el-col :span="17" :xs="24">
+        <el-col
+          :span="17"
+          :xs="24"
+        >
           <div class="card">
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="周绩效日志" name="dctab" />
-              <el-tab-pane label="AC日志" name="actab" />
-              <el-tab-pane label="消息记录" name="msg" />
+              <el-tab-pane
+                label="周绩效日志"
+                name="dctab"
+              />
+              <el-tab-pane
+                label="AC日志"
+                name="actab"
+              />
+              <el-tab-pane
+                label="消息记录"
+                name="msg"
+              />
             </el-tabs>
             <component :is="activeTab" />
           </div>

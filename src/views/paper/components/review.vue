@@ -1,36 +1,91 @@
 <template>
   <div class="box-r">
-    <el-alert v-if="device === 'mobile'" class="display-xs" title="请在PC客户端上提交 review" type="success" />
-    <div v-if="device !== 'mobile'" class="md-container hiden-xs">
-      <el-avatar style="margin-right:16px;" class="hiden-sm" shape="square" size="medium" :src="avatar"> {{ name }}</el-avatar>
+    <el-alert
+      v-if="device === 'mobile'"
+      class="display-xs"
+      title="请在PC客户端上提交 review"
+      type="success"
+    />
+    <div
+      v-if="device !== 'mobile'"
+      class="md-container hiden-xs"
+    >
+      <el-avatar
+        style="margin-right:16px;"
+        class="hiden-sm"
+        shape="square"
+        size="medium"
+        :src="avatar"
+      > {{ name }}</el-avatar>
       <div style="margin-bottom:24px">
         <div style="width: 90vw;max-width: 1100px">
-          <v-md-editor v-model="value" mode="edit" height="280px" class="editor" style="width: 100%; " @save="save" />
+          <v-md-editor
+            v-model="value"
+            mode="edit"
+            height="280px"
+            class="editor"
+            style="width: 100%; "
+            @save="save"
+          />
         </div>
 
-        <el-button style="margin-top:8px" @click="submit"> 提交</el-button>
+        <el-button
+          style="margin-top:8px"
+          @click="submit"
+        > 提交</el-button>
       </div>
     </div>
     <div style="overflow: auto; padding-bottom: 50px">
-      <div v-for="(item, index) in list" :key="index" class="md-container" style="margin-bottom:24px">
-        <el-avatar style="margin:16px 16px 0 0" class="hiden-sm" shape="square" size="medium" :src="item.user.avatar">{{ item.user.name }}</el-avatar>
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="md-container"
+        style="margin-bottom:24px"
+      >
+        <el-avatar
+          style="margin:16px 16px 0 0"
+          class="hiden-sm"
+          shape="square"
+          size="medium"
+          :src="item.user.avatar"
+        >{{ item.user.name }}</el-avatar>
         <div style="flex-grow:1">
           <div style="padding-top: 16px; padding-bottom: 8px">
             <span style="font-size:14px;">{{ item.user.name }} </span>
             <span style=" font-size:12px; color:#595959; padding:8px"> {{ item.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             <template v-if="uid === item.user.id">
-              <el-button type="text" style="margin-right:4px" @click="item.edit = true">编辑</el-button>
-              <el-popconfirm confirm-button-text="好的" cancel-button-text="不用了" icon="el-icon-info" icon-color="red" title="确定删除吗？" @confirm="remove(item.id)">
-                <el-button slot="reference" type="text">删除</el-button>
+              <el-button
+                type="text"
+                style="margin-right:4px"
+                @click="item.edit = true"
+              >编辑</el-button>
+              <el-popconfirm
+                confirm-button-text="好的"
+                cancel-button-text="不用了"
+                icon="el-icon-info"
+                icon-color="red"
+                title="确定删除吗？"
+                @confirm="remove(item.id)"
+              >
+                <el-button
+                  slot="reference"
+                  type="text"
+                >删除</el-button>
               </el-popconfirm>
             </template>
           </div>
           <div>
             <div style="width: 90vw;max-width: 1100px">
-              <v-md-editor v-model="item.md" :mode="item.edit === false ? 'preview' : 'edit'" />
+              <v-md-editor
+                v-model="item.md"
+                :mode="item.edit === false ? 'preview' : 'edit'"
+              />
             </div>
 
-            <div v-if="item.edit === true" style="margin-top:8px">
+            <div
+              v-if="item.edit === true"
+              style="margin-top:8px"
+            >
               <el-button @click="update(item)"> 提交</el-button>
               <el-button @click="fetchReview()"> 取消</el-button>
             </div>

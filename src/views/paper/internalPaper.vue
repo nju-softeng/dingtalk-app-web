@@ -2,9 +2,18 @@
   <div>
     <div class="paper-box">
       <!-- 论文列表 -->
-      <div class="list" style="height: 500px">
-        <el-table :data="list" class="tableClass">
-          <el-table-column label="论文信息" width="335">
+      <div
+        class="list"
+        style="height: 500px"
+      >
+        <el-table
+          :data="list"
+          class="tableClass"
+        >
+          <el-table-column
+            label="论文信息"
+            width="335"
+          >
             <template slot-scope="scope">
               <div class="paper-item">
                 <div class="left-content">
@@ -33,7 +42,10 @@
                       content="更新时间"
                       placement="top-start"
                     >
-                      <div v-if="scope.row.issueDate != undefined" class="time">
+                      <div
+                        v-if="scope.row.issueDate != undefined"
+                        class="time"
+                      >
                         <svg-icon icon-class="date" />
                         {{ scope.row.issueDate }}
                       </div>
@@ -43,7 +55,10 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="论文作者" align="center">
+          <el-table-column
+            label="论文作者"
+            align="center"
+          >
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tooltip
@@ -70,7 +85,11 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="投票结果" align="center" width="110">
+          <el-table-column
+            label="投票结果"
+            align="center"
+            width="110"
+          >
             <template slot-scope="scope">
               <div class="info-item">
                 <el-link
@@ -97,13 +116,21 @@
                     class="paper-tag"
                     type="success"
                   >ACCEPT</el-tag>
-                  <el-tag v-else class="paper-tag" type="danger">REJECT</el-tag>
+                  <el-tag
+                    v-else
+                    class="paper-tag"
+                    type="danger"
+                  >REJECT</el-tag>
                 </router-link>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column label="录用结果" align="center" width="110">
+          <el-table-column
+            label="录用结果"
+            align="center"
+            width="110"
+          >
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tag
@@ -125,16 +152,28 @@
                   class="paper-tag"
                   type="danger"
                 >REJECT</el-tag>
-                <el-tag v-else class="paper-tag" type="success">ACCEPT</el-tag>
+                <el-tag
+                  v-else
+                  class="paper-tag"
+                  type="success"
+                >ACCEPT</el-tag>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center" width="160">
+          <el-table-column
+            label="操作"
+            align="center"
+            width="160"
+          >
             <template slot-scope="scope">
               <div class="info-item">
                 <div style="font-size:14px">
-                  <el-tooltip effect="dark" content="录用结果" placement="top">
+                  <el-tooltip
+                    effect="dark"
+                    content="录用结果"
+                    placement="top"
+                  >
                     <svg-icon
                       icon-class="review"
                       @click="updatePaperResult(scope.row)"
@@ -142,7 +181,11 @@
                   </el-tooltip>
 
                   <el-divider direction="vertical" />
-                  <el-tooltip effect="dark" content="编辑" placement="top">
+                  <el-tooltip
+                    effect="dark"
+                    content="编辑"
+                    placement="top"
+                  >
                     <svg-icon
                       icon-class="edit"
                       @click="modifyPaper(scope.row)"
@@ -150,7 +193,11 @@
                   </el-tooltip>
 
                   <el-divider direction="vertical" />
-                  <el-tooltip effect="dark" content="删除" placement="top">
+                  <el-tooltip
+                    effect="dark"
+                    content="删除"
+                    placement="top"
+                  >
                     <svg-icon
                       icon-class="remove"
                       @click="removePaper(scope.row)"
@@ -163,7 +210,10 @@
           <template slot="empty">
             <div style="height:200px;">
               <div style="margin-top:100px;">
-                <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                <svg-icon
+                  icon-class="null"
+                  style="font-size:32px"
+                /> <br>
               </div>
               <div style="line-height: 10px;">
                 <span>没有论文记录</span>
@@ -196,7 +246,10 @@
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
-      <div v-loading="loading" style="padding-left: 10px">
+      <div
+        v-loading="loading"
+        style="padding-left: 10px"
+      >
         <el-form>
           <el-form-item>
             <span slot="label">
@@ -240,7 +293,10 @@
       top="24vh"
     >
       <div v-loading="loading">
-        <el-form ref="voteform" :model="voteform">
+        <el-form
+          ref="voteform"
+          :model="voteform"
+        >
           <el-form-item
             prop="endTime"
             :rules="{
@@ -263,9 +319,15 @@
           </el-form-item>
         </el-form>
 
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
           <el-button @click="voteDialog = false">取 消</el-button>
-          <el-button type="primary" @click="submitvote">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="submitvote"
+          >确 定</el-button>
         </span>
       </div>
     </el-dialog>

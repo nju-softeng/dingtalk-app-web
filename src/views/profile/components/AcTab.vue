@@ -2,17 +2,34 @@
   <div class="block">
     <template v-if="list.length === 0">
       <div style="height:200px;text-align:center;padding-top:70px;">
-        <svg-icon icon-class="null" style="font-size:32px" />
+        <svg-icon
+          icon-class="null"
+          style="font-size:32px"
+        />
       </div>
     </template>
     <el-timeline>
-      <el-timeline-item v-for="(item, index) of list" :key="index" :timestamp="item.create_time" placement="top">
+      <el-timeline-item
+        v-for="(item, index) of list"
+        :key="index"
+        :timestamp="item.create_time"
+        placement="top"
+      >
         <el-card shadow="never">
           <p>{{ item.reason }}</p>
           <p>
-            <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
-            <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
-            <span v-if="item.classify === 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+            <span
+              v-if="item.ac > 0"
+              style="padding-right:20px"
+            >AC值变化：+ {{ item.ac }}</span>
+            <span
+              v-else
+              style="padding-right:20px"
+            >AC值变化： {{ item.ac }}</span>
+            <span
+              v-if="item.classify === 0"
+              style="padding-right:20px"
+            >审核人: {{ item.auditor }}</span>
             <el-tag>{{ getClassify(item.classify) }}</el-tag>
           </p>
         </el-card>

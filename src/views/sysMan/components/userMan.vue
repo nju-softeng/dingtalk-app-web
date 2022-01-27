@@ -7,7 +7,10 @@
         content="用户进入应用时会自动导入，权限默认为普通用户"
         placement="right"
       >
-        <el-button type="primary" @click="refreshUser">拉取钉钉用户</el-button>
+        <el-button
+          type="primary"
+          @click="refreshUser"
+        >拉取钉钉用户</el-button>
       </el-tooltip>
       <span
         style="padding-left:100px;color: #999999; font-size:13px"
@@ -80,30 +83,53 @@
         style="margin-top:10px;"
         :header-cell-style="{ background: '#eef1f6' }"
       >
-        <el-table-column label="学号" align="center">
+        <el-table-column
+          label="学号"
+          align="center"
+        >
           <template slot-scope="{ row }">
             <span v-if="row.stuNum === undefined">未设置</span>
             <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" align="center">
+        <el-table-column
+          label="姓名"
+          align="center"
+        >
           <template slot-scope="{ row }">
             <span>{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="职位">
+        <el-table-column
+          align="center"
+          label="职位"
+        >
           <template slot-scope="{ row }">
             {{ row.position }}
             <span v-if="row.position === undefined">未设置</span>
           </template>
         </el-table-column>
-        <el-table-column prop="role" align="center" label="权限">
+        <el-table-column
+          prop="role"
+          align="center"
+          label="权限"
+        >
           <template slot-scope="{ row }">
-            <el-tag v-if="row.authority === 0" type="info">普通用户</el-tag>
-            <el-tag v-else type="success">评审人</el-tag>
+            <el-tag
+              v-if="row.authority === 0"
+              type="info"
+            >普通用户</el-tag>
+            <el-tag
+              v-else
+              type="success"
+            >评审人</el-tag>
           </template>
         </el-table-column>
-        <el-table-column width="200px" align="center" label="操作">
+        <el-table-column
+          width="200px"
+          align="center"
+          label="操作"
+        >
           <template slot-scope="{ row }">
             <el-button
               type="text"
@@ -134,14 +160,20 @@
                   "
                 >确定</el-button>
               </div>
-              <el-button slot="reference" type="text">停用</el-button>
+              <el-button
+                slot="reference"
+                type="text"
+              >停用</el-button>
             </el-popover>
           </template>
         </el-table-column>
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br>
+              <svg-icon
+                icon-class="null"
+                style="font-size:32px"
+              /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>无记录</span>
@@ -220,9 +252,15 @@
         </el-form>
       </div>
 
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="dialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitUserInfo">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitUserInfo"
+        >确 定</el-button>
       </span>
     </el-dialog>
 
@@ -238,16 +276,31 @@
             <span>{{ row.stuNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="name" label="姓名" />
-        <el-table-column prop="role" label="权限">
+        <el-table-column
+          property="name"
+          label="姓名"
+        />
+        <el-table-column
+          prop="role"
+          label="权限"
+        >
           <template slot-scope="{ row }">
-            <el-tag v-if="row.authority === 0" type="info">普通用户</el-tag>
-            <el-tag v-else type="success">评审人</el-tag>
+            <el-tag
+              v-if="row.authority === 0"
+              type="info"
+            >普通用户</el-tag>
+            <el-tag
+              v-else
+              type="success"
+            >评审人</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="{ row }">
-            <el-button type="text" @click="recoverU(row.id)">恢复</el-button>
+            <el-button
+              type="text"
+              @click="recoverU(row.id)"
+            >恢复</el-button>
           </template>
         </el-table-column>
       </el-table>

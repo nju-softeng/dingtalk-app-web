@@ -1,13 +1,31 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer size="82%" :visible.sync="visible" direction="btt" @open="handleOpen" @closed="handleClosed" @close="$emit('update:show', false)">
+    <el-drawer
+      size="82%"
+      :visible.sync="visible"
+      direction="btt"
+      @open="handleOpen"
+      @closed="handleClosed"
+      @close="$emit('update:show', false)"
+    >
       <div slot="title">{{ title }} - 第{{ serial }}次迭代</div>
       <div class="content">
-        <el-card shadow="never" style="width:360px;margin-right:5px;">
+        <el-card
+          shadow="never"
+          style="width:360px;margin-right:5px;"
+        >
           <div style="font-size:14px">
             <p style="margin-bottom:10px; margin-top:0px">完成时间</p>
-            <el-date-picker v-model="finishdate" type="date" style="width:200px" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期" @change="changeFinishTime" />
+            <el-date-picker
+              v-model="finishdate"
+              type="date"
+              style="width:200px"
+              value-format="yyyy-MM-dd"
+              :picker-options="{ firstDayOfWeek: 1 }"
+              placeholder="选择日期"
+              @change="changeFinishTime"
+            />
             <p>
               预计周期:
               <span style="font-size:12px">{{ iterate.beginTime }} ~ {{ iterate.endTime }}</span>
@@ -19,15 +37,26 @@
               <p>交付奖励AC: {{ tmp.AcAward.toFixed(3) }}</p>
               <p>最终团队AC: {{ tmp.totalAc.toFixed(3) }}</p>
             </div>
-            <div v-else style="padding:10px;padding-top:20px;background-color:#f5f5f5;height:120px;" />
+            <div
+              v-else
+              style="padding:10px;padding-top:20px;background-color:#f5f5f5;height:120px;"
+            />
           </div>
         </el-card>
 
-        <el-card v-if="finishdate != undefined" shadow="never" style="width:100%">
+        <el-card
+          v-if="finishdate != undefined"
+          shadow="never"
+          style="width:100%"
+        >
           <div style="font-size:14px">
             <!-- radio-group -->
             <div style="margin-bottom: 20px">
-              <el-radio-group v-model="radio" size="mini" @change="tabChange">
+              <el-radio-group
+                v-model="radio"
+                size="mini"
+                @change="tabChange"
+              >
                 <el-radio-button label="true"> 默认方案</el-radio-button>
                 <el-radio-button label="false">自定义</el-radio-button>
               </el-radio-group>
@@ -51,7 +80,11 @@
                         </tr>
                       </table>
                     </div>
-                    <div v-for="(item, index) in tmp.iterateInfos" :key="index" style="width: 80px ;">
+                    <div
+                      v-for="(item, index) in tmp.iterateInfos"
+                      :key="index"
+                      style="width: 80px ;"
+                    >
                       <table width="100%">
                         <tr>
                           <td class="black_title">{{ item.name }}</td>
@@ -80,7 +113,12 @@
                 <div>
                   <p>最终个人AC</p>
                   <div style="display:flex">
-                    <el-card v-for="(item, index) in tmp.iterateInfos" :key="index" shadow="never" style="width:160px; margin-right:5px">
+                    <el-card
+                      v-for="(item, index) in tmp.iterateInfos"
+                      :key="index"
+                      shadow="never"
+                      style="width:160px; margin-right:5px"
+                    >
                       {{ item.name }} : {{ item.ac.toFixed(3) }}
                     </el-card>
                   </div>
@@ -90,15 +128,28 @@
                 </div>
               </div>
               <div v-else>
-                <el-alert title="开发者的DC和为0，公式无法计算，请手动分配" type="error" />
+                <el-alert
+                  title="开发者的DC和为0，公式无法计算，请手动分配"
+                  type="error"
+                />
               </div>
             </div>
             <!-- 手动分配 -->
             <div v-show="!scheme">
               <el-card shadow="never">
-                <el-form label-width="70px" label-position="right">
-                  <el-form-item v-for="(o, index) in iterate.iterationDetails" :key="index" :label="o.user.name">
-                    <el-input v-model="o.ac" style="width:100px" />
+                <el-form
+                  label-width="70px"
+                  label-position="right"
+                >
+                  <el-form-item
+                    v-for="(o, index) in iterate.iterationDetails"
+                    :key="index"
+                    :label="o.user.name"
+                  >
+                    <el-input
+                      v-model="o.ac"
+                      style="width:100px"
+                    />
                   </el-form-item>
                 </el-form>
                 <div style="margin-top:20px">
@@ -122,7 +173,14 @@
             <div>
               <span style="padding-right:10px">完成时间</span>
 
-              <el-date-picker v-model="finishdate" type="date" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期" @change="changeFinishTime" />
+              <el-date-picker
+                v-model="finishdate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                :picker-options="{ firstDayOfWeek: 1 }"
+                placeholder="选择日期"
+                @change="changeFinishTime"
+              />
               <p>请在周日审核完DC后,再结算</p>
             </div>
           </div>

@@ -1,9 +1,18 @@
 <template>
   <div style="display:flex">
-    <el-card class="box-card" style="width:50%; height: 260px;margin-right:5px" shadow="never">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 260px;margin-right:5px"
+      shadow="never"
+    >
       <div slot="header">
         <span>津贴标准</span>
-        <el-button v-if="flag1" style="float: right; padding: 3px 0" type="text" @click="flag1 = false">编辑</el-button>
+        <el-button
+          v-if="flag1"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag1 = false"
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -15,21 +24,42 @@
         >保存</el-button>
       </div>
 
-      <el-table :data="subsidylist" :row-style="{ height: '41px' }">
-        <el-table-column label="在读学位" prop="position" />
-        <el-table-column label="津贴标准" align="center">
+      <el-table
+        :data="subsidylist"
+        :row-style="{ height: '41px' }"
+      >
+        <el-table-column
+          label="在读学位"
+          prop="position"
+        />
+        <el-table-column
+          label="津贴标准"
+          align="center"
+        >
           <template slot-scope="{ row }">
             <span v-if="flag1"> {{ row.subsidy }} 元 / 周</span>
-            <el-input v-else v-model="row.subsidy" />
+            <el-input
+              v-else
+              v-model="row.subsidy"
+            />
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-    <el-card class="box-card" style="width:50%; height: 500px;" shadow="never">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 500px;"
+      shadow="never"
+    >
       <div slot="header">
         <span>论文AC标准</span>
-        <el-button v-if="flag2" style="float: right; padding: 3px 0" type="text" @click="flag2 = false">编辑</el-button>
+        <el-button
+          v-if="flag2"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag2 = false"
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -41,12 +71,24 @@
         >保存</el-button>
       </div>
 
-      <el-table :data="paperlevels" :row-style="{ height: '41px' }">
-        <el-table-column label="论文类别" prop="title" />
-        <el-table-column label="总AC标准" align="center">
+      <el-table
+        :data="paperlevels"
+        :row-style="{ height: '41px' }"
+      >
+        <el-table-column
+          label="论文类别"
+          prop="title"
+        />
+        <el-table-column
+          label="总AC标准"
+          align="center"
+        >
           <template slot-scope="{ row }">
             <span v-if="flag2"> {{ row.total }} </span>
-            <el-input v-else v-model="row.total" />
+            <el-input
+              v-else
+              v-model="row.total"
+            />
           </template>
         </el-table-column>
       </el-table>

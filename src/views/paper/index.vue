@@ -1,11 +1,20 @@
 <template>
   <div class="app-container">
     <div class="paper-box">
-      <div class="action" style="">
+      <div
+        class="action"
+        style=""
+      >
         <!--导航栏-->
         <tabs v-model="activeTab">
-          <tab-pane label="组内评审" name="paperInternal" />
-          <tab-pane label="组外评审" name="paperExternal" />
+          <tab-pane
+            label="组内评审"
+            name="paperInternal"
+          />
+          <tab-pane
+            label="组外评审"
+            name="paperExternal"
+          />
         </tabs>
         <!--添加按钮-->
         <div
@@ -19,7 +28,12 @@
           </el-button>
         </div>
       </div>
-      <component :is="activeTab" ref="reviewTab" @modifyInternal="modifyInternalReview" @modifyExternal="modifyExternalReview" />
+      <component
+        :is="activeTab"
+        ref="reviewTab"
+        @modifyInternal="modifyInternalReview"
+        @modifyExternal="modifyExternalReview"
+      />
     </div>
 
     <!-- 添加评审记录  dialog -->
@@ -32,11 +46,17 @@
       @closed="closeAddReviewDialog"
     >
       <!-- dialog 标题 -->
-      <div slot="title" class="header-title">
+      <div
+        slot="title"
+        class="header-title"
+      >
         <span class="title-age"> {{ addReviewDialogTitle }} </span>
       </div>
       <!-- 评审类型选择菜单 -->
-      <div v-if="addReviewContent === undefined" class="dialog-content">
+      <div
+        v-if="addReviewContent === undefined"
+        class="dialog-content"
+      >
         <el-card
           shadow="hover"
           class="card"
@@ -53,7 +73,10 @@
         </el-card>
       </div>
       <!-- 添加内部评审 -->
-      <div v-if="addReviewContent === 'internalReview'" v-loading="loading">
+      <div
+        v-if="addReviewContent === 'internalReview'"
+        v-loading="loading"
+      >
         <div class="dialog-content">
           <div class="paper-form">
             <el-form
@@ -62,7 +85,10 @@
               :model="internalPaperForm"
               label-width="110px"
             >
-              <el-form-item prop="title" style="width: 500px">
+              <el-form-item
+                prop="title"
+                style="width: 500px"
+              >
                 <span slot="label">
                   <svg-icon icon-class="paper" /> 论文名称</span>
                 <el-input
@@ -144,12 +170,23 @@
                 @click="addAuthor"
               >添加作者
               </el-button>
-              <el-button type="text" style="margin-left:20px;" icon="el-icon-minus" @click="rmAuthor">减少作者</el-button>
+              <el-button
+                type="text"
+                style="margin-left:20px;"
+                icon="el-icon-minus"
+                @click="rmAuthor"
+              >减少作者</el-button>
             </el-form>
           </div>
         </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit('internalPaperForm')">确 定</el-button>
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            type="primary"
+            @click="submit('internalPaperForm')"
+          >确 定</el-button>
           <el-button @click="addReviewContent = undefined">取 消</el-button>
         </span>
       </div>
@@ -191,7 +228,10 @@
             </el-form>
           </div>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
           <el-button
             type="primary"
             @click="addExternalReview('externalPaperForm')"

@@ -6,11 +6,18 @@
     <router-view />
     <el-row>
       <el-col :span="24">
-        <img alt="Vue logo" src="@/assets/logo.png">
+        <img
+          alt="Vue logo"
+          src="@/assets/logo.png"
+        >
         <h1>Welcome</h1>
       </el-col>
       <el-col :span="24">
-        <div v-loading="loading" class="grid-content" element-loading-text="登录中" />
+        <div
+          v-loading="loading"
+          class="grid-content"
+          element-loading-text="登录中"
+        />
       </el-col>
     </el-row>
   </div>

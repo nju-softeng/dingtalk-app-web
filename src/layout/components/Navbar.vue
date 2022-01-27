@@ -2,9 +2,17 @@
   <div class="navbar">
     <div class="navbar_wrap">
       <template v-if="device === 'mobile'">
-        <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+        <hamburger
+          id="hamburger-container"
+          :is-active="sidebar.opened"
+          class="hamburger-container"
+          @toggleClick="toggleSideBar"
+        />
 
-        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+        <breadcrumb
+          id="breadcrumb-container"
+          class="breadcrumb-container"
+        />
       </template>
       <template v-else>
         <topbar class="breadcrumb-container" />
@@ -22,9 +30,18 @@
         </el-dropdown-menu>
       </el-dropdown> -->
 
-        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <el-dropdown
+          class="avatar-container right-menu-item hover-effect"
+          trigger="click"
+        >
           <div class="avatar-wrapper">
-            <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
+            <el-avatar
+              fit="fill"
+              shape="square"
+              :size="35"
+              class="user-avatar"
+              :src="avatar"
+            >
               {{ name }}
             </el-avatar>
             <i class="el-icon-caret-bottom" />

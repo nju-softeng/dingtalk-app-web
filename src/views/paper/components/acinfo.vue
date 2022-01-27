@@ -1,11 +1,18 @@
 <template>
   <div class="acinfo">
-    <div v-if="showContent" class="ac">
+    <div
+      v-if="showContent"
+      class="ac"
+    >
       <el-form>
         <el-form-item v-if="isExternal === false">
           <span slot="label">
             <svg-icon icon-class="paper" /> 作者AC变化</span>
-          <span v-for="(item, index) in internalPaper.paperDetails" :key="index" style="padding:6px">{{ item.user.name }}:
+          <span
+            v-for="(item, index) in internalPaper.paperDetails"
+            :key="index"
+            style="padding:6px"
+          >{{ item.user.name }}:
             {{ item.acRecord.ac }}</span>
         </el-form-item>
         <el-form-item>
@@ -15,18 +22,30 @@
           <!--            <span v-if="internalPaper.result === 4">+ 1 : </span>-->
           <!--            <span v-else>- 1 : </span>-->
           <!--          </span>-->
-          <el-tag v-for="(item, index) in acceptlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag
+            v-for="(item, index) in acceptlist"
+            :key="index"
+            style="margin:0px 4px;"
+          >{{ item }}</el-tag>
         </el-form-item>
         <el-form-item>
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿反对者：</span>
           <!--          <span v-if="internalPaper.result === 3">+ 1 : </span>-->
           <!--          <span v-else>- 1 : </span>-->
-          <el-tag v-for="(item, index) in rejectlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
+          <el-tag
+            v-for="(item, index) in rejectlist"
+            :key="index"
+            style="margin:0px 4px;"
+          >{{ item }}</el-tag>
         </el-form-item>
       </el-form>
     </div>
-    <el-alert v-else title="论文投稿结果尚未确定，无AC变化显示" type="warning" />
+    <el-alert
+      v-else
+      title="论文投稿结果尚未确定，无AC变化显示"
+      type="warning"
+    />
   </div>
 </template>
 <script>

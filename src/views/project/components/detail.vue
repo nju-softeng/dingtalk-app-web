@@ -3,10 +3,16 @@
     <div class="content">
       <!-- 页首 -->
       <el-page-header @back="goBack">
-        <span slot="title" style="font-size:12.5px">
+        <span
+          slot="title"
+          style="font-size:12.5px"
+        >
           返回
         </span>
-        <span slot="content" style="font-size:12.5px">
+        <span
+          slot="content"
+          style="font-size:12.5px"
+        >
           {{ title }}
         </span>
       </el-page-header>
@@ -31,16 +37,37 @@
       <div class="iterate">
         <!-- 操作按钮 -->
         <div style="margin-bottom:40px;">
-          <el-radio-group v-model="radio" style="float:right; margin:0 20px" size="mini">
+          <el-radio-group
+            v-model="radio"
+            style="float:right; margin:0 20px"
+            size="mini"
+          >
             <el-radio-button label="迭代" />
             <el-radio-button label="bug" />
           </el-radio-group>
-          <el-button v-if="radio === 'bug'" style="float:right" type="primary" icon="el-icon-plus" @click="bugDialog = true">报告bug</el-button>
-          <el-button v-if="permission && radio === '迭代'" style="float:right" type="primary" icon="el-icon-plus" @click="newIteration">新建迭代</el-button>
+          <el-button
+            v-if="radio === 'bug'"
+            style="float:right"
+            type="primary"
+            icon="el-icon-plus"
+            @click="bugDialog = true"
+          >报告bug</el-button>
+          <el-button
+            v-if="permission && radio === '迭代'"
+            style="float:right"
+            type="primary"
+            icon="el-icon-plus"
+            @click="newIteration"
+          >新建迭代</el-button>
         </div>
         <!-- 迭代表格 -->
         <div v-if="radio === '迭代'">
-          <el-table key="iteration" :show-header="false" :data="ilist" style="border-top: 0.5px solid #f0f0f0">
+          <el-table
+            key="iteration"
+            :show-header="false"
+            :data="ilist"
+            style="border-top: 0.5px solid #f0f0f0"
+          >
             <el-table-column width="200">
               <template slot-scope="scope">
                 <div style="height:80px;display:flex; justify-content: center; flex-direction:column;">
@@ -57,7 +84,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" width="180">
+            <el-table-column
+              align="center"
+              width="180"
+            >
               <template slot-scope="scope">
                 <div>
                   完成时间
@@ -66,10 +96,16 @@
                   <el-tag type="info">进行中</el-tag>
                 </template>
                 <template v-else>
-                  <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">
+                  <el-tag
+                    v-if="scope.row.finishTime <= scope.row.endTime"
+                    type="success"
+                  >
                     <i class="el-icon-time" />
                     {{ scope.row.finishTime }} 按时完成</el-tag>
-                  <el-tag v-else type="danger">
+                  <el-tag
+                    v-else
+                    type="danger"
+                  >
                     {{ scope.row.finishTime }} 延期完成
                   </el-tag>
                 </template>
@@ -82,28 +118,68 @@
                   <div style="padding-left:10px">开发者</div>
                   <div style="min-width:300px;">
                     <template v-if="scope.row.status === false">
-                      <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }}</el-tag>
+                      <el-tag
+                        v-for="(o, index) in scope.row.iterationDetails"
+                        :key="index"
+                        style="margin:0 4px"
+                        effect="plain"
+                        size="small"
+                      >{{ o.user.name }}</el-tag>
                     </template>
                     <template v-else>
-                      <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }} AC: {{ o.ac }}</el-tag>
+                      <el-tag
+                        v-for="(o, index) in scope.row.iterationDetails"
+                        :key="index"
+                        style="margin:0 4px"
+                        effect="plain"
+                        size="small"
+                      >{{ o.user.name }} AC: {{ o.ac }}</el-tag>
                     </template>
                   </div>
                 </div>
               </template>
             </el-table-column>
 
-            <el-table-column v-if="permission" fixed="right" width="120">
-              <template v-if="scope.$index === 0" slot-scope="scope">
+            <el-table-column
+              v-if="permission"
+              fixed="right"
+              width="120"
+            >
+              <template
+                v-if="scope.$index === 0"
+                slot-scope="scope"
+              >
                 <template v-if="scope.row.status === false">
-                  <el-button type="text" @click="finishIterate(scope.$index, scope.row)">完成</el-button>
-                  <el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button
+                    type="text"
+                    @click="finishIterate(scope.$index, scope.row)"
+                  >完成</el-button>
+                  <el-button
+                    type="text"
+                    @click="handleEdit(scope.$index, scope.row)"
+                  >编辑</el-button>
                 </template>
                 <template v-else>
-                  <el-button type="text" @click="modifyIterate(scope.$index, scope.row)">修改</el-button>
+                  <el-button
+                    type="text"
+                    @click="modifyIterate(scope.$index, scope.row)"
+                  >修改</el-button>
                 </template>
 
-                <el-popconfirm confirm-button-type="danger" confirm-button-text="删除" cancel-button-text="取消" icon="el-icon-info" icon-color="red" title="AC记录也会被删除,谨慎操作" @confirm="handledDelete(scope.$index, scope.row)">
-                  <el-button slot="reference" style="margin-left:10px;" type="text">删除</el-button>
+                <el-popconfirm
+                  confirm-button-type="danger"
+                  confirm-button-text="删除"
+                  cancel-button-text="取消"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  title="AC记录也会被删除,谨慎操作"
+                  @confirm="handledDelete(scope.$index, scope.row)"
+                >
+                  <el-button
+                    slot="reference"
+                    style="margin-left:10px;"
+                    type="text"
+                  >删除</el-button>
                 </el-popconfirm>
               </template>
             </el-table-column>
@@ -111,7 +187,10 @@
             <template slot="empty">
               <div style="height:200px;">
                 <div style="margin-top:100px;">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                  <svg-icon
+                    icon-class="null"
+                    style="font-size:32px"
+                  /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>没有迭代记录</span>
@@ -123,11 +202,20 @@
 
         <!-- bug表格 -->
         <div v-else>
-          <el-table key="bug" :data="buglist" :show-header="false">
+          <el-table
+            key="bug"
+            :data="buglist"
+            :show-header="false"
+          >
             <el-table-column>
               <template slot-scope="scope">
                 <p>
-                  <el-popover placement="bottom" title="标题" width="358" trigger="hover">
+                  <el-popover
+                    placement="bottom"
+                    title="标题"
+                    width="358"
+                    trigger="hover"
+                  >
                     <div>
                       <p>
                         {{ scope.row.description }}
@@ -150,18 +238,37 @@
                   </span>
                   <span v-if="scope.row.status">
                     bug责任人：
-                    <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" effect="plain" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                    <el-tag
+                      v-for="(item, index) in scope.row.bugDetails"
+                      :key="index"
+                      effect="plain"
+                      style="margin:0 8px"
+                    >{{ item.user.name }} AC: {{ item.ac }}</el-tag>
                   </span>
                 </p>
               </template>
             </el-table-column>
 
-            <el-table-column label="tttt" fixed="right" width="100px">
+            <el-table-column
+              label="tttt"
+              fixed="right"
+              width="100px"
+            >
               <template slot-scope="scope">
                 <template v-if="scope.row.status === undefined">
                   <template v-if="uid === scope.row.reporterid">
-                    <el-button type="text" size="small" icon="el-icon-edit" @click="editBug(scope.row)" />
-                    <el-button type="text" size="small" icon="el-icon-delete" @click="deleteBug(scope.row.id)" />
+                    <el-button
+                      type="text"
+                      size="small"
+                      icon="el-icon-edit"
+                      @click="editBug(scope.row)"
+                    />
+                    <el-button
+                      type="text"
+                      size="small"
+                      icon="el-icon-delete"
+                      @click="deleteBug(scope.row.id)"
+                    />
                   </template>
                 </template>
                 <template v-else>
@@ -173,7 +280,10 @@
             <template slot="empty">
               <div style="height:200px;">
                 <div style="margin-top:100px;">
-                  <svg-icon icon-class="null" style="font-size:32px" /> <br>
+                  <svg-icon
+                    icon-class="null"
+                    style="font-size:32px"
+                  /> <br>
                 </div>
                 <div style="line-height: 10px;">
                   <span>没有bug记录</span>
@@ -185,18 +295,52 @@
       </div>
     </div>
 
-    <iterate-dialog :pid="pid" :title="title" :cnt="cnt" :show.sync="idialog_show" :edit="tmp" @submitted="handleSubmitted" />
+    <iterate-dialog
+      :pid="pid"
+      :title="title"
+      :cnt="cnt"
+      :show.sync="idialog_show"
+      :edit="tmp"
+      @submitted="handleSubmitted"
+    />
 
-    <finish-drawer :iterate="finishtmp" :modify="modifyAC" :title="title" :serial="serial" :show.sync="bdrawer_show" @submitted="handleSubmitted" />
+    <finish-drawer
+      :iterate="finishtmp"
+      :modify="modifyAC"
+      :title="title"
+      :serial="serial"
+      :show.sync="bdrawer_show"
+      @submitted="handleSubmitted"
+    />
 
-    <el-dialog title="报告bug" :visible.sync="bugDialog" @close="handleClose">
-      <div v-loading="loading" style="width:100%">
-        <el-form ref="bugform" :data="buglist" :rules="rules" :model="bugform">
+    <el-dialog
+      title="报告bug"
+      :visible.sync="bugDialog"
+      @close="handleClose"
+    >
+      <div
+        v-loading="loading"
+        style="width:100%"
+      >
+        <el-form
+          ref="bugform"
+          :data="buglist"
+          :rules="rules"
+          :model="bugform"
+        >
           <el-form-item prop="title">
-            <el-input v-model="bugform.title" placeholder="标题" />
+            <el-input
+              v-model="bugform.title"
+              placeholder="标题"
+            />
           </el-form-item>
           <el-form-item prop="description">
-            <el-input v-model="bugform.description" type="textarea" :rows="4" placeholder="描述" />
+            <el-input
+              v-model="bugform.description"
+              type="textarea"
+              :rows="4"
+              placeholder="描述"
+            />
           </el-form-item>
         </el-form>
         <!-- <div>
@@ -205,9 +349,15 @@
         </div> -->
       </div>
 
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="bugDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitBug">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitBug"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>

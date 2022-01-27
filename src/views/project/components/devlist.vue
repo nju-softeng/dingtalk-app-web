@@ -3,20 +3,37 @@
     <!-- 项目列表 -->
     <div v-loading="loading" class="list">
       <!-- 无数据提示  -->
-      <div v-if="list.length === 0" style="margin-left: auto;margin-right: auto; padding-top:100px">
-        <svg-icon icon-class="null" style="font-size:32px" />
+      <div
+        v-if="list.length === 0"
+        style="margin-left: auto; margin-right: auto; padding-top: 100px"
+      >
+        <svg-icon icon-class="null" style="font-size: 32px" />
       </div>
       <!-- 项目卡片 -->
-      <el-card v-for="(item, index) in list" :key="index" class="item" shadow="never">
+      <el-card
+        v-for="(item, index) in list"
+        :key="index"
+        class="item"
+        shadow="never"
+      >
         <div>
           <!-- 标题 -->
-          <div style="margin-bottom:17px; ">
+          <div style="margin-bottom: 17px">
             <router-link :to="'/project/detail/' + item.id" class="link-type">
-              <svg-icon icon-class="git" style="font-size:16px; color:#586069; margin-right:5px" />
+              <svg-icon
+                icon-class="git"
+                style="font-size: 16px; color: #586069; margin-right: 5px"
+              />
               <el-link :underline="false" type="primary">{{
                 item.title
               }}</el-link>
-              <el-tag v-if="item.cnt != 0" type="info" style="margin-left:10px;" effect="plain">第 {{ item.cnt }} 次迭代</el-tag>
+              <el-tag
+                v-if="item.cnt != 0"
+                type="info"
+                style="margin-left: 10px"
+                effect="plain"
+                >第 {{ item.cnt }} 次迭代</el-tag
+              >
             </router-link>
           </div>
         </div>
@@ -24,49 +41,75 @@
         <template v-if="item.cnt === 0">
           <p style="color: #586069">尚未创建迭代</p>
           <p>
-            <span style="padding-right:15px; color: #586069">项目创建者：{{ item.name }}</span>
+            <span style="padding-right: 15px; color: #586069"
+              >项目创建者：{{ item.name }}</span
+            >
           </p>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else-if="!item.status">
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;">
+            <span class="date" style="padding-right: 15px">
               <i class="el-icon-time" /> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span>
-            <span v-if="getRemainDay(item.end_time) >= 0" style="color:#67C23A">
+              {{ item.end_time }}</span
+            >
+            <span
+              v-if="getRemainDay(item.end_time) >= 0"
+              style="color: #67c23a"
+            >
               剩余:
-              {{ getRemainDay(item.end_time) }} 天</span>
-            <span v-else style="color:#F56C6C">
-              延期: {{ -getRemainDay(item.end_time) }} 天</span>
+              {{ getRemainDay(item.end_time) }} 天</span
+            >
+            <span v-else style="color: #f56c6c">
+              延期: {{ -getRemainDay(item.end_time) }} 天</span
+            >
           </p>
-          <div style="font-size:12px;line-height:28px;">
-            <span style="padding-right:15px;color: #586069 ">项目创建者：{{ item.name }}</span>
-            <span style="padding-right:15px; color:#bfbfbf;">预期AC：{{ item.expectedac }}</span>
+          <div style="font-size: 12px; line-height: 28px">
+            <span style="padding-right: 15px; color: #586069"
+              >项目创建者：{{ item.name }}</span
+            >
+            <span style="padding-right: 15px; color: #bfbfbf"
+              >预期AC：{{ item.expectedac }}</span
+            >
             <!-- <span>按时交付: {{ item.success_cnt }} 次</span> -->
 
-            <el-button style="float:right" size="mini" @click="commitBug(item.id)">报告bug</el-button>
+            <el-button
+              style="float: right"
+              size="mini"
+              @click="commitBug(item.id)"
+              >报告bug</el-button
+            >
           </div>
         </template>
         <template v-else>
           <p style="color: #586069">
-            <span class="date" style="padding-right:15px;">
+            <span class="date" style="padding-right: 15px">
               <i class="el-icon-time" /> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span>
-            <span v-if="compareTime(item.end_time, item.finish_time)" style="color:#67C23A">
+              {{ item.end_time }}</span
+            >
+            <span
+              v-if="compareTime(item.end_time, item.finish_time)"
+              style="color: #67c23a"
+            >
               按时完成
             </span>
-            <span v-else style="color:#F56C6C"> 延期完成</span>
+            <span v-else style="color: #f56c6c"> 延期完成</span>
           </p>
-          <div style="font-size:12px;line-height:28px;">
-            <span style=" color: #586069">项目创建者：{{ item.name }}</span>
+          <div style="font-size: 12px; line-height: 28px">
+            <span style="color: #586069">项目创建者：{{ item.name }}</span>
 
-            <span style="padding-left:15px; color:#bfbfbf;">
+            <span style="padding-left: 15px; color: #bfbfbf">
               <router-link :to="'/project/detail/' + item.id" class="link-type">
                 查看详情
               </router-link>
             </span>
 
-            <el-button style="float:right" size="mini" @click="commitBug(item.id)">报告bug</el-button>
+            <el-button
+              style="float: right"
+              size="mini"
+              @click="commitBug(item.id)"
+              >报告bug</el-button
+            >
           </div>
         </template>
       </el-card>
@@ -74,63 +117,63 @@
   </div>
 </template>
 <script>
-import { listAllProject } from '@/api/project.js'
+import { listAllProject } from "@/api/project.js";
 
 export default {
   data() {
     return {
-      radio: '',
-      finishtime: '',
+      radio: "",
+      finishtime: "",
       userlist: [],
       unfinish: true,
       dialog: false,
       list: [],
       loading: false,
       dcloading: false,
-      uid: '',
+      uid: "",
       detailDialog: false,
       projectAc: {},
       tmp: {
-        name: '',
-        dates: ['', '']
+        name: "",
+        dates: ["", ""],
       },
-      dclist: []
-    }
+      dclist: [],
+    };
   },
   computed: {
     getRemainDay() {
-      return endtime => {
+      return (endtime) => {
         const day =
           (new Date(endtime) - new Date().setHours(8, 0, 0, 0)) /
-          (24 * 3600 * 1000)
-        return day
-      }
-    }
+          (24 * 3600 * 1000);
+        return day;
+      };
+    },
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
-    listAllProject().then(res => {
-      this.list = res.data
-      console.log(this.list)
-    })
+    this.uid = sessionStorage.getItem("uid");
+    listAllProject().then((res) => {
+      this.list = res.data;
+      console.log(this.list);
+    });
   },
   methods: {
     compareTime(ddl, finish) {
-      const d1 = new Date(ddl)
-      const d2 = new Date(finish)
-      return d1.getTime() > d2.getTime()
+      const d1 = new Date(ddl);
+      const d2 = new Date(finish);
+      return d1.getTime() > d2.getTime();
     },
     commitBug(id) {
       this.$router.push({
-        name: 'Detail',
+        name: "Detail",
         params: {
           id: id,
-          tab: 'bug'
-        }
-      })
-    }
-  }
-}
+          tab: "bug",
+        },
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .project ::v-deep .el-dialog__body {

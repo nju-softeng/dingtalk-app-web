@@ -1,16 +1,33 @@
 <template>
   <div class="drawer">
     <!-- 添加迭代drawer -->
-    <el-drawer size="82%" :visible.sync="visible" direction="btt" @open="handleOpen" @closed="handleClosed" @close="$emit('update:show', false)">
+    <el-drawer
+      size="82%"
+      :visible.sync="visible"
+      direction="btt"
+      @open="handleOpen"
+      @closed="handleClosed"
+      @close="$emit('update:show', false)"
+    >
       <div slot="title">{{ title }} - 第{{ serial }}次迭代</div>
       <div class="content">
-        <el-card shadow="never" style="width:360px;margin-right:5px;">
-          <div style="font-size:14px">
-            <p style="margin-bottom:10px; margin-top:0px">完成时间</p>
-            <el-date-picker v-model="finishdate" type="date" style="width:200px" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期" @change="changeFinishTime" />
+        <el-card shadow="never" style="width: 360px; margin-right: 5px">
+          <div style="font-size: 14px">
+            <p style="margin-bottom: 10px; margin-top: 0px">完成时间</p>
+            <el-date-picker
+              v-model="finishdate"
+              type="date"
+              style="width: 200px"
+              value-format="yyyy-MM-dd"
+              :picker-options="{ firstDayOfWeek: 1 }"
+              placeholder="选择日期"
+              @change="changeFinishTime"
+            />
             <p>
               预计周期:
-              <span style="font-size:12px">{{ iterate.beginTime }} ~ {{ iterate.endTime }}</span>
+              <span style="font-size: 12px"
+                >{{ iterate.beginTime }} ~ {{ iterate.endTime }}</span
+              >
             </p>
             <el-divider />
             <div v-if="finishdate != undefined">
@@ -19,12 +36,24 @@
               <p>交付奖励AC: {{ tmp.AcAward.toFixed(3) }}</p>
               <p>最终团队AC: {{ tmp.totalAc.toFixed(3) }}</p>
             </div>
-            <div v-else style="padding:10px;padding-top:20px;background-color:#f5f5f5;height:120px;" />
+            <div
+              v-else
+              style="
+                padding: 10px;
+                padding-top: 20px;
+                background-color: #f5f5f5;
+                height: 120px;
+              "
+            />
           </div>
         </el-card>
 
-        <el-card v-if="finishdate != undefined" shadow="never" style="width:100%">
-          <div style="font-size:14px">
+        <el-card
+          v-if="finishdate != undefined"
+          shadow="never"
+          style="width: 100%"
+        >
+          <div style="font-size: 14px">
             <!-- radio-group -->
             <div style="margin-bottom: 20px">
               <el-radio-group v-model="radio" size="mini" @change="tabChange">
@@ -37,11 +66,11 @@
               <div v-if="tmp.status">
                 <div>
                   <p>迭代所跨周: {{ tmp.period }}</p>
-                  <p style="white-space: pre;">其中: {{ tmp.info }}</p>
+                  <p style="white-space: pre">其中: {{ tmp.info }}</p>
                 </div>
                 <div>
-                  <div style="display:flex;">
-                    <div style="width:80px;">
+                  <div style="display: flex">
+                    <div style="width: 80px">
                       <table width="100%">
                         <tr>
                           <td class="black_title">#</td>
@@ -51,7 +80,11 @@
                         </tr>
                       </table>
                     </div>
-                    <div v-for="(item, index) in tmp.iterateInfos" :key="index" style="width: 80px ;">
+                    <div
+                      v-for="(item, index) in tmp.iterateInfos"
+                      :key="index"
+                      style="width: 80px"
+                    >
                       <table width="100%">
                         <tr>
                           <td class="black_title">{{ item.name }}</td>
@@ -63,7 +96,7 @@
                         </tr>
                       </table>
                     </div>
-                    <div style="width:80px;">
+                    <div style="width: 80px">
                       <table width="100%">
                         <tr>
                           <td class="black_title">平均DC和</td>
@@ -79,29 +112,41 @@
                 </div>
                 <div>
                   <p>最终个人AC</p>
-                  <div style="display:flex">
-                    <el-card v-for="(item, index) in tmp.iterateInfos" :key="index" shadow="never" style="width:160px; margin-right:5px">
+                  <div style="display: flex">
+                    <el-card
+                      v-for="(item, index) in tmp.iterateInfos"
+                      :key="index"
+                      shadow="never"
+                      style="width: 160px; margin-right: 5px"
+                    >
                       {{ item.name }} : {{ item.ac.toFixed(3) }}
                     </el-card>
                   </div>
                 </div>
-                <div style="margin-top:20px">
+                <div style="margin-top: 20px">
                   <el-button @click="setIterationAC">确定提交</el-button>
                 </div>
               </div>
               <div v-else>
-                <el-alert title="开发者的DC和为0，公式无法计算，请手动分配" type="error" />
+                <el-alert
+                  title="开发者的DC和为0，公式无法计算，请手动分配"
+                  type="error"
+                />
               </div>
             </div>
             <!-- 手动分配 -->
             <div v-show="!scheme">
               <el-card shadow="never">
                 <el-form label-width="70px" label-position="right">
-                  <el-form-item v-for="(o, index) in iterate.iterationDetails" :key="index" :label="o.user.name">
-                    <el-input v-model="o.ac" style="width:100px" />
+                  <el-form-item
+                    v-for="(o, index) in iterate.iterationDetails"
+                    :key="index"
+                    :label="o.user.name"
+                  >
+                    <el-input v-model="o.ac" style="width: 100px" />
                   </el-form-item>
                 </el-form>
-                <div style="margin-top:20px">
+                <div style="margin-top: 20px">
                   <el-button @click="manualAc">确定提交</el-button>
                 </div>
               </el-card>
@@ -112,17 +157,36 @@
         <el-card
           v-show="finishdate === undefined"
           shadow="never"
-          style="width:100%; display:flex; justify-content: center;
-        align-items: center; "
+          style="
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
         >
-          <div style="padding:10px;text-align:center;">
-            暂无迭代绩效数据
-          </div>
-          <div style="height:180px; width:500px; background-color:#f5f5f5; font-size:14px;display:flex; justify-content: center;align-items: center; ">
+          <div style="padding: 10px; text-align: center">暂无迭代绩效数据</div>
+          <div
+            style="
+              height: 180px;
+              width: 500px;
+              background-color: #f5f5f5;
+              font-size: 14px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
             <div>
-              <span style="padding-right:10px">完成时间</span>
+              <span style="padding-right: 10px">完成时间</span>
 
-              <el-date-picker v-model="finishdate" type="date" value-format="yyyy-MM-dd" :picker-options="{ firstDayOfWeek: 1 }" placeholder="选择日期" @change="changeFinishTime" />
+              <el-date-picker
+                v-model="finishdate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                :picker-options="{ firstDayOfWeek: 1 }"
+                placeholder="选择日期"
+                @change="changeFinishTime"
+              />
               <p>请在周日审核完DC后,再结算</p>
             </div>
           </div>
@@ -132,27 +196,27 @@
   </div>
 </template>
 <script>
-import { computeIterateAc, autoSetAc, manualSetAc } from '@/api/project.js'
+import { computeIterateAc, autoSetAc, manualSetAc } from "@/api/project.js";
 
 export default {
   props: {
     show: {
       type: Boolean,
-      default: false
+      default: false,
     },
     iterate: {
-      type: Object
+      type: Object,
     },
     modify: {
       type: Boolean,
-      default: false
+      default: false,
     },
     title: {
-      type: String
+      type: String,
     },
     serial: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   data() {
     return {
@@ -167,64 +231,64 @@ export default {
         AcAward: 0,
         totalAc: 0,
         dcSum: 0,
-        iterateInfos: []
-      }
-    }
+        iterateInfos: [],
+      },
+    };
   },
   watch: {
     show() {
-      this.visible = this.show
-    }
+      this.visible = this.show;
+    },
   },
   methods: {
     changeFinishTime() {
       if (this.finishdate != undefined) {
-        console.log(this.iterate.id, this.finishdate)
-        computeIterateAc(this.iterate.id, this.finishdate).then(res => {
-          console.log(res.data)
-          this.tmp = res.data
-        })
+        console.log(this.iterate.id, this.finishdate);
+        computeIterateAc(this.iterate.id, this.finishdate).then((res) => {
+          console.log(res.data);
+          this.tmp = res.data;
+        });
       }
     },
     setIterationAC() {
-      autoSetAc(this.iterate.id, this.finishdate).then(res => {
+      autoSetAc(this.iterate.id, this.finishdate).then((res) => {
         this.$message({
-          message: '提交成功',
-          type: 'success'
-        })
-        this.$emit('submitted', true)
-        this.drawer = false
-      })
+          message: "提交成功",
+          type: "success",
+        });
+        this.$emit("submitted", true);
+        this.drawer = false;
+      });
     },
     manualAc() {
       var data = {
         finishdate: this.finishdate,
-        iterationDetails: this.iterate.iterationDetails
-      }
-      console.log(data)
+        iterationDetails: this.iterate.iterationDetails,
+      };
+      console.log(data);
       manualSetAc(this.iterate.id, data).then(() => {
         this.$message({
-          message: '提交成功',
-          type: 'success'
-        })
-        this.$emit('submitted', true)
-        this.drawer = false
-      })
+          message: "提交成功",
+          type: "success",
+        });
+        this.$emit("submitted", true);
+        this.drawer = false;
+      });
     },
     tabChange() {
-      this.scheme = !this.scheme
+      this.scheme = !this.scheme;
     },
     handleOpen() {
-      this.finishdate = null
-      this.radio = true
-      this.scheme = true
+      this.finishdate = null;
+      this.radio = true;
+      this.scheme = true;
 
       if (this.modify) {
-        this.finishdate = this.iterate.finishTime
-        computeIterateAc(this.iterate.id, this.finishdate).then(res => {
-          this.tmp = res.data
-          console.log(this.tmp)
-        })
+        this.finishdate = this.iterate.finishTime;
+        computeIterateAc(this.iterate.id, this.finishdate).then((res) => {
+          this.tmp = res.data;
+          console.log(this.tmp);
+        });
       }
     },
 
@@ -235,11 +299,11 @@ export default {
         AcAward: 0,
         totalAc: 0,
         dcSum: 0,
-        iterateInfos: []
-      }
-    }
-  }
-}
+        iterateInfos: [],
+      };
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .drawer ::v-deep .el-drawer > header > span:focus {

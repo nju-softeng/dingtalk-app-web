@@ -6,104 +6,108 @@
     <router-view />
     <el-row>
       <el-col :span="24">
-        <img alt="Vue logo" src="@/assets/logo.png">
+        <img alt="Vue logo" src="@/assets/logo.png" />
         <h1>Welcome</h1>
       </el-col>
       <el-col :span="24">
-        <div v-loading="loading" class="grid-content" element-loading-text="登录中" />
+        <div
+          v-loading="loading"
+          class="grid-content"
+          element-loading-text="登录中"
+        />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { getAuthCode } from '@/utils/dingtalk'
-import { Message } from 'element-ui'
+import { getAuthCode } from "@/utils/dingtalk";
+import { Message } from "element-ui";
 export default {
   data: () => ({
     loading: true,
     code: {
-      authCode: null
+      authCode: null,
     },
     redirect: undefined,
-    otherQuery: {}
+    otherQuery: {},
   }),
   watch: {
     $route: {
-      handler: function(route) {
-        const query = route.query
+      handler: function (route) {
+        const query = route.query;
         if (query) {
-          this.redirect = query.redirect
-          this.otherQuery = this.getOtherQuery(query)
+          this.redirect = query.redirect;
+          this.otherQuery = this.getOtherQuery(query);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       // 配置测试状态无需钉钉登陆;
       this.$store
-        .dispatch('user/test_login', 1)
-        .then(res => {
+        .dispatch("user/test_login", 1)
+        .then((res) => {
           this.$router.push({
-            path: this.redirect || '/',
-            query: this.otherQuery
-          })
-          Message.success('测试状态，跳过钉钉登陆')
-          console.log(res)
+            path: this.redirect || "/",
+            query: this.otherQuery,
+          });
+          Message.success("测试状态，跳过钉钉登陆");
+          console.log(res);
         })
         .catch(() => {
-          this.loading = false
-          Message.error('登录失败')
-        })
+          this.loading = false;
+          Message.error("登录失败");
+        });
     } else {
       // 获取钉钉临时授权码
-      getAuthCode(sessionStorage.getItem('CORP_ID'))
-        .then(res => {
-          this.code.authCode = res.code // 获取authcode
+      getAuthCode(sessionStorage.getItem("CORP_ID"))
+        .then((res) => {
+          this.code.authCode = res.code; // 获取authcode
           this.$store
-            .dispatch('user/_login', this.code)
+            .dispatch("user/_login", this.code)
             .then(() => {
               this.$router.push({
-                path: this.redirect || '/',
-                query: this.otherQuery
-              })
+                path: this.redirect || "/",
+                query: this.otherQuery,
+              });
             })
             .catch(() => {
-              this.loading = false
-              Message.error('dingtalk API 只在钉钉容器中生效,请在工作台打开')
-            })
+              this.loading = false;
+              Message.error("dingtalk API 只在钉钉容器中生效,请在工作台打开");
+            });
         })
-        .catch(e => {
+        .catch((e) => {
           this.$message({
             showClose: true,
             message: e,
-            type: 'error',
-            duration: '5000'
-          })
+            type: "error",
+            duration: "5000",
+          });
         })
         .catch(() => {
           this.$message({
             showClose: true,
-            message: 'dingtalk API 只在钉钉容器中生效,请在工作台打开???',
-            type: 'error',
-            duration: '5000'
-          })
-        })
+            message: "dingtalk API 只在钉钉容器中生效,请在工作台打开???",
+            type: "error",
+            duration: "5000",
+          });
+        });
     }
   },
   methods: {
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== 'redirect') {
-          acc[cur] = query[cur]
+        if (cur !== "redirect") {
+          acc[cur] = query[cur];
         }
-        return acc
-      }, {})
-    }
-  }
-}
+        return acc;
+      }, {});
+    },
+  },
+};
 </script>
 
 <style scoped>

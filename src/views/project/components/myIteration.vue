@@ -1,16 +1,28 @@
 <template>
   <div>
-    <div style="margin-bottom:5px">
+    <div style="margin-bottom: 5px">
       <el-radio-group v-model="radio" size="mini" @change="changeRadio">
         <el-radio-button label="进行中" />
         <el-radio-button label="已结束" />
         <el-radio-button label="全部" />
       </el-radio-group>
     </div>
-    <el-table v-loading="loading" :show-header="false" :data="list" class="tableClass">
+    <el-table
+      v-loading="loading"
+      :show-header="false"
+      :data="list"
+      class="tableClass"
+    >
       <el-table-column width="250">
         <template slot-scope="scope">
-          <div style="height:80px; display:flex; justify-content: center; flex-direction:column;">
+          <div
+            style="
+              height: 80px;
+              display: flex;
+              justify-content: center;
+              flex-direction: column;
+            "
+          >
             <div>
               <span class="title">
                 {{ scope.row.project.title }}
@@ -19,8 +31,10 @@
             </div>
             <div>
               <i class="el-icon-time" />
-              <span style="margin-left: 10px">{{ scope.row.beginTime | formatDate }} ~
-                {{ scope.row.endTime | formatDate }}</span>
+              <span style="margin-left: 10px"
+                >{{ scope.row.beginTime | formatDate }} ~
+                {{ scope.row.endTime | formatDate }}</span
+              >
             </div>
           </div>
         </template>
@@ -37,18 +51,24 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="radio != '进行中'" align="center" min-width="200px">
+      <el-table-column
+        v-if="radio != '进行中'"
+        align="center"
+        min-width="200px"
+      >
         <template slot-scope="scope">
-          <div>
-            完成时间
-          </div>
+          <div>完成时间</div>
           <template v-if="scope.row.status === false">
             <el-tag type="info">进行中</el-tag>
           </template>
           <template v-else>
-            <el-tag v-if="scope.row.finishTime <= scope.row.endTime" type="success">
+            <el-tag
+              v-if="scope.row.finishTime <= scope.row.endTime"
+              type="success"
+            >
               <i class="el-icon-time" />
-              {{ scope.row.finishTime }} 按时完成</el-tag>
+              {{ scope.row.finishTime }} 按时完成</el-tag
+            >
             <el-tag v-else type="danger">
               {{ scope.row.finishTime }} 延期完成
             </el-tag>
@@ -59,13 +79,27 @@
       <el-table-column min-width="320">
         <template slot-scope="scope">
           <div>
-            <div style="padding-left:10px">开发者</div>
-            <div style="min-width:300px;">
+            <div style="padding-left: 10px">开发者</div>
+            <div style="min-width: 300px">
               <template v-if="scope.row.status === false">
-                <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }}</el-tag>
+                <el-tag
+                  v-for="(o, index) in scope.row.iterationDetails"
+                  :key="index"
+                  style="margin: 0 4px"
+                  effect="plain"
+                  size="small"
+                  >{{ o.user.name }}</el-tag
+                >
               </template>
               <template v-else>
-                <el-tag v-for="(o, index) in scope.row.iterationDetails" :key="index" style="margin:0 4px" effect="plain" size="small">{{ o.user.name }} AC: {{ o.ac }}</el-tag>
+                <el-tag
+                  v-for="(o, index) in scope.row.iterationDetails"
+                  :key="index"
+                  style="margin: 0 4px"
+                  effect="plain"
+                  size="small"
+                  >{{ o.user.name }} AC: {{ o.ac }}</el-tag
+                >
               </template>
             </div>
           </div>
@@ -73,17 +107,15 @@
       </el-table-column>
 
       <el-table-column fixed="right" min-width="120">
-        <template>
-          ---(设计中)
-        </template>
+        <template> ---(设计中) </template>
       </el-table-column>
 
       <template slot="empty">
-        <div style="height:200px;">
-          <div style="margin-top:100px;">
-            <svg-icon icon-class="null" style="font-size:32px" /> <br>
+        <div style="height: 200px">
+          <div style="margin-top: 100px">
+            <svg-icon icon-class="null" style="font-size: 32px" /> <br />
           </div>
-          <div style="line-height: 10px;">
+          <div style="line-height: 10px">
             <span>没有迭代记录</span>
           </div>
         </div>
@@ -92,52 +124,52 @@
   </div>
 </template>
 <script>
-import { listUserIteration } from '@/api/project.js'
+import { listUserIteration } from "@/api/project.js";
 
 export default {
   data() {
     return {
       loading: false,
-      radio: '进行中',
+      radio: "进行中",
       list: [],
       donelist: [],
-      undonelist: []
-    }
+      undonelist: [],
+    };
   },
   created() {
-    this.fetchIteration()
+    this.fetchIteration();
   },
   methods: {
     // 查询用户迭代数据
     fetchIteration() {
-      listUserIteration().then(res => {
-        this.totallist = res.data
-        this.donelist = res.data.filter(item => item.status)
-        this.undonelist = res.data.filter(item => !item.status)
-        if (this.radio === '进行中') {
-          this.list = this.undonelist
-        } else if (this.radio === '已结束') {
-          this.list = this.donelist
+      listUserIteration().then((res) => {
+        this.totallist = res.data;
+        this.donelist = res.data.filter((item) => item.status);
+        this.undonelist = res.data.filter((item) => !item.status);
+        if (this.radio === "进行中") {
+          this.list = this.undonelist;
+        } else if (this.radio === "已结束") {
+          this.list = this.donelist;
         } else {
-          this.list = this.totallist
+          this.list = this.totallist;
         }
-      })
+      });
     },
     changeRadio(val) {
-      this.loading = true
+      this.loading = true;
       setTimeout(() => {
-        this.loading = false
-      }, 500)
-      if (val === '进行中') {
-        this.list = this.undonelist
-      } else if (val === '已结束') {
-        this.list = this.donelist
+        this.loading = false;
+      }, 500);
+      if (val === "进行中") {
+        this.list = this.undonelist;
+      } else if (val === "已结束") {
+        this.list = this.donelist;
       } else {
-        this.list = this.totallist
+        this.list = this.totallist;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .tableClass {

@@ -3,20 +3,19 @@
 </template>
 <script>
 export default {
-  name: 'TabPane',
-  inject: ['TabsInstance'],
+  name: "TabPane",
+  inject: ["TabsInstance"],
   props: {
     name: {
-      type: String
+      type: String,
     },
     label: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   mounted() {
-    this.TabsInstance.initTabs()
-  }
-
-}
+    this.TabsInstance.initTabs();
+  },
+};
 </script>

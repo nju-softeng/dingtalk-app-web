@@ -14,21 +14,21 @@
 <script>
 export default {
   components: {
-    myIteration: () => import('../components/myIteration'),
-    userbug: () => import('../components/userbug'),
-    devlist: () => import('../components/devlist')
+    myIteration: () => import("../components/myIteration"),
+    userbug: () => import("../components/userbug"),
+    devlist: () => import("../components/devlist"),
   },
   data() {
     return {
       unfinish: true,
-      activeTab: 'myIteration'
-    }
+      activeTab: "myIteration",
+    };
   },
   created() {
-    this.activeTab = this.$route.query.tab || 'myIteration'
+    this.activeTab = this.$route.query.tab || "myIteration";
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style lang="scss" scoped>
 .dialog-content {
@@ -55,5 +55,4 @@ export default {
     max-width: 1305px !important;
   }
 }
-
 </style>

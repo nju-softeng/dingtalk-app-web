@@ -6,14 +6,19 @@
         <el-table-column>
           <template slot-scope="scope">
             <p>
-              <el-popover placement="bottom" title="标题" width="358" trigger="hover">
+              <el-popover
+                placement="bottom"
+                title="标题"
+                width="358"
+                trigger="hover"
+              >
                 <div>
                   <p>
                     {{ scope.row.description }}
                   </p>
                 </div>
                 <span slot="reference">
-                  <span style="margin-right:10px">{{
+                  <span style="margin-right: 10px">{{
                     scope.row.project.title
                   }}</span>
                   <span>{{ scope.row.title }}</span>
@@ -31,18 +36,24 @@
               </span>
               <span v-if="scope.row.status">
                 bug责任人：
-                <el-tag v-for="(item, index) in scope.row.bugDetails" :key="index" effect="plain" style="margin:0 8px">{{ item.user.name }} AC: {{ item.ac }}</el-tag>
+                <el-tag
+                  v-for="(item, index) in scope.row.bugDetails"
+                  :key="index"
+                  effect="plain"
+                  style="margin: 0 8px"
+                  >{{ item.user.name }} AC: {{ item.ac }}</el-tag
+                >
               </span>
             </p>
           </template>
         </el-table-column>
 
         <template slot="empty">
-          <div style="height:200px;">
-            <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br>
+          <div style="height: 200px">
+            <div style="margin-top: 100px">
+              <svg-icon icon-class="null" style="font-size: 32px" /> <br />
             </div>
-            <div style="line-height: 10px;">
+            <div style="line-height: 10px">
               <span>没有bug记录</span>
             </div>
           </div>
@@ -52,24 +63,24 @@
   </div>
 </template>
 <script>
-import { listUserBug } from '@/api/bug.js'
+import { listUserBug } from "@/api/bug.js";
 export default {
   data() {
     return {
-      list: []
-    }
+      list: [],
+    };
   },
   created() {
-    this.fetchUserBug()
+    this.fetchUserBug();
   },
   methods: {
     fetchUserBug() {
-      listUserBug().then(res => {
-        this.list = res.data
-      })
-    }
-  }
-}
+      listUserBug().then((res) => {
+        this.list = res.data;
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .btable {

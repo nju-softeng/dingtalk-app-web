@@ -13,20 +13,20 @@
 <script>
 export default {
   components: {
-    assign: () => import('../components/assign'),
-    auditbug: () => import('../components/auditbug'),
-    devlist: () => import('../components/devlist')
+    assign: () => import("../components/assign"),
+    auditbug: () => import("../components/auditbug"),
+    devlist: () => import("../components/devlist"),
   },
   data() {
     return {
-      activeTab: 'assign'
-    }
+      activeTab: "assign",
+    };
   },
   created() {
-    this.activeTab = this.$route.query.tab || 'assign'
+    this.activeTab = this.$route.query.tab || "assign";
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style lang="scss" scoped>
 .dialog-content {
@@ -53,5 +53,4 @@ export default {
     max-width: 1305px !important;
   }
 }
-
 </style>

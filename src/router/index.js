@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 // 避免 NavigationDuplicated
-const originalPush = Router.prototype.push
+const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+  return originalPush.call(this, location).catch((err) => err);
+};
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -31,210 +31,224 @@ Router.prototype.push = function push(location) {
  */
 
 // 所有权限通用路由表: 如首页和登录页和一些不用权限的公用页面
-export const constantRoutes = [{
-  path: '/redirect',
-  component: Layout,
-  hidden: true,
-  children: [{
-    path: '/redirect/:path(.*)',
-    component: () => import('@/views/redirect/index')
-  }]
-},
-{
-  path: '/login',
-  component: () => import('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () => import('@/views/404'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    component: () => import('@/views/dashboard/index'),
-    name: 'Dashboard',
-    meta: {
-      title: '工作台',
-      icon: 'dashboard',
-      affix: true
-    }
-  }]
-},
-{
-  path: '/profile',
-  component: Layout,
-  redirect: '/profile/index',
-  hidden: true,
-  children: [{
-    path: 'index',
-    component: () => import('@/views/profile/index'),
-    name: 'Profile',
-    meta: {
-      title: '个人中心',
-      icon: 'user',
-      noCache: true
-    }
-  }]
-}
-]
+export const constantRoutes = [
+  {
+    path: "/redirect",
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index"),
+      },
+    ],
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true,
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/404"),
+    hidden: true,
+  },
+  {
+    path: "/",
+    component: Layout,
+    redirect: "/dashboard",
+    children: [
+      {
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index"),
+        name: "Dashboard",
+        meta: {
+          title: "工作台",
+          icon: "dashboard",
+          affix: true,
+        },
+      },
+    ],
+  },
+  {
+    path: "/profile",
+    component: Layout,
+    redirect: "/profile/index",
+    hidden: true,
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/profile/index"),
+        name: "Profile",
+        meta: {
+          title: "个人中心",
+          icon: "user",
+          noCache: true,
+        },
+      },
+    ],
+  },
+];
 
 // 异步挂载的路由：动态需要根据权限加载的路由表
-export const asyncRoutes = [{
-  path: '/performance',
-  component: Layout,
-  redirect: '/performance/perfApplication',
-  name: 'Performance',
-  meta: {
-    title: '绩效管理',
-    icon: 'perf'
-  },
-  children: [{
-    path: 'perfApplication',
-    name: 'PerfApplication',
-    component: () => import('@/views/perfApplication/index'),
-    meta: {
-      title: '绩效申请',
-      icon: 'apply'
-    }
-  },
+export const asyncRoutes = [
   {
-    path: 'perfAudit',
-    name: 'PerfAudit',
-    component: () => import('@/views/perfAudit/index'),
+    path: "/performance",
+    component: Layout,
+    redirect: "/performance/perfApplication",
+    name: "Performance",
     meta: {
-      title: '绩效审核',
-      icon: 'audit',
-      roles: ['admin', 'auditor']
-    }
+      title: "绩效管理",
+      icon: "perf",
+    },
+    children: [
+      {
+        path: "perfApplication",
+        name: "PerfApplication",
+        component: () => import("@/views/perfApplication/index"),
+        meta: {
+          title: "绩效申请",
+          icon: "apply",
+        },
+      },
+      {
+        path: "perfAudit",
+        name: "PerfAudit",
+        component: () => import("@/views/perfAudit/index"),
+        meta: {
+          title: "绩效审核",
+          icon: "audit",
+          roles: ["admin", "auditor"],
+        },
+      },
+      {
+        path: "performance_dc",
+        name: "Performance_dc",
+        component: () => import("@/views/performance/dc-index"),
+        meta: {
+          title: "绩效汇总",
+          icon: "gather",
+        },
+      },
+      {
+        path: "performance_ac",
+        name: "Performance_ac",
+        component: () => import("@/views/performance/ac-index"),
+        meta: {
+          title: "AC汇总",
+          icon: "rank",
+        },
+      },
+    ],
   },
-  {
-    path: 'performance_dc',
-    name: 'Performance_dc',
-    component: () => import('@/views/performance/dc-index'),
-    meta: {
-      title: '绩效汇总',
-      icon: 'gather'
-    }
-  },
-  {
-    path: 'performance_ac',
-    name: 'Performance_ac',
-    component: () => import('@/views/performance/ac-index'),
-    meta: {
-      title: 'AC汇总',
-      icon: 'rank'
-    }
-  }
-  ]
-},
 
-{
-  path: '/project',
-  component: Layout,
-  name: 'Project',
-  meta: {
-    title: '开发管理',
-    icon: 'dev'
-  },
-  children: [{
-    path: 'index',
-    name: 'Task',
-    component: () => import('@/views/project/index'),
+  {
+    path: "/project",
+    component: Layout,
+    name: "Project",
     meta: {
-      title: '开发管理',
-      icon: 'dev'
-    }
+      title: "开发管理",
+      icon: "dev",
+    },
+    children: [
+      {
+        path: "index",
+        name: "Task",
+        component: () => import("@/views/project/index"),
+        meta: {
+          title: "开发管理",
+          icon: "dev",
+        },
+      },
+      {
+        path: "detail/:id",
+        name: "Detail",
+        component: () => import("@/views/project/components/detail"),
+        meta: {
+          title: "项目详情",
+          icon: "table",
+          roles: ["admin", "auditor", "normal"],
+        },
+        hidden: true,
+      },
+    ],
   },
   {
-    path: 'detail/:id',
-    name: 'Detail',
-    component: () => import('@/views/project/components/detail'),
-    meta: {
-      title: '项目详情',
-      icon: 'table',
-      roles: ['admin', 'auditor', 'normal']
-    },
-    hidden: true
-  }
-  ]
-},
-{
-  path: '/paper',
-  component: Layout,
-  redirect: '/paper/index/',
-  children: [{
-    path: 'index/:type',
-    name: 'Paper',
-    component: () => import('@/views/paper/index'),
-    meta: {
-      title: '论文管理',
-      icon: 'thesis'
-    }
+    path: "/paper",
+    component: Layout,
+    redirect: "/paper/index/",
+    children: [
+      {
+        path: "index/:type",
+        name: "Paper",
+        component: () => import("@/views/paper/index"),
+        meta: {
+          title: "论文管理",
+          icon: "thesis",
+        },
+      },
+      {
+        path: "in-detail/:id/:tab",
+        component: () => import("@/views/paper/internalDetail"),
+        name: "internalDetail",
+        meta: {
+          title: "论文详细",
+          noCache: true,
+          activeMenu: "/paper/index",
+        },
+        hidden: true,
+      },
+      {
+        path: "ex-detail/:id/:tab",
+        component: () => import("@/views/paper/externalDetail"),
+        name: "externalDetail",
+        meta: {
+          title: "论文详细",
+          noCache: true,
+          activeMenu: "/paper/index",
+        },
+        hidden: true,
+      },
+    ],
   },
   {
-    path: 'in-detail/:id/:tab',
-    component: () => import('@/views/paper/internalDetail'),
-    name: 'internalDetail',
-    meta: {
-      title: '论文详细',
-      noCache: true,
-      activeMenu: '/paper/index'
-    },
-    hidden: true
+    path: "/system",
+    component: Layout,
+    redirect: "/system",
+    children: [
+      {
+        path: "index",
+        name: "System",
+        component: () => import("@/views/sysMan/index"),
+        meta: {
+          title: "系统设置",
+          icon: "setting",
+          roles: ["admin", "auditor"],
+        },
+      },
+    ],
   },
   {
-    path: 'ex-detail/:id/:tab',
-    component: () => import('@/views/paper/externalDetail'),
-    name: 'externalDetail',
-    meta: {
-      title: '论文详细',
-      noCache: true,
-      activeMenu: '/paper/index'
-    },
-    hidden: true
-  }]
-},
-{
-  path: '/system',
-  component: Layout,
-  redirect: '/system',
-  children: [{
-    path: 'index',
-    name: 'System',
-    component: () => import('@/views/sysMan/index'),
-    meta: {
-      title: '系统设置',
-      icon: 'setting',
-      roles: ['admin', 'auditor']
-    }
-  }]
-},
-{
-  path: '*',
-  redirect: '/404',
-  hidden: true
-}
-]
+    path: "*",
+    redirect: "/404",
+    hidden: true,
+  },
+];
 
 const createRouter = () =>
   new Router({
-    mode: 'history', // require service support
+    mode: "history", // require service support
     scrollBehavior: () => ({
-      y: 0
+      y: 0,
     }),
-    routes: constantRoutes
-  })
+    routes: constantRoutes,
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;

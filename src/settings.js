@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'DevOps+',
+  title: "DevOps+",
 
   /**
    * @type {boolean} true | false
@@ -17,5 +17,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: true
-}
+  sidebarLogo: true,
+};

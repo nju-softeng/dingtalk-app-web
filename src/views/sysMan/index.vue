@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-container class="box">
-      <el-aside width="170px" style="background-color:#fff; padding:0px">
+      <el-aside width="170px" style="background-color: #fff; padding: 0px">
         <el-menu default-active="userMan" class="menu" @select="handleSelect">
           <el-menu-item index="userMan">
             <i class="el-icon-user" />
@@ -14,7 +14,7 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main style="padding-top:0px">
+      <el-main style="padding-top: 0px">
         <component :is="activeName" />
       </el-main>
     </el-container>
@@ -23,24 +23,24 @@
 
 <script>
 export default {
-  name: 'Tab',
+  name: "Tab",
 
   components: {
-    userMan: () => import('./components/userMan'),
-    confMan: () => import('./components/confMan')
+    userMan: () => import("./components/userMan"),
+    confMan: () => import("./components/confMan"),
   },
   data() {
     return {
-      activeName: 'userMan'
-    }
+      activeName: "userMan",
+    };
   },
   created() {},
   methods: {
     handleSelect(val) {
-      this.activeName = val
-    }
-  }
-}
+      this.activeName = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -81,9 +81,8 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-  .box  {
+  .box {
     max-width: 1800px !important;
   }
 }
-
 </style>

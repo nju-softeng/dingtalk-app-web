@@ -3,21 +3,28 @@
     <div class="wrap-head">
       <div class="layout-container">
         <div class="groupInfo">
-          <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px">
-            <el-breadcrumb-item :to="{ path: '/paper/index/external' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
+          <el-breadcrumb
+            separator-class="el-icon-arrow-right"
+            style="font-size: 13px"
+          >
+            <el-breadcrumb-item :to="{ path: '/paper/index/external' }">
+              <svg-icon icon-class="back" />
+              <span style="color: #409eff">返回列表</span></el-breadcrumb-item
+            >
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
 
           <div style="padding-left: 16px; padding-right: 16px">
-            <p style="margin-bottom:0px">
-              <span style="font-size:18px;color:#0366d6;font-weight: 500;">
-                {{ paper.title }}</span>
+            <p style="margin-bottom: 0px">
+              <span style="font-size: 18px; color: #0366d6; font-weight: 500">
+                {{ paper.title }}</span
+              >
             </p>
 
-            <div style="display:flex;flex-wrap: wrap">
-              <div style="font-size:13px;color:#595959;">
+            <div style="display: flex; flex-wrap: wrap">
+              <div style="font-size: 13px; color: #595959">
                 <p>
-                  <span style="margin-right:8px">
+                  <span style="margin-right: 8px">
                     <svg-icon icon-class="vote" /> 投票意见:
                   </span>
                   <el-tag :type="getVoteResult(paper.vote).type">{{
@@ -28,7 +35,11 @@
             </div>
           </div>
         </div>
-        <el-menu :default-active="activeTab" mode="horizontal" @select="handleSelect">
+        <el-menu
+          :default-active="activeTab"
+          mode="horizontal"
+          @select="handleSelect"
+        >
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
@@ -42,67 +53,67 @@
   </div>
 </template>
 <script>
-import { getExPaper } from '@/api/ex-paper'
+import { getExPaper } from "@/api/ex-paper";
 
 export default {
   components: {
-    review: () => import('./components/review'),
-    vote: () => import('./components/vote'),
-    acinfo: () => import('./components/acinfo')
+    review: () => import("./components/review"),
+    vote: () => import("./components/vote"),
+    acinfo: () => import("./components/acinfo"),
   },
   data() {
     return {
       id: null,
       paper: {},
-      activeTab: 'vote'
-    }
+      activeTab: "vote",
+    };
   },
   computed: {
     // 投票状态标签
     getVoteResult() {
-      return vote => {
+      return (vote) => {
         if (vote === undefined) {
           return {
-            type: 'info',
-            content: '投票未发起'
-          }
+            type: "info",
+            content: "投票未发起",
+          };
         } else if (vote.result === undefined) {
           return {
-            type: '',
-            content: '等待投票结果'
-          }
+            type: "",
+            content: "等待投票结果",
+          };
         } else if (vote.result === true) {
           return {
-            type: 'success',
-            content: 'ACCEPT'
-          }
+            type: "success",
+            content: "ACCEPT",
+          };
         } else if (vote.result === false) {
           return {
-            type: 'danger',
-            content: 'REJECT'
-          }
+            type: "danger",
+            content: "REJECT",
+          };
         }
-      }
-    }
+      };
+    },
   },
   created() {
-    this.id = this.$route.params.id
-    this.activeTab = this.$route.params.tab || 'vote'
+    this.id = this.$route.params.id;
+    this.activeTab = this.$route.params.tab || "vote";
     getExPaper(this.id)
-      .then(res => {
-        this.paper = res.data
-        console.log(this.paper)
+      .then((res) => {
+        this.paper = res.data;
+        console.log(this.paper);
       })
       .catch(() => {
-        this.$router.push({ path: '/404' })
-      })
+        this.$router.push({ path: "/404" });
+      });
   },
   methods: {
     handleSelect(val) {
-      this.activeTab = val
-    }
-  }
-}
+      this.activeTab = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -150,5 +161,4 @@ export default {
     padding: 0px;
   }
 }
-
 </style>

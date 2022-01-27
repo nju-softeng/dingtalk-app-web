@@ -5,29 +5,29 @@
 </template>
 
 <script>
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
 export default {
-  name: 'Editor',
+  name: "Editor",
   components: {
-    mavonEditor
+    mavonEditor,
   },
   props: {
     show: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       visible: this.show,
-      childData: {}
-    }
+      childData: {},
+    };
   },
   watch: {
     show() {
-      this.visible = this.show
-    }
-  }
-}
+      this.visible = this.show;
+    },
+  },
+};
 </script>

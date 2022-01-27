@@ -14,15 +14,15 @@
 <script>
 export default {
   components: {
-    checking: () => import('./components/checking'),
-    checked: () => import('./components/checked')
+    checking: () => import("./components/checking"),
+    checked: () => import("./components/checked"),
   },
   data() {
     return {
-      activetab: 'checking'
-    }
-  }
-}
+      activetab: "checking",
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -46,5 +46,4 @@ export default {
     max-width: 1305px !important;
   }
 }
-
 </style>

@@ -2,7 +2,12 @@
   <div class="navbar">
     <div class="navbar_wrap">
       <template v-if="device === 'mobile'">
-        <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+        <hamburger
+          id="hamburger-container"
+          :is-active="sidebar.opened"
+          class="hamburger-container"
+          @toggleClick="toggleSideBar"
+        />
 
         <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
       </template>
@@ -22,9 +27,18 @@
         </el-dropdown-menu>
       </el-dropdown> -->
 
-        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <el-dropdown
+          class="avatar-container right-menu-item hover-effect"
+          trigger="click"
+        >
           <div class="avatar-wrapper">
-            <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
+            <el-avatar
+              fit="fill"
+              shape="square"
+              :size="35"
+              class="user-avatar"
+              :src="avatar"
+            >
               {{ name }}
             </el-avatar>
             <i class="el-icon-caret-bottom" />
@@ -44,37 +58,37 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Topbar from './Topbar'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import Topbar from "./Topbar";
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Topbar
+    Topbar,
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'device', 'name'])
+    ...mapGetters(["sidebar", "avatar", "device", "name"]),
   },
   created() {
-    console.log('头像')
-    if (this.avatar === '') {
-      console.log('null')
+    console.log("头像");
+    if (this.avatar === "") {
+      console.log("null");
     }
-    console.log(this.avatar)
+    console.log(this.avatar);
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    }
-  }
-}
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

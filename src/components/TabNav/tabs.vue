@@ -20,6 +20,9 @@
 <script>
 export default {
   name: 'Tabs',
+  provide() {
+    return { TabsInstance: this }
+  },
   model: {
     prop: 'actived',
     event: 'handleChange'
@@ -29,9 +32,6 @@ export default {
     return {
       navList: []
     }
-  },
-  provide() {
-    return { TabsInstance: this }
   },
   watch: {
     actived() {

@@ -83,9 +83,40 @@
 
     <!-- 创建项目dialog -->
     <el-dialog title="项目" :lock-scroll="false" :visible.sync="projectDialog" width="32%" @submit.native.prevent @close="clearProjectForm">
-      <el-form ref="projectform" v-loading="loading" style="width:100%" :rules="rules" :model="projectform">
-        <el-form-item prop="title">
-          <el-input v-model="projectform.title" style="width:100% !important" placeholder="项目名称" />
+      <el-form ref="projectForm" v-loading="loading" style="width:100%" label-width="100px" :rules="rules" :model="projectForm">
+        <el-form-item prop="title" label="项目名称：">
+          <el-input v-model="projectForm.title" style="!important" />
+        </el-form-item>
+        <el-form-item prop="leader" label="项目负责人：">
+          <el-input v-model="projectForm.leader" style="!important" />
+        </el-form-item>
+        <el-form-item prop="nature" label="项目性质：">
+          <el-select v-model="projectForm.nature" placeholder="请选择">
+            <el-option
+              v-for="item in projectNatureList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="level" label="项目级别：">
+          <el-select v-if="projectForm.nature" v-model="projectForm.level" placeholder="请选择">
+            <el-option
+              v-for="item in projectHorizontalLevelList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select v-if="!projectForm.nature" v-model="projectForm.level" placeholder="请选择">
+            <el-option
+              v-for="item in projectLongitudinalLevelList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -103,6 +134,23 @@
 import { createProject, listProject, rmProject, getIteration } from '@/api/project.js'
 import FinishDrawer from './finishDrawer'
 import IterateDialog from './iterateDialog'
+const projectNature = [
+  { label: '横向项目', value: true },
+  { label: '纵向项目', value: false }
+]
+const projectLongitudinalLevel = [
+  { label: '国家级项目', value: '国家级项目' },
+  { label: '省部级项目', value: '省部级项目' },
+  { label: '厅局级项目', value: '厅局级项目' },
+  { label: '国家级学会和协会项目', value: '国家级学会和协会项目' },
+  { label: '省级学会和协会项目', value: '省级学会和协会项目' }
+]
+const projectHorizontalLevel = [
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'C', value: 'C' },
+  { label: 'D', value: 'D' }
+]
 export default {
   components: { IterateDialog, FinishDrawer },
   data() {
@@ -116,9 +164,15 @@ export default {
       list: [],
       serial: 0,
       loading: false,
-      projectform: {
+      projectNatureList: projectNature,
+      projectLongitudinalLevelList: projectLongitudinalLevel,
+      projectHorizontalLevelList: projectHorizontalLevel,
+      projectForm: {
         id: '',
-        title: ''
+        title: '',
+        leader: '',
+        nature: '',
+        level: ''
       },
       tmp: {},
       rules: {
@@ -155,10 +209,10 @@ export default {
     },
     // 创建或更新项目
     submitProject() {
-      this.$refs.projectform.validate(valid => {
+      this.$refs.projectForm.validate(valid => {
         if (valid) {
           this.loading = true
-          createProject(this.projectform)
+          createProject(this.projectForm)
             .then(() => {
               this.projectDialog = false
               this.$notify({
@@ -186,14 +240,14 @@ export default {
     modifyProject(item) {
       this.projectDialog = true
       this.$nextTick(() => {
-        this.projectform.id = item.id
-        this.projectform.title = item.title
+        this.projectForm.id = item.id
+        this.projectForm.title = item.title
       })
     },
     // 删除项目
     rmProject(item) {
       console.log('/????')
-      if (item.cnt != 0) {
+      if (item.cnt !== 0) {
         this.$message({
           showClose: true,
           message: '请删除项目的迭代之后，再删除项目',
@@ -214,8 +268,8 @@ export default {
     },
     // 清空dialog
     clearProjectForm() {
-      this.$refs.projectform.resetFields()
-      this.projectform.id = ''
+      this.$refs.projectForm.resetFields()
+      this.projectForm.id = ''
     },
     // 新建一个迭代
     newIterate(item) {
@@ -236,6 +290,11 @@ export default {
         this.serial = item.cnt
         this.bdrawer_show = true
       })
+    }
+  },
+  watch: {
+    'projectForm.nature': function(newValue, oldValue) {
+      this.projectForm.level = null
     }
   }
 }

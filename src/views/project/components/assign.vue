@@ -84,11 +84,32 @@
     <!-- 创建项目dialog -->
     <el-dialog title="项目" :lock-scroll="false" :visible.sync="projectDialog" width="32%" @submit.native.prevent @close="clearProjectForm">
       <el-form ref="projectForm" v-loading="loading" style="width:100%" label-width="100px" :rules="rules" :model="projectForm">
-        <el-form-item prop="title" label="项目名称：">
-          <el-input v-model="projectForm.title" style="!important" />
+        <el-form-item prop="name" label="项目名称：">
+          <el-input v-model="projectForm.name" style="!important" />
         </el-form-item>
         <el-form-item prop="leader" label="项目负责人：">
-          <el-input v-model="projectForm.leader" style="!important" />
+          <el-select
+            v-model="projectForm.leaderId"
+            style="width:193px"
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in userList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+          <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="支持搜索功能快速查找用户"
+                  placement="right"
+          >
+                    <span style="margin-left:8px">
+                      <svg-icon icon-class="hint" /></span>
+          </el-tooltip>
         </el-form-item>
         <el-form-item prop="nature" label="项目性质：">
           <el-select v-model="projectForm.nature" placeholder="请选择">
@@ -101,7 +122,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="level" label="项目级别：">
-          <el-select v-if="projectForm.nature" v-model="projectForm.level" placeholder="请选择">
+          <el-select v-if="projectForm.nature" v-model="projectForm.horizontalLevel" placeholder="请选择">
             <el-option
               v-for="item in projectHorizontalLevelList"
               :key="item.value"
@@ -109,7 +130,7 @@
               :value="item.value"
             />
           </el-select>
-          <el-select v-if="!projectForm.nature" v-model="projectForm.level" placeholder="请选择">
+          <el-select v-if="!projectForm.nature" v-model="projectForm.longitudinalLevel" placeholder="请选择">
             <el-option
               v-for="item in projectLongitudinalLevelList"
               :key="item.value"
@@ -131,6 +152,7 @@
   </div>
 </template>
 <script>
+import { getUserList } from '@/api/common'
 import { createProject, listProject, rmProject, getIteration } from '@/api/project.js'
 import FinishDrawer from './finishDrawer'
 import IterateDialog from './iterateDialog'
@@ -162,6 +184,7 @@ export default {
       title: '',
       cnt: '',
       list: [],
+      userList: [],
       serial: 0,
       loading: false,
       projectNatureList: projectNature,
@@ -169,14 +192,15 @@ export default {
       projectHorizontalLevelList: projectHorizontalLevel,
       projectForm: {
         id: '',
-        title: '',
-        leader: '',
+        name: '',
+        leaderId: '',
         nature: '',
-        level: ''
+        longitudinalLevel: '',
+        horizontalLevel: ''
       },
       tmp: {},
       rules: {
-        title: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
         dates: [{ required: true, message: '请选择时间', trigger: 'blur' }],
         dingIds: [{ required: true, message: '请分配任务', trigger: 'blur' }]
       }
@@ -192,6 +216,9 @@ export default {
   },
   created() {
     this.fetchProjects()
+    getUserList().then(res => {
+      this.userList = res.data
+    })
   },
 
   methods: {
@@ -212,6 +239,7 @@ export default {
       this.$refs.projectForm.validate(valid => {
         if (valid) {
           this.loading = true
+          console.log(this.projectForm)
           createProject(this.projectForm)
             .then(() => {
               this.projectDialog = false
@@ -294,7 +322,8 @@ export default {
   },
   watch: {
     'projectForm.nature': function(newValue, oldValue) {
-      this.projectForm.level = null
+      this.projectForm.horizontalLevel = null
+      this.projectForm.longitudinalLevel = null
     }
   }
 }

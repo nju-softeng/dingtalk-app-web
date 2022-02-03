@@ -60,154 +60,159 @@
           <div>非学生一作</div>
         </el-card>
       </div>
-      <!-- 添加内部评审 -->
-      <div v-if="addReviewContent === 'internalReview'" v-loading="loading">
-        <div class="dialog-content">
-          <div class="paper-form">
-            <el-form
-              ref="internalPaperForm"
-              :rules="rules"
-              :model="internalPaperForm"
-              label-width="110px"
-            >
-              <el-form-item prop="title" style="width: 500px">
-                <span slot="label">
-                  <svg-icon icon-class="paper" /> 论文名称</span>
-                <el-input
-                  v-model="internalPaperForm.title"
-                  type="textarea"
-                  :rows="2"
-                  placeholder="请输入内容"
-                />
-              </el-form-item>
-              <el-form-item>
-                <span slot="label">
-                  <svg-icon icon-class="school" /> 刊物/会议</span>
-                <el-input
-                  v-model="internalPaperForm.journal"
-                  type="textarea"
-                  :rows="1"
-                  placeholder="请输入内容"
-                />
-              </el-form-item>
-
-              <el-form-item prop="paperType">
-                <span slot="label">
-                  <svg-icon icon-class="grade" /> 论文分类</span>
-                <el-select
-                  v-model="internalPaperForm.paperType"
-                  style="width:193px"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="(item, index) in options"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item
-                v-for="(author, index) in internalPaperForm.authors"
-                :key="index"
-                :prop="'authors.' + index + '.uid'"
-                :rules="{
-                  required: true,
-                  message: '请选择学生作者',
-                  trigger: 'change'
-                }"
+      <div v-else>
+        <!-- 添加内部评审 -->
+        <div v-if="addReviewContent === 'internalReview'" v-loading="loading">
+          <div class="dialog-content">
+            <div class="paper-form">
+              <el-form
+                ref="internalPaperForm"
+                :rules="rules"
+                :model="internalPaperForm"
+                label-width="110px"
               >
-                <span slot="label">
-                  <svg-icon icon-class="people" /> 学生作者
-                  {{ index + 1 }}</span>
-
-                <el-select
-                  v-model="author.uid"
-                  style="width:193px"
-                  filterable
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="(item, index) in userlist"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
+                <el-form-item prop="title" style="width: 500px">
+                  <span slot="label">
+                    <svg-icon icon-class="paper" /> 论文名称</span>
+                  <el-input
+                    v-model="internalPaperForm.title"
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
                   />
-                </el-select>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="支持搜索功能快速查找用户"
-                  placement="right"
+                </el-form-item>
+                <el-form-item>
+                  <span slot="label">
+                    <svg-icon icon-class="file" /> 文件上传</span>
+                </el-form-item>
+                <el-form-item>
+                  <span slot="label">
+                    <svg-icon icon-class="school" /> 刊物/会议</span>
+                  <el-input
+                    v-model="internalPaperForm.journal"
+                    type="textarea"
+                    :rows="1"
+                    placeholder="请输入内容"
+                  />
+                </el-form-item>
+                <el-form-item prop="paperType">
+                  <span slot="label">
+                    <svg-icon icon-class="grade" /> 论文分类</span>
+                  <el-select
+                    v-model="internalPaperForm.paperType"
+                    style="width:193px"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="(item, index) in options"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item
+                  v-for="(author, index) in internalPaperForm.authors"
+                  :key="index"
+                  :prop="'authors.' + index + '.uid'"
+                  :rules="{
+                    required: true,
+                    message: '请选择学生作者',
+                    trigger: 'change'
+                  }"
                 >
-                  <span style="margin-left:8px">
-                    <svg-icon icon-class="hint" /></span>
-                </el-tooltip>
-              </el-form-item>
-              <el-button
-                type="text"
-                style="margin-left:20px;"
-                icon="el-icon-plus"
-                @click="addAuthor"
-              >添加作者
-              </el-button>
-              <el-button type="text" style="margin-left:20px;" icon="el-icon-minus" @click="rmAuthor">减少作者</el-button>
-            </el-form>
-          </div>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit('internalPaperForm')">确 定</el-button>
-          <el-button @click="addReviewContent = undefined">取 消</el-button>
-        </span>
-      </div>
-      <!-- 添加外部评审 -->
-      <div v-if="addReviewContent === 'externalReview'">
-        <div class="dialog-content">
-          <div class="paper-form">
-            <el-form
-              ref="externalPaperForm"
-              :rules="rules"
-              :model="externalPaperForm"
-              label-width="110px"
-            >
-              <el-form-item prop="title">
-                <span slot="label">
-                  <svg-icon icon-class="paper" /> 论文名称</span>
-                <el-input
-                  v-model="externalPaperForm.title"
-                  type="textarea"
-                  :rows="2"
-                  placeholder="请输入内容"
-                />
-              </el-form-item>
+                  <span slot="label">
+                    <svg-icon icon-class="people" /> 学生作者
+                    {{ index + 1 }}</span>
 
-              <el-form-item prop="period">
-                <span slot="label">
-                  <svg-icon icon-class="school" /> 投票时间</span>
-                <el-time-picker
-                  v-model="externalPaperForm.period"
-                  value-format="yyyy-MM-ddTHH:mm:ss"
-                  format="HH:mm"
-                  is-range
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  placeholder="选择时间范围"
-                />
-              </el-form-item>
-            </el-form>
+                  <el-select
+                    v-model="author.uid"
+                    style="width:193px"
+                    filterable
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="(item, index) in userlist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id"
+                    />
+                  </el-select>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="支持搜索功能快速查找用户"
+                    placement="right"
+                  >
+                    <span style="margin-left:8px">
+                      <svg-icon icon-class="hint" /></span>
+                  </el-tooltip>
+                </el-form-item>
+                <el-button
+                  type="text"
+                  style="margin-left:20px;"
+                  icon="el-icon-plus"
+                  @click="addAuthor"
+                >添加作者
+                </el-button>
+                <el-button type="text" style="margin-left:20px;" icon="el-icon-minus" @click="rmAuthor">减少作者</el-button>
+              </el-form>
+            </div>
           </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submit('internalPaperForm')">确 定</el-button>
+            <el-button @click="addReviewContent = undefined">取 消</el-button>
+          </span>
         </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button
-            type="primary"
-            @click="addExternalReview('externalPaperForm')"
-          >确 定</el-button>
-          <el-button @click="addReviewContent = undefined">取 消</el-button>
-        </span>
+        <!-- 添加外部评审 -->
+        <div v-if="addReviewContent === 'externalReview'">
+          <div class="dialog-content">
+            <div class="paper-form">
+              <el-form
+                ref="externalPaperForm"
+                :rules="rules"
+                :model="externalPaperForm"
+                label-width="110px"
+              >
+                <el-form-item prop="title">
+                  <span slot="label">
+                    <svg-icon icon-class="paper" /> 论文名称</span>
+                  <el-input
+                    v-model="externalPaperForm.title"
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                  />
+                </el-form-item>
+
+                <el-form-item prop="period">
+                  <span slot="label">
+                    <svg-icon icon-class="school" /> 投票时间</span>
+                  <el-time-picker
+                    v-model="externalPaperForm.period"
+                    value-format="yyyy-MM-ddTHH:mm:ss"
+                    format="HH:mm"
+                    is-range
+                    range-separator="至"
+                    start-placeholder="开始时间"
+                    end-placeholder="结束时间"
+                    placeholder="选择时间范围"
+                  />
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button
+              type="primary"
+              @click="addExternalReview('externalPaperForm')"
+            >确 定</el-button>
+            <el-button @click="addReviewContent = undefined">取 消</el-button>
+          </span>
+        </div>
+        <!-- 添加非学生一作 -->
+        <div v-if="addReviewContent === 'paperByProfessorReview'" />
       </div>
-      <div v-if="addReviewContent === 'paperByProfessorReview'" />
     </el-dialog>
   </div>
 </template>
@@ -278,6 +283,7 @@ export default {
 
       loading: false,
       options: levels,
+      file: {},
       // 内部论文评审表单
       internalPaperForm: {
         id: null,

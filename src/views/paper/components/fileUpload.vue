@@ -1,24 +1,55 @@
 <template>
-  <div>
+  <el-form-item ref="paperUploadComponent" prop="file">
+    <span slot="label">
+      <el-icon class="el-icon-upload" /> 文件上传</span>
     <el-upload
-      ref="internalPaperUpload"
+      ref="PaperUpload"
+      v-model="innerFile"
       class="upload-demo"
-      :on-change="handlePaperChange('internal')"
-      :file-list="fileList"
+      :on-change="handleFileChange"
+      action=""
+      :auto-upload="false"
     >
       <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传word/pdf文件</div>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="只能上传word/pdf文件"
+        placement="right"
+      >
+        <span style="margin-left:8px">
+          <svg-icon icon-class="hint" /></span>
+      </el-tooltip>
     </el-upload>
-  </div>
+  </el-form-item>
 </template>
 
 <script>
 export default {
   name: 'FileUpload',
-  props: ['file'],
+  props: {
+    file: {
+      type: Object,
+      default: function() {
+        return null
+      }
+    }
+  },
   data() {
     return {
-      fileList: {}
+      innerFile: this.file
+    }
+  },
+  methods: {
+    handleFileChange(file, fileList) {
+      if (fileList.length > 1) {
+        console.log(fileList)
+        fileList.splice(0, 1)
+      }
+      this.innerFile = file
+      this.$emit('changeFile', file)
+      this.$refs['paperUploadComponent'].clearValidate()
+      console.log(this.innerFile)
     }
   }
 }

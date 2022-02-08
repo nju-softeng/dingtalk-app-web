@@ -81,10 +81,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <el-form-item>
-                  <span slot="label">
-                    <svg-icon icon-class="file" /> 文件上传</span>
-                </el-form-item>
+                <file-upload :file="file" @changeFile="changeFile"/>
                 <el-form-item>
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -220,6 +217,7 @@
 import { getUserList } from '@/api/common'
 import Tabs from '@/components/TabNav/tabs'
 import TabPane from '@/components/TabNav/tabpane'
+import FileUpload from '@/views/paper/components/fileUpload'
 import paperExternal from '@/views/paper/externalPaper'
 import paperInternal from '@/views/paper/internalPaper'
 import paperByProfessor from '@/views/paper/paperByProfessor'
@@ -263,6 +261,7 @@ const levels = [
 
 export default {
   components: {
+    FileUpload,
     Tabs,
     TabPane,
     paperExternal,
@@ -280,16 +279,16 @@ export default {
       addReviewWidth: '52%',
       addReviewContent: undefined,
       addReviewDialogTitle: '请选择评审类型',
-
+      file: null,
       loading: false,
       options: levels,
-      file: {},
       // 内部论文评审表单
       internalPaperForm: {
         id: null,
         title: null,
         journal: null,
         paperType: null,
+        file: null,
         authors: [
           {
             num: 1,
@@ -308,7 +307,10 @@ export default {
       rules: {
         title: [{ required: true, message: '请输入论文名称', trigger: 'blur' }],
         paperType: [{ required: true, message: '请选择论文分类', trigger: 'change' }],
-        period: [{ required: true, message: '请选择起止时间', trigger: 'blur' }]
+        period: [{ required: true, message: '请选择起止时间', trigger: 'blur' }],
+        file: [{ trigger: 'blur', validator: async(rule, value, callback) => {
+          if (!this.file) callback(new Error('请上传论文文件'))
+        } }]
       }
     }
   },
@@ -480,6 +482,9 @@ export default {
       if (this.internalPaperForm.authors.length !== 1) {
         this.internalPaperForm.authors.pop()
       }
+    },
+    changeFile(file) {
+      this.file = file
     }
   }
 }

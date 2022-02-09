@@ -7,8 +7,10 @@
       v-model="innerFile"
       class="upload-demo"
       :on-change="handleFileChange"
+      :on-remove="handleFileRemove"
       action=""
       :auto-upload="false"
+      accept=".pdf,.doc,.docx"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <el-tooltip
@@ -50,6 +52,11 @@ export default {
       this.$emit('changeFile', file)
       this.$refs['paperUploadComponent'].clearValidate()
       console.log(this.innerFile)
+    },
+    handleFileRemove(file, fileList) {
+      console.log(fileList)
+      this.innerFile = null
+      this.$emit('changeFile', null)
     }
   }
 }

@@ -81,7 +81,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload :file="file" @changeFile="changeFile"/>
+                <file-upload :file="file" @changeFile="changeFile" />
                 <el-form-item>
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -181,7 +181,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-
+                <file-upload :file="file" @changeFile="changeFile" />
                 <el-form-item prop="period">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 投票时间</span>
@@ -208,7 +208,116 @@
           </span>
         </div>
         <!-- 添加非学生一作 -->
-        <div v-if="addReviewContent === 'paperByProfessorReview'" />
+        <div v-if="addReviewContent === 'paperByProfessorReview'">
+          <div class="dialog-content">
+            <div class="paper-form">
+              <el-form
+                ref="internalPaperForm"
+                :rules="rules"
+                :model="professorPaperForm"
+                label-width="110px"
+              >
+                <el-form-item prop="title" style="width: 500px">
+                  <span slot="label">
+                    <svg-icon icon-class="paper" /> 论文名称</span>
+                  <el-input
+                    v-model="professorPaperForm.title"
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                  />
+                </el-form-item>
+                <file-upload :file="file" @changeFile="changeFile" />
+                <el-form-item>
+                  <span slot="label">
+                    <svg-icon icon-class="school" /> 刊物/会议</span>
+                  <el-input
+                    v-model="professorPaperForm.journal"
+                    type="textarea"
+                    :rows="1"
+                    placeholder="请输入内容"
+                  />
+                </el-form-item>
+                <el-form-item prop="paperType">
+                  <span slot="label">
+                    <svg-icon icon-class="grade" /> 论文分类</span>
+                  <el-select
+                    v-model="professorPaperForm.paperType"
+                    style="width:193px"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="(item, index) in options"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item prop="author" style="width: 500px">
+                  <span slot="label">
+                    <svg-icon icon-class="paper" /> 第一作者</span>
+                  <el-input
+                    v-model="professorPaperForm.firstAuthor"
+                    type="textarea"
+                    :rows="1"
+                    style="width:193px"
+                    placeholder="请输入第一作者"
+                  />
+                </el-form-item>
+                <el-form-item
+                  v-for="(author, index) in professorPaperForm.authors"
+                  :key="index"
+                  :prop="'authors.' + index + '.uid'"
+                  :rules="{
+                    required: true,
+                    message: '请选择学生作者',
+                    trigger: 'change'
+                  }"
+                >
+                  <span slot="label">
+                    <svg-icon icon-class="people" /> 学生作者
+                    {{ index + 1 }}</span>
+
+                  <el-select
+                    v-model="author.uid"
+                    style="width:193px"
+                    filterable
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="(item, index) in userlist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id"
+                    />
+                  </el-select>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="支持搜索功能快速查找用户"
+                    placement="right"
+                  >
+                    <span style="margin-left:8px">
+                      <svg-icon icon-class="hint" /></span>
+                  </el-tooltip>
+                </el-form-item>
+                <el-button
+                  type="text"
+                  style="margin-left:20px;"
+                  icon="el-icon-plus"
+                  @click="addAuthor"
+                >添加作者
+                </el-button>
+                <el-button type="text" style="margin-left:20px;" icon="el-icon-minus" @click="rmAuthor">减少作者</el-button>
+              </el-form>
+            </div>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submit('internalPaperForm')">确 定</el-button>
+            <el-button @click="addReviewContent = undefined">取 消</el-button>
+          </span>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -289,6 +398,7 @@ export default {
         journal: null,
         paperType: null,
         file: null,
+        isStudentFirstAuthor: true,
         authors: [
           {
             num: 1,
@@ -301,11 +411,29 @@ export default {
       externalPaperForm: {
         id: null,
         title: null,
+        file: null,
         period: ''
+      },
+      professorPaperForm: {
+        id: null,
+        title: null,
+        journal: null,
+        paperType: null,
+        file: null,
+        firstAuthor: null,
+        isStudentFirstAuthor: false,
+        authors: [
+          {
+            num: 1,
+            name: '',
+            uid: null
+          }
+        ]
       },
 
       rules: {
         title: [{ required: true, message: '请输入论文名称', trigger: 'blur' }],
+        author: [{ required: true, message: '请输入第一作者', trigger: 'blur' }],
         paperType: [{ required: true, message: '请选择论文分类', trigger: 'change' }],
         period: [{ required: true, message: '请选择起止时间', trigger: 'blur' }],
         file: [{ trigger: 'blur', validator: async(rule, value, callback) => {
@@ -352,6 +480,7 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.internalPaperForm.file = this.file
           this.loading = true
           addPaper(this.internalPaperForm)
             .then(() => {
@@ -387,6 +516,7 @@ export default {
     addExternalReview(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.externalPaperForm.file = this.file
           this.loading = true
           this.externalPaperForm.startTime = this.externalPaperForm.period[0]
           this.externalPaperForm.endTime = this.externalPaperForm.period[1]

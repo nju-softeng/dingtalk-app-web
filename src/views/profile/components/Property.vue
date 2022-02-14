@@ -51,14 +51,14 @@
       :visible.sync="addPropertyDialogueVisible"
       width="30%"
     >
-      <el-form ref="form" :model="addPropertyForm" label-width="80px">
-        <el-form-item label="名称:">
-          <el-col :span="12">
-            <el-input v-model="addPropertyForm.name" size="mini" />
+      <el-form ref="addPropertyForm"  :rules="rules" :model="addPropertyForm" label-width="100px">
+        <el-form-item prop="name" label="名称:">
+          <el-col :span="10">
+            <el-input v-model="addPropertyForm.name"  />
           </el-col>
         </el-form-item>
-        <el-form-item label="开始时间:">
-          <el-col :span="12">
+        <el-form-item prop="startTime" label="开始时间:">
+          <el-col :span="10">
             <el-date-picker
               v-model="addPropertyForm.startTime"
               value-format="yyyy-MM-dd"
@@ -68,18 +68,20 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="类型：">
-          <el-col :span="16">
+        <el-form-item prop="type" label="类型：">
+          <el-col :span="8">
             <el-input v-model="addPropertyForm.type" size="mini" />
           </el-col>
         </el-form-item>
-        <el-form-item label="保管人：">
-          <el-input v-model="addPropertyForm.preserver" />
+        <el-form-item prop="preserver" label="保管人：">
+          <el-col :span="12">
+            <el-input v-model="addPropertyForm.preserver" />
+          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="addPropertyDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addProperty">添加</el-button>
+        <el-button type="primary" @click="addProperty('addPropertyForm')">添加</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -87,13 +89,13 @@
       :visible.sync="modifyPropertyDialogueVisible"
       width="30%"
     >
-      <el-form ref="form" :model="modifyPropertyForm" label-width="80px">
-        <el-form-item label="名称:">
+      <el-form ref="modifyPropertyForm" :rules="rules" :model="modifyPropertyForm" label-width="100px">
+        <el-form-item prop="name" label="名称:">
           <el-col :span="12">
             <el-input v-model="modifyPropertyForm.name" size="mini" />
           </el-col>
         </el-form-item>
-        <el-form-item label="开始时间:">
+        <el-form-item prop="startTime" label="开始时间:">
           <el-col :span="12">
             <el-date-picker
               v-model="modifyPropertyForm.startTime"
@@ -104,18 +106,18 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="类型:">
+        <el-form-item prop="type" label="类型:">
           <el-col :span="16">
             <el-input v-model="modifyPropertyForm.type" size="mini" />
           </el-col>
         </el-form-item>
-        <el-form-item label="备注:">
+        <el-form-item prop="preserver" label="备注:">
           <el-input v-model="modifyPropertyForm.preserver" />
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="modifyPropertyDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmModifyProperty">确认</el-button>
+        <el-button type="primary" @click="confirmModifyProperty('modifyPropertyForm')">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -137,7 +139,13 @@ export default {
       }],
       typeConvertor: ['校级', '省级', '国家级', '国际级'],
       addPropertyForm: {},
-      modifyPropertyForm: {}
+      modifyPropertyForm: {},
+      rules: {
+        name: [{ required: true, message: '请输入物品名称', trigger: 'blur' }],
+        startTime: [{ required: true, message: '请输入开始时间', trigger: 'blur' }],
+        type: [{ required: true, message: '请输入物品类型', trigger: 'blur' }],
+        preserver: [{ required: true, message: '请输入保管人姓名', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -147,39 +155,60 @@ export default {
     })
   },
   methods: {
-    async addProperty() {
-      var res = await addProperty(this.addPropertyForm)
-      this.addPropertyForm = {}
-      if (res) {
-        this.$message({
-          showClose: true,
-          message: '固定资产信息添加成功！',
-          type: 'success'
-        })
-      }
-      getUserProperties().then(res => {
-        this.propertyList = res.data
+    async addProperty(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          var res = await addProperty(this.addPropertyForm)
+          this.addPropertyForm = {}
+          if (res) {
+            this.$message({
+              showClose: true,
+              message: '固定资产信息添加成功！',
+              type: 'success'
+            })
+          }
+          getUserProperties().then(res => {
+            this.propertyList = res.data
+          })
+          this.addPropertyDialogueVisible = false
+        } else {
+          this.$notify({
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
       })
-      this.addPropertyDialogueVisible = false
     },
     modifyPropertyClick(data) {
       console.log(data)
       this.modifyPropertyDialogueVisible = true
       this.modifyPropertyForm = JSON.parse(JSON.stringify(data))
     },
-    async confirmModifyProperty() {
-      var res = await updateProperty(this.modifyPropertyForm)
-      if (res) {
-        this.$message({
-          showClose: true,
-          message: '固定资产信息修改成功！',
-          type: 'success'
-        })
-      }
-      this.modifyPropertyDialogueVisible = false
-      getUserProperties().then(res => {
-        this.propertyList = res.data
+    async confirmModifyProperty(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          var res = await updateProperty(this.modifyPropertyForm)
+          if (res) {
+            this.$message({
+              showClose: true,
+              message: '固定资产信息修改成功！',
+              type: 'success'
+            })
+          }
+          this.modifyPropertyDialogueVisible = false
+          getUserProperties().then(res => {
+            this.propertyList = res.data
+          })
+        } else {
+          this.$notify({
+            title: '修改失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
       })
+
     },
     async deletePropertyClick(data) {
       await deleteProperty(data.id)

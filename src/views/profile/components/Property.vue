@@ -19,9 +19,9 @@
           width="200"
         />
         <el-table-column
-                prop="startTime"
-                label="开始时间"
-                width="200"
+          prop="startTime"
+          label="开始时间"
+          width="200"
         />
         <el-table-column
           prop="type"
@@ -51,10 +51,10 @@
       :visible.sync="addPropertyDialogueVisible"
       width="30%"
     >
-      <el-form ref="addPropertyForm"  :rules="rules" :model="addPropertyForm" label-width="100px">
+      <el-form ref="addPropertyForm" :rules="rules" :model="addPropertyForm" label-width="100px">
         <el-form-item prop="name" label="名称:">
           <el-col :span="10">
-            <el-input v-model="addPropertyForm.name"  />
+            <el-input v-model="addPropertyForm.name" />
           </el-col>
         </el-form-item>
         <el-form-item prop="startTime" label="开始时间:">
@@ -208,7 +208,6 @@ export default {
           })
         }
       })
-
     },
     async deletePropertyClick(data) {
       await deleteProperty(data.id)

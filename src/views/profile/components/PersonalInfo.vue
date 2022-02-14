@@ -42,7 +42,10 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="当前状态:">
-                <el-select v-model="personalInfoForm.workState" placeholder="请选择">
+                <el-select
+                  v-model="personalInfoForm.workState"
+                  placeholder="请选择"
+                >
                   <el-option label="实习" :value="true" />
                   <el-option label="在校" :value="false" />
                 </el-select>
@@ -94,60 +97,63 @@
             </el-col>
           </el-row>
         </div>
-
       </el-form>
     </div>
     <el-row type="flex" justify="center">
-      <el-button type="primary" size="medium" style="margin-bottom: 10px" @click="confirmModify">确认修改</el-button>
+      <el-button
+        type="primary"
+        size="medium"
+        style="margin-bottom: 10px"
+        @click="confirmModify"
+        >确认修改</el-button
+      >
     </el-row>
   </div>
 </template>
 
 <script>
-import { getUserDetail, updateUserInfo } from '@/api/user'
+import { getUserDetail, updateUserInfo } from "@/api/user";
 export default {
-  name: 'PersonalInfo',
+  name: "PersonalInfo",
   data() {
     return {
-      personalInfoForm: {}
-    }
+      personalInfoForm: {},
+    };
   },
   created() {
-    getUserDetail().then(res => {
-      console.log(res)
-      this.personalInfoForm = res.data
-      console.log(this.personalInfoForm)
-    })
+    getUserDetail().then((res) => {
+      console.log(res);
+      this.personalInfoForm = res.data;
+      console.log(this.personalInfoForm);
+    });
   },
   methods: {
     confirmModify() {
-      console.log(this.personalInfoForm)
-      if (this.personalInfoForm.name === '') {
+      console.log(this.personalInfoForm);
+      if (this.personalInfoForm.name === "") {
         this.$message({
           showClose: true,
-          message: '请填写必要信息',
-          type: 'warning'
-        })
-        return
+          message: "请填写必要信息",
+          type: "warning",
+        });
+        return;
       }
       updateUserInfo(this.personalInfoForm)
         .then(() => {
           this.$message({
             showClose: true,
-            message: '更新成功',
-            type: 'success'
-          })
+            message: "更新成功",
+            type: "success",
+          });
         })
         .finally(() => {
-          getUserDetail().then(res => {
-            this.personalInfoForm = res.data
-          })
-        })
-    }
-  }
-}
+          getUserDetail().then((res) => {
+            this.personalInfoForm = res.data;
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

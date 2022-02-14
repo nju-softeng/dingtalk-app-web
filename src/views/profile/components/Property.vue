@@ -2,46 +2,27 @@
   <div>
     <div class="propertyList">
       <el-row type="flex">
-        <el-col :span="8">
-          资产详情
-        </el-col>
-        <el-col :span="8" style="float: right;margin-right: 30px">
-          <el-button type="primary" @click="addPropertyDialogueVisible=true">新增固定资产</el-button>
+        <el-col :span="8"> 资产详情 </el-col>
+        <el-col :span="8" style="float: right; margin-right: 30px">
+          <el-button type="primary" @click="addPropertyDialogueVisible = true"
+            >新增固定资产</el-button
+          >
         </el-col>
       </el-row>
-      <el-table
-        :data="propertyList"
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="name"
-          label="名称"
-          width="200"
-        />
-        <el-table-column
-                prop="startTime"
-                label="开始时间"
-                width="200"
-        />
-        <el-table-column
-          prop="type"
-          label="类型"
-          width="100"
-        />
-        <el-table-column
-          prop="preserver"
-          label="保管人"
-          width="150"
-        />
-        <el-table-column
-          label="操作"
-          width="200"
-        >
+      <el-table :data="propertyList" style="width: 100%">
+        <el-table-column prop="name" label="名称" width="200" />
+        <el-table-column prop="startTime" label="开始时间" width="200" />
+        <el-table-column prop="type" label="类型" width="100" />
+        <el-table-column prop="preserver" label="保管人" width="150" />
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
-            <el-button type="primary" @click="modifyPropertyClick(scope.row)">修改</el-button>
-            <el-button type="danger" @click="deletePropertyClick(scope.row)">删除</el-button>
+            <el-button type="primary" @click="modifyPropertyClick(scope.row)"
+              >修改</el-button
+            >
+            <el-button type="danger" @click="deletePropertyClick(scope.row)"
+              >删除</el-button
+            >
           </template>
-
         </el-table-column>
       </el-table>
     </div>
@@ -114,89 +95,97 @@
         </el-form-item>
       </el-form>
       <span slot="footer">
-        <el-button @click="modifyPropertyDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmModifyProperty">确认</el-button>
+        <el-button @click="modifyPropertyDialogueVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="confirmModifyProperty"
+          >确认</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserProperties, addProperty, deleteProperty, updateProperty } from '@/api/user'
+import {
+  getUserProperties,
+  addProperty,
+  deleteProperty,
+  updateProperty,
+} from "@/api/user";
 export default {
-  name: 'Property',
+  name: "Property",
   data() {
     return {
       addPropertyDialogueVisible: false,
       modifyPropertyDialogueVisible: false,
-      propertyList: [{
-        startTime: '12414',
-        name: '124124',
-        type: '12',
-        preserver: '12414'
-      }],
-      typeConvertor: ['校级', '省级', '国家级', '国际级'],
+      propertyList: [
+        {
+          startTime: "12414",
+          name: "124124",
+          type: "12",
+          preserver: "12414",
+        },
+      ],
+      typeConvertor: ["校级", "省级", "国家级", "国际级"],
       addPropertyForm: {},
-      modifyPropertyForm: {}
-    }
+      modifyPropertyForm: {},
+    };
   },
   created() {
-    getUserProperties().then(res => {
-      console.log(res)
-      this.propertyList = res.data
-    })
+    getUserProperties().then((res) => {
+      console.log(res);
+      this.propertyList = res.data;
+    });
   },
   methods: {
     async addProperty() {
-      var res = await addProperty(this.addPropertyForm)
-      this.addPropertyForm = {}
+      var res = await addProperty(this.addPropertyForm);
+      this.addPropertyForm = {};
       if (res) {
         this.$message({
           showClose: true,
-          message: '固定资产信息添加成功！',
-          type: 'success'
-        })
+          message: "固定资产信息添加成功！",
+          type: "success",
+        });
       }
-      getUserProperties().then(res => {
-        this.propertyList = res.data
-      })
-      this.addPropertyDialogueVisible = false
+      getUserProperties().then((res) => {
+        this.propertyList = res.data;
+      });
+      this.addPropertyDialogueVisible = false;
     },
     modifyPropertyClick(data) {
-      console.log(data)
-      this.modifyPropertyDialogueVisible = true
-      this.modifyPropertyForm = JSON.parse(JSON.stringify(data))
+      console.log(data);
+      this.modifyPropertyDialogueVisible = true;
+      this.modifyPropertyForm = JSON.parse(JSON.stringify(data));
     },
     async confirmModifyProperty() {
-      var res = await updateProperty(this.modifyPropertyForm)
+      var res = await updateProperty(this.modifyPropertyForm);
       if (res) {
         this.$message({
           showClose: true,
-          message: '固定资产信息修改成功！',
-          type: 'success'
-        })
+          message: "固定资产信息修改成功！",
+          type: "success",
+        });
       }
-      this.modifyPropertyDialogueVisible = false
-      getUserProperties().then(res => {
-        this.propertyList = res.data
-      })
+      this.modifyPropertyDialogueVisible = false;
+      getUserProperties().then((res) => {
+        this.propertyList = res.data;
+      });
     },
     async deletePropertyClick(data) {
-      await deleteProperty(data.id)
+      await deleteProperty(data.id);
       this.$message({
         showClose: true,
-        message: '固定资产信息删除成功！',
-        type: 'success'
-      })
-      getUserProperties().then(res => {
-        this.propertyList = res.data
-      })
-    }
-  }
-}
+        message: "固定资产信息删除成功！",
+        type: "success",
+      });
+      getUserProperties().then((res) => {
+        this.propertyList = res.data;
+      });
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
-
+<style scoped></style>

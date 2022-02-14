@@ -1,16 +1,12 @@
 <template>
   <div>
-    <div>
-      123123
-    </div>
+    <div>123123</div>
   </div>
 </template>
 <script>
 export default {
-  name: 'PaperByProfessor'
-}
+  name: "PaperByProfessor",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

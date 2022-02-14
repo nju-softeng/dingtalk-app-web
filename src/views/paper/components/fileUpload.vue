@@ -1,7 +1,6 @@
 <template>
   <el-form-item ref="paperUploadComponent" prop="file">
-    <span slot="label">
-      <el-icon class="el-icon-upload" /> 文件上传</span>
+    <span slot="label"> <el-icon class="el-icon-upload" /> 文件上传</span>
     <el-upload
       ref="PaperUpload"
       v-model="innerFile"
@@ -19,8 +18,7 @@
         content="只能上传word/pdf文件"
         placement="right"
       >
-        <span style="margin-left:8px">
-          <svg-icon icon-class="hint" /></span>
+        <span style="margin-left: 8px"> <svg-icon icon-class="hint" /></span>
       </el-tooltip>
     </el-upload>
   </el-form-item>
@@ -28,40 +26,38 @@
 
 <script>
 export default {
-  name: 'FileUpload',
+  name: "FileUpload",
   props: {
     file: {
       type: Object,
-      default: function() {
-        return null
-      }
-    }
+      default: function () {
+        return null;
+      },
+    },
   },
   data() {
     return {
-      innerFile: this.file
-    }
+      innerFile: this.file,
+    };
   },
   methods: {
     handleFileChange(file, fileList) {
       if (fileList.length > 1) {
-        console.log(fileList)
-        fileList.splice(0, 1)
+        console.log(fileList);
+        fileList.splice(0, 1);
       }
-      this.innerFile = file
-      this.$emit('changeFile', file)
-      this.$refs['paperUploadComponent'].clearValidate()
-      console.log(this.innerFile)
+      this.innerFile = file;
+      this.$emit("changeFile", file);
+      this.$refs["paperUploadComponent"].clearValidate();
+      console.log(this.innerFile);
     },
     handleFileRemove(file, fileList) {
-      console.log(fileList)
-      this.innerFile = null
-      this.$emit('changeFile', null)
-    }
-  }
-}
+      console.log(fileList);
+      this.innerFile = null;
+      this.$emit("changeFile", null);
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

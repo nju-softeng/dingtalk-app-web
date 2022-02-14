@@ -55,13 +55,13 @@
       :visible.sync="addPrizeDialogueVisible"
       width="30%"
     >
-      <el-form ref="form" :model="addPrizeForm" label-width="80px">
-        <el-form-item label="获奖名称:">
+      <el-form ref="addPrizeForm" :model="addPrizeForm" :rules="rules" label-width="100px">
+        <el-form-item prop="prizeName" label="获奖名称:">
           <el-col :span="12">
             <el-input v-model="addPrizeForm.prizeName" size="mini" />
           </el-col>
         </el-form-item>
-        <el-form-item label="获奖时间:">
+        <el-form-item prop="prizeTime" label="获奖时间:">
           <el-col :span="12">
             <el-date-picker
               v-model="addPrizeForm.prizeTime"
@@ -72,7 +72,7 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="级别:">
+        <el-form-item prop="level" label="级别:">
           <el-col :span="8">
             <el-select v-model="addPrizeForm.level" placeholder="请选择">
               <el-option label="校级" :value="0" />
@@ -88,7 +88,7 @@
       </el-form>
       <span slot="footer">
         <el-button @click="addPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addPrize">添加</el-button>
+        <el-button type="primary" @click="addPrize('addPrizeForm')">添加</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -96,13 +96,13 @@
       :visible.sync="modifyPrizeDialogueVisible"
       width="30%"
     >
-      <el-form ref="form" :model="modifyPrizeForm" label-width="80px">
-        <el-form-item label="获奖名称:">
+      <el-form ref="modifyPrizeForm" :model="modifyPrizeForm" :rules="rules" label-width="100px">
+        <el-form-item prop="prizeName" label="获奖名称:">
           <el-col :span="12">
             <el-input v-model="modifyPrizeForm.prizeName" size="mini" />
           </el-col>
         </el-form-item>
-        <el-form-item label="获奖时间:">
+        <el-form-item prop="prizeTime" label="获奖时间:">
           <el-col :span="12">
             <el-date-picker
               v-model="modifyPrizeForm.prizeTime"
@@ -113,7 +113,7 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="级别:">
+        <el-form-item prop="level" label="级别:">
           <el-col :span="8">
             <el-select v-model="modifyPrizeForm.level" placeholder="请选择">
               <el-option label="校级" :value="0" />
@@ -129,7 +129,7 @@
       </el-form>
       <span slot="footer">
         <el-button @click="modifyPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmModifyPrize">确认</el-button>
+        <el-button type="primary" @click="confirmModifyPrize('modifyPrizeForm')">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -151,52 +151,76 @@ export default {
       }],
       levelConvertor: ['校级', '省级', '国家级', '国际级'],
       addPrizeForm: {},
-      modifyPrizeForm: {}
+      modifyPrizeForm: {},
+      rules: {
+        prizeName: [{ required: true, message: '请输入奖项名称', trigger: 'blur' }],
+        prizeTime: [{ required: true, message: '请输入获奖时间', trigger: 'blur' }],
+        level: [{ required: true, message: '请输入奖项等级', trigger: 'blur' }]
+      }
     }
   },
-  created() {
-    getUserPrizes().then(res => {
-      console.log(res)
+  mounted() {
+    getUserPrizes(sessionStorage.getItem('uid')).then(res => {
       this.prizeList = res.data
     })
   },
   methods: {
-    async addPrize() {
-      var res = await addPrize(this.addPrizeForm)
-      this.addPrizeForm = {}
-      if (res) {
-        this.$message({
-          showClose: true,
-          message: '奖项信息添加成功！',
-          type: 'success'
-        })
-      }
-      getUserPrizes().then(res => {
-        this.prizeList = res.data
+    async addPrize(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          var res = await addPrize(sessionStorage.getItem('uid'), this.addPrizeForm)
+          this.addPrizeForm = {}
+          if (res) {
+            this.$message({
+              showClose: true,
+              message: '奖项信息添加成功！',
+              type: 'success'
+            })
+          }
+          getUserPrizes().then(res => {
+            this.prizeList = res.data
+          })
+          this.addPrizeDialogueVisible = false
+        } else {
+          this.$notify({
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
       })
-      this.addPrizeDialogueVisible = false
     },
     modifyPrizeClick(data) {
       console.log(data)
       this.modifyPrizeDialogueVisible = true
       this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
     },
-    async confirmModifyPrize() {
-      var res = await updatePrize(this.modifyPrizeForm)
-      if (res) {
-        this.$message({
-          showClose: true,
-          message: '奖项信息修改成功！',
-          type: 'success'
-        })
-      }
-      this.modifyPrizeDialogueVisible = false
-      getUserPrizes().then(res => {
-        this.prizeList = res.data
+    async confirmModifyPrize(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          var res = await updatePrize(sessionStorage.getItem('uid'), this.modifyPrizeForm.id, this.modifyPrizeForm)
+          if (res) {
+            this.$message({
+              showClose: true,
+              message: '奖项信息修改成功！',
+              type: 'success'
+            })
+          }
+          this.modifyPrizeDialogueVisible = false
+          getUserPrizes().then(res => {
+            this.prizeList = res.data
+          })
+        } else {
+          this.$notify({
+            title: '修改失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
       })
     },
     async deletePrizeClick(data) {
-      await deletePrize(data.id)
+      await deletePrize(sessionStorage.getItem('uid'), data.id)
       this.$message({
         showClose: true,
         message: '奖项信息删除成功！',

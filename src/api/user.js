@@ -76,35 +76,34 @@ export function updateUserInfo(data) {
   })
 }
 // 查询用户奖项
-export function getUserPrizes() {
+export function getUserPrizes(uid) {
   return axios({
-    url: '/prizeList',
+    url: '/users/' + uid + '/prizes',
     method: 'get'
   })
 }
 // 新建用户奖项
-export function addPrize(data) {
+export function addPrize(uid, data) {
   return axios({
-    url: '/prize',
-    method: 'put',
+    url: '/users/' + uid + '/prizes',
+    method: 'post',
     data
   })
 }
 
 // 删除用户奖项
-export function deletePrize(data) {
+export function deletePrize(uid, prizeId) {
   return axios({
-    url: '/prize',
-    method: 'delete',
-    data
+    url: '/users/' + uid + '/prizes/' + prizeId,
+    method: 'delete'
   })
 }
 
 // 修改用户奖项
-export function updatePrize(data) {
+export function updatePrize(uid, prizeId, data) {
   return axios({
-    url: '/prize/update',
-    method: 'post',
+    url: '/users/' + uid + '/prizes/' + prizeId,
+    method: 'put',
     data
   })
 }

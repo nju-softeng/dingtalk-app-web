@@ -75,3 +75,69 @@ export function updateUserInfo(data) {
     data
   })
 }
+// 查询用户奖项
+export function getUserPrizes(uid) {
+  return axios({
+    url: '/users/' + uid + '/prizes',
+    method: 'get'
+  })
+}
+// 新建用户奖项
+export function addPrize(uid, data) {
+  return axios({
+    url: '/users/' + uid + '/prizes',
+    method: 'post',
+    data
+  })
+}
+
+// 删除用户奖项
+export function deletePrize(uid, prizeId) {
+  return axios({
+    url: '/users/' + uid + '/prizes/' + prizeId,
+    method: 'delete'
+  })
+}
+
+// 修改用户奖项
+export function updatePrize(uid, prizeId, data) {
+  return axios({
+    url: '/users/' + uid + '/prizes/' + prizeId,
+    method: 'put',
+    data
+  })
+}
+
+// 查询用户固定资产
+export function getUserProperties() {
+  return axios({
+    url: '/propertyList',
+    method: 'get'
+  })
+}
+// 新建用户查询用户固定资产
+export function addProperty(data) {
+  return axios({
+    url: '/property',
+    method: 'put',
+    data
+  })
+}
+
+// 删除用户查询用户固定资产
+export function deleteProperty(data) {
+  return axios({
+    url: '/property',
+    method: 'delete',
+    data
+  })
+}
+
+// 修改用户查询用户固定资产
+export function updateProperty(data) {
+  return axios({
+    url: '/property/update',
+    method: 'post',
+    data
+  })
+}

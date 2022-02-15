@@ -12,6 +12,9 @@
               <el-tab-pane label="周绩效日志" name="dctab" />
               <el-tab-pane label="AC日志" name="actab" />
               <el-tab-pane label="消息记录" name="msg" />
+              <el-tab-pane label="个人信息" name="personalInfo" />
+              <el-tab-pane label="获奖情况" name="prize" />
+              <el-tab-pane label="固定资产" name="property" />
             </el-tabs>
             <component :is="activeTab" />
           </div>
@@ -22,43 +25,46 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import UserCard from './components/UserCard'
+import { mapGetters } from "vuex";
+import UserCard from "./components/UserCard";
 
 export default {
-  name: 'Profile',
+  name: "Profile",
   components: {
     UserCard,
-    dctab: () => import('./components/DcTab'),
-    actab: () => import('./components/AcTab'),
-    msg: () => import('./components/Message')
+    dctab: () => import("./components/DcTab"),
+    actab: () => import("./components/AcTab"),
+    msg: () => import("./components/Message"),
+    personalInfo: () => import("./components/PersonalInfo"),
+    prize: () => import("./components/Prize"),
+    property: () => import("./components/Property"),
   },
   data() {
     return {
       user: {},
-      activeTab: 'dctab'
-    }
+      activeTab: "dctab",
+    };
   },
   computed: {
-    ...mapGetters(['name', 'avatar', 'roles'])
+    ...mapGetters(["name", "avatar", "roles"]),
   },
   created() {
-    this.getUser()
-    console.log(this.$route.query.tab)
-    this.activeTab = this.$route.query.tab || 'dctab'
+    this.getUser();
+    console.log(this.$route.query.tab);
+    this.activeTab = this.$route.query.tab || "dctab";
   },
   methods: {
     getUser() {
       this.user = {
         name: this.name,
         // role: this.roles.join(" | "),
-        email: 'admin@test.com',
-        avatar: this.avatar
-      }
-      console.log(this.user)
-    }
-  }
-}
+        email: "admin@test.com",
+        avatar: this.avatar,
+      };
+      console.log(this.user);
+    },
+  },
+};
 </script>
 <style lang="scss">
 .card {

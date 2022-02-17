@@ -1,5 +1,10 @@
 FROM nginx:latest
-COPY mysite.template /etc/nginx/conf.d/mysite.template
-COPY dist/ /usr/share/nginx/html/
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY dist/ /var/www/localhost/
 
-CMD sed -i "s/{corp_id}/$corp_id/g"  /usr/share/nginx/html/env.js; envsubst '$backend' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'
+# 自签证书
+COPY ssl/localhost.crt /etc/nginx/ssl/localhost.crt
+COPY ssl/localhost.key /etc/nginx/ssl/localhost.key
+COPY ssl/dhparam.pem /etc/nginx/dhparam.pem
+
+CMD sed -i "s/{corp_id}/$corp_id/g"  /var/www/localhost/env.js; exec nginx -g 'daemon off;'

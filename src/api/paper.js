@@ -3,6 +3,7 @@ import axios from '@/utils/request'
 const api = {
   addPaper: '/paper',
   listPaper: (page, size) => `/paper/page/${page}/${size}`,
+  listProfessorPaper: (page, size) => `/non-first/page/${page}/${size}`,
   getPaper: id => `/paper/${id}`,
   createVote: '/vote',
   getPaperVote: pid => `/paper/${pid}/vote`,
@@ -25,6 +26,14 @@ export function addPaper(data) {
 export function listPaper(page, size) {
   return axios({
     url: api.listPaper(page, size),
+    method: 'get'
+  })
+}
+
+// 分页查询非学生一作论文
+export function listProfessorPaper(page, size) {
+  return axios({
+    url: api.listProfessorPaper(page, size),
     method: 'get'
   })
 }

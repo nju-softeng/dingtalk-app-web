@@ -131,12 +131,7 @@ export default {
     return {
       addPropertyDialogueVisible: false,
       modifyPropertyDialogueVisible: false,
-      propertyList: [{
-        startTime: '12414',
-        name: '124124',
-        type: '12',
-        preserver: '12414'
-      }],
+      propertyList: [],
       typeConvertor: ['校级', '省级', '国家级', '国际级'],
       addPropertyForm: {},
       modifyPropertyForm: {},

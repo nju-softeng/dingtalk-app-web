@@ -239,7 +239,7 @@
 import { getUserList } from '@/api/common'
 
 import {
-  listPaper,
+  listProfessorPaper,
   createVote,
   submitResult,
   rmPaper
@@ -316,7 +316,7 @@ export default {
     // 分页获取论文信息
     fetchPaper(page) {
       return new Promise((resolve, reject) => {
-        listPaper(page, 6)
+        listProfessorPaper(page, 6)
           .then(res => {
             this.list = res.data.list
             this.total = res.data.total

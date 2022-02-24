@@ -143,12 +143,7 @@ export default {
     return {
       addPrizeDialogueVisible: false,
       modifyPrizeDialogueVisible: false,
-      prizeList: [{
-        prizeTime: '12414',
-        prizeName: '124124',
-        level: '12',
-        remark: '12414'
-      }],
+      prizeList: [],
       levelConvertor: ['校级', '省级', '国家级', '国际级'],
       addPrizeForm: {},
       modifyPrizeForm: {},

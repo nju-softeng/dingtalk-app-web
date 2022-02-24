@@ -25,46 +25,46 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import UserCard from "./components/UserCard";
+import { mapGetters } from 'vuex'
+import UserCard from './components/UserCard'
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   components: {
     UserCard,
-    dctab: () => import("./components/DcTab"),
-    actab: () => import("./components/AcTab"),
-    msg: () => import("./components/Message"),
-    personalInfo: () => import("./components/PersonalInfo"),
-    prize: () => import("./components/Prize"),
-    property: () => import("./components/Property"),
+    dctab: () => import('./components/DcTab'),
+    actab: () => import('./components/AcTab'),
+    msg: () => import('./components/Message'),
+    personalInfo: () => import('./components/PersonalInfo'),
+    prize: () => import('./components/Prize'),
+    property: () => import('./components/Property')
   },
   data() {
     return {
       user: {},
-      activeTab: "dctab",
-    };
+      activeTab: 'dctab'
+    }
   },
   computed: {
-    ...mapGetters(["name", "avatar", "roles"]),
+    ...mapGetters(['name', 'avatar', 'roles'])
   },
   created() {
-    this.getUser();
-    console.log(this.$route.query.tab);
-    this.activeTab = this.$route.query.tab || "dctab";
+    this.getUser()
+    console.log(this.$route.query.tab)
+    this.activeTab = this.$route.query.tab || 'dctab'
   },
   methods: {
     getUser() {
       this.user = {
         name: this.name,
         // role: this.roles.join(" | "),
-        email: "admin@test.com",
-        avatar: this.avatar,
-      };
-      console.log(this.user);
-    },
-  },
-};
+        email: 'admin@test.com',
+        avatar: this.avatar
+      }
+      console.log(this.user)
+    }
+  }
+}
 </script>
 <style lang="scss">
 .card {

@@ -50,7 +50,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <p style="color:#434343">
+      <div style="color:#434343; margin-top: 16px">
         <i class="el-icon-warning" />
         AC分配规则
         <ul style="padding-left:16px;padding-top:0px">
@@ -59,7 +59,7 @@
           <li>3rd author : 15%</li>
           <li>other share : 10%</li>
         </ul>
-      </p>
+      </div>
     </el-card>
   </div>
 </template>

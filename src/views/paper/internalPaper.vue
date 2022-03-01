@@ -94,11 +94,12 @@
                   class="link-type"
                 >
                   <el-tag
-                    v-if="scope.row.v_result === true"
+                    v-if="scope.row.v_result === 1"
                     class="paper-tag"
                     type="success"
                   >ACCEPT</el-tag>
-                  <el-tag v-else class="paper-tag" type="danger">REJECT</el-tag>
+                  <el-tag v-else-if="scope.row.v_result === 0" class="paper-tag" type="danger">REJECT</el-tag>
+                  <el-tag v-else-if="scope.row.v_result === -1" class="paper-tag" type="info">FLAT</el-tag>
                 </router-link>
               </div>
             </template>

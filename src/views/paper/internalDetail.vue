@@ -186,6 +186,11 @@ export default {
         } else if (paper.result === 5) {
           return {
             type: 'info',
+            content: 'FLAT'
+          }
+        } else if (paper.result === 6) {
+          return {
+            type: 'info',
             content: 'SUSPEND'
           }
         } else {

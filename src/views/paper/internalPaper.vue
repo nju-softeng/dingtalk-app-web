@@ -70,7 +70,6 @@
               </div>
             </template>
           </el-table-column>
-<!--TODO  根据vote result-->
           <el-table-column label="投票结果" align="center" width="110">
             <template slot-scope="scope">
               <div class="info-item">
@@ -99,7 +98,9 @@
                     type="success"
                   >ACCEPT</el-tag>
                   <el-tag v-else-if="scope.row.v_result === 0" class="paper-tag" type="danger">REJECT</el-tag>
-                  <el-tag v-else-if="scope.row.v_result === 2" class="paper-tag" type="info">FLAT</el-tag>
+                  <div v-else-if="scope.row.v_result === 2">
+                    <el-tag class="paper-tag" type="info">FLAT</el-tag>
+                  </div>
                 </router-link>
               </div>
             </template>

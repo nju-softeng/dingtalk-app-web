@@ -9,7 +9,8 @@ const api = {
   getPaperVote: pid => `/paper/${pid}/vote`,
   getVoteDetailByPid: pid => `/vote/paper/${pid}/detail`,
   getVoteDetailByVid: vid => `/vote/${vid}/detail`,
-  addPoll: vid => `/vote/${vid}`
+  addPoll: vid => `/vote/${vid}`,
+  makeFlatDecision: id => `/paper/${id}`
 
 }
 
@@ -51,6 +52,14 @@ export function createVote(data) {
   return axios({
     url: api.createVote,
     method: 'post',
+    data
+  })
+}
+// 决定平票结果
+export function makeFlatDecision(id, data) {
+  return axios({
+    url: api.makeFlatDecision(id),
+    method: 'patch',
     data
   })
 }

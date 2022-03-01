@@ -4,7 +4,7 @@
       <div class="layout-container">
         <div class="groupInfo">
           <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px;width: 100%">
-            <el-breadcrumb-item :to="{ path: '/paper/index/internal' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/paper/index/paperByProfessor' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
           <div style="display: flex">
@@ -21,6 +21,11 @@
                     <span style="margin-right:8px">
                       机构：{{ paper.journal }}</span>
                     <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
+                  </p>
+                  <p>
+                    <span>
+                      <svg-icon icon-class="user" /> 第一作者: </span>
+                    <span style="font-weight: bold">{{ paper.firstAuthor }}</span>
                   </p>
                   <p>
                     <span>
@@ -45,7 +50,6 @@
                 </div>
               </div>
             </div>
-            <el-divider v-if="isAbleToMakeFlatDecision" direction="vertical" style="float: left;height: 200px" />
           </div>
         </div>
         <el-menu :default-active="activeTab" mode="horizontal" @select="handleSelect">
@@ -104,11 +108,7 @@ export default {
       level: levels,
       id: null,
       paper: {},
-      activeTab: 'vote',
-      flatDecisionForm: {
-        id: null,
-        decision: null
-      }
+      activeTab: 'vote'
     }
   },
   computed: {
@@ -117,37 +117,6 @@ export default {
         const tmp = this.level.find(item => item.value === val)
         if (tmp !== undefined) {
           return tmp.label
-        }
-      }
-    },
-    // 投票状态标签
-    getVoteResult() {
-      return vote => {
-        if (vote === undefined) {
-          return {
-            type: 'info',
-            content: '投票未发起'
-          }
-        } else if (vote.result === undefined) {
-          return {
-            type: 'info',
-            content: '等待投票结果'
-          }
-        } else if (vote.result === 1) {
-          return {
-            type: 'success',
-            content: 'ACCEPT'
-          }
-        } else if (vote.result === 0) {
-          return {
-            type: 'danger',
-            content: 'REJECT'
-          }
-        } else if (vote.result === 2) {
-          return {
-            type: 'info',
-            content: 'FLAT'
-          }
         }
       }
     },
@@ -196,19 +165,6 @@ export default {
           }
         }
       }
-    },
-    // 是否可以决定平票结果
-    isAbleToMakeFlatDecision() {
-      if (this.paper.result === 5) {
-        const uid = sessionStorage.getItem('uid')
-        console.log('uid', uid)
-        for (let i = 0; i < this.paper.paperDetails.length; i++) {
-          if (uid === this.paper.paperDetails[i].user.id.toString()) {
-            return true
-          }
-        }
-      }
-      return false
     }
   },
   created() {
@@ -217,7 +173,7 @@ export default {
     getPaper(this.id)
       .then(res => {
         this.paper = res.data
-        console.log(this.paper)
+        console.log('paper info', this.paper)
       })
       .catch(() => {
         this.$router.push({ path: '/404' })

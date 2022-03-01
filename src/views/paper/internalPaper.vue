@@ -117,7 +117,7 @@
                   v-else-if="scope.row.result === 1"
                   class="paper-tag"
                   type="danger"
-                >未提交</el-tag>
+                >未通过</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 2"
                   class="paper-tag"
@@ -128,7 +128,17 @@
                   class="paper-tag"
                   type="danger"
                 >REJECT</el-tag>
-                <el-tag v-else class="paper-tag" type="success">ACCEPT</el-tag>
+                <el-tag
+                  v-else-if="scope.row.result === 4"
+                  class="paper-tag"
+                  type="success"
+                >ACCEPT</el-tag>
+                <el-tag
+                  v-else-if="scope.row.result === 5"
+                  class="paper-tag"
+                  type="info"
+                >FLAT</el-tag>
+                <el-tag v-else class="paper-tag" type="info">SUSPEND</el-tag>
               </div>
             </template>
           </el-table-column>

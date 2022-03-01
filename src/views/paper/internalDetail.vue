@@ -143,7 +143,7 @@ export default {
       activeTab: 'vote',
       flatDecisionForm: {
         id: null,
-        flatDecision: null
+        decision: null
       }
     }
   },
@@ -265,7 +265,7 @@ export default {
     },
     decideFlat(val) {
       this.flatDecisionForm.id = this.id
-      this.flatDecisionForm.flatDecision = val
+      this.flatDecisionForm.decision = val
       makeFlatDecision(this.id, this.flatDecisionForm).then(() => {
         if (val) {
           this.$message({

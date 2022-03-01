@@ -70,6 +70,7 @@
               </div>
             </template>
           </el-table-column>
+<!--TODO  根据vote result-->
           <el-table-column label="投票结果" align="center" width="110">
             <template slot-scope="scope">
               <div class="info-item">

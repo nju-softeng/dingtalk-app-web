@@ -137,15 +137,20 @@ export default {
             type: 'info',
             content: '等待投票结果'
           }
-        } else if (vote.result === true) {
+        } else if (vote.result === 1) {
           return {
             type: 'success',
             content: 'ACCEPT'
           }
-        } else if (vote.result === false) {
+        } else if (vote.result === 0) {
           return {
             type: 'danger',
             content: 'REJECT'
+          }
+        } else if (vote.result === 2) {
+          return {
+            type: 'info',
+            content: 'FLAT'
           }
         }
       }
@@ -177,6 +182,11 @@ export default {
           return {
             type: 'success',
             content: 'ACCEPT'
+          }
+        } else if (paper.result === 5) {
+          return {
+            type: 'info',
+            content: 'SUSPEND'
           }
         } else {
           return {

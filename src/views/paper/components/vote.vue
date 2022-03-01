@@ -155,7 +155,7 @@ export default {
         acceptnames: [],
         rejectnames: [],
         unvotenames: [],
-        acceptedPercentage: ''
+        acceptedPercentage: 0.0
       },
       loading: false,
       voteform: {
@@ -178,7 +178,7 @@ export default {
     // 投票百分比数值
     getNum() {
       return (val) => {
-        return (val * 100.0).toFixed(1)
+        return parseFloat((val * 100.0).toFixed(1))
       }
     },
     hasVoted() {

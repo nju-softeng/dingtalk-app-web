@@ -278,6 +278,14 @@ export default {
             message: '已中止评审！'
           })
         }
+        getPaper(this.id)
+          .then(res => {
+            this.paper = res.data
+            console.log(this.paper)
+          })
+          .catch(() => {
+            this.$router.push({ path: '/404' })
+          })
       }).catch(() => {
         this.$message({
           type: 'warning',

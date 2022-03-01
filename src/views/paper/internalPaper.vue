@@ -423,6 +423,7 @@ export default {
       if (
         this.role === 'admin' ||
         this.role === 'auditor' ||
+        // eslint-disable-next-line no-eval
         authors.map(item => item.uid).indexOf(eval(this.uid)) !== -1
       ) {
         return true

@@ -4,7 +4,7 @@
       <!-- 论文列表 -->
       <div class="list" style="height: 500px">
         <el-table :data="list" class="tableClass">
-          <el-table-column label="论文信息" width="335">
+          <el-table-column label="论文信息" width="335" >
             <template slot-scope="scope">
               <div class="paper-item">
                 <div class="left-content">

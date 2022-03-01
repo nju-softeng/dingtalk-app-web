@@ -16,7 +16,7 @@
                       placement="top-start"
                     >
                       <router-link
-                        :to="'/paper/in-detail/' + scope.row.id + '/vote'"
+                        :to="'/paper/pro-detail/' + scope.row.id + '/acinfo'"
                         class="link-type"
                       >
                         <svg-icon icon-class="paper" /> {{ scope.row.title }}

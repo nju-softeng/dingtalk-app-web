@@ -197,6 +197,17 @@ export const asyncRoutes = [{
       activeMenu: '/paper/index'
     },
     hidden: true
+  },
+  {
+    path: 'pro-detail/:id/:tab',
+    component: () => import('@/views/paper/paperByProfessorDetail'),
+    name: 'professorPaperDetail',
+    meta: {
+      title: '论文详细',
+      noCache: true,
+      activeMenu: '/paper/index'
+    },
+    hidden: true
   }]
 },
 {

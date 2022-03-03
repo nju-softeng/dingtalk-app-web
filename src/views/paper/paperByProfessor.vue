@@ -16,7 +16,7 @@
                       placement="top-start"
                     >
                       <router-link
-                        :to="'/paper/in-detail/' + scope.row.id + '/vote'"
+                        :to="'/paper/pro-detail/' + scope.row.id + '/acinfo'"
                         class="link-type"
                       >
                         <svg-icon icon-class="paper" /> {{ scope.row.title }}
@@ -79,7 +79,7 @@
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tag
-                  v-if="scope.row.result <= 2"
+                  v-if="scope.row.result === 2"
                   class="paper-tag"
                   type="info"
                 >审稿中</el-tag>

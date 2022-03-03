@@ -93,11 +93,14 @@
                   class="link-type"
                 >
                   <el-tag
-                    v-if="scope.row.v_result === true"
+                    v-if="scope.row.v_result === 1"
                     class="paper-tag"
                     type="success"
                   >ACCEPT</el-tag>
-                  <el-tag v-else class="paper-tag" type="danger">REJECT</el-tag>
+                  <el-tag v-else-if="scope.row.v_result === 0" class="paper-tag" type="danger">REJECT</el-tag>
+                  <div v-else-if="scope.row.v_result === 2">
+                    <el-tag class="paper-tag" type="info">FLAT</el-tag>
+                  </div>
                 </router-link>
               </div>
             </template>
@@ -114,7 +117,7 @@
                   v-else-if="scope.row.result === 1"
                   class="paper-tag"
                   type="danger"
-                >未提交</el-tag>
+                >未通过</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 2"
                   class="paper-tag"
@@ -125,7 +128,17 @@
                   class="paper-tag"
                   type="danger"
                 >REJECT</el-tag>
-                <el-tag v-else class="paper-tag" type="success">ACCEPT</el-tag>
+                <el-tag
+                  v-else-if="scope.row.result === 4"
+                  class="paper-tag"
+                  type="success"
+                >ACCEPT</el-tag>
+                <el-tag
+                  v-else-if="scope.row.result === 5"
+                  class="paper-tag"
+                  type="info"
+                >FLAT</el-tag>
+                <el-tag v-else class="paper-tag" type="info">SUSPEND</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -420,6 +433,7 @@ export default {
       if (
         this.role === 'admin' ||
         this.role === 'auditor' ||
+        // eslint-disable-next-line no-eval
         authors.map(item => item.uid).indexOf(eval(this.uid)) !== -1
       ) {
         return true

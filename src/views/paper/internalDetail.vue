@@ -3,54 +3,82 @@
     <div class="wrap-head">
       <div class="layout-container">
         <div class="groupInfo">
-          <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px">
+          <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px;width: 100%">
             <el-breadcrumb-item :to="{ path: '/paper/index/internal' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>论文详情</el-breadcrumb-item>
           </el-breadcrumb>
+          <div style="display: flex">
+            <div style="float:left;padding-left: 16px; padding-right: 16px">
+              <p style="margin-bottom:0px">
+                <span style="font-size:18px;color:#0366d6;font-weight: 500;">
+                  {{ paper.title }}</span>
+              </p>
 
-          <div style="padding-left: 16px; padding-right: 16px">
-            <p style="margin-bottom:0px">
-              <span style="font-size:18px;color:#0366d6;font-weight: 500;">
-                {{ paper.title }}</span>
-            </p>
+              <div style="display:flex;flex-wrap: wrap">
+                <div style="font-size:13px;color:#595959; margin-right:48px">
+                  <p>
+                    <svg-icon icon-class="school" />
+                    <span style="margin-right:8px">
+                      机构：{{ paper.journal }}</span>
+                    <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
+                  </p>
+                  <p>
+                    <span>
+                      <svg-icon icon-class="people" /> 作者: </span>
+                    <span
+                      v-for="(p, index) in paper.paperDetails"
+                      :key="index"
+                      style="margin:6px"
+                    >{{ p.user.name }}</span>
+                  </p>
+                </div>
 
-            <div style="display:flex;flex-wrap: wrap">
-              <div style="font-size:13px;color:#595959; margin-right:48px">
-                <p>
-                  <svg-icon icon-class="school" />
-                  <span style="margin-right:8px">
-                    机构：{{ paper.journal }}</span>
-                  <el-tag>{{ getlevel(paper.paperType) }}</el-tag>
-                </p>
-                <p>
-                  <span>
-                    <svg-icon icon-class="people" /> 作者: </span>
-                  <span
-                    v-for="(p, index) in paper.paperDetails"
-                    :key="index"
-                    style="margin:6px"
-                  >{{ p.user.name }}</span>
-                </p>
+                <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
+                  <p>
+                    <span style="margin-right:8px">
+                      <svg-icon icon-class="vote" /> 投票意见:
+                    </span>
+                    <el-tag :type="getVoteResult(paper.vote).type ">{{
+                      getVoteResult(paper.vote).content
+                    }}</el-tag>
+                  </p>
+                  <p>
+                    <span style="margin-right:8px">
+                      <svg-icon icon-class="paper" /> 投稿结果:
+                    </span>
+                    <el-tag :type="getPaperResult(paper).type ">{{
+                      getPaperResult(paper).content
+                    }}</el-tag>
+                  </p>
+                </div>
               </div>
+            </div>
+            <el-divider v-if="isAbleToMakeFlatDecision" direction="vertical" style="float: left;height: 200px" />
+            <div v-if="isAbleToMakeFlatDecision" style="margin-left: 50px;float: left">
+              <el-row type="flex" justify="center">
+                <p style="margin-bottom:20px">
+                  <span style="font-size:15px;color:#ff0000;font-weight: 500;">
+                    当前论文投票结果为平票，请选择是否外投或中止
+                    <el-tooltip
+                      class="item"
+                      effect="dark"
+                      content="外投或中止仍会影响ac值，请谨慎选择"
+                      placement="right"
+                    >
+                      <span style="margin-left: 0px">
+                        <svg-icon
+                          style="color: red"
+                          icon-class="hint"
+                        /></span>
+                    </el-tooltip>
+                  </span>
+                </p>
+              </el-row>
+              <el-row type="flex" justify="center">
+                <el-button type="primary" size="large" round @click="decideFlat(true)">外投</el-button>
+                <el-button type="danger" size="large" round @click="decideFlat(false)">中止</el-button>
+              </el-row>
 
-              <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
-                <p>
-                  <span style="margin-right:8px">
-                    <svg-icon icon-class="vote" /> 投票意见:
-                  </span>
-                  <el-tag :type="getVoteResult(paper.vote).type ">{{
-                    getVoteResult(paper.vote).content
-                  }}</el-tag>
-                </p>
-                <p>
-                  <span style="margin-right:8px">
-                    <svg-icon icon-class="paper" /> 投稿结果:
-                  </span>
-                  <el-tag :type="getPaperResult(paper).type ">{{
-                    getPaperResult(paper).content
-                  }}</el-tag>
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -68,7 +96,7 @@
   </div>
 </template>
 <script>
-import { getPaper } from '@/api/paper'
+import { getPaper, makeFlatDecision } from '@/api/paper'
 
 const levels = [
   {
@@ -112,7 +140,11 @@ export default {
       level: levels,
       id: null,
       paper: {},
-      activeTab: 'vote'
+      activeTab: 'vote',
+      flatDecisionForm: {
+        id: null,
+        decision: null
+      }
     }
   },
   computed: {
@@ -137,15 +169,20 @@ export default {
             type: 'info',
             content: '等待投票结果'
           }
-        } else if (vote.result === true) {
+        } else if (vote.result === 1) {
           return {
             type: 'success',
             content: 'ACCEPT'
           }
-        } else if (vote.result === false) {
+        } else if (vote.result === 0) {
           return {
             type: 'danger',
             content: 'REJECT'
+          }
+        } else if (vote.result === 2) {
+          return {
+            type: 'info',
+            content: 'FLAT'
           }
         }
       }
@@ -178,6 +215,16 @@ export default {
             type: 'success',
             content: 'ACCEPT'
           }
+        } else if (paper.result === 5) {
+          return {
+            type: 'info',
+            content: 'FLAT'
+          }
+        } else if (paper.result === 6) {
+          return {
+            type: 'info',
+            content: 'SUSPEND'
+          }
         } else {
           return {
             type: 'info',
@@ -185,6 +232,19 @@ export default {
           }
         }
       }
+    },
+    // 是否可以决定平票结果
+    isAbleToMakeFlatDecision() {
+      if (this.paper.result === 5) {
+        const uid = sessionStorage.getItem('uid')
+        console.log('uid', uid)
+        for (let i = 0; i < this.paper.paperDetails.length; i++) {
+          if (uid === this.paper.paperDetails[i].user.id.toString()) {
+            return true
+          }
+        }
+      }
+      return false
     }
   },
   created() {
@@ -202,6 +262,36 @@ export default {
   methods: {
     handleSelect(val) {
       this.activeTab = val
+    },
+    decideFlat(val) {
+      this.flatDecisionForm.id = this.id
+      this.flatDecisionForm.decision = val
+      makeFlatDecision(this.id, this.flatDecisionForm).then(() => {
+        if (val) {
+          this.$message({
+            type: 'success',
+            message: '已决定外投！'
+          })
+        } else {
+          this.$message({
+            type: 'success',
+            message: '已中止评审！'
+          })
+        }
+        getPaper(this.id)
+          .then(res => {
+            this.paper = res.data
+            console.log(this.paper)
+          })
+          .catch(() => {
+            this.$router.push({ path: '/404' })
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'warning',
+          message: '连接超时！'
+        })
+      })
     }
   }
 }
@@ -251,6 +341,9 @@ export default {
   .container {
     padding: 0px;
   }
+}
+.el-divider--vertical {
+  height: 100px;
 }
 
 </style>

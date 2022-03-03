@@ -8,7 +8,7 @@
           <span v-for="(item, index) in internalPaper.paperDetails" :key="index" style="padding:6px">{{ item.user.name }}:
             {{ item.acRecord.ac }}</span>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="isProfessorPaper">
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿支持者：</span>
           <!--          <span>-->
@@ -17,7 +17,7 @@
           <!--          </span>-->
           <el-tag v-for="(item, index) in acceptlist" :key="index" style="margin:0px 4px;">{{ item }}</el-tag>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="isProfessorPaper">
           <span slot="label">
             <svg-icon icon-class="paper" /> 投稿反对者：</span>
           <!--          <span v-if="internalPaper.result === 3">+ 1 : </span>-->
@@ -45,12 +45,18 @@ export default {
       rejectlist: ''
     }
   },
-
+  computed: {
+    isProfessorPaper() {
+      if (this.$route.path.slice(7, 17) === 'pro-detail') {
+        return false
+      } else return true
+    }
+  },
   created() {
     this.id = this.$route.params.id
     // 获取路由的路径
     const path = this.$route.path
-    if (path.slice(7, 16) === 'in-detail') {
+    if (path.slice(7, 16) === 'in-detail' || path.slice(7, 17) === 'pro-detail') {
       // 如果是内部评审, 获取内部论文的信息
       getPaper(this.id).then(res => {
         this.internalPaper = res.data

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="prizeList">
-      <el-row type="flex">
-        <el-col :span="8">
+      <el-row type="flex" align="middle">
+        <el-col :span="3">
           奖项详情
         </el-col>
         <el-col :span="8" style="float: right;margin-right: 30px">

@@ -164,6 +164,40 @@ export const asyncRoutes = [{
   ]
 },
 {
+  path: '/property',
+  component: Layout,
+  redirect: '/property/academic/:type',
+  meta: {
+    title: '资产管理',
+    icon: 'prop'
+  },
+  children: [{
+    path: '/academic/:type',
+    name: 'academicProperty',
+    component: () => import('@/views/property/academicProperty/index'),
+    meta: {
+      title: '学术资产',
+      icon: 'academic'
+    }
+  }, {
+    path: '/project/:type',
+    name: 'projectProperty',
+    component: () => import('@/views/property/projectProperty/index'),
+    meta: {
+      title: '项目资产',
+      icon: 'project'
+    }
+  }, {
+    path: '/lab/:type',
+    name: 'labProperty',
+    component: () => import('@/views/property/labProperty/index'),
+    meta: {
+      title: '实验室团队产出',
+      icon: 'lab'
+    }
+  }]
+},
+{
   path: '/paper',
   component: Layout,
   redirect: '/paper/index/',

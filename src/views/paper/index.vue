@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="paper-box">
-      <div class="action" style="">
+      <div class="action" >
         <!--导航栏-->
         <tabs v-model="activeTab">
           <tab-pane label="组内评审" name="paperInternal" />

@@ -419,7 +419,6 @@ export default {
         title: null,
         journal: null,
         paperType: null,
-        file: null,
         isStudentFirstAuthor: true,
         authors: [
           {
@@ -441,7 +440,6 @@ export default {
         title: null,
         journal: null,
         paperType: null,
-        file: null,
         firstAuthor: null,
         isStudentFirstAuthor: false,
         authors: [
@@ -512,14 +510,25 @@ export default {
     this.role = sessionStorage.getItem('role')
   },
   methods: {
+    // 对象转formData
+    toFormData(data) {
+      const formData = new FormData()
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key])
+      })
+      return formData
+    },
     // 提交内部论文评审记录
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (formName === 'internalPaperForm') {
+            const formData = new FormData()
+            formData.append('file', this.file.raw)
+            formData.append('paperFormJsonStr', JSON.stringify(this.internalPaperForm))
             this.internalPaperForm.file = this.file
             this.loading = true
-            addPaper(this.internalPaperForm)
+            addPaper(formData)
               .then(() => {
                 this.addReviewDialog = false
                 this.loading = false

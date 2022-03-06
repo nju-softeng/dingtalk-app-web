@@ -105,7 +105,6 @@
               </div>
             </template>
           </el-table-column>
-
           <el-table-column label="录用结果" align="center" width="110">
             <template slot-scope="scope">
               <div class="info-item">

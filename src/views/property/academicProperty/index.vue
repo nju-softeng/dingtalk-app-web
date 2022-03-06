@@ -7,6 +7,9 @@
           <tab-pane label="项目过程产物" name="projectProcess" />
           <tab-pane label="学生毕业论文" name="studentDissertation" />
         </tabs>
+        <div style="display: flex;justify-content: center; align-items: center">
+          <el-button type="primary" size="small" icon="el-icon-plus">新增{{buttonName}}</el-button>
+        </div>
       </div>
       <div>
         <component :is="activeTab" />
@@ -33,6 +36,13 @@ export default {
   data() {
     return {
       activeTab: 'digitalDoc'
+    }
+  },
+  computed: {
+    buttonName() {
+      if (this.activeTab === 'digitalDoc') return '文献数字文档'
+      if (this.activeTab === 'projectProcess') return '项目过程产物'
+      else return '学生毕业论文'
     }
   },
   created() {

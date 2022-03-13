@@ -26,38 +26,38 @@
 
 <script>
 export default {
-  name: "FileUpload",
+  name: 'FileUpload',
   props: {
     file: {
       type: Object,
-      default: function () {
-        return null;
-      },
-    },
+      default: function() {
+        return null
+      }
+    }
   },
   data() {
     return {
-      innerFile: this.file,
-    };
+      innerFile: this.file
+    }
   },
   methods: {
     handleFileChange(file, fileList) {
       if (fileList.length > 1) {
-        console.log(fileList);
-        fileList.splice(0, 1);
+        console.log(fileList)
+        fileList.splice(0, 1)
       }
-      this.innerFile = file;
-      this.$emit("changeFile", file);
-      this.$refs["paperUploadComponent"].clearValidate();
-      console.log(this.innerFile);
+      this.innerFile = file
+      this.$emit('changeFile', file)
+      this.$refs['paperUploadComponent'].clearValidate()
+      console.log(this.innerFile)
     },
     handleFileRemove(file, fileList) {
-      console.log(fileList);
-      this.innerFile = null;
-      this.$emit("changeFile", null);
-    },
-  },
-};
+      console.log(fileList)
+      this.innerFile = null
+      this.$emit('changeFile', null)
+    }
+  }
+}
 </script>
 
 <style scoped></style>

@@ -9,7 +9,7 @@
           </el-breadcrumb>
           <div style="display: flex">
             <div style="float:left;padding-left: 16px; padding-right: 16px">
-              <p style="margin-bottom:0px">
+              <p style="margin-bottom:0">
                 <span style="font-size:18px;color:#0366d6;font-weight: 500;">
                   {{ paper.title }}</span>
               </p>
@@ -33,7 +33,7 @@
                   </p>
                 </div>
 
-                <div v-show="activeTab != 'vote'" style="font-size:13px;color:#595959;">
+                <div v-show="activeTab !== 'vote'" style="font-size:13px;color:#595959;">
                   <p>
                     <span style="margin-right:8px">
                       <svg-icon icon-class="vote" /> 投票意见:
@@ -86,6 +86,7 @@
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
+          <el-menu-item index="files">论文文件</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -133,7 +134,8 @@ export default {
   components: {
     review: () => import('./components/review'),
     vote: () => import('./components/vote'),
-    acinfo: () => import('./components/acinfo')
+    acinfo: () => import('./components/acinfo'),
+    files: () => import('./components/files')
   },
   data() {
     return {
@@ -324,7 +326,7 @@ export default {
 }
 
 .el-menu.el-menu--horizontal {
-  border-bottom: 0px;
+  border-bottom: 0;
 }
 
 .box {
@@ -339,7 +341,7 @@ export default {
 
 @media only screen and (max-width: 855px) {
   .container {
-    padding: 0px;
+    padding: 0;
   }
 }
 .el-divider--vertical {

@@ -1,5 +1,5 @@
 <template>
-  <el-timeline-item timestamp="组内评审版本文件" placement="top">
+  <el-timeline-item :timestamp="card.fileTypeZHCN" placement="top">
     <el-card>
       <h4 v-if="card.fileName == null">文件未上传！</h4>
       <h4 v-else>{{ card.fileName }}</h4>
@@ -22,7 +22,7 @@
         >
           <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
         </el-upload>
-        <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round @click="downloadFile">下 载</el-button>
+        <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round disabled @click="downloadFile">下 载</el-button>
         <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
       </span>
     </el-card>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { addPaperFile, getPaperFileDownloadInfo, deletePaperFile } from '@/api/paperFile'
+import { addPaperFile, addExternalPaperFile, getPaperFileDownloadInfo, deletePaperFile, deleteExternalPaperFile } from '@/api/paperFile'
 export default {
   name: 'FileCard',
   props: {
@@ -43,6 +43,10 @@ export default {
     paperId: {
       type: String,
       default: ''
+    },
+    paperType: {
+      type: Number,
+      default: -1 // -1为默认值，0为内部评审论文，1为外部论文，2为非学生一作论文
     }
   },
   data() {
@@ -52,6 +56,7 @@ export default {
     }
   },
   created() {
+    // console.log(this.paperType)
     if (this.card.fileType === 'publishedLatexFile') {
       this.tipContent = '仅支持LaTeX格式文件'
       this.acceptType = '.tex'
@@ -69,18 +74,33 @@ export default {
       const formData = new FormData()
       formData.append('file', file.raw)
       formData.append('fileType', this.card.fileType)
-      addPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '论文文件上传成功',
-          type: 'success'
+      if (this.paperType === 0 || this.paperType === 2) {
+        addPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '论文文件上传成功',
+            type: 'success'
+          })
+          this.$emit('init')
+        }).catch(() => {
+          this.$message.error('上传失败')
         })
-        this.$emit('init')
-      }).catch(() => { this.$message.error('上传失败') })
+      } else if (this.paperType === 1) {
+        addExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '论文文件上传成功',
+            type: 'success'
+          })
+          this.$emit('init')
+        }).catch(() => {
+          this.$message.error('上传失败')
+        })
+      }
     },
     downloadFile() {
       getPaperFileDownloadInfo(sessionStorage.getItem('uid'), this.card.fileId).then(res => {
-        console.log(res)
+        // console.log(res)
         const fs = require('fs')
         const Axios = require('axios')
         const url = res.url
@@ -102,14 +122,36 @@ export default {
     deleteFile() {
       const formData = new FormData()
       formData.append('fileType', this.card.fileType)
-      deletePaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '论文文件删除成功',
-          type: 'success'
-        })
-        this.$emit('init')
-      }).catch(() => { this.$message.error('删除失败') })
+      if (this.card.fileName !== undefined && this.card.fileName !== null) {
+        console.log(this.card.fileName)
+        if (this.paperType === 0 || this.paperType === 2) {
+          deletePaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '论文文件删除成功',
+              type: 'success'
+            })
+            this.$emit('init')
+          }).catch(() => {
+            this.$message.error('删除失败')
+          })
+        } else if (this.paperType === 1) {
+          deleteExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '论文文件删除成功',
+              type: 'success'
+            })
+            this.$emit('init')
+          }).catch(() => {
+            this.$message.error('删除失败')
+          })
+        } else {
+          this.$message.error('未知的论文类型！')
+        }
+      } else {
+        this.$message.error('未上传文件！')
+      }
     }
   }
 }

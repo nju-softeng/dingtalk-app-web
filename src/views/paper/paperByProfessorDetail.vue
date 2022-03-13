@@ -54,12 +54,13 @@
         </div>
         <el-menu :default-active="activeTab" mode="horizontal" @select="handleSelect">
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
+          <el-menu-item index="files">论文文件</el-menu-item>
         </el-menu>
       </div>
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" />
+      <component :is="activeTab" :paperid="id" :paper-type="2" />
     </div>
   </div>
 </template>
@@ -99,9 +100,10 @@ const levels = [
 
 export default {
   components: {
-    review: () => import('./components/review'),
-    vote: () => import('./components/vote'),
-    acinfo: () => import('./components/acinfo')
+    // review: () => import('./components/review'),
+    // vote: () => import('./components/vote'),
+    acinfo: () => import('./components/acinfo'),
+    files: () => import('./components/files')
   },
   data() {
     return {

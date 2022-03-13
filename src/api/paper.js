@@ -16,7 +16,7 @@ const api = {
 
 // 添加论文
 export function addPaper(data) {
-  console.log(data.get('file'))
+  console.log(data.get('paperFormJsonStr'))
   return axios({
     url: api.addPaper,
     method: 'post',

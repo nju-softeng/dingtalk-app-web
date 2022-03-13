@@ -38,7 +38,7 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" />
+      <component :is="activeTab" :paperid="id" :paper-type="1" />
     </div>
   </div>
 </template>
@@ -62,14 +62,13 @@ export default {
   computed: {
     // 投票状态标签
     getVoteResult() {
-      console.log(1111)
       return vote => {
         if (vote === undefined) {
           return {
             type: 'info',
             content: '投票未发起'
           }
-        } else if (vote.result === undefined) {
+        } else if (vote.result === -1) {
           return {
             type: 'info',
             content: '等待投票结果'

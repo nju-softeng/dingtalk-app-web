@@ -62,6 +62,7 @@ export default {
   computed: {
     // 投票状态标签
     getVoteResult() {
+      console.log(1111)
       return vote => {
         if (vote === undefined) {
           return {

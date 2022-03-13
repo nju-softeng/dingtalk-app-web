@@ -32,6 +32,7 @@
           <el-menu-item index="vote">投票</el-menu-item>
           <el-menu-item index="review">评审意见</el-menu-item>
           <el-menu-item index="acinfo">AC 变更</el-menu-item>
+          <el-menu-item index="files">论文文件</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -48,7 +49,8 @@ export default {
   components: {
     review: () => import('./components/review'),
     vote: () => import('./components/vote'),
-    acinfo: () => import('./components/acinfo')
+    acinfo: () => import('./components/acinfo'),
+    files: () => import('./components/files')
   },
   data() {
     return {
@@ -60,6 +62,7 @@ export default {
   computed: {
     // 投票状态标签
     getVoteResult() {
+      console.log(1111)
       return vote => {
         if (vote === undefined) {
           return {
@@ -68,18 +71,23 @@ export default {
           }
         } else if (vote.result === undefined) {
           return {
-            type: '',
+            type: 'info',
             content: '等待投票结果'
           }
-        } else if (vote.result === true) {
+        } else if (vote.result === 1) {
           return {
             type: 'success',
             content: 'ACCEPT'
           }
-        } else if (vote.result === false) {
+        } else if (vote.result === 0) {
           return {
             type: 'danger',
             content: 'REJECT'
+          }
+        } else if (vote.result === 2) {
+          return {
+            type: 'info',
+            content: 'FLAT'
           }
         }
       }

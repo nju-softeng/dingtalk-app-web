@@ -25,6 +25,7 @@
         ref="reviewTab"
         @modifyInternal="modifyInternalReview"
         @modifyExternal="modifyExternalReview"
+        @modifyProfessor="modifyProfessorReview"
       />
     </div>
 
@@ -86,7 +87,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload :file="file" @changeFile="changeFile" />
+                <file-upload v-if="internalPaperForm.id === null" :file="file" @changeFile="changeFile" />
                 <el-form-item>
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -173,11 +174,12 @@
               type="primary"
               @click="submit('internalPaperForm')"
             >确 定</el-button>
-            <el-button @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-if="internalPaperForm.id === null" @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
         <!-- 添加外部评审 -->
-        <div v-if="addReviewContent === 'externalReview'">
+        <div v-if="addReviewContent === 'externalReview'" v-loading="loading">
           <div class="dialog-content">
             <div class="paper-form">
               <el-form
@@ -196,7 +198,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload :file="file" @changeFile="changeFile" />
+                <file-upload v-if="externalPaperForm.id === null" :file="file" @changeFile="changeFile" />
                 <el-form-item prop="period">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 投票时间</span>
@@ -219,11 +221,12 @@
               type="primary"
               @click="addExternalReview('externalPaperForm')"
             >确 定</el-button>
-            <el-button @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-if="externalPaperForm.id === null" @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
         <!-- 添加非学生一作 -->
-        <div v-if="addReviewContent === 'paperByProfessorReview'">
+        <div v-if="addReviewContent === 'paperByProfessorReview'" v-loading="loading">
           <div class="dialog-content">
             <div class="paper-form">
               <el-form
@@ -645,6 +648,17 @@ export default {
       this.externalPaperForm.id = item.id
       this.externalPaperForm.title = item.title
       this.externalPaperForm.period = [item.vote.startTime, item.vote.endTime]
+    },
+    modifyProfessorReview(form) {
+      this.addReviewDialog = true
+      this.addReviewContent = 'paperByProfessorReview'
+
+      this.professorPaperForm.id = form.id
+      this.professorPaperForm.title = form.title
+      this.professorPaperForm.journal = form.journal
+      this.professorPaperForm.paperType = form.paperType
+      this.professorPaperForm.issueDate = form.issueDate
+      this.professorPaperForm.authors = form.authors
     },
     // 关闭前清空表单
     closeAddReviewDialog() {

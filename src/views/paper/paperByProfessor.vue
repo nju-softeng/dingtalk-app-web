@@ -435,7 +435,7 @@ export default {
     // 修改论文记录
     modifyPaper(item) {
       if (this.hasAuth(item.authors)) {
-        this.$emit('modifyInternal', item)
+        this.$emit('modifyProfessor', item)
       } else {
         this.$message({
           message: '只有审核人，和论文作者才可以操作',

@@ -174,7 +174,7 @@
               type="primary"
               @click="submit('internalPaperForm')"
             >确 定</el-button>
-            <el-button v-if="internalPaperForm.id === null" @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-if="internalPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
             <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
@@ -195,8 +195,7 @@
                     v-model="externalPaperForm.title"
                     type="textarea"
                     :rows="2"
-                    placeholder="请输入内容"
-                  />
+                    placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <file-upload v-if="externalPaperForm.id === null" :file="file" @changeFile="changeFile" />
                 <el-form-item prop="period">
@@ -210,8 +209,7 @@
                     range-separator="至"
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
-                    placeholder="选择时间范围"
-                  />
+                    placeholder="选择时间范围"></el-time-picker>
                 </el-form-item>
               </el-form>
             </div>
@@ -221,7 +219,7 @@
               type="primary"
               @click="addExternalReview('externalPaperForm')"
             >确 定</el-button>
-            <el-button v-if="externalPaperForm.id === null" @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-if="externalPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
             <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
@@ -343,7 +341,8 @@
               type="primary"
               @click="submit('professorPaperForm')"
             >确 定</el-button>
-            <el-button @click="addReviewContent = undefined">取 消</el-button>
+            <el-button v-if="professorPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
+            <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
       </div>
@@ -553,9 +552,12 @@ export default {
                 this.$message.error('创建失败')
               })
           } else {
+            const formData = new FormData()
+            formData.append('file', this.file.raw)
+            formData.append('paperFormJsonStr', JSON.stringify(this.professorPaperForm))
             this.professorPaperForm.file = this.file
             this.loading = true
-            addPaper(this.professorPaperForm)
+            addPaper(formData)
               .then(() => {
                 this.addReviewDialog = false
                 this.loading = false
@@ -590,12 +592,13 @@ export default {
     addExternalReview(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.externalPaperForm.file = this.file
           this.loading = true
           this.externalPaperForm.startTime = this.externalPaperForm.period[0]
           this.externalPaperForm.endTime = this.externalPaperForm.period[1]
-
-          addExReview(this.externalPaperForm)
+          const formData = new FormData()
+          formData.append('file', this.file.raw)
+          formData.append('externalPaperFormJsonStr', JSON.stringify(this.externalPaperForm))
+          addExReview(formData)
             .then(() => {
               this.addReviewDialog = false
               this.loading = false
@@ -669,7 +672,7 @@ export default {
         title: null,
         journal: null,
         paperType: null,
-        issueDate: null,
+        isStudentFirstAuthor: true,
         authors: [
           {
             num: 1,
@@ -682,6 +685,21 @@ export default {
         id: null,
         title: null,
         period: ''
+      }
+      this.professorPaperForm = {
+        id: null,
+        title: null,
+        journal: null,
+        paperType: null,
+        firstAuthor: null,
+        isStudentFirstAuthor: false,
+        authors: [
+          {
+            num: 1,
+            name: '',
+            uid: null
+          }
+        ]
       }
     },
     // 添加论文作者

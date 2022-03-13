@@ -1,5 +1,5 @@
 <template>
-  <el-form-item ref="paperUploadComponent" prop="file">
+  <el-form-item ref="paperUploadComponent" required prop="file">
     <span slot="label"> <el-icon class="el-icon-upload" /> 文件上传</span>
     <el-upload
       ref="PaperUpload"

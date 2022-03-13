@@ -4,6 +4,14 @@
       <h4 v-if="card.fileName == null">文件未上传！</h4>
       <h4 v-else>{{ card.fileName }}</h4>
       <span class="rightFooter">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="tipContent"
+          placement="right"
+        >
+          <span style="align-self: center; margin-right: 20px"> <svg-icon icon-class="hint" /></span>
+        </el-tooltip>
         <el-upload
           class="uploadFIle"
           :on-change="handleFileChange"
@@ -12,24 +20,17 @@
           :auto-upload="false"
           :accept="acceptType"
         >
-          <el-button icon="el-icon-upload2" type="success" style="margin-right: 10px" round>上 传</el-button>
+          <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
         </el-upload>
-        <el-button icon="el-icon-download" type="primary" style="margin-right: 15px" round @click="downloadFile">下 载</el-button>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="tipContent"
-          placement="right"
-        >
-          <span style="align-self: center;"> <svg-icon icon-class="hint" /></span>
-        </el-tooltip>
+        <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round @click="downloadFile">下 载</el-button>
+        <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
       </span>
     </el-card>
   </el-timeline-item>
 </template>
 
 <script>
-import { addPaperFile, getPaperFileDownloadInfo } from '@/api/paperFile'
+import { addPaperFile, getPaperFileDownloadInfo, deletePaperFile } from '@/api/paperFile'
 export default {
   name: 'FileCard',
   props: {
@@ -97,6 +98,18 @@ export default {
           response.data.pipe(writer)
         })
       })
+    },
+    deleteFile() {
+      const formData = new FormData()
+      formData.append('fileType', this.card.fileType)
+      deletePaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '论文文件删除成功',
+          type: 'success'
+        })
+        this.$emit('init')
+      }).catch(() => { this.$message.error('删除失败') })
     }
   }
 }

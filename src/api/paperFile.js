@@ -3,7 +3,8 @@ import axios from '@/utils/request'
 const api = {
   addPaperFile: (uid, paperId) => `/${uid}/paperFile/${paperId}`,
   getPaperFileInfo: (uid, paperId) => `/${uid}/paperFileInfo/${paperId}`,
-  getPaperFileDownloadInfo: (uid, fileId) => `/${uid}/paperFile/${fileId}`
+  getPaperFileDownloadInfo: (uid, fileId) => `/${uid}/paperFile/${fileId}`,
+  deletePaperFile: (uid, paperId, fileId) => `/${uid}/paper/${paperId}/paperFile/${fileId}`
 }
 
 // 上传论文文件
@@ -28,5 +29,14 @@ export function getPaperFileDownloadInfo(uid, fileId) {
   return axios({
     url: api.getPaperFileDownloadInfo(uid, fileId),
     method: 'get'
+  })
+}
+
+// 删除论文文件
+export function deletePaperFile(uid, paperId, fileId, data) {
+  return axios({
+    url: api.deletePaperFile(uid, paperId, fileId),
+    method: 'delete',
+    data
   })
 }

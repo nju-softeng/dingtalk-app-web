@@ -38,7 +38,7 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" :paper-type="1" />
+      <component :is="activeTab" :paperid="id" :paper-type="1" :paper-path="paper.path"/>
     </div>
   </div>
 </template>

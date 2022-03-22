@@ -92,7 +92,7 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" :paper-type="0" />
+      <component :is="activeTab" :paperid="id" :paper-type="0" :paper-path="paper.path" />
     </div>
   </div>
 </template>

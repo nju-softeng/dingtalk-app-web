@@ -60,7 +60,7 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" :paper-type="2" />
+      <component :is="activeTab" :paperid="id" :paper-type="2" :paper-path="paper.path"/>
     </div>
   </div>
 </template>

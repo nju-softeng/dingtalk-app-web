@@ -7,6 +7,7 @@
         :card="item"
         :paper-id="id"
         :paper-type="paperType"
+        :paper-path="paperPath"
         @init="init"
       />
     </el-timeline>
@@ -17,6 +18,7 @@
         :card="item"
         :paper-id="id"
         :paper-type="paperType"
+        :paper-path="paperPath"
         @init="init"
       />
     </el-timeline>
@@ -33,6 +35,10 @@ export default {
     paperType: {
       type: Number,
       default: -1 // -1为默认值，0为内部评审论文，1为外部论文，2为非学生一作论文
+    },
+    paperPath: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -40,8 +46,11 @@ export default {
       cards: [
         { fileName: '', fileId: '', fileTypeZHCN: '评审版本文件', fileType: 'reviewFile' },
         { fileName: '', fileId: '', fileTypeZHCN: '提交时文件', fileType: 'submissionFile' },
+        { fileName: '', fileId: '', fileTypeZHCN: '文献评审结果', fileType: 'commentFile' },
         { fileName: '', fileId: '', fileTypeZHCN: '发表版本文件', fileType: 'publishedFile' },
-        { fileName: '', fileId: '', fileTypeZHCN: '发表版本LATEX文件', fileType: 'publishedLatexFile' }
+        { fileName: '', fileId: '', fileTypeZHCN: '发表版本LATEX文件', fileType: 'publishedLatexFile' },
+        { fileName: '', fileId: '', fileTypeZHCN: '源文件', fileType: 'sourceFile' },
+        { fileName: '', fileId: '', fileTypeZHCN: '对外版本文件', fileType: 'publicFile' }
       ]
     }
   },
@@ -58,10 +67,16 @@ export default {
           this.cards[0].fileId = res.data.reviewFileId
           this.cards[1].fileName = res.data.submissionFileName
           this.cards[1].fileId = res.data.submissionFileId
-          this.cards[2].fileName = res.data.publishedFileName
-          this.cards[2].fileId = res.data.publishedFileId
-          this.cards[3].fileName = res.data.publishedLatexFileName
-          this.cards[3].fileId = res.data.publishedLatexFileId
+          this.cards[2].fileName = res.data.commentFileName
+          this.cards[2].fileId = res.data.commentFileId
+          this.cards[3].fileName = res.data.publishedFileName
+          this.cards[3].fileId = res.data.publishedFileId
+          this.cards[4].fileName = res.data.publishedLatexFileName
+          this.cards[4].fileId = res.data.publishedLatexFileId
+          this.cards[5].fileName = res.data.sourceFileName
+          this.cards[5].fileId = res.data.sourceFileId
+          this.cards[6].fileName = res.data.publicFileName
+          this.cards[6].fileId = res.data.publicFileId
         })
       } else if (this.paperType === 1) {
         getExternalPaperFileInfo(sessionStorage.getItem('uid'), this.id).then(res => {
@@ -69,10 +84,16 @@ export default {
           this.cards[0].fileId = res.data.reviewFileId
           this.cards[1].fileName = res.data.submissionFileName
           this.cards[1].fileId = res.data.submissionFileId
-          this.cards[2].fileName = res.data.publishedFileName
-          this.cards[2].fileId = res.data.publishedFileId
-          this.cards[3].fileName = res.data.publishedLatexFileName
-          this.cards[3].fileId = res.data.publishedLatexFileId
+          this.cards[2].fileName = res.data.commentFileName
+          this.cards[2].fileId = res.data.commentFileId
+          this.cards[3].fileName = res.data.publishedFileName
+          this.cards[3].fileId = res.data.publishedFileId
+          this.cards[4].fileName = res.data.publishedLatexFileName
+          this.cards[4].fileId = res.data.publishedLatexFileId
+          this.cards[5].fileName = res.data.sourceFileName
+          this.cards[5].fileId = res.data.sourceFileId
+          this.cards[6].fileName = res.data.publicFileName
+          this.cards[6].fileId = res.data.publicFileId
         })
       }
     }

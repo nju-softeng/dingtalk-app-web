@@ -1,30 +1,33 @@
 <template>
   <el-timeline-item :timestamp="card.fileTypeZHCN" placement="top">
     <el-card>
-      <h4 v-if="card.fileName == null">文件未上传！</h4>
-      <h4 v-else>{{ card.fileName }}</h4>
-      <span class="rightFooter">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="tipContent"
-          placement="right"
-        >
-          <span style="align-self: center; margin-right: 20px"> <svg-icon icon-class="hint" /></span>
-        </el-tooltip>
-        <el-upload
-          class="uploadFIle"
-          :on-change="handleFileChange"
-          :show-file-list="false"
-          action=""
-          :auto-upload="false"
-          :accept="acceptType"
-        >
-          <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
-        </el-upload>
-        <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round disabled @click="downloadFile">下 载</el-button>
-        <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
-      </span>
+      <h3 v-if="card.fileName == null">文件未上传！</h3>
+      <h3 v-else>{{ card.fileName }}</h3>
+      <div v-show="card.fileName != null" style="font-weight: bold; font-size: 12px; float: left">文件路径： {{ getPath }} </div>
+      <div>
+        <span class="rightFooter">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="tipContent"
+            placement="right"
+          >
+            <span style="align-self: center; margin-right: 20px"> <svg-icon icon-class="hint" /></span>
+          </el-tooltip>
+          <el-upload
+            class="uploadFIle"
+            :on-change="handleFileChange"
+            :show-file-list="false"
+            action=""
+            :auto-upload="false"
+            :accept="acceptType"
+          >
+            <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
+          </el-upload>
+          <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round disabled @click="downloadFile">下 载</el-button>
+          <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
+        </span>
+      </div>
     </el-card>
   </el-timeline-item>
 </template>
@@ -47,12 +50,21 @@ export default {
     paperType: {
       type: Number,
       default: -1 // -1为默认值，0为内部评审论文，1为外部论文，2为非学生一作论文
+    },
+    paperPath: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       tipContent: '',
       acceptType: ''
+    }
+  },
+  computed: {
+    getPath() {
+      return this.paperPath + '/' + this.card.fileType.substring(0, 1).toUpperCase() + this.card.fileType.substring(1, this.card.fileType.length - 4)
     }
   },
   created() {

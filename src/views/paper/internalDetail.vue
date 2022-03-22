@@ -33,7 +33,7 @@
                   </p>
                 </div>
 
-                <div v-show="activeTab !== 'vote'" style="font-size:13px;color:#595959;">
+                <div style="font-size:13px;color:#595959;">
                   <p>
                     <span style="margin-right:8px">
                       <svg-icon icon-class="vote" /> 投票意见:
@@ -166,7 +166,7 @@ export default {
             type: 'info',
             content: '投票未发起'
           }
-        } else if (vote.result === undefined) {
+        } else if (vote.result === -1) {
           return {
             type: 'info',
             content: '等待投票结果'
@@ -185,6 +185,11 @@ export default {
           return {
             type: 'info',
             content: 'FLAT'
+          }
+        } else {
+          return {
+            type: 'danger',
+            content: '未知的状态'
           }
         }
       }
@@ -239,7 +244,7 @@ export default {
     isAbleToMakeFlatDecision() {
       if (this.paper.result === 5) {
         const uid = sessionStorage.getItem('uid')
-        console.log('uid', uid)
+        // console.log('uid', uid)
         for (let i = 0; i < this.paper.paperDetails.length; i++) {
           if (uid === this.paper.paperDetails[i].user.id.toString()) {
             return true
@@ -255,7 +260,7 @@ export default {
     getPaper(this.id)
       .then(res => {
         this.paper = res.data
-        console.log(this.paper)
+        console.log('paper', this.paper)
       })
       .catch(() => {
         this.$router.push({ path: '/404' })
@@ -283,7 +288,7 @@ export default {
         getPaper(this.id)
           .then(res => {
             this.paper = res.data
-            console.log(this.paper)
+            // console.log(this.paper)
           })
           .catch(() => {
             this.$router.push({ path: '/404' })

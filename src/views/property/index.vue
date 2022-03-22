@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="paper-box">
+    <div class="property-box">
       <div class="action">
         <tabs v-model="activeTab">
           <tab-pane label="学术资产" name="academicProperty" />
@@ -9,7 +9,7 @@
         </tabs>
       </div>
       <div>
-        <component :is="activeTab"></component>
+        <component :is="activeTab" />
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
 import Tabs from '@/components/TabNav/tabs'
 import TabPane from '@/components/TabNav/tabpane'
 import academicProperty from '@/views/property/components/academicProperty'
-import labProperty from '@/views/property/components/labProperty'
+import labProperty from '@/views/property/components/eventProperty'
 import projectProperty from '@/views/property/components/projectProperty'
 export default {
   name: 'Index',
@@ -60,14 +60,14 @@ export default {
     background-color: #fafafa;
   }
 
-  .paper-box {
+  .property-box {
     max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
   }
 
   @media only screen and (min-width: 1400px) {
-    .paper-box {
+    .property-box {
       max-width: 1305px !important;
     }
   }

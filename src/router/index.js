@@ -190,7 +190,7 @@ export const asyncRoutes = [{
   }, {
     path: '/lab/:type',
     name: 'labProperty',
-    component: () => import('@/views/property/labProperty/index'),
+    component: () => import('@/views/property/eventProperty/index'),
     meta: {
       title: '实验室团队产出',
       icon: 'lab'

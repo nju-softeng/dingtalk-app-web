@@ -15,16 +15,19 @@
               <div class="info-item">
                 <span>投票意见 : </span>
                 <span>
-                  <el-tag v-if="item.vote.result === true" class="tag" type="success">ACCEPT</el-tag>
+                  <el-tag v-if="item.vote.result === 1" class="tag" type="success">ACCEPT</el-tag>
+                  <el-tag v-else-if="item.vote.result === -1" class="tag" type="message">未结束</el-tag>
+                  <el-tag v-else-if="item.vote.result === 2" class="tag" type="message">FLAT</el-tag>
                   <el-tag v-else class="tag" type="danger">REJECT</el-tag>
                 </span>
               </div>
               <div class="info-item">
                 <span>录用结果 : </span>
                 <span>
-                  <el-tag v-if="item.result === undefined" class="tag" type="success">等待中</el-tag>
-                  <el-tag v-else-if="item.result === true" class="tag" type="success">ACCEPT</el-tag>
-                  <el-tag v-else class="tag" type="danger">REJECT</el-tag>
+                  <el-tag v-if="item.result === 0" class="tag" type="danger">REJECT</el-tag>
+                  <el-tag v-else-if="item.result === 1" class="tag" type="success">ACCEPT</el-tag>
+                  <el-tag v-else-if="item.result === 2" class="tag" type="danger">SUSPEND</el-tag>
+                  <el-tag v-else class="tag" type="message">等待中</el-tag>
                 </span>
               </div>
             </div>
@@ -78,8 +81,8 @@
               <svg-icon icon-class="paper" /> 接收情况 :
             </span>
             <el-radio-group v-model="resultForm.result">
-              <el-radio :label="true">接收</el-radio>
-              <el-radio :label="false">拒绝</el-radio>
+              <el-radio :label="1">接收</el-radio>
+              <el-radio :label="0">拒绝</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>
@@ -97,7 +100,14 @@
           </el-form-item>
         </el-form>
         <div class="dialog-footer">
-          <el-button @click="resultDialog = false">取 消</el-button>
+          <el-button
+            @click="resultDialog = false
+            resultForm = {
+              paperId: '',
+              result: null,
+              updateDate: null
+            }"
+          >取 消</el-button>
           <el-button
             type="primary"
             @click="submitPaperResult()"
@@ -235,12 +245,12 @@ export default {
               message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
               type: 'success'
             })
-          }).catch(err => {
-            this.$message({
-              message: err.message,
-              type: 'warning'
-            })
-          })
+            this.resultForm = {
+              paperId: '',
+              result: null,
+              updateDate: null
+            }
+          }).catch()
           .finally(() => {
             this.loading = false
           })

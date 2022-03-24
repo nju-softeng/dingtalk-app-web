@@ -84,14 +84,28 @@
             <svg-icon icon-class="paper" /> Accept {{ vote_detail.accept }} 票</span>
           <span> {{ getNum(vote_detail.acceptedPercentage) }}% </span>
           <span v-if="vote_detail.myvote === 'accept'" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getNum(vote_detail.acceptedPercentage)" status="success" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="接受者的权重总和占比"
+            placement="right"
+          >
+            <el-progress class="progress" :percentage="getNum(vote_detail.acceptedPercentage)" status="success" />
+          </el-tooltip>
         </el-form-item>
         <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject {{ vote_detail.reject }} 票</span>
           {{ getNum(1.0 - vote_detail.acceptedPercentage) }}%
           <span v-if="vote_detail.myvote === 'reject'" style="color:#409EFF; font-weight:500">[已选]</span>
-          <el-progress class="progress" :percentage="getNum(1.0 - vote_detail.acceptedPercentage)" status="exception" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="拒绝者的权重总和占比"
+            placement="right"
+          >
+            <el-progress class="progress" :percentage="getNum(1.0 - vote_detail.acceptedPercentage)" status="exception" />
+          </el-tooltip>
         </el-form-item>
         <el-form-item>
           <span slot="label">

@@ -282,7 +282,7 @@ export default {
         authority: null
       },
       page: 0,
-      options: ['本科生', '硕士生', '博士生', '待定'],
+      options: ['本科生', '专硕', '学硕', '博士生', '待定'],
       authorityList: [
         { label: '普通用户', value: 0 },
         { label: '评审人', value: 1 }

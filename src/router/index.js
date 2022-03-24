@@ -166,13 +166,13 @@ export const asyncRoutes = [{
 {
   path: '/property',
   component: Layout,
-  redirect: '/property/academic/:type',
+  redirect: '/property/academic/',
   meta: {
     title: '资产管理',
     icon: 'prop'
   },
   children: [{
-    path: '/academic/:type',
+    path: 'academic/:type',
     name: 'academicProperty',
     component: () => import('@/views/property/academicProperty/index'),
     meta: {
@@ -180,7 +180,7 @@ export const asyncRoutes = [{
       icon: 'academic'
     }
   }, {
-    path: '/project/:type',
+    path: 'project/:type',
     name: 'projectProperty',
     component: () => import('@/views/property/projectProperty/index'),
     meta: {
@@ -188,13 +188,18 @@ export const asyncRoutes = [{
       icon: 'project'
     }
   }, {
-    path: '/lab/:type',
-    name: 'labProperty',
+    path: 'event',
+    name: 'eventProperty',
     component: () => import('@/views/property/eventProperty/index'),
     meta: {
       title: '实验室团队产出',
-      icon: 'lab'
+      icon: 'event'
     }
+  },
+  {
+    path: 'eventDetail/:id',
+    name: 'eventDetail',
+    component: () => import('@/views/property/eventProperty/component/eventDetail')
   }]
 },
 {

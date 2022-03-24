@@ -2,6 +2,8 @@
   <div class="app-container">
     <div class="eventWrap">
       <div class="eventBox">
+        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="addEvent()">新建活动
+        </el-button>
         <div class="eventList">
           <el-table :data="eventList" fit highlight-current-row class="tableClass">
             <el-table-column label="活动/会议名称" width="360px" align="center">
@@ -20,7 +22,9 @@
               </template>
             </el-table-column>
             <el-table-column label="详情" align="center">
-
+              <template slot-scope="{ row }">
+                <el-button icon="el-icon-more" circle size="mini" @click="getDetail(row.id)"></el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -44,6 +48,8 @@
 </template>
 
 <script>
+import { listEvent, addEvent, deleteEvent } from '@/api/eventProperty'
+
 export default {
   name: 'EventProperty',
   data() {
@@ -53,18 +59,44 @@ export default {
       eventList: []
     }
   },
+  created() {
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.fetchEvent(this.currentPage)
+  },
   methods: {
+    // 分页获取活动
+    fetchEvent(page) {
+      console.log(this.eventList)
+      return new Promise((resolve, reject) => {
+        listEvent(page, 10)
+          .then(res => {
+            this.eventList = res.data.list
+            this.total = res.data.total
+            console.log(res)
+            resolve(res)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
     // 上一页
     handlePrev(val) {
-      this.fetchApplication(val)
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchApplication(val)
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchApplication(val)
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
+    },
+    getDetail(id) {
+      this.$router.push('/property/eventDetail/' + id)
     }
   }
 }

@@ -369,7 +369,7 @@ export default {
           .then(res => {
             this.list = res.data.list
             this.total = res.data.total
-            console.log(res.data)
+            // console.log(res.data)
             resolve(res)
           })
           .catch(err => {

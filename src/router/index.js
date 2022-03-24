@@ -181,6 +181,7 @@ export const asyncRoutes = [{
     }
   }, {
     path: 'project/:type',
+
     name: 'projectProperty',
     component: () => import('@/views/property/projectProperty/index'),
     meta: {

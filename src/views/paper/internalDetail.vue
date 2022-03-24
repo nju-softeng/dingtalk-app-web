@@ -32,7 +32,6 @@
                     >{{ p.user.name }}</span>
                   </p>
                 </div>
-
                 <div style="font-size:13px;color:#595959;">
                   <p>
                     <span style="margin-right:8px">

@@ -72,6 +72,9 @@ export default {
     if (this.card.fileType === 'publishedLatexFile') {
       this.tipContent = '仅支持LaTeX格式文件'
       this.acceptType = '.tex'
+    } else if (this.card.fileType === 'sourceFile') {
+      this.tipContent = '仅支持Zip/Rar格式文件'
+      this.acceptType = '.zip,.rar'
     } else {
       this.tipContent = '仅支持Word/PDF格式文件'
       this.acceptType = '.pdf,.doc,.docx'

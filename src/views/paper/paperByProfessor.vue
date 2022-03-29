@@ -166,8 +166,9 @@
               <svg-icon icon-class="paper" /> 接收情况 :
             </span>
             <el-radio-group v-model="resultForm.result">
-              <el-radio :label="true">接收</el-radio>
-              <el-radio :label="false">拒绝</el-radio>
+              <el-radio :label="1">接收</el-radio>
+              <el-radio :label="0">拒绝</el-radio>
+              <el-radio :label="2">中止</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item>

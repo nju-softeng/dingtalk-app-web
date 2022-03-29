@@ -28,6 +28,11 @@
                 <el-input v-model="personalInfoForm.creditCard" />
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="开户银行">
+                <el-input v-model="personalInfoForm.bankName" placeholder="例：工商银行汉口路支行" />
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
@@ -82,6 +87,27 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col>
+              <el-form-item label="住房合同">
+                <span v-if="personalInfoForm.leaseContractFileName != null">{{ personalInfoForm.leaseContractFileName }}</span>
+                <span v-else>请上传住房合同！</span><br>
+                <span style="display: flex">
+                  <el-upload
+                    class="uploadFIle"
+                    :on-change="handleFileChange"
+                    :show-file-list="false"
+                    action=""
+                    :auto-upload="false"
+                    :accept="acceptType"
+                  >
+                    <el-button icon="el-icon-upload2" type="success" style="margin-right: 30px" round>上 传</el-button>
+                  </el-upload>
+                  <el-button icon="el-icon-download" type="primary" style="margin-top: 1px" round disabled @click="downloadFile">下 载</el-button>
+                </span>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
         <!--        备注信息-->
         <div class="remarkInfo">
@@ -104,7 +130,7 @@
 </template>
 
 <script>
-import { getUserDetail, updateUserInfo } from '@/api/user'
+import { getUserDetail, updateUserInfo, updateContract, downloadContract } from '@/api/user'
 import { mapGetters } from 'vuex'
 export default {
   name: 'PersonalInfo',
@@ -115,12 +141,15 @@ export default {
         stuNum: null,
         idCardNo: null,
         creditCard: null,
+        bankName: null,
         undergraduateCollege: null,
         masterCollege: null,
         workState: null,
         rentingStart: null,
         rentingEnd: null,
         address: null,
+        leaseContractFileName: null,
+        leaseContractFilePath: null,
         remark: null
       },
       rules: {
@@ -176,6 +205,29 @@ export default {
           })
         }
       })
+    },
+    handleFileChange(file, fileList) {
+      if (fileList.length > 1) {
+        fileList.splice(0, 1)
+      }
+      const formData = new FormData()
+      formData.append('file', file.raw)
+      updateContract(formData).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '论文文件上传成功',
+          type: 'success'
+        })
+      }).catch(() => {
+        this.$message.error('上传失败')
+      }).finally(() => {
+        getUserDetail().then(res => {
+          this.personalInfoForm.leaseContractFileName = res.data.leaseContractFileName
+        })
+      })
+    },
+    downloadFile() {
+      downloadContract().then(res => {})
     }
   }
 }

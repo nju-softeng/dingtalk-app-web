@@ -1,5 +1,5 @@
 <template>
-  <el-timeline-item :timestamp="card.fileTypeZHCN" placement="top">
+  <el-timeline-item v-show="card.fileShow" :timestamp="card.fileTypeZHCN" placement="top">
     <el-card>
       <h3 v-if="card.fileName == null">文件未上传！</h3>
       <h3 v-else>{{ card.fileName }}</h3>
@@ -68,7 +68,7 @@ export default {
     }
   },
   created() {
-    // console.log(this.paperType)
+    console.log(this.card)
     if (this.card.fileType === 'publishedLatexFile') {
       this.tipContent = '仅支持LaTeX格式文件'
       this.acceptType = '.tex'
@@ -79,7 +79,6 @@ export default {
       this.tipContent = '仅支持Word/PDF格式文件'
       this.acceptType = '.pdf,.doc,.docx'
     }
-    console.log(this.card)
   },
   methods: {
     handleFileChange(file, fileList) {
@@ -137,6 +136,7 @@ export default {
     deleteFile() {
       const formData = new FormData()
       formData.append('fileType', this.card.fileType)
+      formData.append('fileName', this.card.fileName)
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
         console.log(this.card.fileName)
         if (this.paperType === 0 || this.paperType === 2) {

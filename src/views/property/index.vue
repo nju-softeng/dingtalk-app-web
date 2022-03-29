@@ -6,6 +6,8 @@
           <tab-pane label="学术资产" name="academicProperty" />
           <tab-pane label="项目资产" name="projectProperty" />
           <tab-pane label="实验室团队产出" name="labProperty" />
+          <tab-pane label="荣誉资产" name="prizeProperty" />
+          <tab-pane label="固定资产" name="fixedProperty" />
         </tabs>
       </div>
       <div>
@@ -18,9 +20,12 @@
 <script>
 import Tabs from '@/components/TabNav/tabs'
 import TabPane from '@/components/TabNav/tabpane'
-import academicProperty from '@/views/property/components/academicProperty'
-import labProperty from '@/views/property/components/eventProperty'
-import projectProperty from '@/views/property/components/projectProperty'
+import academicProperty from '@/views/property/academicProperty'
+import labProperty from '@/views/property/eventProperty'
+import projectProperty from '@/views/property/projectProperty'
+import prizeProperty from '@/views/property/prizeProperty'
+import fixedProperty from '@/views/property/fixedProperty'
+
 export default {
   name: 'Index',
   components: {
@@ -28,7 +33,9 @@ export default {
     TabPane,
     academicProperty,
     labProperty,
-    projectProperty
+    projectProperty,
+    prizeProperty,
+    fixedProperty
   },
   data() {
     return {
@@ -42,6 +49,10 @@ export default {
       this.activeTab = 'project'
     } else if (this.$route.params.type === 'lab') {
       this.activeTab = 'lab'
+    } else if (this.$route.params.type === 'prize') {
+      this.activeTab = 'prize'
+    } else if (this.$route.params.type === 'fixed') {
+      this.activeTab = 'fixed'
     }
   }
 }

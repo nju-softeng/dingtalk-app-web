@@ -201,7 +201,24 @@ export const asyncRoutes = [{
     path: 'eventDetail/:id',
     name: 'eventDetail',
     component: () => import('@/views/property/eventProperty/component/eventDetail')
-  }]
+  }, {
+    path: 'prize',
+    name: 'prizeProperty',
+    component: () => import('@/views/property/prizeProperty/index'),
+    meta: {
+      title: '荣誉资产',
+      icon: 'prize'
+    }
+  }, {
+    path: 'fixed',
+    name: 'fixedProperty',
+    component: () => import('@/views/property/fixedProperty/index'),
+    meta: {
+      title: '固定资产',
+      icon: 'fixed'
+    }
+  }
+  ]
 },
 {
   path: '/paper',

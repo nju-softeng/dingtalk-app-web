@@ -152,3 +152,21 @@ export function updateProperty(data) {
     data
   })
 }
+
+// 上传住房合同
+export function updateContract(data) {
+  return axios({
+    url: '/user/leaseContract',
+    method: 'post',
+    data
+  })
+}
+
+// 下载住房合同
+export function downloadContract(data) {
+  return axios({
+    url: '/user/leaseContract',
+    method: 'get',
+    data
+  })
+}

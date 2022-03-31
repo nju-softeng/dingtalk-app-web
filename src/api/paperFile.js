@@ -6,8 +6,8 @@ const api = {
   getPaperFileInfo: (uid, paperId) => `/${uid}/paperFileInfo/${paperId}`,
   getExternalPaperFileInfo: (uid, paperId) => `/${uid}/ex-paperFileInfo/${paperId}`,
   paperFileDownload: () => `/paper/paperFileDownload`,
-  deletePaperFile: (uid, paperId, fileId) => `/${uid}/paper/${paperId}/paperFile/${fileId}`,
-  deleteExternalPaperFile: (uid, paperId, fileId) => `/${uid}/ex-paper/${paperId}/ex-paperFile/${fileId}`
+  deletePaperFile: (uid, paperId) => `/${uid}/paper/${paperId}/paperFile`,
+  deleteExternalPaperFile: (uid, paperId) => `/${uid}/ex-paper/${paperId}/ex-paperFile`
 }
 
 // 上传论文文件
@@ -56,7 +56,7 @@ export function getPaperFileDownloadInfo(data) {
 // 删除论文文件
 export function deletePaperFile(uid, paperId, fileId, data) {
   return axios({
-    url: api.deletePaperFile(uid, paperId, fileId),
+    url: api.deletePaperFile(uid, paperId),
     method: 'delete',
     data
   })
@@ -65,7 +65,7 @@ export function deletePaperFile(uid, paperId, fileId, data) {
 // 删除外部论文文件
 export function deleteExternalPaperFile(uid, paperId, fileId, data) {
   return axios({
-    url: api.deleteExternalPaperFile(uid, paperId, fileId),
+    url: api.deleteExternalPaperFile(uid, paperId),
     method: 'delete',
     data
   })

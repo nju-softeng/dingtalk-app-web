@@ -54,7 +54,8 @@ export function getPaperFileDownloadInfo(data) {
 }
 
 // 删除论文文件
-export function deletePaperFile(uid, paperId, fileId, data) {
+export function deletePaperFile(uid, paperId, data) {
+  console.log()
   return axios({
     url: api.deletePaperFile(uid, paperId),
     method: 'delete',
@@ -63,7 +64,7 @@ export function deletePaperFile(uid, paperId, fileId, data) {
 }
 
 // 删除外部论文文件
-export function deleteExternalPaperFile(uid, paperId, fileId, data) {
+export function deleteExternalPaperFile(uid, paperId, data) {
   return axios({
     url: api.deleteExternalPaperFile(uid, paperId),
     method: 'delete',

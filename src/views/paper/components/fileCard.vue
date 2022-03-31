@@ -135,7 +135,7 @@ export default {
         const binaryData = [res.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
         const a = document.createElement('a')
-        a.download = this.personalInfoForm.leaseContractFileName
+        a.download = this.personalInfoForm.this.card.fileName
         a.href = url
         a.click()
       })
@@ -144,10 +144,11 @@ export default {
       const formData = new FormData()
       formData.append('fileType', this.card.fileType)
       formData.append('fileName', this.card.fileName)
+      formData.append('fileId', this.card.fileId)
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
         console.log(this.card.fileName)
         if (this.paperType === 0 || this.paperType === 2) {
-          deletePaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
+          deletePaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
             this.$notify({
               title: '成功',
               message: '论文文件删除成功',
@@ -158,7 +159,7 @@ export default {
             this.$message.error('删除失败')
           })
         } else if (this.paperType === 1) {
-          deleteExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, this.card.fileId, formData).then(() => {
+          deleteExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
             this.$notify({
               title: '成功',
               message: '论文文件删除成功',

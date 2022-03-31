@@ -30,7 +30,7 @@
       <!-- 固定资产列表 -->
       <div v-loading="loading" class="box-fixed-card" style="width: 65%;">
         <div class="title">
-          <span style="padding-right:20px">{{ name }} 的奖项</span>
+          <span style="padding-right:20px">{{ name }} 的固定资产</span>
           <el-button v-show="addShow" type="primary" style="margin-left: 50px" @click="addPropertyDialogueVisible=true">
             新增固定资产
           </el-button>

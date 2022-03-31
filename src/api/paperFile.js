@@ -5,7 +5,7 @@ const api = {
   addExternalPaperFile: (uid, paperId) => `/${uid}/ex-paperFile/${paperId}`,
   getPaperFileInfo: (uid, paperId) => `/${uid}/paperFileInfo/${paperId}`,
   getExternalPaperFileInfo: (uid, paperId) => `/${uid}/ex-paperFileInfo/${paperId}`,
-  getPaperFileDownloadInfo: (uid, fileId) => `/${uid}/paperFile/${fileId}`,
+  paperFileDownload: () => `/paper/paperFileDownload`,
   deletePaperFile: (uid, paperId, fileId) => `/${uid}/paper/${paperId}/paperFile/${fileId}`,
   deleteExternalPaperFile: (uid, paperId, fileId) => `/${uid}/ex-paper/${paperId}/ex-paperFile/${fileId}`
 }
@@ -45,10 +45,11 @@ export function getExternalPaperFileInfo(uid, paperId) {
 }
 
 // 获取文件的下载信息
-export function getPaperFileDownloadInfo(uid, fileId) {
+export function getPaperFileDownloadInfo(data) {
   return axios({
-    url: api.getPaperFileDownloadInfo(uid, fileId),
-    method: 'get'
+    url: api.paperFileDownload(),
+    method: 'post',
+    data
   })
 }
 

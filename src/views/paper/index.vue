@@ -356,14 +356,14 @@
                   type="text"
                   style="margin-left: 20px"
                   icon="el-icon-plus"
-                  @click="addAuthor"
+                  @click="addNonFirstAuthor"
                 >添加作者
                 </el-button>
                 <el-button
                   type="text"
                   style="margin-left: 20px"
                   icon="el-icon-minus"
-                  @click="rmAuthor"
+                  @click="rmNonFirstAuthor"
                 >减少作者</el-button>
               </el-form>
             </div>
@@ -754,10 +754,24 @@ export default {
         uid: ''
       })
     },
+    // 添加非学生一作作者
+    addNonFirstAuthor() {
+      const val = this.professorPaperForm.authors.length + 1
+      this.professorPaperForm.authors.push({
+        num: val,
+        uid: ''
+      })
+    },
     // 移除论文作者
     rmAuthor() {
       if (this.internalPaperForm.authors.length !== 1) {
         this.internalPaperForm.authors.pop()
+      }
+    },
+    // 移除非学生一作作者
+    rmNonFirstAuthor() {
+      if (this.professorPaperForm.authors.length !== 1) {
+        this.professorPaperForm.authors.pop()
       }
     },
     changeFile(file) {

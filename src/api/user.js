@@ -5,10 +5,10 @@ const api = {
   addPrize: uid => `/users/${uid}/prizes`,
   deletePrize: (uid, prizeId) => `/users/${uid}/prizes/${prizeId}`,
   updatePrize: (uid, prizeId) => `/users/${uid}/prizes/${prizeId}`,
-  getUserProperties: uid => `/users/${uid}/properties`,
-  addProperties: uid => `/users/${uid}/properties`,
-  deleteProperties: (uid, propertyId) => `/users/${uid}/properties/${propertyId}`,
-  updateProperties: (uid, propertyId) => `/users/${uid}/properties/${propertyId}`,
+  getUserProperties: uid => `/user/${uid}/propertyList`,
+  addProperties: uid => `/user/${uid}/property`,
+  deleteProperties: () => `/property`,
+  updateProperties: () => `/property/update`
 }
 
 // 测试用户登陆
@@ -95,6 +95,7 @@ export function getUserPrizes(uid) {
 }
 // 新建用户奖项
 export function addPrize(uid, data) {
+  console.log(api.addPrize(uid))
   return axios({
     url: api.addPrize(uid),
     method: 'post',
@@ -120,35 +121,36 @@ export function updatePrize(uid, prizeId, data) {
 }
 
 // 查询用户固定资产
-export function getUserProperties() {
+export function getUserProperties(uid) {
   return axios({
-    url: '/propertyList',
+    url: api.getUserProperties(uid),
     method: 'get'
   })
 }
+
 // 新建用户查询用户固定资产
-export function addProperty(data) {
+export function addProperty(uid, data) {
   return axios({
-    url: '/property',
-    method: 'put',
+    url: api.addProperties(uid),
+    method: 'post',
     data
   })
 }
 
 // 删除用户查询用户固定资产
-export function deleteProperty(data) {
+export function deleteProperty(propertyId) {
   return axios({
-    url: '/property',
+    url: api.deleteProperties(),
     method: 'delete',
-    data
+    propertyId
   })
 }
 
 // 修改用户查询用户固定资产
 export function updateProperty(data) {
   return axios({
-    url: '/property/update',
-    method: 'post',
+    url: api.updateProperties(),
+    method: 'put',
     data
   })
 }
@@ -166,6 +168,7 @@ export function updateContract(data) {
 export function downloadContract(data) {
   return axios({
     url: '/user/leaseContract',
+    responseType: 'blob',
     method: 'get',
     data
   })

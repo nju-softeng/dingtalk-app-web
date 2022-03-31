@@ -99,11 +99,11 @@
                     :show-file-list="false"
                     action=""
                     :auto-upload="false"
-                    :accept="acceptType"
+                    accept=".pdf,.jpg,.png"
                   >
                     <el-button icon="el-icon-upload2" type="success" style="margin-right: 30px" round>上 传</el-button>
                   </el-upload>
-                  <el-button icon="el-icon-download" type="primary" style="margin-top: 1px" round disabled @click="downloadFile">下 载</el-button>
+                  <el-button icon="el-icon-download" type="primary" style="margin-top: 1px" round @click="downloadFile">下 载</el-button>
                 </span>
               </el-form-item>
             </el-col>
@@ -227,7 +227,23 @@ export default {
       })
     },
     downloadFile() {
-      downloadContract().then(res => {})
+      downloadContract().then(res => {
+        let type
+        if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.pdf') {
+          type = 'application/pdf'
+        } else if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.jpg') {
+          type = 'image/jpeg'
+        } else if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.png') {
+          type = 'image/png'
+        }
+
+        const binaryData = [res.data]
+        const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
+        const a = document.createElement('a')
+        a.download = this.personalInfoForm.leaseContractFileName
+        a.href = url
+        a.click()
+      })
     }
   }
 }

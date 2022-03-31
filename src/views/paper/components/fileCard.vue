@@ -24,7 +24,7 @@
           >
             <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
           </el-upload>
-          <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round disabled @click="downloadFile">下 载</el-button>
+          <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round @click="downloadFile">下 载</el-button>
           <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
         </span>
       </div>
@@ -113,24 +113,31 @@ export default {
       }
     },
     downloadFile() {
-      getPaperFileDownloadInfo(sessionStorage.getItem('uid'), this.card.fileId).then(res => {
-        // console.log(res)
-        const fs = require('fs')
-        const Axios = require('axios')
-        const url = res.url
-        const path = 'C:\\'
-        const writer = fs.createWriteStream(path)
-        Axios({
-          url,
-          method: 'GET',
-          responseType: 'stream',
-          headers: {
-            '<headerKey1>': res.headerKey1,
-            '<headerKey2>': res.headerKey2
-          }
-        }).then(function(response) {
-          response.data.pipe(writer)
-        })
+      var fd = new FormData()
+      fd.append('fileName', this.card.fileName)
+      fd.append('filePath', this.card.fileId)
+      getPaperFileDownloadInfo(fd).then(res => {
+        let type
+        if (this.card.fileName.split('.')[-1] === '.tex') {
+          type = 'application/x-tex'
+        } else if (this.card.fileName.split('.')[-1] === '.zip') {
+          type = 'application/zip'
+        } else if (this.card.fileName.split('.')[-1] === '.rar') {
+          type = 'application/x-rar-compressed'
+        } else if (this.card.fileName.split('.')[-1] === '.pdf') {
+          type = 'application/pdf'
+        } else if (this.card.fileName.split('.')[-1] === '.doc') {
+          type = 'application/msword'
+        } else if (this.card.fileName.split('.')[-1] === '.docx') {
+          type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
+        }
+
+        const binaryData = [res.data]
+        const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
+        const a = document.createElement('a')
+        a.download = this.personalInfoForm.leaseContractFileName
+        a.href = url
+        a.click()
       })
     },
     deleteFile() {

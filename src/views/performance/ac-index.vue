@@ -164,7 +164,7 @@ export default {
   border-radius: 4px;
   border: 1px solid #ebeef5;
   height: 85vh;
-  padding: 10px 0px;
+  padding: 10px 0;
   background-color: white;
 }
 .ac-card {

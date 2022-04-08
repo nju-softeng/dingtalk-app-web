@@ -3,7 +3,8 @@ import axios from '@/utils/request'
 const api = {
   listEvent: (page, size) => `/event/page/${page}/${size}`,
   addEvent: '/event',
-  deleteEvent: (id) => `/event/${id}`
+  deleteEvent: (id) => `/event/${id}`,
+  getEventInfo: (id) => `/event/${id}`
 }
 
 // 分页查询活动
@@ -26,7 +27,14 @@ export function addEvent(data) {
 // 删除活动
 export function deleteEvent(id) {
   return axios({
-    url: api.deleteEvent,
+    url: api.deleteEvent(id),
     method: 'delete'
+  })
+}
+
+export function getEventInfo(id) {
+  return axios({
+    url: api.getEventInfo(id),
+    method: 'get'
   })
 }

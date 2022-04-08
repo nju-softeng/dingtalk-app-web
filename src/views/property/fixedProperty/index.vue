@@ -122,7 +122,7 @@
         </el-form>
         <span slot="footer">
           <el-button @click="addPropertyDialogueVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addProperty('addPropertyForm')">添加</el-button>
+          <el-button type="primary" @click="addProperty('addPropertyForm')">添 加</el-button>
         </span>
       </el-dialog>
       <el-dialog

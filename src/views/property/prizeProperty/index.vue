@@ -124,7 +124,7 @@
       </el-form>
       <span slot="footer">
         <el-button @click="addPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addPrize('addPrizeForm')">添加</el-button>
+        <el-button type="primary" @click="addPrize('addPrizeForm')">添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog

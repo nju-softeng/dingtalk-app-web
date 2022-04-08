@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="eventWrap">
       <div class="eventBox">
-        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="addEvent()">新建活动
+        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="currentOperation='添加活动'; addEventDialogVisible=true">新建活动
         </el-button>
         <div class="eventList">
           <el-table :data="eventList" fit highlight-current-row class="tableClass">
@@ -18,12 +18,32 @@
             </el-table-column>
             <el-table-column label="活动类型" width="300px" align="center">
               <template slot-scope="{ row }">
-                <span>{{ row.type }}</span>
+                <span>{{ typeConverter[row.type] }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="详情" align="center">
+            <el-table-column label="操作" align="center">
               <template slot-scope="{ row }">
-                <el-button icon="el-icon-more" circle size="mini" @click="getDetail(row.id)"></el-button>
+                <el-tooltip
+                  effect="dark"
+                  content="详情"
+                  placement="top"
+                >
+                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="getDetail(row.id)" />
+                </el-tooltip>
+                <el-tooltip
+                  effect="dark"
+                  content="编辑"
+                  placement="top"
+                >
+                  <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifyEvent(row)" />
+                </el-tooltip>
+                <el-tooltip
+                  effect="dark"
+                  content="删除"
+                  placement="top"
+                >
+                  <el-button class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" @click="deleteWholeEvent(row.id)" />
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
@@ -44,6 +64,47 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      :title="currentOperation"
+      :visible.sync="addEventDialogVisible"
+      width="30%"
+      :before-close="clearBeforeClose"
+    >
+      <el-form ref="addEventForm" :model="addEventForm" :rules="rules" label-width="100px">
+        <el-form-item prop="name" label="活动名称:">
+          <el-col :span="12">
+            <el-input v-model="addEventForm.name" placeholder="请输入活动名称" style="width: 200px" />
+          </el-col>
+        </el-form-item>
+        <el-form-item prop="year" label="活动年份:">
+          <el-col :span="12">
+            <el-date-picker
+              v-model="addEventForm.year"
+              value-format="yyyy"
+              type="year"
+              placeholder="选择年份"
+              style="width: 200px"
+            />
+          </el-col>
+        </el-form-item>
+        <el-form-item prop="type" label="活动类型:">
+          <el-col :span="8">
+            <el-select v-model="addEventForm.type" placeholder="请选择活动类型" style="width: 200px">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="cancelAddEvent">取 消</el-button>
+        <el-button type="primary" @click="addNewEvent('addEventForm')">确 认</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -56,7 +117,36 @@ export default {
     return {
       total: 0,
       currentPage: 1,
-      eventList: []
+      eventList: [],
+      addEventDialogVisible: false,
+      typeConverter: ['项目会议', '团队组织/参与的活动', '实验室活动'],
+      currentOperation: '添加活动',
+      addEventForm: {
+        id: null,
+        name: '',
+        year: 0,
+        type: '',
+        path: ''
+      },
+      rules: {
+        name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择时间类型', trigger: 'blur' }]
+      },
+      options: [
+        {
+          value: '0',
+          label: '项目会议'
+        },
+        {
+          value: '1',
+          label: '团队组织/参与的活动'
+        },
+        {
+          value: '2',
+          label: '实验室活动'
+        }
+      ]
     }
   },
   created() {
@@ -66,7 +156,7 @@ export default {
   methods: {
     // 分页获取活动
     fetchEvent(page) {
-      console.log(this.eventList)
+      // console.log(this.eventList)
       return new Promise((resolve, reject) => {
         listEvent(page, 10)
           .then(res => {
@@ -97,6 +187,76 @@ export default {
     },
     getDetail(id) {
       this.$router.push('/property/eventDetail/' + id)
+    },
+    deleteWholeEvent(id) {
+      deleteEvent(id).then(() => {
+        this.$message.success('删除成功')
+        this.fetchEvent(this.currentPage)
+      }).catch(() => {
+        this.$message.error('删除失败')
+      })
+    },
+    addNewEvent(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.addEventForm.path = '/Property/Event/' + this.addEventForm.year + '/' + this.addEventForm.name
+          const formData = new FormData()
+          formData.append('eventPropertyJsonStr', JSON.stringify(this.addEventForm))
+          addEvent(formData).then(() => {
+            if (this.currentOperation === '添加活动') {
+              this.$message.success('添加成功')
+            } else if (this.currentOperation === '修改活动') {
+              this.$message.success('修改成功')
+            } else {
+              this.$message.error('未知的状态！')
+            }
+            this.cancelAddEvent()
+            this.fetchEvent(this.currentPage)
+          }).catch(() => {
+            if (this.currentOperation === '添加活动') {
+              this.$message.error('添加失败')
+            } else if (this.currentOperation === '修改活动') {
+              this.$message.error('修改失败')
+            } else {
+              this.$message.error('未知的状态！')
+            }
+          })
+        } else {
+          this.$notify({
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
+      })
+    },
+    modifyEvent(row) {
+      this.currentOperation = '修改活动'
+      this.addEventForm.id = row.id
+      this.addEventForm.name = row.name
+      this.addEventForm.year = row.year
+      this.addEventForm.type = row.type
+      this.addEventDialogVisible = true
+    },
+    clearBeforeClose(done) {
+      this.addEventForm = {
+        id: null,
+        name: '',
+        year: 0,
+        type: '',
+        path: ''
+      }
+      return done(true)
+    },
+    cancelAddEvent() {
+      this.addEventDialogVisible = false
+      this.addEventForm = {
+        id: null,
+        name: '',
+        year: 0,
+        type: '',
+        path: ''
+      }
     }
   }
 }
@@ -137,5 +297,21 @@ export default {
     margin-top:16px;
     display:flex;
     justify-content:center;
+  }
+
+  .detailBtn {
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+
+  .modifyBtn {
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+
+  .deleteBtn {
+    padding: 2px 6px;
+    border-radius: 5px;
+    margin-left: 16px;
   }
 </style>

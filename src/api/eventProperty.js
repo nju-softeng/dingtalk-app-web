@@ -4,7 +4,8 @@ const api = {
   listEvent: (page, size) => `/event/page/${page}/${size}`,
   addEvent: '/event',
   deleteEvent: (id) => `/event/${id}`,
-  getEventInfo: (id) => `/event/${id}`
+  getEventInfo: (id) => `/event/${id}`,
+  addEventPropertyFile: (id) => `/event/${id}/eventFile`
 }
 
 // 分页查询活动
@@ -36,5 +37,12 @@ export function getEventInfo(id) {
   return axios({
     url: api.getEventInfo(id),
     method: 'get'
+  })
+}
+
+export function addEventPropertyFile(id, data) {
+  return axios({
+    url: api.addEventPropertyFile(id),
+    method: 'post'
   })
 }

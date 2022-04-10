@@ -43,6 +43,7 @@ export function getEventInfo(id) {
 export function addEventPropertyFile(id, data) {
   return axios({
     url: api.addEventPropertyFile(id),
-    method: 'post'
+    method: 'post',
+    data
   })
 }

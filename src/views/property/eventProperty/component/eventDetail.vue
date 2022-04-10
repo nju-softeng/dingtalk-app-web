@@ -97,8 +97,8 @@ export default {
     },
     handleFileUpload(data) {
       const fd = new FormData()
+      fd.append('eventPropertyFile', data.file)
       fd.append('fileType', this.updateFileType)
-      fd.append('file', [data.file.raw])
       addEventPropertyFile(this.id, fd).then(res => {
         if (res) {
           this.$notify.success('上传成功!')

@@ -5,7 +5,8 @@ const api = {
   addEvent: '/event',
   deleteEvent: (id) => `/event/${id}`,
   getEventInfo: (id) => `/event/${id}`,
-  addEventPropertyFile: (id) => `/event/${id}/eventFile`
+  addEventPropertyFile: (id) => `/event/${id}/eventFile`,
+  downloadEventFile: (id) => `/eventFile/${id}`
 }
 
 // 分页查询活动
@@ -45,5 +46,13 @@ export function addEventPropertyFile(id, data) {
     url: api.addEventPropertyFile(id),
     method: 'post',
     data
+  })
+}
+
+export function downloadEventFile(id) {
+  return axios({
+    url: api.downloadEventFile(id),
+    responseType: 'blob',
+    method: 'get'
   })
 }

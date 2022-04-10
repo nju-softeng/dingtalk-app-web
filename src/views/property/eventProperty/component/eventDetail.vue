@@ -11,18 +11,72 @@
         </div>
       </el-card>
       <el-card shadow="hover" class="bodyCard">
-        <div class="picHead">
+        <div class="fileHead">
           <div>活动图片</div>
-          <div>活动图片</div>
+          <el-button type="primary" @click="uploadType='活动图片'; acceptFileType = '.jpg,.png'; updateFileType = 'Picture'; uploadFileVisible = true"> 上传文件</el-button>
         </div>
-        <div class="picBody">
-          <div v-if="fileList.length !== 0">
-            <el-image v-for="files in fileList" :key="files.name" :src="files.url" fit="contain" lazy />
+        <div class="fileBody">
+          <div v-if="pictureFileList.length !== 0">
+            <div v-for="file in pictureFileList" :key="file.url" class="hoverFile">
+              <div class="hoverButtons">
+                <el-button class="hoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="hoverBtn deleteBtn" icon="el-icon-delete" />
+              </div>
+              <el-image :src="file.url" fit="contain" lazy />
+            </div>
+            <div v-show="haveMorePic" class="moreFile">
+              <el-button class="moreBtn" @click="getMorePicture">
+                <i class="el-icon-more" style="font-size: 30px" /><br>
+                More
+              </el-button>
+            </div>
           </div>
           <div v-else class="null">
             <svg-icon icon-class="null" style="font-size:32px" />
             <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
               暂无活动图片！
+            </div>
+          </div>
+        </div>
+        <div class="fileHead">
+          <div>活动视频</div>
+          <el-button type="primary" @click="uploadType='活动视频'; acceptFileType = '.mp4,.avi'; updateFileType = 'Video'; uploadFileVisible = true"> 上传文件</el-button>
+        </div>
+        <div class="fileBody">
+          <div v-if="videoFileList.length !== 0">
+            <el-image v-for="file in pictureFileList" :key="file.url" :src="file.url" fit="contain" lazy />
+            <div v-show="haveMoreVideo" class="moreFile">
+              <el-button class="moreBtn">
+                <i class="el-icon-more" style="font-size: 30px" /><br>
+                More
+              </el-button>
+            </div>
+          </div>
+          <div v-else class="null">
+            <svg-icon icon-class="null" style="font-size:32px" />
+            <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
+              暂无活动视频！
+            </div>
+          </div>
+        </div>
+        <div class="fileHead">
+          <div>活动文档</div>
+          <el-button type="primary" @click="uploadType='活动文档'; acceptFileType = '.doc,.docx,.pdf,.md'; updateFileType = 'Doc'; uploadFileVisible = true"> 上传文件</el-button>
+        </div>
+        <div class="fileBody">
+          <div v-show="haveMoreDoc" v-if="docFileList.length !== 0">
+            <el-image v-for="file in pictureFileList" :key="file.url" :src="file.url" fit="contain" lazy />
+            <div class="moreFile">
+              <el-button class="moreBtn">
+                <i class="el-icon-more" style="font-size: 30px" /><br>
+                More
+              </el-button>
+            </div>
+          </div>
+          <div v-else class="null">
+            <svg-icon icon-class="null" style="font-size:32px" />
+            <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
+              暂无活动文档！
             </div>
           </div>
         </div>
@@ -32,6 +86,7 @@
       title="上传文件"
       :visible.sync="uploadFileVisible"
       width="30%"
+      :before-close="refreshBeforeClose"
     >
       <div class="uploadHead">
         <div style="display: inline">请选择文件类型：</div>
@@ -44,6 +99,7 @@
         </div>
       </div>
       <el-upload
+        ref="fileUpload"
         class="fileUpload"
         drag
         action=""
@@ -61,7 +117,7 @@
 </template>
 
 <script>
-import { getEventInfo, addEventPropertyFile } from '@/api/eventProperty'
+import { getEventInfo, addEventPropertyFile, downloadEventFile } from '@/api/eventProperty'
 
 export default {
   name: 'EventDetail',
@@ -72,40 +128,82 @@ export default {
       eventInfo: {
         name: '无活动名！',
         year: 2000,
-        type: 0
+        type: 0,
+        pictureFileList: [],
+        videoFileList: [],
+        docFileList: []
       },
-      fileList: [],
-      uploadFileVisible: true,
+      pictureFileList: [],
+      videoFileList: [],
+      docFileList: [],
+      uploadFileVisible: false,
       uploadType: '活动图片',
       acceptFileType: '.jpg,.png',
-      updateFileType: 'Picture'
+      updateFileType: 'Picture',
+      haveMorePic: true,
+      haveMoreVideo: false,
+      haveMoreDoc: false,
+      pageMax: 5
     }
   },
-  created() {
+  async created() {
     this.id = this.$route.params.id
-    getEventInfo(this.id).then(res => {
+    await getEventInfo(this.id).then(async res => {
       if (res) {
         this.eventInfo = res.data
+        for (let i = 0; i < this.pageMax && i < res.data.pictureFileList.length; i++) {
+          await downloadEventFile(res.data.pictureFileList[i].id).then(result => {
+            const binaryData = [result.data]
+            const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.pictureFileList[i]) }))
+            this.pictureFileList = this.pictureFileList.concat([{
+              id: res.data.pictureFileList[i].id,
+              fileName: res.data.pictureFileList[i].fileName,
+              url: url
+            }])
+          })
+        }
       }
     }).catch(() => {
       this.$message.error('无法获取活动信息')
     })
+    this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
   },
   methods: {
+    getType(file) {
+      let type
+      if (file.fileName.split('.')[-1] === '.md') {
+        type = 'text/x-markdown'
+      } else if (file.fileName.split('.')[-1] === '.pdf') {
+        type = 'application/pdf'
+      } else if (file.fileName.split('.')[-1] === '.doc') {
+        type = 'application/msword'
+      } else if (file.fileName.split('.')[-1] === '.docx') {
+        type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
+      } else if (file.fileName.split('.')[-1] === '.jpg') {
+        type = 'image/jpeg'
+      } else if (file.fileName.split('.')[-1] === '.png') {
+        type = 'image/png'
+      } else if (file.fileName.split('.')[-1] === '.mp4') {
+        type = 'video/mp4'
+      } else if (file.fileName.split('.')[-1] === '.avi') {
+        type = 'video/x-msvideo'
+      }
+      return type
+    },
     goBack() {
       this.$router.push('/property/event/')
     },
-    handleFileUpload(data) {
+    async handleFileUpload(data) {
       const fd = new FormData()
       fd.append('eventPropertyFile', data.file)
       fd.append('fileType', this.updateFileType)
-      addEventPropertyFile(this.id, fd).then(res => {
-        if (res) {
-          this.$notify.success('上传成功!')
-        }
-      }).catch(() => {
+      const res1 = await addEventPropertyFile(this.id, fd)
+      if (res1) {
+        this.$notify.success('上传成功!')
+      } else {
         this.$notify.error('上传失败!')
-      })
+      }
+      this.$refs.fileUpload.clearFiles()
     },
     handleTypeChange(chosenLabel) {
       switch (chosenLabel) {
@@ -122,6 +220,51 @@ export default {
           this.updateFileType = 'Doc'
           break
       }
+    },
+    async getMorePicture() {
+      const init = this.pictureFileList.length
+      for (let i = init; i < init + 6 && i < this.eventInfo.pictureFileList.length; i++) {
+        await downloadEventFile(this.eventInfo.pictureFileList[i].id).then(result => {
+          const binaryData = [result.data]
+          const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(this.eventInfo.pictureFileList[i]) }))
+          this.pictureFileList = this.pictureFileList.concat([{
+            id: this.eventInfo.pictureFileList[i].id,
+            fileName: this.eventInfo.pictureFileList[i].fileName,
+            url: url
+          }])
+        })
+      }
+      this.haveMorePic = this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
+      this.pageMax += 6
+    },
+    downloadFile(file) {
+      downloadEventFile(file.id).then(res => {
+        const binaryData = [res.data]
+        const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(file) }))
+        const a = document.createElement('a')
+        a.download = file.fileName
+        a.href = url
+        a.click()
+      })
+    },
+    async refreshBeforeClose(done) {
+      const res = await getEventInfo(this.id)
+      if (res) {
+        this.eventInfo = res.data
+      }
+      const init = this.pictureFileList.length
+      for (var i = init; i < this.pageMax && i < res.data.pictureFileList.length; i++) {
+        const result = await downloadEventFile(res.data.pictureFileList[i].id)
+        const binaryData = [result.data]
+        const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.pictureFileList[i]) }))
+        this.pictureFileList = this.pictureFileList.concat([{
+          id: res.data.pictureFileList[i].id,
+          fileName: res.data.pictureFileList[i].fileName,
+          url: url
+        }])
+      }
+      this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
+      return done(true)
     }
   }
 }
@@ -166,27 +309,60 @@ export default {
     margin-top: 36px;
   }
 
-  .picHead {
+  .fileHead {
     font-size: larger;
     margin: 0 0 10px 30px;
     display: flex;
     justify-content: space-between;
   }
 
-  .picBody {
+  .fileBody {
     height: 400px;
     overflow-y: auto;
   }
 
-  .picBody .el-image {
+  .hoverFile {
     width: 48%;
-    height: 100%;
+    height: 380px;
     margin: 1%;
-    background: #f3f3f3;
+    position: relative;
+    display: inline-block;
+    overflow: hidden
   }
 
-  .picBody .el-image:last-child {
-    margin-bottom: 0;
+  .hoverButtons {
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    position: absolute;
+    z-index: 2;
+    opacity: 0;
+  }
+
+  .hoverButtons:hover{
+    opacity: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hoverBtn {
+    height: 25%;
+    width: 20%;
+    margin: 5%;
+    font-size: 500%;
+    background-color: rgba(0,0,0,0);
+    border: 0;
+    font-weight: bolder;
+    color: white;
+  }
+
+  .fileBody .el-image {
+    width: 100%;
+    height: 100%;
+    background: #f3f3f3;
+    position: absolute;
+    z-index: 1;
   }
 
   .null {
@@ -203,6 +379,21 @@ export default {
 
   .fileUpload {
     text-align: center;
+  }
+
+  .moreFile {
+    height: 380px;
+    width: 48%;
+    margin: 1%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden
+  }
+
+  .moreBtn {
+    border: 0;
+    height: 100%;
+    width: 100%;
   }
 
 </style>

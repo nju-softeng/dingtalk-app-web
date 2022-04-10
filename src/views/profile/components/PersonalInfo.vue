@@ -236,12 +236,12 @@ export default {
         } else if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.png') {
           type = 'image/png'
         }
-
         const binaryData = [res.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
         const a = document.createElement('a')
         a.download = this.personalInfoForm.leaseContractFileName
         a.href = url
+          console.log(a.href)
         a.click()
       })
     }

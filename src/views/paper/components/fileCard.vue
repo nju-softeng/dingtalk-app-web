@@ -113,6 +113,10 @@ export default {
       }
     },
     downloadFile() {
+      if (!this.card.fileName) {
+        this.$message.warning('文件未上传！请上传文件！')
+        return
+      }
       var fd = new FormData()
       fd.append('fileName', this.card.fileName)
       fd.append('filePath', this.card.fileId)
@@ -135,7 +139,7 @@ export default {
         const binaryData = [res.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
         const a = document.createElement('a')
-        a.download = this.personalInfoForm.this.card.fileName
+        a.download = this.card.fileName
         a.href = url
         a.click()
       })

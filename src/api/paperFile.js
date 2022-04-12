@@ -55,7 +55,6 @@ export function getPaperFileDownloadInfo(data) {
 
 // 删除论文文件
 export function deletePaperFile(uid, paperId, data) {
-  console.log()
   return axios({
     url: api.deletePaperFile(uid, paperId),
     method: 'delete',

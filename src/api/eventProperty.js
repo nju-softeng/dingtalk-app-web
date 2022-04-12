@@ -3,7 +3,10 @@ import axios from '@/utils/request'
 const api = {
   listEvent: (page, size) => `/event/page/${page}/${size}`,
   addEvent: '/event',
-  deleteEvent: (id) => `/event/${id}`
+  deleteEvent: (id) => `/event/${id}`,
+  getEventInfo: (id) => `/event/${id}`,
+  addEventPropertyFile: (id) => `/event/${id}/eventFile`,
+  downloadEventFile: (id) => `/eventFile/${id}`
 }
 
 // 分页查询活动
@@ -26,7 +29,30 @@ export function addEvent(data) {
 // 删除活动
 export function deleteEvent(id) {
   return axios({
-    url: api.deleteEvent,
+    url: api.deleteEvent(id),
     method: 'delete'
+  })
+}
+
+export function getEventInfo(id) {
+  return axios({
+    url: api.getEventInfo(id),
+    method: 'get'
+  })
+}
+
+export function addEventPropertyFile(id, data) {
+  return axios({
+    url: api.addEventPropertyFile(id),
+    method: 'post',
+    data
+  })
+}
+
+export function downloadEventFile(id) {
+  return axios({
+    url: api.downloadEventFile(id),
+    responseType: 'blob',
+    method: 'get'
   })
 }

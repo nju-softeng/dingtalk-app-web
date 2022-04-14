@@ -17,10 +17,10 @@
         </div>
         <div class="fileBody">
           <div v-if="pictureFileList.length !== 0">
-            <div v-for="file in pictureFileList" :key="file.url" class="hoverFile">
+            <div v-for="(file, index) in pictureFileList" :key="file.url" class="hoverFile">
               <div class="hoverButtons">
                 <el-button class="hoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
-                <el-button class="hoverBtn deleteBtn" icon="el-icon-delete" />
+                <el-button class="hoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Picture')" />
               </div>
               <el-image :src="file.url" fit="contain" lazy />
             </div>
@@ -64,10 +64,10 @@
           <el-button type="primary" @click="uploadType='活动文档'; acceptFileType = '.doc,.docx,.pdf,.md'; updateFileType = 'Doc'; uploadFileVisible = true"> 上传文件</el-button>
         </div>
         <div class="fileBody">
-          <div v-show="haveMoreDoc" v-if="docFileList.length !== 0">
-            <el-image v-for="file in pictureFileList" :key="file.url" :src="file.url" fit="contain" lazy />
-            <div class="moreFile">
-              <el-button class="moreBtn">
+          <div v-if="docFileList.length !== 0">
+            <el-image v-for="file in docFileList" :key="file.url" :src="file.url" fit="contain" lazy />
+            <div v-show="haveMoreDoc" class="moreFile">
+              <el-button class="moreBtn" @click="getMoreDoc">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { getEventInfo, addEventPropertyFile, downloadEventFile } from '@/api/eventProperty'
+import { getEventInfo, addEventPropertyFile, downloadEventFile, deleteEventPropertyFile } from '@/api/eventProperty'
 
 export default {
   name: 'EventDetail',
@@ -140,7 +140,7 @@ export default {
       uploadType: '活动图片',
       acceptFileType: '.jpg,.png',
       updateFileType: 'Picture',
-      haveMorePic: true,
+      haveMorePic: false,
       haveMoreVideo: false,
       haveMoreDoc: false,
       pageMax: 5
@@ -247,7 +247,35 @@ export default {
         a.click()
       })
     },
+    deleteFile(file, index, type) {
+      deleteEventPropertyFile(this.id, file.id, type).then(async res => {
+        if (res) {
+          this.$notify.success('删除完成！')
+          switch (type) {
+            case 'Picture':
+              this.pictureFileList.splice(index, 1)
+              break
+            case 'Video':
+              this.videoFileList.splice(index, 1)
+              break
+            case 'Doc':
+              this.docFileList.splice(index, 1)
+              break
+          }
+          await this.refreshPictureList()
+          if (this.eventInfo.pictureFileList.length <= this.pageMax - 6) {
+            this.pageMax -= 6
+          }
+        }
+      }).catch(() => {
+        this.$notify.error('删除失败！')
+      })
+    },
     async refreshBeforeClose(done) {
+      await this.refreshPictureList()
+      return done(true)
+    },
+    async refreshPictureList() {
       const res = await getEventInfo(this.id)
       if (res) {
         this.eventInfo = res.data
@@ -264,7 +292,6 @@ export default {
         }])
       }
       this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
-      return done(true)
     }
   }
 }

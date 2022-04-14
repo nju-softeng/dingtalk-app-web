@@ -167,9 +167,9 @@ export default {
   },
   created() {
     getUserDetail().then(res => {
-      console.log(res)
+      // console.log(res)
       this.personalInfoForm = res.data
-      console.log(this.personalInfoForm)
+      // console.log(this.personalInfoForm)
     })
   },
   methods: {
@@ -241,7 +241,6 @@ export default {
         const a = document.createElement('a')
         a.download = this.personalInfoForm.leaseContractFileName
         a.href = url
-          console.log(a.href)
         a.click()
       })
     }

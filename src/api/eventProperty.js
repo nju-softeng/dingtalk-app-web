@@ -6,7 +6,8 @@ const api = {
   deleteEvent: (id) => `/event/${id}`,
   getEventInfo: (id) => `/event/${id}`,
   addEventPropertyFile: (id) => `/event/${id}/eventFile`,
-  downloadEventFile: (id) => `/eventFile/${id}`
+  downloadEventFile: (id) => `/eventFile/${id}`,
+  deleteEventPropertyFile: (eventId, eventFileId, type) => `/event/${eventId}/eventFile/${eventFileId}/eventFileType/${type}`
 }
 
 // 分页查询活动
@@ -54,5 +55,13 @@ export function downloadEventFile(id) {
     url: api.downloadEventFile(id),
     responseType: 'blob',
     method: 'get'
+  })
+}
+
+// 删除文件
+export function deleteEventPropertyFile(eventId, eventFileId, type) {
+  return axios({
+    url: api.deleteEventPropertyFile(eventId, eventFileId, type),
+    method: 'delete'
   })
 }

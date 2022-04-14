@@ -65,7 +65,10 @@
         </div>
         <div class="fileBody">
           <div v-if="docFileList.length !== 0">
-            <el-image v-for="file in docFileList" :key="file.url" :src="file.url" fit="contain" lazy />
+            <el-card v-for="file in docFileList" :key="file.url" lazy>
+              <i class="el-icon-document"/>
+              <p>{{ file.fileName }}</p>
+            </el-card>
             <div v-show="haveMoreDoc" class="moreFile">
               <el-button class="moreBtn" @click="getMoreDoc">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
@@ -151,6 +154,7 @@ export default {
     await getEventInfo(this.id).then(async res => {
       if (res) {
         this.eventInfo = res.data
+          console.log(this.eventInfo)
         for (let i = 0; i < this.pageMax && i < res.data.pictureFileList.length; i++) {
           await downloadEventFile(res.data.pictureFileList[i].id).then(result => {
             const binaryData = [result.data]

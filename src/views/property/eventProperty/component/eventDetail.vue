@@ -346,7 +346,7 @@ export default {
         this.eventInfo = res.data
       }
       const init = this.videoFileList.length
-      const end = this.eventInfo.videoFileList.length < init + this.videoEachPage ? this.eventInfo.videoFileList.length : init + this.videoEachPage
+      const end = this.eventInfo.videoFileList.length < this.videoPageMax ? this.eventInfo.videoFileList.length : this.videoPageMax
       this.videoFileList = this.videoFileList.concat(this.eventInfo.videoFileList.slice(init, end))
       this.haveMoreVideo = this.videoFileList.length < this.eventInfo.videoFileList.length
     },
@@ -356,7 +356,7 @@ export default {
         this.eventInfo = res.data
       }
       const init = this.docFileList.length
-      const end = this.eventInfo.docFileList.length < init + this.docEachPage ? this.eventInfo.docFileList.length : init + this.docEachPage
+      const end = this.eventInfo.docFileList.length < this.docPageMax ? this.eventInfo.docFileList.length : this.docPageMax
       this.docFileList = this.docFileList.concat(this.eventInfo.docFileList.slice(init, end))
       this.haveMoreDoc = this.docFileList.length < this.eventInfo.docFileList.length
     }

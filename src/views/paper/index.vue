@@ -262,7 +262,7 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload :file="file" @changeFile="changeFile" />
+                <file-upload v-if="professorPaperForm.id === null" :file="file" @changeFile="changeFile" />
                 <el-form-item prop="journal">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -676,8 +676,6 @@ export default {
       })
     },
     modifyInternalReview(form) {
-      console.log('modify!!!')
-      console.log(form)
       this.addReviewDialog = true
       this.addReviewContent = 'internalReview'
 

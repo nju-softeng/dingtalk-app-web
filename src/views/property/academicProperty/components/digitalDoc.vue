@@ -2,11 +2,11 @@
   <div>
     <div class="list">
       <el-table :data="list" class="tableClass">
-        <el-table-column label="组内评审文件"></el-table-column>
-        <el-table-column label="提交时文件"></el-table-column>
-        <el-table-column label="发表版本文件"></el-table-column>
-        <el-table-column label="发表版本LATEX文件"></el-table-column>
-        <el-table-column label="评审结果"></el-table-column>
+        <el-table-column label="组内评审文件" />
+        <el-table-column label="提交时文件" />
+        <el-table-column label="发表版本文件" />
+        <el-table-column label="发表版本LATEX文件" />
+        <el-table-column label="评审结果" />
       </el-table>
     </div>
   </div>
@@ -19,6 +19,11 @@ export default {
     return {
       list: []
     }
+  },
+  created() {
+    this.$router.push('/paper/index/internal').then(() => {
+      this.$message.success('已为你自动跳转至论文管理')
+    })
   }
 }
 </script>
@@ -28,15 +33,6 @@ export default {
     margin-top:16px;
     display:flex;
     justify-content:center;
-  }
-
-  .tableClass {
-    ::v-deep .el-table__fixed-right {
-      height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
-    }
-    ::v-deep .el-table__fixed-right::before {
-      height: 0px !important; //设置高优先，以覆盖内联样式
-    }
   }
 
   .list {

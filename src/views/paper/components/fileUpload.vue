@@ -4,6 +4,7 @@
     <el-upload
       ref="PaperUpload"
       v-model="innerFile"
+      :file-list="fileList"
       class="upload-demo"
       :on-change="handleFileChange"
       :on-remove="handleFileRemove"
@@ -37,7 +38,8 @@ export default {
   },
   data() {
     return {
-      innerFile: this.file
+      innerFile: this.file,
+      fileList: []
     }
   },
   methods: {
@@ -54,6 +56,10 @@ export default {
     handleFileRemove(file, fileList) {
       console.log(fileList)
       this.innerFile = null
+      this.$emit('changeFile', null)
+    },
+    handleClose() {
+      this.fileList = []
       this.$emit('changeFile', null)
     }
   }

@@ -35,10 +35,11 @@ export function getDissertationDetail(uid) {
 }
 
 // 上传毕业论文文件
-export function addDissertationFile(id) {
+export function addDissertationFile(id, data) {
   return axios({
     url: api.addDissertationFile(id),
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 

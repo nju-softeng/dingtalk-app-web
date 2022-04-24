@@ -90,7 +90,6 @@ export default {
       }
       const formData = new FormData()
       formData.append('file', file.raw)
-        console.log(formData.get('file'))
       formData.append('fileType', this.card.fileType)
       addDissertationFile(this.dissertationId, formData).then(() => {
         this.$notify({

@@ -3,13 +3,10 @@
     <div class="paper-box">
       <div class="action">
         <tabs v-model="activeTab">
-          <tab-pane label="文献数字文档" name="digitalDoc" />
           <tab-pane label="项目过程产物" name="projectProcess" />
           <tab-pane label="学生毕业论文" name="studentDissertation" />
+          <tab-pane label="文献数字文档" name="digitalDoc" />
         </tabs>
-        <div style="display: flex;justify-content: center; align-items: center">
-          <el-button type="primary" size="small" icon="el-icon-plus">新增{{buttonName}}</el-button>
-        </div>
       </div>
       <div>
         <component :is="activeTab" />
@@ -35,19 +32,16 @@ export default {
   },
   data() {
     return {
-      activeTab: 'digitalDoc'
+      activeTab: 'projectProcess'
     }
   },
   computed: {
-    buttonName() {
-      if (this.activeTab === 'digitalDoc') return '文献数字文档'
-      if (this.activeTab === 'projectProcess') return '项目过程产物'
-      else return '学生毕业论文'
-    }
   },
   created() {
     if (this.$route.params.type === 'digitalDoc') {
-      this.activeTab = 'digitalDoc'
+      this.$router.push('/paper/index/internal').then(() => {
+        this.$message.success('已为你自动跳转至论文管理')
+      })
     } else if (this.$route.params.type === 'projectProcess') {
       this.activeTab = 'projectProcess'
     } else if (this.$route.params.type === 'studentDissertation') {
@@ -64,30 +58,6 @@ export default {
     display: flex;
     justify-content: space-between;
     align-content: center;
-  }
-
-  .card {
-    width: 25vh;
-    height: 25vh;
-    margin: 10px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .dialog-footer {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .paper-form {
-    display: flex;
-  }
-
-  .dialog-content {
-    display: flex;
-    justify-content: center;
   }
 
   .app-container {

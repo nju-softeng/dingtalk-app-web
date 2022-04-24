@@ -7,17 +7,17 @@
           style="display: flex; justify-content: end; width: 100%; position: relative; bottom: 30px"
         >
           <el-button
-              v-if="haveDissertation"
-              type="primary"
-              icon="el-icon-edit-outline"
-              @click="goDetail(uid)"
+            v-if="haveDissertation"
+            type="primary"
+            icon="el-icon-edit-outline"
+            @click="goDetail(uid)"
           >跳转至我的论文
           </el-button>
           <el-button
-              v-else
-              type="primary"
-              icon="el-icon-plus"
-              @click="addDissertationDialog = true"
+            v-else
+            type="primary"
+            icon="el-icon-plus"
+            @click="addDissertationDialog = true"
           >添加我的毕业论文
           </el-button>
         </div>
@@ -196,11 +196,11 @@ export default {
       this.getAllDissertation(val)
       sessionStorage.setItem('external-cur-page', val)
     },
-      goDetail(id) {
-          this.$router.push({
-              path: '/property/academic/dissertation-detail/' + id
-          })
-      },
+    goDetail(id) {
+      this.$router.push({
+        path: '/property/academic/dissertation-detail/' + id
+      })
+    },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -223,6 +223,7 @@ export default {
                 type: 'success'
               })
               this.$refs.child.handleClose()
+              this.goDetail(this.uid)
             }).catch((err) => {
               console.log(err)
               this.loading = false

@@ -65,3 +65,26 @@ export function deleteEventPropertyFile(eventId, eventFileId, type) {
     method: 'delete'
   })
 }
+
+export function getEventInfo(id) {
+  return axios({
+    url: api.getEventInfo(id),
+    method: 'get'
+  })
+}
+
+export function addEventPropertyFile(id, data) {
+  return axios({
+    url: api.addEventPropertyFile(id),
+    method: 'post',
+    data
+  })
+}
+
+export function downloadEventFile(id) {
+  return axios({
+    url: api.downloadEventFile(id),
+    responseType: 'blob',
+    method: 'get'
+  })
+}

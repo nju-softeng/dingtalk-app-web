@@ -241,6 +241,7 @@ export default {
         const a = document.createElement('a')
         a.download = this.personalInfoForm.leaseContractFileName
         a.href = url
+          console.log(a.href)
         a.click()
       })
     }

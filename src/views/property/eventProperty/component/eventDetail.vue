@@ -531,7 +531,6 @@ export default {
     height: 160px;
     width: 23%;
   }
-
   .moreBtn {
     border: 0;
     height: 100%;

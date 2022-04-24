@@ -124,7 +124,7 @@ export default {
       addEventForm: {
         id: null,
         name: '',
-        year: 0,
+        year: null,
         type: '',
         path: ''
       },
@@ -199,7 +199,7 @@ export default {
     addNewEvent(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.addEventForm.path = '/Property/Event/' + this.addEventForm.year + '/' + this.addEventForm.name
+          this.addEventForm.path = 'Property/Event/' + this.addEventForm.year + '/' + this.addEventForm.name
           const formData = new FormData()
           formData.append('eventPropertyJsonStr', JSON.stringify(this.addEventForm))
           addEvent(formData).then(() => {
@@ -307,6 +307,7 @@ export default {
   .modifyBtn {
     padding: 2px 6px;
     border-radius: 5px;
+    margin-left: 16px;
   }
 
   .deleteBtn {

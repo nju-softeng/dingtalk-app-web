@@ -6,7 +6,8 @@ const api = {
   deleteEvent: (id) => `/event/${id}`,
   getEventInfo: (id) => `/event/${id}`,
   addEventPropertyFile: (id) => `/event/${id}/eventFile`,
-  downloadEventFile: (id) => `/eventFile/${id}`
+  downloadEventFile: (id) => `/eventFile/${id}`,
+  deleteEventPropertyFile: (eventId, eventFileId, type) => `/event/${eventId}/eventFile/${eventFileId}/eventFileType/${type}`
 }
 
 // 分页查询活动

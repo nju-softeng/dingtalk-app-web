@@ -131,7 +131,7 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
         year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择时间类型', trigger: 'blur' }]
+        type: [{ required: true, message: '请选择事件类型', trigger: 'blur' }]
       },
       options: [
         {

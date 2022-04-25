@@ -17,14 +17,14 @@
         </div>
         <div class="fileBody">
           <div v-if="pictureFileList.length !== 0">
-            <div v-for="file in pictureFileList" :key="file.url" class="hoverFile">
+            <div v-for="(file, index) in pictureFileList" :key="file.url" class="hoverFile picHoverFile">
               <div class="hoverButtons">
-                <el-button class="hoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
-                <el-button class="hoverBtn deleteBtn" icon="el-icon-delete" />
+                <el-button class="picHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="picHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Picture')" />
               </div>
               <el-image :src="file.url" fit="contain" lazy />
             </div>
-            <div v-show="haveMorePic" class="moreFile">
+            <div v-show="haveMorePic" class="moreFile picMoreFile">
               <el-button class="moreBtn" @click="getMorePicture">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
@@ -44,9 +44,16 @@
         </div>
         <div class="fileBody">
           <div v-if="videoFileList.length !== 0">
-            <el-image v-for="file in pictureFileList" :key="file.url" :src="file.url" fit="contain" lazy />
-            <div v-show="haveMoreVideo" class="moreFile">
-              <el-button class="moreBtn">
+            <el-card v-for="(file, index) in videoFileList" :key="file.url" body-style="padding: 0" class="hoverFile videoHoverFile">
+              <div class="hoverButtons">
+                <el-button class="videoHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="videoHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Video')" />
+              </div>
+              <i class="el-icon-video-camera videoIcon" />
+              <p class="videoName">{{ file.fileName }}</p>
+            </el-card>
+            <div v-show="haveMoreVideo" class="moreFile videoMoreFile">
+              <el-button class="moreBtn" @click="getMoreVideo">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
@@ -64,10 +71,17 @@
           <el-button type="primary" @click="uploadType='活动文档'; acceptFileType = '.doc,.docx,.pdf,.md'; updateFileType = 'Doc'; uploadFileVisible = true"> 上传文件</el-button>
         </div>
         <div class="fileBody">
-          <div v-show="haveMoreDoc" v-if="docFileList.length !== 0">
-            <el-image v-for="file in pictureFileList" :key="file.url" :src="file.url" fit="contain" lazy />
-            <div class="moreFile">
-              <el-button class="moreBtn">
+          <div v-if="docFileList.length !== 0">
+            <el-card v-for="(file, index) in docFileList" :key="file.url" body-style="padding: 0" class="hoverFile docHoverFile">
+              <div class="hoverButtons">
+                <el-button class="docHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="docHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Doc')" />
+              </div>
+                <i class="el-icon-document docIcon" />
+                <p class="docName">{{ file.fileName }}</p>
+            </el-card>
+            <div v-show="haveMoreDoc" class="moreFile docMoreFile">
+              <el-button class="moreBtn" @click="getMoreDoc">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
@@ -117,12 +131,15 @@
 </template>
 
 <script>
-import { getEventInfo, addEventPropertyFile, downloadEventFile } from '@/api/eventProperty'
+import { getEventInfo, addEventPropertyFile, downloadEventFile, deleteEventPropertyFile } from '@/api/eventProperty'
 
 export default {
   name: 'EventDetail',
   data() {
     return {
+      picEachPage: 6,
+      videoEachPage: 8,
+      docEachPage: 8,
       id: 0,
       typeConverter: ['项目会议', '团队组织/参与的活动', '实验室活动'],
       eventInfo: {
@@ -140,10 +157,12 @@ export default {
       uploadType: '活动图片',
       acceptFileType: '.jpg,.png',
       updateFileType: 'Picture',
-      haveMorePic: true,
+      haveMorePic: false,
       haveMoreVideo: false,
       haveMoreDoc: false,
-      pageMax: 5
+      picPageMax: 5,
+      videoPageMax: 7,
+      docPageMax: 7
     }
   },
   async created() {
@@ -151,7 +170,7 @@ export default {
     await getEventInfo(this.id).then(async res => {
       if (res) {
         this.eventInfo = res.data
-        for (let i = 0; i < this.pageMax && i < res.data.pictureFileList.length; i++) {
+        for (let i = 0; i < this.picPageMax && i < res.data.pictureFileList.length; i++) {
           await downloadEventFile(res.data.pictureFileList[i].id).then(result => {
             const binaryData = [result.data]
             const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.pictureFileList[i]) }))
@@ -162,11 +181,15 @@ export default {
             }])
           })
         }
+        this.videoFileList = this.eventInfo.videoFileList.slice(0, this.eventInfo.videoFileList.length < 7 ? this.eventInfo.videoFileList.length : 7)
+        this.docFileList = this.eventInfo.docFileList.slice(0, this.eventInfo.docFileList.length < 7 ? this.eventInfo.docFileList.length : 7)
       }
     }).catch(() => {
       this.$message.error('无法获取活动信息')
     })
     this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
+    this.haveMoreVideo = this.videoFileList.length < this.eventInfo.videoFileList.length
+    this.haveMoreDoc = this.docFileList.length < this.eventInfo.docFileList.length
   },
   methods: {
     getType(file) {
@@ -223,7 +246,7 @@ export default {
     },
     async getMorePicture() {
       const init = this.pictureFileList.length
-      for (let i = init; i < init + 6 && i < this.eventInfo.pictureFileList.length; i++) {
+      for (let i = init; i < init + this.picEachPage && i < this.eventInfo.pictureFileList.length; i++) {
         await downloadEventFile(this.eventInfo.pictureFileList[i].id).then(result => {
           const binaryData = [result.data]
           const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(this.eventInfo.pictureFileList[i]) }))
@@ -234,8 +257,22 @@ export default {
           }])
         })
       }
-      this.haveMorePic = this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
-      this.pageMax += 6
+      this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
+      this.picPageMax += this.picEachPage
+    },
+    async getMoreVideo() {
+      const init = this.videoFileList.length
+      const end = this.eventInfo.videoFileList.length < init + this.videoEachPage ? this.eventInfo.videoFileList.length : init + this.videoEachPage
+      this.videoFileList = this.videoFileList.concat(this.eventInfo.videoFileList.slice(init, end))
+      this.haveMoreVideo = this.videoFileList.length < this.eventInfo.videoFileList.length
+      this.videoPageMax += this.videoEachPage
+    },
+    async getMoreDoc() {
+      const init = this.docFileList.length
+      const end = this.eventInfo.docFileList.length < init + this.docEachPage ? this.eventInfo.docFileList.length : init + this.docEachPage
+      this.docFileList = this.docFileList.concat(this.eventInfo.docFileList.slice(init, end))
+      this.haveMoreDoc = this.docFileList.length < this.eventInfo.docFileList.length
+      this.docPageMax += this.docEachPage
     },
     downloadFile(file) {
       downloadEventFile(file.id).then(res => {
@@ -247,13 +284,51 @@ export default {
         a.click()
       })
     },
+    deleteFile(file, index, type) {
+      deleteEventPropertyFile(this.id, file.id, type).then(async res => {
+        if (res) {
+          this.$notify.success('删除完成！')
+          switch (type) {
+            case 'Picture':
+              this.pictureFileList.splice(index, 1)
+              await this.refreshPictureList()
+              if (this.eventInfo.pictureFileList.length <= this.picPageMax - this.picEachPage) {
+                this.picPageMax -= this.picEachPage
+              }
+              break
+            case 'Video':
+              this.videoFileList.splice(index, 1)
+              await this.refreshVideoList()
+              if (this.eventInfo.videoFileList.length <= this.videoPageMax - this.videoEachPage) {
+                this.picPageMax -= this.videoEachPage
+              }
+              break
+            case 'Doc':
+              this.docFileList.splice(index, 1)
+              await this.refreshDocList()
+              if (this.eventInfo.docFileList.length <= this.docPageMax - this.docEachPage) {
+                this.picPageMax -= this.docEachPage
+              }
+              break
+          }
+        }
+      }).catch(() => {
+        this.$notify.error('删除失败！')
+      })
+    },
     async refreshBeforeClose(done) {
+      await this.refreshPictureList()
+      await this.refreshVideoList()
+      await this.refreshDocList()
+      return done(true)
+    },
+    async refreshPictureList() {
       const res = await getEventInfo(this.id)
       if (res) {
         this.eventInfo = res.data
       }
       const init = this.pictureFileList.length
-      for (var i = init; i < this.pageMax && i < res.data.pictureFileList.length; i++) {
+      for (var i = init; i < this.picPageMax && i < res.data.pictureFileList.length; i++) {
         const result = await downloadEventFile(res.data.pictureFileList[i].id)
         const binaryData = [result.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.pictureFileList[i]) }))
@@ -264,7 +339,26 @@ export default {
         }])
       }
       this.haveMorePic = this.pictureFileList.length < this.eventInfo.pictureFileList.length
-      return done(true)
+    },
+    async refreshVideoList() {
+      const res = await getEventInfo(this.id)
+      if (res) {
+        this.eventInfo = res.data
+      }
+      const init = this.videoFileList.length
+      const end = this.eventInfo.videoFileList.length < this.videoPageMax ? this.eventInfo.videoFileList.length : this.videoPageMax
+      this.videoFileList = this.videoFileList.concat(this.eventInfo.videoFileList.slice(init, end))
+      this.haveMoreVideo = this.videoFileList.length < this.eventInfo.videoFileList.length
+    },
+    async refreshDocList() {
+      const res = await getEventInfo(this.id)
+      if (res) {
+        this.eventInfo = res.data
+      }
+      const init = this.docFileList.length
+      const end = this.eventInfo.docFileList.length < this.docPageMax ? this.eventInfo.docFileList.length : this.docPageMax
+      this.docFileList = this.docFileList.concat(this.eventInfo.docFileList.slice(init, end))
+      this.haveMoreDoc = this.docFileList.length < this.eventInfo.docFileList.length
     }
   }
 }
@@ -311,7 +405,7 @@ export default {
 
   .fileHead {
     font-size: larger;
-    margin: 0 0 10px 30px;
+    margin: 10px 0 10px 30px;
     display: flex;
     justify-content: space-between;
   }
@@ -322,12 +416,25 @@ export default {
   }
 
   .hoverFile {
-    width: 48%;
-    height: 380px;
     margin: 1%;
     position: relative;
     display: inline-block;
     overflow: hidden
+  }
+
+  .picHoverFile {
+    width: 48%;
+    height: 380px;
+  }
+
+  .videoHoverFile {
+    width: 23%;
+    height: 160px;
+  }
+
+  .docHoverFile {
+    width: 23%;
+    height: 160px;
   }
 
   .hoverButtons {
@@ -346,11 +453,33 @@ export default {
     align-items: center;
   }
 
-  .hoverBtn {
+  .picHoverBtn {
     height: 25%;
     width: 20%;
     margin: 5%;
     font-size: 500%;
+    background-color: rgba(0,0,0,0);
+    border: 0;
+    font-weight: bolder;
+    color: white;
+  }
+
+  .videoHoverBtn {
+    height: 50%;
+    width: 25%;
+    margin: 5%;
+    font-size: 300%;
+    background-color: rgba(0,0,0,0);
+    border: 0;
+    font-weight: bolder;
+    color: white;
+  }
+
+  .docHoverBtn {
+    height: 50%;
+    width: 25%;
+    margin: 5%;
+    font-size: 300%;
     background-color: rgba(0,0,0,0);
     border: 0;
     font-weight: bolder;
@@ -382,18 +511,51 @@ export default {
   }
 
   .moreFile {
-    height: 380px;
-    width: 48%;
     margin: 1%;
     position: relative;
     display: inline-block;
     overflow: hidden
   }
 
+  .picMoreFile {
+    height: 380px;
+    width: 48%;
+  }
+
+  .videoMoreFile {
+    height: 160px;
+    width: 23%;
+  }
+
+  .docMoreFile {
+    height: 160px;
+    width: 23%;
+  }
+
   .moreBtn {
     border: 0;
     height: 100%;
     width: 100%;
+  }
+
+  .videoIcon {
+    margin: 2em 2em 0 2em;
+  }
+
+  .videoName {
+    margin-left: 2em;
+    width: 80%;
+    word-break: break-word;
+  }
+
+  .docIcon {
+    margin: 2em 2em 0 2em;
+  }
+
+  .docName {
+    margin-left: 2em;
+    width: 80%;
+    word-break: break-word;
   }
 
 </style>

@@ -3,10 +3,52 @@
     <div class="processDetailWrap">
       <el-card shadow="hover" class="headCard">
         <el-page-header content="会议详情" style="margin-left: 50px" @back="goBack" />
-        <div class="processName">会议名称： {{ processInfo.name }}</div>
+        <el-tooltip
+          effect="dark"
+          content="邀请函"
+          placement="top"
+          class="invitation"
+        >
+          <div v-if="invitationSrc!=='PDF!'">
+            <div v-show="invitationSrc!==''" class="hoverDeleteInvitation">
+              <el-button icon="el-icon-delete" size="mini" class="deleteInvitation" @click="popoutConfirmDeleteInvitation" />
+            </div>
+            <el-image
+              style="width: 80px; height: 100px"
+              :src="invitationSrc"
+              :preview-src-list="[invitationSrc]"
+              fit="contain"
+            >
+              <div slot="error" class="addInvitation">
+                <el-upload
+                  class="invitationUploader"
+                  action=""
+                  :show-file-list="false"
+                  style="width: 80px; height: 100px"
+                  icon="el-icon-plus"
+                  :http-request="handleFileUpload"
+                  accept=".jpg,.png,.pdf"
+                  :before-upload="changeToInvitation"
+                >
+                  <i class="el-icon-plus invitationUploaderIcon" />
+                </el-upload>
+              </div>
+            </el-image>
+          </div>
+          <div v-else>
+            <div class="hoverDeleteInvitation">
+              <el-button icon="el-icon-delete" size="mini" class="deleteInvitation" @click="popoutConfirmDeleteInvitation" />
+            </div>
+            <div class="invitationPdf">
+              <i class="el-icon-s-claim" /><br>
+              <p class="invitationPdfName">
+                {{ processInfo.invitationFile.fileName }}
+              </p>
+            </div>
+          </div>
+        </el-tooltip>
+        <div class="processName">会议名称： {{ processInfo.conferenceName }}</div>
         <div class="processOtherAttributes">
-          <div>{{ typeConverter[processInfo.type] }}</div>
-          <el-divider direction="vertical" class="divider" />
           <div class="processYear">年份： {{ processInfo.year }}年</div>
         </div>
       </el-card>
@@ -17,15 +59,15 @@
         </div>
         <div class="fileBody">
           <div v-if="personalPhotoFileList.length !== 0">
-            <div v-for="(file, index) in personalPhotoFileList" :key="file.url" class="hoverFile picHoverFile">
+            <div v-for="(file, index) in personalPhotoFileList" :key="file.url" class="hoverFile personalPhotoHoverFile">
               <div class="hoverButtons">
-                <el-button class="picHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
-                <el-button class="picHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Picture')" />
+                <el-button class="personalPhotoHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="personalPhotoHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'personalPhotoFile')" />
               </div>
               <el-image :src="file.url" fit="contain" lazy />
             </div>
-            <div v-show="haveMorePersonalPhoto" class="moreFile picMoreFile">
-              <el-button class="moreBtn" @click="getMorePicture">
+            <div v-show="haveMorePersonalPhoto" class="moreFile personalPhotoMoreFile">
+              <el-button class="moreBtn" @click="getMorePersonalPhoto">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
@@ -44,16 +86,16 @@
         </div>
         <div class="fileBody">
           <div v-if="conferencePhotoFileList.length !== 0">
-            <el-card v-for="(file, index) in conferencePhotoFileList" :key="file.url" body-style="padding: 0" class="hoverFile videoHoverFile">
+            <el-card v-for="(file, index) in conferencePhotoFileList" :key="file.url" body-style="padding: 0" class="hoverFile conferencePhotoHoverFile">
               <div class="hoverButtons">
-                <el-button class="videoHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
-                <el-button class="videoHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Video')" />
+                <el-button class="conferencePhotoHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
+                <el-button class="conferencePhotoHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'conferencePhotoFile')" />
               </div>
-              <i class="el-icon-video-camera videoIcon" />
-              <p class="videoName">{{ file.fileName }}</p>
+              <i class="el-icon-video-camera conferencePhotoIcon" />
+              <p class="conferencePhotoName">{{ file.fileName }}</p>
             </el-card>
-            <div v-show="haveMoreConferencePhoto" class="moreFile videoMoreFile">
-              <el-button class="moreBtn" @click="getMoreVideo">
+            <div v-show="haveMoreConferencePhoto" class="moreFile conferencePhotoMoreFile">
+              <el-button class="moreBtn" @click="getMoreConferencePhoto">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
@@ -67,32 +109,8 @@
           </div>
         </div>
         <div class="fileHead">
-          <div>会议文档</div>
-          <el-button type="primary" @click="uploadType='会议文档'; acceptFileType = '.doc,.docx,.pdf,.md'; updateFileType = 'Doc'; uploadFileVisible = true"> 上传文件</el-button>
-        </div>
-        <div class="fileBody">
-          <div v-if="docFileList.length !== 0">
-            <el-card v-for="(file, index) in docFileList" :key="file.url" body-style="padding: 0" class="hoverFile docHoverFile">
-              <div class="hoverButtons">
-                <el-button class="docHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
-                <el-button class="docHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'Doc')" />
-              </div>
-              <i class="el-icon-document docIcon" />
-              <p class="docName">{{ file.fileName }}</p>
-            </el-card>
-            <div v-show="haveMoreDoc" class="moreFile docMoreFile">
-              <el-button class="moreBtn" @click="getMoreDoc">
-                <i class="el-icon-more" style="font-size: 30px" /><br>
-                More
-              </el-button>
-            </div>
-          </div>
-          <div v-else class="null">
-            <svg-icon icon-class="null" style="font-size:32px" />
-            <div style="font-size:13px;height:20px;color:rgba(0, 0, 0, 0.45);">
-              暂无会议文档！
-            </div>
-          </div>
+          <div>会议PPT</div>
+          <el-button type="primary" @click="uploadType='会议PPT'; acceptFileType = '.ppt,.pptx'; updateFileType = 'PPTFile'; uploadFileVisible = true"> 上传文件</el-button>
         </div>
       </el-card>
     </div>
@@ -106,9 +124,8 @@
         <div style="display: inline">请选择文件类型：</div>
         <div style="display: inline">
           <el-radio-group v-model="uploadType" fill="#409EFF" text-color="#ffffff" @change="handleTypeChange">
-            <el-radio-button label="会议图片" />
-            <el-radio-button label="会议视频" />
-            <el-radio-button label="会议文档" />
+            <el-radio-button label="个人参会照片" />
+            <el-radio-button label="参会场地宣传用照片" />
           </el-radio-group>
         </div>
       </div>
@@ -136,41 +153,39 @@ export default {
   name: 'ProcessDetail',
   data() {
     return {
-      picEachPage: 6,
-      videoEachPage: 8,
-      docEachPage: 8,
+      personalPhotoEachPage: 6,
+      conferencePhotoEachPage: 6,
       id: 0,
-      typeConverter: ['项目会议', '团队组织/参与的会议', '实验室会议'],
+      invitationSrc: '',
       processInfo: {
-        name: '无会议名！',
+        id: -1,
+        conferenceName: '无会议名！',
         year: 2000,
-        type: 0,
+        filePath: '',
+        user: null,
+        invitationFile: null,
+        PPTFile: null,
         personalPhotoFileList: [],
-        conferencePhotoFileList: [],
-        docFileList: []
+        conferencePhotoFileList: []
       },
       personalPhotoFileList: [],
       conferencePhotoFileList: [],
-      docFileList: [],
       uploadFileVisible: false,
       uploadType: '会议图片',
       acceptFileType: '.jpg,.png',
-      updateFileType: 'Picture',
+      updateFileType: 'personalPhotoFile',
       haveMorePersonalPhoto: false,
       haveMoreConferencePhoto: false,
-      haveMoreDoc: false,
-      picPageMax: 5,
-      videoPageMax: 7,
-      docPageMax: 7
+      personalPhotoPageMax: 5,
+      conferencePhotoPageMax: 5
     }
   },
   async created() {
     this.id = this.$route.params.id
     await getProcessPropertyInfo(this.id).then(async res => {
       if (res) {
-          console.log(res)
         this.processInfo = res.data
-        for (let i = 0; i < this.picPageMax && i < res.data.personalPhotoFileList.length; i++) {
+        for (let i = 0; i < this.personalPhotoPageMax && i < res.data.personalPhotoFileList.length; i++) {
           await downloadProcessFile(res.data.personalPhotoFileList[i].id).then(result => {
             const binaryData = [result.data]
             const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.personalPhotoFileList[i]) }))
@@ -181,15 +196,22 @@ export default {
             }])
           })
         }
-        this.conferencePhotoFileList = this.processInfo.conferencePhotoFileList.slice(0, this.processInfo.conferencePhotoFileList.length < 7 ? this.processInfo.conferencePhotoFileList.length : 7)
-        this.docFileList = this.processInfo.docFileList.slice(0, this.processInfo.docFileList.length < 7 ? this.processInfo.docFileList.length : 7)
+        if (res.data.invitationFile) {
+          if (res.data.invitationFile.fileName.split('.').slice(-1)[0] === 'pdf') {
+            this.invitationSrc = 'PDF!'
+          } else {
+            const result = await downloadProcessFile(res.data.invitationFile.id)
+            const binaryData = [result.data]
+            this.invitationSrc = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.invitationFile) }))
+          }
+        }
       }
-    }).catch(() => {
+    }).catch(err => {
+      console.log(err)
       this.$message.error('无法获取会议信息')
     })
     this.haveMorePersonalPhoto = this.personalPhotoFileList.length < this.processInfo.personalPhotoFileList.length
     this.haveMoreConferencePhoto = this.conferencePhotoFileList.length < this.processInfo.conferencePhotoFileList.length
-    this.haveMoreDoc = this.docFileList.length < this.processInfo.docFileList.length
   },
   methods: {
     getType(file) {
@@ -198,31 +220,28 @@ export default {
         type = 'text/x-markdown'
       } else if (file.fileName.split('.')[-1] === '.pdf') {
         type = 'application/pdf'
-      } else if (file.fileName.split('.')[-1] === '.doc') {
-        type = 'application/msword'
-      } else if (file.fileName.split('.')[-1] === '.docx') {
-        type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
       } else if (file.fileName.split('.')[-1] === '.jpg') {
         type = 'image/jpeg'
       } else if (file.fileName.split('.')[-1] === '.png') {
         type = 'image/png'
-      } else if (file.fileName.split('.')[-1] === '.mp4') {
-        type = 'video/mp4'
-      } else if (file.fileName.split('.')[-1] === '.avi') {
-        type = 'video/x-msvideo'
       }
       return type
     },
     goBack() {
-      this.$router.push('/property/process/')
+      this.$router.push('/property/academic/process')
     },
     async handleFileUpload(data) {
       const fd = new FormData()
-      fd.append('processPropertyFile', data.file)
+      fd.append('file', data.file)
       fd.append('fileType', this.updateFileType)
       const res1 = await addProcessFile(this.id, fd)
       if (res1) {
         this.$notify.success('上传成功!')
+        if (this.updateFileType === 'invitationFile') {
+          this.refreshInvitation()
+        } else if (this.updateFileType === 'PPTFile') {
+          this.refreshPPT()
+        }
       } else {
         this.$notify.error('上传失败!')
       }
@@ -230,23 +249,19 @@ export default {
     },
     handleTypeChange(chosenLabel) {
       switch (chosenLabel) {
-        case '会议图片':
+        case '个人参会照片':
           this.acceptFileType = '.jpg,.png'
-          this.updateFileType = 'Picture'
+          this.updateFileType = 'personalPhotoFile'
           break
-        case '会议视频':
-          this.acceptFileType = '.mp4,.avi'
-          this.updateFileType = 'Video'
-          break
-        case '会议文档':
-          this.acceptFileType = '.doc,.docx,.pdf,.md'
-          this.updateFileType = 'Doc'
+        case '参会地宣传用照片':
+          this.acceptFileType = '.jpg,.png'
+          this.updateFileType = 'conferencePhotoFile'
           break
       }
     },
-    async getMorePicture() {
+    async getMorePersonalPhoto() {
       const init = this.personalPhotoFileList.length
-      for (let i = init; i < init + this.picEachPage && i < this.processInfo.personalPhotoFileList.length; i++) {
+      for (let i = init; i < init + this.personalPhotoEachPage && i < this.processInfo.personalPhotoFileList.length; i++) {
         await downloadProcessFile(this.processInfo.personalPhotoFileList[i].id).then(result => {
           const binaryData = [result.data]
           const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(this.processInfo.personalPhotoFileList[i]) }))
@@ -258,21 +273,14 @@ export default {
         })
       }
       this.haveMorePersonalPhoto = this.personalPhotoFileList.length < this.processInfo.personalPhotoFileList.length
-      this.picPageMax += this.picEachPage
+      this.personalPhotoPageMax += this.personalPhotoEachPage
     },
-    async getMoreVideo() {
+    async getMoreConferencePhoto() {
       const init = this.conferencePhotoFileList.length
-      const end = this.processInfo.conferencePhotoFileList.length < init + this.videoEachPage ? this.processInfo.conferencePhotoFileList.length : init + this.videoEachPage
+      const end = this.processInfo.conferencePhotoFileList.length < init + this.conferencePhotoEachPage ? this.processInfo.conferencePhotoFileList.length : init + this.conferencePhotoEachPage
       this.conferencePhotoFileList = this.conferencePhotoFileList.concat(this.processInfo.conferencePhotoFileList.slice(init, end))
       this.haveMoreConferencePhoto = this.conferencePhotoFileList.length < this.processInfo.conferencePhotoFileList.length
-      this.videoPageMax += this.videoEachPage
-    },
-    async getMoreDoc() {
-      const init = this.docFileList.length
-      const end = this.processInfo.docFileList.length < init + this.docEachPage ? this.processInfo.docFileList.length : init + this.docEachPage
-      this.docFileList = this.docFileList.concat(this.processInfo.docFileList.slice(init, end))
-      this.haveMoreDoc = this.docFileList.length < this.processInfo.docFileList.length
-      this.docPageMax += this.docEachPage
+      this.conferencePhotoPageMax += this.conferencePhotoEachPage
     },
     downloadFile(file) {
       downloadProcessFile(file.id).then(res => {
@@ -289,25 +297,18 @@ export default {
         if (res) {
           this.$notify.success('删除完成！')
           switch (type) {
-            case 'Picture':
+            case 'personalPhoto':
               this.personalPhotoFileList.splice(index, 1)
-              await this.refreshPictureList()
-              if (this.processInfo.personalPhotoFileList.length <= this.picPageMax - this.picEachPage) {
-                this.picPageMax -= this.picEachPage
+              await this.refreshPersonalPhotoList()
+              if (this.processInfo.personalPhotoFileList.length <= this.personalPhotoPageMax - this.personalPhotoEachPage) {
+                this.personalPhotoPageMax -= this.personalPhotoEachPage
               }
               break
-            case 'Video':
+            case 'ConferencePhotoFile':
               this.conferencePhotoFileList.splice(index, 1)
-              await this.refreshVideoList()
-              if (this.processInfo.conferencePhotoFileList.length <= this.videoPageMax - this.videoEachPage) {
-                this.picPageMax -= this.videoEachPage
-              }
-              break
-            case 'Doc':
-              this.docFileList.splice(index, 1)
-              await this.refreshDocList()
-              if (this.processInfo.docFileList.length <= this.docPageMax - this.docEachPage) {
-                this.picPageMax -= this.docEachPage
+              await this.refreshConferencePhotoList()
+              if (this.processInfo.conferencePhotoFileList.length <= this.conferencePhotoPageMax - this.conferencePhotoEachPage) {
+                this.personalPhotoPageMax -= this.conferencePhotoEachPage
               }
               break
           }
@@ -317,18 +318,17 @@ export default {
       })
     },
     async refreshBeforeClose(done) {
-      await this.refreshPictureList()
-      await this.refreshVideoList()
-      await this.refreshDocList()
+      await this.refreshPersonalPhotoList()
+      await this.refreshConferencePhotoList()
       return done(true)
     },
-    async refreshPictureList() {
+    async refreshPersonalPhotoList() {
       const res = await getProcessPropertyInfo(this.id)
       if (res) {
         this.processInfo = res.data
       }
       const init = this.personalPhotoFileList.length
-      for (var i = init; i < this.picPageMax && i < res.data.personalPhotoFileList.length; i++) {
+      for (var i = init; i < this.personalPhotoPageMax && i < res.data.personalPhotoFileList.length; i++) {
         const result = await downloadProcessFile(res.data.personalPhotoFileList[i].id)
         const binaryData = [result.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.personalPhotoFileList[i]) }))
@@ -340,25 +340,69 @@ export default {
       }
       this.haveMorePersonalPhoto = this.personalPhotoFileList.length < this.processInfo.personalPhotoFileList.length
     },
-    async refreshVideoList() {
+    async refreshConferencePhotoList() {
       const res = await getProcessPropertyInfo(this.id)
       if (res) {
         this.processInfo = res.data
       }
       const init = this.conferencePhotoFileList.length
-      const end = this.processInfo.conferencePhotoFileList.length < this.videoPageMax ? this.processInfo.conferencePhotoFileList.length : this.videoPageMax
+      const end = this.processInfo.conferencePhotoFileList.length < this.conferencePhotoPageMax ? this.processInfo.conferencePhotoFileList.length : this.conferencePhotoPageMax
       this.conferencePhotoFileList = this.conferencePhotoFileList.concat(this.processInfo.conferencePhotoFileList.slice(init, end))
       this.haveMoreConferencePhoto = this.conferencePhotoFileList.length < this.processInfo.conferencePhotoFileList.length
     },
-    async refreshDocList() {
+    changeToInvitation() {
+      this.updateFileType = 'invitationFile'
+    },
+    async refreshInvitation() {
+      const res = await getProcessPropertyInfo(this.id)
+      if (res) {
+        this.processInfo = res.data
+        if (res.data.invitationFile) {
+          if (res.data.invitationFile.fileName.split('.').slice(-1)[0] === 'pdf') {
+            this.invitationSrc = 'PDF!'
+          } else {
+            const result = await downloadProcessFile(res.data.invitationFile.id)
+            const binaryData = [result.data]
+            this.invitationSrc = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.invitationFile) }))
+          }
+        } else {
+          this.invitationSrc = ''
+        }
+      }
+    },
+    async refreshPPT() {
       const res = await getProcessPropertyInfo(this.id)
       if (res) {
         this.processInfo = res.data
       }
-      const init = this.docFileList.length
-      const end = this.processInfo.docFileList.length < this.docPageMax ? this.processInfo.docFileList.length : this.docPageMax
-      this.docFileList = this.docFileList.concat(this.processInfo.docFileList.slice(init, end))
-      this.haveMoreDoc = this.docFileList.length < this.processInfo.docFileList.length
+    },
+    popoutConfirmDeleteInvitation() {
+      this.$confirm('确定要永久删除邀请函?', '删除邀请函', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteProcessFile(this.processInfo.id, this.processInfo.invitationFile.id, 'invitationFile').then(res => {
+          if (res) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.refreshInvitation()
+          }
+        }).catch(err => {
+          this.$message({
+            type: 'error',
+            message: '删除失败!'
+          })
+          console.log(err)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
@@ -394,10 +438,6 @@ export default {
     color: #646464;
   }
 
-  .divider {
-    height: 16px;
-  }
-
   .bodyCard {
     border-radius: 10px;
     margin-top: 36px;
@@ -422,17 +462,12 @@ export default {
     overflow: hidden
   }
 
-  .picHoverFile {
+  .personalPhotoHoverFile {
     width: 48%;
     height: 380px;
   }
 
-  .videoHoverFile {
-    width: 23%;
-    height: 160px;
-  }
-
-  .docHoverFile {
+  .conferencePhotoHoverFile {
     width: 23%;
     height: 160px;
   }
@@ -453,7 +488,35 @@ export default {
     align-items: center;
   }
 
-  .picHoverBtn {
+  .hoverDeleteInvitation {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    margin-left: 64px;
+    opacity: 36%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .hoverDeleteInvitation:hover {
+    opacity: 100%;
+  }
+
+  .deleteInvitation {
+    background-color: rgba(0,0,0,0);
+    font-weight: bolder;
+    border: none;
+    color: red;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    padding: 0;
+  }
+
+  .personalPhotoHoverBtn {
     height: 25%;
     width: 20%;
     margin: 5%;
@@ -464,18 +527,7 @@ export default {
     color: white;
   }
 
-  .videoHoverBtn {
-    height: 50%;
-    width: 25%;
-    margin: 5%;
-    font-size: 300%;
-    background-color: rgba(0,0,0,0);
-    border: 0;
-    font-weight: bolder;
-    color: white;
-  }
-
-  .docHoverBtn {
+  .conferencePhotoHoverBtn {
     height: 50%;
     width: 25%;
     margin: 5%;
@@ -507,7 +559,11 @@ export default {
   }
 
   .fileUpload {
-    text-align: center;
+    width: 27vw;
+  }
+
+  /deep/ .el-upload-dragger {
+    width: 27vw;
   }
 
   .moreFile {
@@ -517,17 +573,12 @@ export default {
     overflow: hidden
   }
 
-  .picMoreFile {
+  .personalPhotoMoreFile {
     height: 380px;
     width: 48%;
   }
 
-  .videoMoreFile {
-    height: 160px;
-    width: 23%;
-  }
-
-  .docMoreFile {
+  .conferencePhotoMoreFile {
     height: 160px;
     width: 23%;
   }
@@ -538,23 +589,50 @@ export default {
     width: 100%;
   }
 
-  .videoIcon {
+  .conferencePhotoIcon {
     margin: 2em 2em 0 2em;
   }
 
-  .videoName {
+  .conferencePhotoName {
     margin-left: 2em;
     width: 80%;
     word-break: break-word;
   }
 
-  .docIcon {
-    margin: 2em 2em 0 2em;
+  .invitation {
+    border: 2px dashed #d9d9d9;
+    float: right;
+    width: 84px;
+    height: 104px;
+    margin: auto 100px 10px auto
   }
 
-  .docName {
-    margin-left: 2em;
-    width: 80%;
-    word-break: break-word;
+  .invitationUploader {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .invitationUploaderIcon {
+    width: 80px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    color: #7e7e7e;
+  }
+
+  .invitationPdf {
+    padding-top: 10px;
+    width: 80px;
+    height: 100px;
+    display: block;
+    text-align: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .invitationPdfName {
+    padding: 2px;
+    font-size: 13px;
+    margin: 0;
   }
 </style>

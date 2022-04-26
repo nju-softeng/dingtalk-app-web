@@ -86,14 +86,13 @@
         </div>
         <div class="fileBody">
           <div v-if="conferencePhotoFileList.length !== 0">
-            <el-card v-for="(file, index) in conferencePhotoFileList" :key="file.url" body-style="padding: 0" class="hoverFile conferencePhotoHoverFile">
+            <div v-for="(file, index) in conferencePhotoFileList" :key="file.url" class="hoverFile conferencePhotoHoverFile">
               <div class="hoverButtons">
                 <el-button class="conferencePhotoHoverBtn downloadBtn" icon="el-icon-download" @click="downloadFile(file)" />
                 <el-button class="conferencePhotoHoverBtn deleteBtn" icon="el-icon-delete" @click="deleteFile(file, index, 'conferencePhotoFile')" />
               </div>
-              <i class="el-icon-video-camera conferencePhotoIcon" />
-              <p class="conferencePhotoName">{{ file.fileName }}</p>
-            </el-card>
+              <el-image :src="file.url" fit="contain" lazy />
+            </div>
             <div v-show="haveMoreConferencePhoto" class="moreFile conferencePhotoMoreFile">
               <el-button class="moreBtn" @click="getMoreConferencePhoto">
                 <i class="el-icon-more" style="font-size: 30px" /><br>
@@ -110,7 +109,23 @@
         </div>
         <div class="fileHead">
           <div>会议PPT</div>
-          <el-button type="primary" @click="uploadType='会议PPT'; acceptFileType = '.ppt,.pptx'; updateFileType = 'PPTFile'; uploadFileVisible = true"> 上传文件</el-button>
+        </div>
+        <div style="height: 220px;overflow-y: auto;display: block">
+          <el-upload
+            class="pptUploader"
+            action=""
+            :show-file-list="false"
+            :http-request="handleFileUpload"
+            accept=".ppt,.pptx"
+            :before-upload="changeToPPT"
+          >
+            <el-card v-if="processInfo.pptfile" body-style="padding: 20px 0" shadow="always" class="pptCard">
+              <i class="el-icon-document" style="font-size: 60px" /><br>
+              <p style="font-size: 16px">{{ processInfo.pptfile.fileName }}</p>
+            </el-card>
+            <i v-else class="el-icon-plus pptUploaderIcon" />
+          </el-upload>
+          <el-button class="pptDownload" size="mini" icon="el-icon-download" @click="downloadPPT" />
         </div>
       </el-card>
     </div>
@@ -125,7 +140,7 @@
         <div style="display: inline">
           <el-radio-group v-model="uploadType" fill="#409EFF" text-color="#ffffff" @change="handleTypeChange">
             <el-radio-button label="个人参会照片" />
-            <el-radio-button label="参会场地宣传用照片" />
+            <el-radio-button label="参会地宣传用照片" />
           </el-radio-group>
         </div>
       </div>
@@ -164,7 +179,7 @@ export default {
         filePath: '',
         user: null,
         invitationFile: null,
-        PPTFile: null,
+        pptfile: null,
         personalPhotoFileList: [],
         conferencePhotoFileList: []
       },
@@ -196,6 +211,17 @@ export default {
             }])
           })
         }
+        for (let i = 0; i < this.conferencePhotoPageMax && i < res.data.conferencePhotoFileList.length; i++) {
+          await downloadProcessFile(res.data.conferencePhotoFileList[i].id).then(result => {
+            const binaryData = [result.data]
+            const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.conferencePhotoFileList[i]) }))
+            this.conferencePhotoFileList = this.conferencePhotoFileList.concat([{
+              id: res.data.conferencePhotoFileList[i].id,
+              fileName: res.data.conferencePhotoFileList[i].fileName,
+              url: url
+            }])
+          })
+        }
         if (res.data.invitationFile) {
           if (res.data.invitationFile.fileName.split('.').slice(-1)[0] === 'pdf') {
             this.invitationSrc = 'PDF!'
@@ -216,8 +242,10 @@ export default {
   methods: {
     getType(file) {
       let type
-      if (file.fileName.split('.')[-1] === '.md') {
-        type = 'text/x-markdown'
+      if (file.fileName.split('.')[-1] === '.ppt') {
+        type = 'application/vnd.ms-powerpoint'
+      } else if (file.fileName.split('.')[-1] === '.pptx') {
+        type = 'application/vnd.openxmlformats-officedoucment.presentationml.presentation'
       } else if (file.fileName.split('.')[-1] === '.pdf') {
         type = 'application/pdf'
       } else if (file.fileName.split('.')[-1] === '.jpg') {
@@ -277,8 +305,17 @@ export default {
     },
     async getMoreConferencePhoto() {
       const init = this.conferencePhotoFileList.length
-      const end = this.processInfo.conferencePhotoFileList.length < init + this.conferencePhotoEachPage ? this.processInfo.conferencePhotoFileList.length : init + this.conferencePhotoEachPage
-      this.conferencePhotoFileList = this.conferencePhotoFileList.concat(this.processInfo.conferencePhotoFileList.slice(init, end))
+      for (let i = init; i < init + this.conferencePhotoEachPage && i < this.processInfo.conferencePhotoFileList.length; i++) {
+        await downloadProcessFile(this.processInfo.conferencePhotoFileList[i].id).then(result => {
+          const binaryData = [result.data]
+          const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(this.processInfo.conferencePhotoFileList[i]) }))
+          this.conferencePhotoFileList = this.conferencePhotoFileList.concat([{
+            id: this.processInfo.conferencePhotoFileList[i].id,
+            fileName: this.processInfo.conferencePhotoFileList[i].fileName,
+            url: url
+          }])
+        })
+      }
       this.haveMoreConferencePhoto = this.conferencePhotoFileList.length < this.processInfo.conferencePhotoFileList.length
       this.conferencePhotoPageMax += this.conferencePhotoEachPage
     },
@@ -346,12 +383,23 @@ export default {
         this.processInfo = res.data
       }
       const init = this.conferencePhotoFileList.length
-      const end = this.processInfo.conferencePhotoFileList.length < this.conferencePhotoPageMax ? this.processInfo.conferencePhotoFileList.length : this.conferencePhotoPageMax
-      this.conferencePhotoFileList = this.conferencePhotoFileList.concat(this.processInfo.conferencePhotoFileList.slice(init, end))
+      for (var i = init; i < this.conferencePhotoPageMax && i < res.data.conferencePhotoFileList.length; i++) {
+        const result = await downloadProcessFile(res.data.conferencePhotoFileList[i].id)
+        const binaryData = [result.data]
+        const url = window.URL.createObjectURL(new Blob(binaryData, { type: this.getType(res.data.conferencePhotoFileList[i]) }))
+        this.conferencePhotoFileList = this.conferencePhotoFileList.concat([{
+          id: res.data.conferencePhotoFileList[i].id,
+          fileName: res.data.conferencePhotoFileList[i].fileName,
+          url: url
+        }])
+      }
       this.haveMoreConferencePhoto = this.conferencePhotoFileList.length < this.processInfo.conferencePhotoFileList.length
     },
     changeToInvitation() {
       this.updateFileType = 'invitationFile'
+    },
+    changeToPPT() {
+      this.updateFileType = 'PPTFile'
     },
     async refreshInvitation() {
       const res = await getProcessPropertyInfo(this.id)
@@ -403,6 +451,9 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    downloadPPT() {
+      this.downloadFile(this.processInfo.pptfile)
     }
   }
 }
@@ -468,8 +519,8 @@ export default {
   }
 
   .conferencePhotoHoverFile {
-    width: 23%;
-    height: 160px;
+    width: 48%;
+    height: 380px;
   }
 
   .hoverButtons {
@@ -528,10 +579,10 @@ export default {
   }
 
   .conferencePhotoHoverBtn {
-    height: 50%;
-    width: 25%;
+    height: 25%;
+    width: 20%;
     margin: 5%;
-    font-size: 300%;
+    font-size: 500%;
     background-color: rgba(0,0,0,0);
     border: 0;
     font-weight: bolder;
@@ -579,24 +630,14 @@ export default {
   }
 
   .conferencePhotoMoreFile {
-    height: 160px;
-    width: 23%;
+    height: 380px;
+    width: 48%;
   }
 
   .moreBtn {
     border: 0;
     height: 100%;
     width: 100%;
-  }
-
-  .conferencePhotoIcon {
-    margin: 2em 2em 0 2em;
-  }
-
-  .conferencePhotoName {
-    margin-left: 2em;
-    width: 80%;
-    word-break: break-word;
   }
 
   .invitation {
@@ -634,5 +675,53 @@ export default {
     padding: 2px;
     font-size: 13px;
     margin: 0;
+  }
+
+  .pptUploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 180px;
+    height: 180px;
+    margin-left: 80px;
+    text-align: center;
+    padding-top: 6px;
+  }
+
+  .pptUploader :hover {
+    background-color: #f5f5f5;
+  }
+
+  .pptUploaderIcon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 161px;
+    height: 161px;
+    line-height: 161px;
+    text-align: center;
+  }
+
+  .pptCard {
+    border: none;
+    width: 161px;
+    height: 161px;
+  }
+
+  .pptDownload {
+    width: 180px;
+    margin: 0 80px;
+    border: 1px solid #efefef;
+  }
+
+  .pptDownload:hover{
+    color: #ffffff;
+    background-color: #888888;
+  }
+
+  .pptDownload:focus{
+    color: #7a7a7a;
+    background-color: #ffffff;
   }
 </style>

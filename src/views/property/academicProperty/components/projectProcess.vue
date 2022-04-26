@@ -38,7 +38,7 @@
                 >
                   <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifyProcess(row)" />
                 </el-tooltip>
-                <el-button v-show="row.user.id !== uid" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled/>
+                <el-button v-show="row.user.id !== uid" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled />
                 <el-tooltip
                   v-show="row.user.id === uid"
                   effect="dark"
@@ -183,7 +183,11 @@ export default {
         if (valid) {
           this.addProcessForm.filePath = 'Property/Academic/Process/' + this.addProcessForm.conferenceName + '/' + this.addProcessForm.year + '/' + sessionStorage.getItem('name')
           const formData = new FormData()
-          formData.append('file', this.file.raw)
+          if (this.file != null) {
+            formData.append('file', this.file.raw)
+          } else {
+            formData.append('file', null)
+          }
           formData.append('processPropertyVOJsonStr', JSON.stringify(this.addProcessForm))
           addProcessProperty(formData).then(() => {
             if (this.currentOperation === '添加会议') {

@@ -242,15 +242,15 @@ export default {
   methods: {
     getType(file) {
       let type
-      if (file.fileName.split('.')[-1] === '.ppt') {
+      if (file.fileName.split('.').slice(-1)[0] === '.ppt') {
         type = 'application/vnd.ms-powerpoint'
-      } else if (file.fileName.split('.')[-1] === '.pptx') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.pptx') {
         type = 'application/vnd.openxmlformats-officedoucment.presentationml.presentation'
-      } else if (file.fileName.split('.')[-1] === '.pdf') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.pdf') {
         type = 'application/pdf'
-      } else if (file.fileName.split('.')[-1] === '.jpg') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.jpg') {
         type = 'image/jpeg'
-      } else if (file.fileName.split('.')[-1] === '.png') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.png') {
         type = 'image/png'
       }
       return type

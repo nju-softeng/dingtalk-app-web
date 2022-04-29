@@ -109,15 +109,15 @@ export default {
       }
       downloadDissertationFile(this.dissertationId, this.card.fileType).then(res => {
         let type
-        if (this.card.fileName.split('.')[-1] === '.zip') {
+        if (this.card.fileName.split('.').slice(-1)[0] === '.zip') {
           type = 'application/zip'
-        } else if (this.card.fileName.split('.')[-1] === '.rar') {
+        } else if (this.card.fileName.split('.').slice(-1)[0] === '.rar') {
           type = 'application/x-rar-compressed'
-        } else if (this.card.fileName.split('.')[-1] === '.pdf') {
+        } else if (this.card.fileName.split('.').slice(-1)[0] === '.pdf') {
           type = 'application/pdf'
-        } else if (this.card.fileName.split('.')[-1] === '.doc') {
+        } else if (this.card.fileName.split('.').slice(-1)[0] === '.doc') {
           type = 'application/msword'
-        } else if (this.card.fileName.split('.')[-1] === '.docx') {
+        } else if (this.card.fileName.split('.').slice(-1)[0] === '.docx') {
           type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
         }
 

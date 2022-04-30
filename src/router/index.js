@@ -287,6 +287,20 @@ export const asyncRoutes = [{
   }]
 },
 {
+  path: '/patent',
+  component: Layout,
+  redirect: '/patent/index',
+  children: [{
+    path: 'index',
+    name: 'Patent',
+    component: () => import('@/views/patent/index'),
+    meta: {
+      title: '专利管理',
+      icon: 'patent'
+    }
+  }]
+},
+{
   path: '/system',
   component: Layout,
   redirect: '/system',

@@ -13,11 +13,11 @@
       </div>
       <div class="list" style="height: 500px">
         <el-table :data="list" class="tableClass">
-          <el-table-column label="论文信息" width="335">
+          <el-table-column label="专利信息" width="335">
             <template slot-scope="scope">
               <div class="patent-item">
                 <div class="left-content">
-                  <div class="title">
+                  <div class="name">
                     <el-tooltip
                       class="item"
                       effect="dark"
@@ -28,41 +28,47 @@
                         :to="'/patent/detail/' + scope.row.id"
                         class="link-type"
                       >
-                        <svg-icon icon-class="patent" /> {{ scope.row.name }}
+                        <i class="el-icon-collection" /> {{ scope.row.name }}
                       </router-link>
                     </el-tooltip>
                   </div>
                   <div class="detail">
-                    <div class="journal">
-                      <svg-icon icon-class="school" /> {{ scope.row.obligee }}
+                    <div class="obligee">
+                      <i class="el-icon-house" /> {{ scope.row.obligee }}
+                    </div>
+                    <div class="year">
+                      <i class="el-icon-date" /> {{ scope.row.year }}
+                    </div>
+                    <div class="type">
+                      <i class="el-icon-collection-tag" /> {{ scope.row.type }}
                     </div>
                   </div>
                 </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="论文作者" align="center">
+          <el-table-column label="专利发明人" align="center">
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tooltip
                   :disabled="scope.row.patentDetailList.length <= 3"
                   class="item"
                   effect="dark"
-                  placement="top-start"
+                  placement="top"
                 >
                   <div slot="content">
                     <span
                       v-for="(o, index) in scope.row.patentDetailList"
                       :key="index"
                       style="padding:5px;"
-                    >{{ o.name }}</span>
+                    >{{ o.user.name }}</span>
                   </div>
                   <div class="nameList">
                     <span
                       v-for="(o, index) in scope.row.patentDetailList"
                       :key="index"
                       style="padding:5px;"
-                    >{{ o.name }}</span>
+                    >{{ o.user.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
@@ -98,7 +104,6 @@
               </div>
             </template>
           </el-table-column>
-
           <el-table-column label="操作" align="center" width="160">
             <template slot-scope="scope">
               <div class="info-item">
@@ -142,7 +147,7 @@
                 <svg-icon icon-class="null" style="font-size:32px" /> <br>
               </div>
               <div style="line-height: 10px;">
-                <span>没有论文记录</span>
+                <span>没有专利记录</span>
               </div>
             </div>
           </template>
@@ -223,7 +228,7 @@
                 />
               </el-form-item>
               <el-form-item
-                v-for="(author, index) in patentForm.patentDetailList"
+                v-for="(inventors, index) in patentForm.patentDetailList"
                 :key="index"
                 :prop="'patentDetailList.' + index + '.uid'"
                 :rules="{
@@ -237,7 +242,7 @@
                   {{ index + 1 }}</span>
 
                 <el-select
-                  v-model="author.uid"
+                  v-model="inventors.uid"
                   style="width: 200px"
                   filterable
                   placeholder="请选择"
@@ -374,7 +379,6 @@ export default {
         label: '软著',
         value: 'copyright'
       }],
-      // 内部专利评审表单
       patentForm: {
         id: null,
         name: '',
@@ -395,7 +399,7 @@ export default {
         obligee: [{ required: true, message: '请输入权利人', trigger: 'blur' }],
         type: [{ required: true, message: '请选择类型', trigger: 'blur' }],
         year: [{ required: true, message: '请选择刊物/会议年份', trigger: 'blur' }],
-        author: [
+        inventors: [
           { required: true, message: '请选择发明人', trigger: 'blur' }
         ],
         file: [
@@ -439,6 +443,14 @@ export default {
       return new Promise((resolve, reject) => {
         getPatentList(page, 6).then(res => {
           this.list = res.data.list
+          console.log(this.list)
+          for (const i in this.list) {
+            for (const j in this.list[i].patentDetailList) {
+              this.list[i].patentDetailList[j].num = j
+              this.list[i].patentDetailList[j].name = this.list[i].patentDetailList[j].user.name
+              this.list[i].patentDetailList[j].uid = this.list[i].patentDetailList[j].user.id
+            }
+          }
           this.total = res.data.total
           console.log(res.data)
           resolve(res)
@@ -473,6 +485,10 @@ export default {
             formData.append('file', null)
           }
           this.patentForm.filePath = 'Patent' + '/' + this.patentForm.type + '/' + this.patentForm.year + '/' + this.patentForm.obligee + '/' + this.patentForm.name
+          this.patentForm.inventorsIdList = []
+          for (const i in this.patentForm.patentDetailList) {
+            this.patentForm.inventorsIdList.push(this.patentForm.patentDetailList[i].uid)
+          }
           formData.append('patentVOJsonStr', JSON.stringify(this.patentForm))
           this.patentForm.file = this.file
           this.loading = true
@@ -534,7 +550,7 @@ export default {
     submitPatentReviewResult() {
       if (this.reviewResultForm.result !== null) {
         this.loading = true
-        decideAudit(this.reviewResultForm.patentId, this.reviewResultForm).then(res => {
+        decideAudit(this.reviewResultForm.patentId, this.reviewResultForm.result).then(res => {
           this.reviewResultDialog = false
           this.fetchPatent(this.currentPage)
           this.$notify({
@@ -562,7 +578,7 @@ export default {
     submitPatentAuthorizationResult() {
       if (this.authorizationResultForm.result !== null) {
         this.loading = true
-        decideAudit(this.authorizationResultForm.patentId, this.authorizationResultForm).then(res => {
+        decideAuthorization(this.authorizationResultForm.patentId, this.authorizationResultForm.result).then(res => {
           this.reviewResultDialog = false
           this.fetchPatent(this.currentPage)
           this.$notify({
@@ -586,11 +602,11 @@ export default {
         })
       }
     },
-    // 删除论文记录
+    // 删除专利记录
     removePatent(item) {
       if (this.hasAuth(item.patentDetailList)) {
         this.$confirm(
-          '删除后，对应的AC变化和投票记录也将被删除，请谨慎操作',
+          '删除后，对应的AC变化也将被删除，请谨慎操作',
           '提示',
           {
             confirmButtonText: '确定',
@@ -614,7 +630,7 @@ export default {
           })
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
+          message: '只有审核人，和专利发明人才可以操作',
           type: 'warning'
         })
       }
@@ -632,7 +648,7 @@ export default {
         this.patentForm.patentDetailList = form.patentDetailList
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
+          message: '只有审核人，和专利发明人才可以操作',
           type: 'warning'
         })
       }
@@ -641,17 +657,18 @@ export default {
     closeAddPatentDialog() {
       this.patentForm = {
         id: null,
-        title: null,
-        journal: null,
-        patentType: null,
-        isStudentFirstAuthor: true,
+        name: '',
+        type: '',
+        obligee: '',
+        year: null,
         patentDetailList: [
           {
             num: 1,
             name: '',
             uid: null
           }
-        ]
+        ],
+        filePath: ''
       }
       this.addPatentDialog = false
     },
@@ -747,7 +764,7 @@ export default {
       font-size: 13px;
       display: flex;
       flex-direction: column;
-      .title {
+      .name {
         a {
           color: #0366d6;
         }
@@ -764,14 +781,23 @@ export default {
         color: gray;
         font-size: 13px;
         padding-top: 7px;
-        .journal {
-          width: 180px;
-          overflow: hidden; /*超出部分隐藏*/
+        .obligee {
+          width: 110px;
+          overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-        .time {
-          padding-left: 5px;
+        .year {
+          width: 110px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .type {
+          width: 110px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
     }

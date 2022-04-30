@@ -298,6 +298,16 @@ export const asyncRoutes = [{
       title: '专利管理',
       icon: 'patent'
     }
+  }, {
+    path: 'detail/:id',
+    component: () => import('@/views/patent/components/patentDetail'),
+    name: 'internalDetail',
+    meta: {
+      title: '专利详细',
+      noCache: true,
+      activeMenu: '/paper/index'
+    },
+    hidden: true
   }]
 },
 {

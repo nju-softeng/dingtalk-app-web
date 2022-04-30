@@ -74,7 +74,7 @@ export function addPatentFile(id, type, data) {
 export function deletePatentFile(id, type) {
   return axios({
     url: api.deletePatentFile(id, type),
-    method: 'post'
+    method: 'delete'
   })
 }
 

@@ -301,11 +301,35 @@ export const asyncRoutes = [{
   }, {
     path: 'detail/:id',
     component: () => import('@/views/patent/components/patentDetail'),
-    name: 'internalDetail',
+    name: 'patentDetail',
     meta: {
       title: '专利详细',
       noCache: true,
-      activeMenu: '/paper/index'
+      activeMenu: '/patent/index'
+    },
+    hidden: true
+  }]
+},
+{
+  path: '/reimburse',
+  component: Layout,
+  redirect: '/reimburse/index',
+  children: [{
+    path: 'index',
+    name: 'Reimburse',
+    component: () => import('@/views/reimburse/index'),
+    meta: {
+      title: '报销管理',
+      icon: 'reimburse'
+    }
+  }, {
+    path: 'detail/:id',
+    component: () => import('@/views/reimburse/components/reimburseDetail'),
+    name: 'reimburseDetail',
+    meta: {
+      title: '报销详细',
+      noCache: true,
+      activeMenu: '/reimburse/index'
     },
     hidden: true
   }]

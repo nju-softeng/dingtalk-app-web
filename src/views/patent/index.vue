@@ -82,25 +82,30 @@
                   class="patent-tag"
                 >待内审</el-tag>
                 <el-tag
-                  v-else-if="scope.row.result === 1"
+                  v-else-if="scope.row.state === 1"
                   class="patent-tag"
                   type="danger"
                 >内审不通过</el-tag>
                 <el-tag
-                  v-else-if="scope.row.result === 2"
-                  class="patent-tag"
-                  type="info"
-                >内审通过</el-tag>
-                <el-tag
-                  v-else-if="scope.row.result === 3"
-                  class="patent-tag"
-                  type="danger"
-                >专利授权</el-tag>
-                <el-tag
-                  v-else-if="scope.row.result === 4"
+                  v-else-if="scope.row.state === 2"
                   class="patent-tag"
                   type="success"
+                >内审通过</el-tag>
+                <el-tag
+                  v-else-if="scope.row.state === 3"
+                  class="patent-tag"
+                  type="success"
+                >专利授权</el-tag>
+                <el-tag
+                  v-else-if="scope.row.state === 4"
+                  class="patent-tag"
+                  type="successdanger"
                 >专利驳回</el-tag>
+                <el-tag
+                  v-else
+                  class="patent-tag"
+                  type="danger"
+                >{{ scope.row.state }}未知状态</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -550,7 +555,7 @@ export default {
     submitPatentReviewResult() {
       if (this.reviewResultForm.result !== null) {
         this.loading = true
-        decideAudit(this.reviewResultForm.patentId, this.reviewResultForm.result).then(res => {
+        decideAudit(this.reviewResultForm.patentId, this.reviewResultForm.result === 1).then(res => {
           this.reviewResultDialog = false
           this.fetchPatent(this.currentPage)
           this.$notify({
@@ -578,7 +583,7 @@ export default {
     submitPatentAuthorizationResult() {
       if (this.authorizationResultForm.result !== null) {
         this.loading = true
-        decideAuthorization(this.authorizationResultForm.patentId, this.authorizationResultForm.result).then(res => {
+        decideAuthorization(this.authorizationResultForm.patentId, this.authorizationResultForm.result === 1).then(res => {
           this.reviewResultDialog = false
           this.fetchPatent(this.currentPage)
           this.$notify({

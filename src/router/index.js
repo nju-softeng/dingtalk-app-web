@@ -129,6 +129,15 @@ export const asyncRoutes = [{
       title: 'AC汇总',
       icon: 'rank'
     }
+  },
+  {
+    path: 'schedule',
+    name: 'Schedule',
+    component: () => import('@/views/schedule/index'),
+    meta: {
+      title: '日程汇总',
+      icon: 'date'
+    }
   }
   ]
 },

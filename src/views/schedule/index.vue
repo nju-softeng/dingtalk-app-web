@@ -2,47 +2,93 @@
   <div class="app-container">
     <div class="scheduleWrap">
       <div class="scheduleBox">
-        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="currentOperation='添加日程'; addScheduleDialogVisible=true">新建日程
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          style="margin-bottom: 10px;"
+          @click="currentOperation='新建日程'; addScheduleDialogVisible=true"
+        >新建日程
         </el-button>
         <div class="scheduleList">
           <el-table :data="scheduleList" fit highlight-current-row class="tableClass">
             <el-table-column label="日程名称" width="360px" align="center">
               <template slot-scope="{ row }">
-                <span>{{ row.name }}</span>
+                <span>{{ row.summary }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="年份" width="150px" align="center">
+            <el-table-column label="日程时间" width="200px" align="center">
               <template slot-scope="{ row }">
-                <span>{{ row.year }}</span>
+                <span>{{ row.start | dateFormat("yyyy年") }} → {{ row.end }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="日程类型" width="300px" align="center">
+            <el-table-column label="地点" width="200px" align="center">
               <template slot-scope="{ row }">
-                <span>{{ typeConverter[row.type] }}</span>
+                <span v-if="row.online"><el-tag>线上</el-tag></span>
+                <span v-else>{{ row.location }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" width="100px" align="center">
+              <template slot-scope="{ row }">
+                <div v-if="row.acCalculated">
+                  <el-tag type="info">
+                    已结算
+                  </el-tag>
+                </div>
+                <div v-else-if="nowTime.getTime() > row.end.getTime()">
+                  {{ nowTime.getTime() }}
+                  {{ row.end.getTime() }}
+                  <el-tag type="info">
+                    已结束
+                  </el-tag>
+                </div>
+                <div v-else-if="nowTime.getTime() < row.start.getTime()">
+                  {{ nowTime.getTime() }}
+                  <el-tag type="success">
+                    未开始
+                  </el-tag>
+                </div>
+                <div v-else>
+                  {{ nowTime.getTime() }}
+                  <el-tag>
+                    进行中
+                  </el-tag>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
               <template slot-scope="{ row }">
                 <el-tooltip
                   effect="dark"
-                  content="详情"
+                  content="请假详情"
                   placement="top"
                 >
-                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="getDetail(row.id)" />
+                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="absentDetailVisible = true" />
                 </el-tooltip>
                 <el-tooltip
                   effect="dark"
                   content="编辑"
                   placement="top"
                 >
-                  <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifySchedule(row)" />
+                  <el-button
+                    class="modifyBtn"
+                    type="primary"
+                    icon="el-icon-s-operation"
+                    size="mini"
+                    @click="modifySchedule(row)"
+                  />
                 </el-tooltip>
                 <el-tooltip
                   effect="dark"
                   content="删除"
                   placement="top"
                 >
-                  <el-button class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" @click="deleteWholeSchedule(row.id)" />
+                  <el-button
+                    class="deleteBtn"
+                    type="danger"
+                    icon="el-icon-delete-solid"
+                    size="mini"
+                    @click="deleteWholeSchedule(row.id)"
+                  />
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -71,33 +117,66 @@
       :before-close="clearBeforeClose"
     >
       <el-form ref="addScheduleForm" :model="addScheduleForm" :rules="rules" label-width="100px">
-        <el-form-item prop="name" label="日程名称:">
-          <el-col :span="12">
-            <el-input v-model="addScheduleForm.name" placeholder="请输入日程名称" style="width: 200px" />
+        <el-form-item prop="summary" label="日程名称:">
+          <el-col :span="16">
+            <el-input v-model="addScheduleForm.summary" placeholder="请输入日程名称" style="width: 200px" />
           </el-col>
         </el-form-item>
-        <el-form-item prop="year" label="日程年份:">
-          <el-col :span="12">
+        <el-form-item prop="time" label="日程时间:">
+          <el-col :span="16">
             <el-date-picker
-              v-model="addScheduleForm.year"
-              value-format="yyyy"
-              type="year"
-              placeholder="选择年份"
+              v-model="addScheduleForm.time"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
               style="width: 200px"
             />
           </el-col>
         </el-form-item>
-        <el-form-item prop="type" label="日程类型:">
-          <el-col :span="8">
-            <el-select v-model="addScheduleForm.type" placeholder="请选择日程类型" style="width: 200px">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+        <el-form-item prop="location" label="日程地点:">
+          <el-row>
+            <el-col :span="16">
+              <el-input
+                v-model="addScheduleForm.location"
+                placeholder="请输入日程地点"
+                :disabled="addScheduleForm.online"
+                style="width: 200px"
               />
-            </el-select>
-          </el-col>
+            </el-col>
+            <el-col :span="4">
+              <el-checkbox v-model="addScheduleForm.online">线上</el-checkbox>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item prop="attendessIdList" label="与会人员">
+          <el-row>
+            <el-col :span="16">
+              <el-cascader
+                v-model="addScheduleForm.attendeesIdList"
+                style="width: 200px"
+                filterable
+                multiple
+                collapse-tags
+                placeholder="请选择与会人员"
+                :options="userList"
+                :props="{ multiple: true}"
+              />
+            </el-col>
+            <el-col :span="4">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="支持搜索功能快速查找用户"
+                placement="right"
+              >
+                <span style="margin-left: 8px">
+                  <svg-icon
+                    icon-class="hint"
+                  /></span>
+              </el-tooltip>
+            </el-col>
+          </el-row>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -109,28 +188,49 @@
 </template>
 
 <script>
-import { getScheduleList, addSchedule, deleteSchedule, addAbsentOA, deleteAbsentOA, getAbsentOADetail } from '@/api/schedule'
+import { getUserList } from '@/api/common'
+import {
+  getScheduleList,
+  addSchedule,
+  deleteSchedule,
+  addAbsentOA,
+  deleteAbsentOA,
+  getAbsentOADetail
+} from '@/api/schedule'
+
 export default {
   name: 'Index',
   data() {
     return {
+      nowTime: 0,
       total: 0,
       currentPage: 1,
       scheduleList: [],
       addScheduleDialogVisible: false,
-      typeConverter: ['项目会议', '团队组织/参与的日程', '实验室日程'],
-      currentOperation: '添加日程',
+      absentDetailVisible: false,
+      currentOperation: '新建日程',
+      userList: [],
       addScheduleForm: {
         id: null,
-        name: '',
-        year: null,
-        type: '',
-        path: ''
+        summary: '',
+        time: null,
+        start: null,
+        end: null,
+        online: false,
+        location: '',
+        attendeesIdList: []
       },
       rules: {
-        name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
-        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择事件类型', trigger: 'blur' }]
+        summary: [{ required: true, message: '请输入日程名称', trigger: 'blur' }],
+        time: [{ required: true, message: '请选择日程时间', trigger: 'blur' }],
+        location: [{
+          trigger: 'blur',
+          validator: async(rule, value, callback) => {
+            if (!this.addScheduleForm.online) {
+              callback(new Error('请输入日程地点'))
+            }
+          }
+        }]
       },
       options: [
         {
@@ -150,20 +250,46 @@ export default {
   },
   created() {
     this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.nowTime = new Date()
+    getUserList().then((res) => {
+      const tempUserList = []
+      for (const i in res.data) {
+        tempUserList.push({
+          value: res.data[i].id,
+          label: res.data[i].name
+        })
+      }
+      this.userList = [{
+        label: '第一组',
+        value: 1,
+        children: tempUserList
+      }]
+      console.log(this.userList)
+    }).catch(err => {
+      this.$message.error('无法获取用户列表！')
+      console.log(err)
+    })
     this.fetchSchedule(this.currentPage)
   },
   methods: {
     // 分页获取日程
     fetchSchedule(page) {
-      console.log(page, 11111)
       return new Promise((resolve, reject) => {
-        getScheduleList(page, 10)
-          .then(res => {
-            this.scheduleList = res.data.list
-            this.total = res.data.total
-            console.log(res)
-            resolve(res)
-          })
+        getScheduleList(page, 10).then(res => {
+          this.scheduleList = res.data.list
+          for (const i in this.scheduleList) {
+            this.scheduleList[i].attendeesIdList = []
+            for (const j in this.scheduleList[i].dingTalkScheduleDetailList) {
+              this.scheduleList[i].attendeesIdList.push([1, this.scheduleList[i].dingTalkScheduleDetailList[j].user.id])
+            }
+            this.scheduleList[i].start = new Date(Date.parse(this.scheduleList[i].start))
+            this.scheduleList[i].end = new Date(Date.parse(this.scheduleList[i].end))
+            this.scheduleList[i].time = [this.scheduleList[i].start, this.scheduleList[i].end]
+          }
+          this.total = res.data.total
+          console.log(res)
+          resolve(res)
+        })
           .catch(err => {
             reject(err)
           })
@@ -198,11 +324,14 @@ export default {
     addNewSchedule(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.addScheduleForm.path = 'Property/Schedule/' + this.addScheduleForm.year + '/' + this.addScheduleForm.name
-          const formData = new FormData()
-          formData.append('scheduleJsonStr', JSON.stringify(this.addScheduleForm))
-          addSchedule(formData).then(() => {
-            if (this.currentOperation === '添加日程') {
+          for (const i in this.addScheduleForm.attendeesIdList) {
+            this.addScheduleForm.attendeesIdList[i] = this.addScheduleForm.attendeesIdList[i][1]
+          }
+          this.addScheduleForm.start = this.addScheduleForm.time[0]
+          this.addScheduleForm.end = this.addScheduleForm.time[1]
+          // console.log(this.addScheduleForm)
+          addSchedule(this.addScheduleForm).then(() => {
+            if (this.currentOperation === '新建日程') {
               this.$message.success('添加成功')
             } else if (this.currentOperation === '修改日程') {
               this.$message.success('修改成功')
@@ -212,7 +341,7 @@ export default {
             this.cancelAddSchedule()
             this.fetchSchedule(this.currentPage)
           }).catch(() => {
-            if (this.currentOperation === '添加日程') {
+            if (this.currentOperation === '新建日程') {
               this.$message.error('添加失败')
             } else if (this.currentOperation === '修改日程') {
               this.$message.error('修改失败')
@@ -230,20 +359,29 @@ export default {
       })
     },
     modifySchedule(row) {
+      console.log(row)
+      console.log(this.scheduleList)
       this.currentOperation = '修改日程'
       this.addScheduleForm.id = row.id
-      this.addScheduleForm.name = row.name
-      this.addScheduleForm.year = row.year
-      this.addScheduleForm.type = row.type
+      this.addScheduleForm.summary = row.summary
+      this.addScheduleForm.start = row.start
+      this.addScheduleForm.end = row.end
+      this.addScheduleForm.time = row.time
+      this.addScheduleForm.online = row.online
+      this.addScheduleForm.location = row.location
+      this.addScheduleForm.attendeesIdList = row.attendeesIdList
       this.addScheduleDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addScheduleForm = {
         id: null,
-        name: '',
-        year: null,
-        type: '',
-        path: ''
+        summary: '',
+        start: null,
+        end: null,
+        time: null,
+        online: false,
+        location: '',
+        attendeesIdList: []
       }
       return done(true)
     },
@@ -251,10 +389,13 @@ export default {
       this.addScheduleDialogVisible = false
       this.addScheduleForm = {
         id: null,
-        name: '',
-        year: null,
-        type: '',
-        path: ''
+        summary: '',
+        start: null,
+        end: null,
+        time: null,
+        online: false,
+        location: '',
+        attendeesIdList: []
       }
     }
   }
@@ -293,9 +434,9 @@ export default {
   }
 
   .pagination {
-    margin-top:16px;
-    display:flex;
-    justify-content:center;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
   }
 
   .detailBtn {

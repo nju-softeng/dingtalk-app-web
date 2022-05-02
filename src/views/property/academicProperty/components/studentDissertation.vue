@@ -92,7 +92,7 @@
                 <el-date-picker
                   v-model="dissertationForm.graduateYear"
                   value-format="yyyy"
-                  format="yyyy年"
+                  format="yyyy 年"
                   style="width: 193px"
                   type="year"
                   placeholder="毕业年份"
@@ -208,7 +208,7 @@ export default {
             const formData = new FormData()
             formData.append('file', this.file.raw)
             this.dissertationForm.userId = this.uid
-            this.dissertationForm.filePath = '/Property/Academic/Student/' + this.dissertationForm.graduateYear + '/' + this.userName
+            this.dissertationForm.filePath = 'Property/Academic/Student/' + this.dissertationForm.graduateYear + '/' + this.userName
             formData.append('dissertationVOJsonStr', JSON.stringify(this.dissertationForm))
             this.dissertationForm.file = this.file
             this.loading = true

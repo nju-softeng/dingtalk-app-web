@@ -2,11 +2,11 @@
   <div class="app-container">
     <div class="processWrap">
       <div class="processBox">
-        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="currentOperation='添加会议'; addProcessDialogVisible=true">新建会议
+        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="currentOperation='添加会议'; addProcessDialogVisible=true">新建会议记录
         </el-button>
         <div class="processList">
           <el-table :data="processList" fit highlight-current-row class="tableClass">
-            <el-table-column label="会议名称" width="360px" align="center">
+            <el-table-column label="会议名称" width="460px" align="center">
               <template slot-scope="{ row }">
                 <span>{{ row.conferenceName }}</span>
               </template>
@@ -16,7 +16,7 @@
                 <span>{{ row.year }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="上传人" width="300px" align="center">
+            <el-table-column label="上传人" width="200px" align="center">
               <template slot-scope="{ row }">
                 <span>{{ row.user.name }}</span>
               </template>
@@ -31,19 +31,23 @@
                   <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="getDetail(row.id)" />
                 </el-tooltip>
                 <el-tooltip
+                  v-show="row.user.id === uid"
                   effect="dark"
                   content="编辑"
                   placement="top"
                 >
                   <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifyProcess(row)" />
                 </el-tooltip>
+                <el-button v-show="row.user.id !== uid" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled />
                 <el-tooltip
+                  v-show="row.user.id === uid"
                   effect="dark"
                   content="删除"
                   placement="top"
                 >
                   <el-button class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" @click="deleteWholeProcess(row.id)" />
                 </el-tooltip>
+                <el-button v-show="row.user.id !== uid" class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" disabled />
               </template>
             </el-table-column>
           </el-table>
@@ -70,10 +74,10 @@
       width="30%"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addProcessForm" :model="addProcessForm" :rules="rules" label-width="100px">
-        <el-form-item prop="name" label="会议名称:">
+      <el-form ref="addProcessForm" :model="addProcessForm" :rules="rules" label-width="100px" style="margin-left: 36px">
+        <el-form-item prop="conferenceName" label="会议名称:">
           <el-col :span="12">
-            <el-input v-model="addProcessForm.name" placeholder="请输入会议名称" style="width: 200px" />
+            <el-input v-model="addProcessForm.conferenceName" placeholder="请输入会议名称" style="width: 200px" />
           </el-col>
         </el-form-item>
         <el-form-item prop="year" label="会议年份:">
@@ -81,12 +85,14 @@
             <el-date-picker
               v-model="addProcessForm.year"
               value-format="yyyy"
+              format="yyyy 年"
               type="year"
               placeholder="选择年份"
               style="width: 200px"
             />
           </el-col>
         </el-form-item>
+        <process-ppt-upload v-show="currentOperation === '添加会议'" ref="child" :file="file" @changeFile="changeFile" />
       </el-form>
       <span slot="footer">
         <el-button @click="cancelAddProcess">取 消</el-button>
@@ -97,9 +103,11 @@
 </template>
 
 <script>
+import ProcessPptUpload from './processPptUpload'
 import { getProcessProperty, addProcessProperty, deleteProcessProperty } from '@/api/processProperty'
 export default {
   name: 'ProjectProcess',
+  components: { ProcessPptUpload },
   data() {
     return {
       total: 0,
@@ -111,32 +119,26 @@ export default {
       addProcessForm: {
         id: null,
         conferenceName: '',
-        year: 0,
-        path: '',
+        year: null,
+        filePath: '',
         file: null
       },
       rules: {
-        name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
-        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }],
-        file: [
-          {
-            trigger: 'blur',
-            validator: async(rule, value, callback) => {
-              if (!this.file) callback(new Error('请上传预答辩论文文件'))
-            }
-          }
-        ]
-      }
+        conferenceName: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }]
+      },
+      uid: -1
     }
   },
   created() {
     this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
     this.fetchProcess(this.currentPage)
+    this.uid = parseInt(sessionStorage.getItem('uid'))
   },
   methods: {
     // 分页获取会议
     fetchProcess(page) {
-      // console.log(this.processList)
+      console.log(this.processList)
       return new Promise((resolve, reject) => {
         getProcessProperty(page, 10)
           .then(res => {
@@ -166,7 +168,7 @@ export default {
       sessionStorage.setItem('inner-cur-page', val)
     },
     getDetail(id) {
-      this.$router.push('/property/processDetail/' + id)
+      this.$router.push('/property/academic/process-detail/' + id)
     },
     deleteWholeProcess(id) {
       deleteProcessProperty(id).then(() => {
@@ -179,9 +181,14 @@ export default {
     addNewProcess(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.addProcessForm.path = '/Property/Process/' + this.addProcessForm.year + '/' + this.addProcessForm.name
+          this.addProcessForm.filePath = 'Property/Academic/Process/' + this.addProcessForm.conferenceName + '/' + this.addProcessForm.year + '/' + sessionStorage.getItem('name')
           const formData = new FormData()
-          formData.append('processPropertyJsonStr', JSON.stringify(this.addProcessForm))
+          if (this.file != null) {
+            formData.append('file', this.file.raw)
+          } else {
+            formData.append('file', null)
+          }
+          formData.append('processPropertyVOJsonStr', JSON.stringify(this.addProcessForm))
           addProcessProperty(formData).then(() => {
             if (this.currentOperation === '添加会议') {
               this.$message.success('添加成功')
@@ -213,29 +220,32 @@ export default {
     modifyProcess(row) {
       this.currentOperation = '修改会议'
       this.addProcessForm.id = row.id
-      this.addProcessForm.name = row.name
+      this.addProcessForm.conferenceName = row.conferenceName
       this.addProcessForm.year = row.year
       this.addProcessDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addProcessForm = {
         id: null,
-        name: '',
+        conferenceName: '',
         year: 0,
-        type: '',
-        path: ''
+        filePath: ''
       }
+      this.$refs.child.handleClose()
       return done(true)
     },
     cancelAddProcess() {
       this.addProcessDialogVisible = false
       this.addProcessForm = {
         id: null,
-        name: '',
+        conferenceName: '',
         year: 0,
-        type: '',
-        path: ''
+        filePath: ''
       }
+      this.$refs.child.handleClose()
+    },
+    changeFile(file) {
+      this.file = file
     }
   }
 }
@@ -286,6 +296,7 @@ export default {
   .modifyBtn {
     padding: 2px 6px;
     border-radius: 5px;
+    margin-left: 16px;
   }
 
   .deleteBtn {

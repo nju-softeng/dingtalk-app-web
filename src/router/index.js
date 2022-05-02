@@ -180,6 +180,16 @@ export const asyncRoutes = [{
       icon: 'academic'
     }
   }, {
+    path: 'academic/process-detail/:id',
+    name: 'processDetail',
+    component: () => import('@/views/property/academicProperty/components/processDetail'),
+    meta: {
+      title: '会议记录详情',
+      noCache: true,
+      activeMenu: '/property/academic'
+    },
+    hidden: true
+  }, {
     path: 'academic/dissertation-detail/:id',
     name: 'dissertationDetail',
     component: () => import('@/views/property/academicProperty/components/dissertationDetail'),

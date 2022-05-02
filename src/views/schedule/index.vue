@@ -214,7 +214,7 @@
       width="30%"
       :before-close="clearAbsentBeforeClose"
     >
-      <el-form :model="addAbsentForm" label-width="100px" :rules="absentRules" ref="addAbsentForm">
+      <el-form ref="addAbsentForm" :model="addAbsentForm" label-width="100px" :rules="absentRules">
         <el-form-item label="请假类型:">
           <el-select v-model="addAbsentForm.type">
             <el-option
@@ -284,7 +284,9 @@ export default {
           trigger: 'blur',
           validator: async(rule, value, callback) => {
             if (!this.addScheduleForm.online) {
-              callback(new Error('请输入日程地点'))
+              if (!this.addScheduleForm.location) {
+                callback(new Error('请输入日程地点'))
+              }
             }
           }
         }]

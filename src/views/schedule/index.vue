@@ -16,9 +16,9 @@
                 <span>{{ row.summary }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="日程时间" width="200px" align="center">
+            <el-table-column label="日程时间" width="300px" align="center">
               <template slot-scope="{ row }">
-                <span>{{ row.start | dateFormat("yyyy年") }} → {{ row.end }}</span>
+                <span>{{ (row.start) | filterDate }} → {{ row.end | filterDate }}</span>
               </template>
             </el-table-column>
             <el-table-column label="地点" width="200px" align="center">
@@ -35,20 +35,16 @@
                   </el-tag>
                 </div>
                 <div v-else-if="nowTime.getTime() > row.end.getTime()">
-                  {{ nowTime.getTime() }}
-                  {{ row.end.getTime() }}
                   <el-tag type="info">
                     已结束
                   </el-tag>
                 </div>
                 <div v-else-if="nowTime.getTime() < row.start.getTime()">
-                  {{ nowTime.getTime() }}
                   <el-tag type="success">
                     未开始
                   </el-tag>
                 </div>
                 <div v-else>
-                  {{ nowTime.getTime() }}
                   <el-tag>
                     进行中
                   </el-tag>
@@ -62,7 +58,7 @@
                   content="请假详情"
                   placement="top"
                 >
-                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="absentDetailVisible = true" />
+                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="openAbsentDetail(row.id)" />
                 </el-tooltip>
                 <el-tooltip
                   effect="dark"
@@ -184,6 +180,60 @@
         <el-button type="primary" @click="addNewSchedule('addScheduleForm')">确 认</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="请假详情"
+      :visible.sync="absentDetailVisible"
+      width="30%"
+    >
+      <el-form v-if="absentDetail.id" :model="absentDetail" label-width="100px">
+        <el-form-item label="请假类型:">
+          {{ absentDetail.type }}
+        </el-form-item>
+        <el-form-item label="请假缘由:">
+          {{ absentDetail.reason }}
+        </el-form-item>
+        <el-form-item label="状态:">
+          <el-tag v-if="absentDetail.state === -1">待审批</el-tag>
+          <el-tag v-else-if="absentDetail.state === 0" type="danger">拒绝</el-tag>
+          <el-tag v-else-if="absentDetail.state === 1" type="success">通过</el-tag>
+          <el-tag v-else type="info">未知状态</el-tag>
+        </el-form-item>
+      </el-form>
+      <div v-else class="noAbsent">
+        <span class="noAbsentTip"> 你还未请假! </span>
+        <el-button type="danger" size="mini" class="noAbsentButton" @click="openAddAbsent">点击请假</el-button>
+      </div>
+      <span slot="footer">
+        <el-button v-if="absentDetail.id" type="danger" @click="deleteAbsent(absentDetail.id)">删除</el-button>
+        <el-button type="primary" @click="absentDetailVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="请假申请"
+      :visible.sync="addAbsentDialogVisible"
+      width="30%"
+      :before-close="clearAbsentBeforeClose"
+    >
+      <el-form :model="addAbsentForm" label-width="100px" :rules="absentRules" ref="addAbsentForm">
+        <el-form-item label="请假类型:">
+          <el-select v-model="addAbsentForm.type">
+            <el-option
+              v-for="(item, index) in options"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请假缘由:">
+          <el-input v-model="addAbsentForm.reason" type="textarea" style="width: 80%" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="cancelAddAbsent">取 消</el-button>
+        <el-button type="primary" @click="addNewAbsent('addAbsentForm')">确 认</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -197,9 +247,15 @@ import {
   deleteAbsentOA,
   getAbsentOADetail
 } from '@/api/schedule'
-
 export default {
   name: 'Index',
+  filters: {
+    filterDate(date) {
+      return (
+        date.getFullYear() + '年' + date.getMonth() + '月' + date.getDate() + '日' + ' ' + date.toString().split(' ')[4]
+      )
+    }
+  },
   data() {
     return {
       nowTime: 0,
@@ -208,6 +264,7 @@ export default {
       scheduleList: [],
       addScheduleDialogVisible: false,
       absentDetailVisible: false,
+      addAbsentDialogVisible: false,
       currentOperation: '新建日程',
       userList: [],
       addScheduleForm: {
@@ -232,20 +289,30 @@ export default {
           }
         }]
       },
+      absentRules: {
+        type: [{ required: true, message: '请选择请假类型', trigger: 'blur' }],
+        reason: [{ required: true, message: '请输入请假缘由', trigger: 'blur' }]
+      },
       options: [
         {
-          value: '0',
-          label: '项目会议'
+          value: '事假',
+          label: '事 假'
         },
         {
-          value: '1',
-          label: '团队组织/参与的日程'
+          value: '病假',
+          label: '病 假'
         },
         {
-          value: '2',
-          label: '实验室日程'
+          value: '其它',
+          label: '其 它'
         }
-      ]
+      ],
+      absentDetail: {},
+      addAbsentForm: {
+        type: '',
+        reason: ''
+      },
+      currentScheduleToAbsent: null
     }
   },
   created() {
@@ -358,6 +425,24 @@ export default {
         }
       })
     },
+    addNewAbsent(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          addAbsentOA(this.currentScheduleToAbsent, this.addAbsentForm).then(() => {
+            this.$message.success('申请成功')
+            this.cancelAddAbsent()
+          }).catch(() => {
+            this.$message.error('申请失败')
+          })
+        } else {
+          this.$notify({
+            title: '申请失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
+        }
+      })
+    },
     modifySchedule(row) {
       console.log(row)
       console.log(this.scheduleList)
@@ -385,6 +470,14 @@ export default {
       }
       return done(true)
     },
+    clearAbsentBeforeClose(done) {
+      this.addAbsentForm = {
+        type: null,
+        reason: null
+      }
+      this.openAbsentDetail(this.currentScheduleToAbsent)
+      return done(true)
+    },
     cancelAddSchedule() {
       this.addScheduleDialogVisible = false
       this.addScheduleForm = {
@@ -397,6 +490,37 @@ export default {
         location: '',
         attendeesIdList: []
       }
+    },
+    cancelAddAbsent() {
+      this.addAbsentDialogVisible = false
+      this.addAbsentForm = {
+        type: null,
+        reason: null
+      }
+      this.openAbsentDetail(this.currentScheduleToAbsent)
+    },
+    openAbsentDetail(id) {
+      getAbsentOADetail(id).then(res => {
+        this.absentDetail = res.data
+        this.currentScheduleToAbsent = id
+        this.absentDetailVisible = true
+      }).catch(err => {
+        this.$message('获取请假详情失败！')
+        console.log(err)
+      })
+    },
+    deleteAbsent(id) {
+      deleteAbsentOA(id).then(() => {
+        this.$notify.success('删除成功！')
+        this.absentDetailVisible = false
+      }).catch(err => {
+        this.$notify.error('删除失败！')
+        console.log(err)
+      })
+    },
+    openAddAbsent() {
+      this.absentDetailVisible = false
+      this.addAbsentDialogVisible = true
     }
   }
 }
@@ -454,5 +578,25 @@ export default {
     padding: 2px 6px;
     border-radius: 5px;
     margin-left: 16px;
+  }
+
+  .noAbsent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .noAbsentTip {
+    font-size: 30px;
+    margin: 10px;
+  }
+
+  .noAbsentButton {
+    width: 30%;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
   }
 </style>

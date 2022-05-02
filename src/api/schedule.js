@@ -9,7 +9,6 @@ const api = {
   getAbsentOADetail: (id) => `/schedule/${id}/absentOA`
 }
 
-// 添加专利
 export function addSchedule(data) {
   return axios({
     url: api.addSchedule,
@@ -18,7 +17,6 @@ export function addSchedule(data) {
   })
 }
 
-// 获取专利列表
 export function getScheduleList(page, size) {
   return axios({
     url: api.getScheduleList(page, size),
@@ -26,7 +24,6 @@ export function getScheduleList(page, size) {
   })
 }
 
-// 删除专利
 export function deleteSchedule(id) {
   return axios({
     url: api.deleteSchedule(id),
@@ -34,7 +31,6 @@ export function deleteSchedule(id) {
   })
 }
 
-// 添加专利文件
 export function addAbsentOA(id, data) {
   return axios({
     url: api.addAbsentOA(id),
@@ -43,7 +39,6 @@ export function addAbsentOA(id, data) {
   })
 }
 
-// 删除专利文件
 export function deleteAbsentOA(id) {
   return axios({
     url: api.deleteAbsentOA(id),

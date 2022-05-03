@@ -7,7 +7,6 @@
       <div>
         <span class="rightFooter">
           <el-tooltip
-            v-show="dissertationUid===uid"
             class="item"
             effect="dark"
             :content="tipContent"
@@ -26,7 +25,7 @@
             <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
           </el-upload>
           <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round @click="downloadFile">下 载</el-button>
-          <el-button v-show="dissertationUid===uid" icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
+          <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
         </span>
       </div>
     </el-card>
@@ -34,7 +33,7 @@
 </template>
 
 <script>
-import { addDissertationFile, downloadDissertationFile, deleteDissertationFile } from '@/api/dissertation'
+import { addPatentFile, downloadPatentFile, deletePatentFile } from '@/api/patent'
 export default {
   name: 'FileCard',
   props: {
@@ -44,35 +43,31 @@ export default {
         return null
       }
     },
-    dissertationUid: {
-      type: Number,
-      default: -1
-    },
-    filePath: {
+    patentId: {
       type: String,
       default: ''
     },
-    dissertationId: {
-      type: Number,
-      default: -1
+    patentPath: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       tipContent: '',
-      acceptType: '',
-      uid: -1
+      acceptType: ''
     }
   },
   computed: {
     getPath() {
-      return this.filePath + '/' + this.card.fileType.substring(0, 1).toUpperCase() + this.card.fileType.substring(1, this.card.fileType.length - 4)
+      return this.patentPath + '/' + this.card.fileType.substring(0, 1).toUpperCase() + this.card.fileType.substring(1, this.card.fileType.length - 4)
     }
   },
   created() {
-    this.uid = parseInt(sessionStorage.getItem('uid'))
-    // console.log(this.card)
-    if (this.card.fileType === 'finalFile') {
+    if (this.card.fileType === 'publishedLatexFile') {
+      this.tipContent = '仅支持LaTeX格式文件'
+      this.acceptType = '.tex'
+    } else if (this.card.fileType === 'sourceFile') {
       this.tipContent = '仅支持Zip/Rar格式文件'
       this.acceptType = '.zip,.rar'
     } else {
@@ -81,20 +76,16 @@ export default {
     }
   },
   methods: {
-    // typeChange(fileType) {
-    //   return fileType.substring(0, 1).toUpperCase() + fileType.substring(1, fileType.length - 4)
-    // },
     handleFileChange(file, fileList) {
       while (fileList.length > 1) {
         fileList.splice(0, 1)
       }
       const formData = new FormData()
       formData.append('file', file.raw)
-      formData.append('fileType', this.card.fileType)
-      addDissertationFile(this.dissertationId, formData).then(() => {
+      addPatentFile(this.patentId, this.card.fileType, formData).then(() => {
         this.$notify({
           title: '成功',
-          message: '论文文件上传成功',
+          message: '专利文件上传成功',
           type: 'success'
         })
         this.$emit('init')
@@ -107,9 +98,11 @@ export default {
         this.$message.warning('文件未上传！请上传文件！')
         return
       }
-      downloadDissertationFile(this.dissertationId, this.card.fileType).then(res => {
+      downloadPatentFile(this.patentId, this.card.fileType).then(res => {
         let type
-        if (this.card.fileName.split('.').slice(-1)[0] === '.zip') {
+        if (this.card.fileName.split('.').slice(-1)[0] === '.tex') {
+          type = 'application/x-tex'
+        } else if (this.card.fileName.split('.').slice(-1)[0] === '.zip') {
           type = 'application/zip'
         } else if (this.card.fileName.split('.').slice(-1)[0] === '.rar') {
           type = 'application/x-rar-compressed'
@@ -120,7 +113,6 @@ export default {
         } else if (this.card.fileName.split('.').slice(-1)[0] === '.docx') {
           type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
         }
-
         const binaryData = [res.data]
         const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
         const a = document.createElement('a')
@@ -131,11 +123,11 @@ export default {
     },
     deleteFile() {
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
-        // console.log(this.card.fileName)
-        deleteDissertationFile(this.dissertationId, this.card.fileType).then(() => {
+        console.log(this.card.fileName)
+        deletePatentFile(this.patentId, this.card.fileType).then(() => {
           this.$notify({
             title: '成功',
-            message: '论文文件删除成功',
+            message: '专利文件删除成功',
             type: 'success'
           })
           this.$emit('init')

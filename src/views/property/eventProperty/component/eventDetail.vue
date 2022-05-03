@@ -194,21 +194,21 @@ export default {
   methods: {
     getType(file) {
       let type
-      if (file.fileName.split('.')[-1] === '.md') {
+      if (file.fileName.split('.').slice(-1)[0] === '.md') {
         type = 'text/x-markdown'
-      } else if (file.fileName.split('.')[-1] === '.pdf') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.pdf') {
         type = 'application/pdf'
-      } else if (file.fileName.split('.')[-1] === '.doc') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.doc') {
         type = 'application/msword'
-      } else if (file.fileName.split('.')[-1] === '.docx') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.docx') {
         type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
-      } else if (file.fileName.split('.')[-1] === '.jpg') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.jpg') {
         type = 'image/jpeg'
-      } else if (file.fileName.split('.')[-1] === '.png') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.png') {
         type = 'image/png'
-      } else if (file.fileName.split('.')[-1] === '.mp4') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.mp4') {
         type = 'video/mp4'
-      } else if (file.fileName.split('.')[-1] === '.avi') {
+      } else if (file.fileName.split('.').slice(-1)[0] === '.avi') {
         type = 'video/x-msvideo'
       }
       return type

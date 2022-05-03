@@ -1,8 +1,8 @@
 <template>
-  <el-form-item ref="pptUploadComponent" prop="file">
-    <span slot="label"> <el-icon class="el-icon-upload" /> PPT上传</span>
+  <el-form-item ref="patentUploadComponent" prop="file">
+    <span slot="label"> <span style="display: inline-block; color:#f56c6c">* </span><el-icon class="el-icon-upload2" /> 专利受理文件</span>
     <el-upload
-      ref="PPTUpload"
+      ref="PatentUpload"
       v-model="innerFile"
       :file-list="fileList"
       class="upload-demo"
@@ -10,13 +10,13 @@
       :on-remove="handleFileRemove"
       action=""
       :auto-upload="false"
-      accept=".ppt,.pptx"
+      accept=".pdf,.doc,.docx"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <el-tooltip
         class="item"
         effect="dark"
-        content="只能上传ppt文件"
+        content="只能上传word/pdf文件"
         placement="right"
       >
         <span style="margin-left: 8px"> <svg-icon icon-class="hint" /></span>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ProcessPptUpload',
+  name: 'FileUpload',
   props: {
     file: {
       type: Object,
@@ -50,7 +50,7 @@ export default {
       }
       this.innerFile = file
       this.$emit('changeFile', file)
-      this.$refs['pptUploadComponent'].clearValidate()
+      this.$refs['patentUploadComponent'].clearValidate()
       console.log(this.innerFile)
     },
     handleFileRemove(file, fileList) {
@@ -66,6 +66,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

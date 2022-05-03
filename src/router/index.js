@@ -129,6 +129,15 @@ export const asyncRoutes = [{
       title: 'AC汇总',
       icon: 'rank'
     }
+  },
+  {
+    path: 'schedule',
+    name: 'Schedule',
+    component: () => import('@/views/schedule/index'),
+    meta: {
+      title: '日程汇总',
+      icon: 'date'
+    }
   }
   ]
 },
@@ -282,6 +291,54 @@ export const asyncRoutes = [{
       title: '论文详细',
       noCache: true,
       activeMenu: '/paper/index'
+    },
+    hidden: true
+  }]
+},
+{
+  path: '/patent',
+  component: Layout,
+  redirect: '/patent/index',
+  children: [{
+    path: 'index',
+    name: 'Patent',
+    component: () => import('@/views/patent/index'),
+    meta: {
+      title: '专利管理',
+      icon: 'patent'
+    }
+  }, {
+    path: 'detail/:id',
+    component: () => import('@/views/patent/components/patentDetail'),
+    name: 'patentDetail',
+    meta: {
+      title: '专利详细',
+      noCache: true,
+      activeMenu: '/patent/index'
+    },
+    hidden: true
+  }]
+},
+{
+  path: '/reimburse',
+  component: Layout,
+  redirect: '/reimburse/index',
+  children: [{
+    path: 'index',
+    name: 'Reimburse',
+    component: () => import('@/views/reimburse/index'),
+    meta: {
+      title: '报销管理',
+      icon: 'reimburse'
+    }
+  }, {
+    path: 'detail/:id',
+    component: () => import('@/views/reimburse/components/reimburseDetail'),
+    name: 'reimburseDetail',
+    meta: {
+      title: '报销详细',
+      noCache: true,
+      activeMenu: '/reimburse/index'
     },
     hidden: true
   }]

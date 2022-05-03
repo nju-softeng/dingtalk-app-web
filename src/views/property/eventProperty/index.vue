@@ -242,7 +242,7 @@ export default {
       this.addEventForm = {
         id: null,
         name: '',
-        year: 0,
+        year: null,
         type: '',
         path: ''
       }
@@ -253,7 +253,7 @@ export default {
       this.addEventForm = {
         id: null,
         name: '',
-        year: 0,
+        year: null,
         type: '',
         path: ''
       }

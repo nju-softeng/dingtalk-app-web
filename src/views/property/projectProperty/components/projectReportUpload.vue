@@ -1,8 +1,8 @@
 <template>
-  <el-form-item ref="pptUploadComponent" prop="file">
-    <span slot="label"> <el-icon class="el-icon-upload" /> PPT上传</span>
+  <el-form-item ref="reportUploadComponent" prop="reportFile">
+    <span slot="label"> <el-icon class="el-icon-upload" /> 报告上传</span>
     <el-upload
-      ref="PPTUpload"
+      ref="ReportUpload"
       v-model="innerFile"
       :file-list="fileList"
       class="upload-demo"
@@ -10,13 +10,13 @@
       :on-remove="handleFileRemove"
       action=""
       :auto-upload="false"
-      accept=".ppt,.pptx"
+      accept=".doc,.docx,pdf,.md"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <el-tooltip
         class="item"
         effect="dark"
-        content="只能上传ppt文件"
+        content="只能上传word/pdf/md文件"
         placement="right"
       >
         <span style="margin-left: 8px"> <svg-icon icon-class="hint" /></span>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'ProcessPptUpload',
+  name: 'ProjectReportUpload',
   props: {
     file: {
       type: Object,
@@ -45,22 +45,22 @@ export default {
   methods: {
     handleFileChange(file, fileList) {
       if (fileList.length > 1) {
-        console.log(fileList)
+        // console.log(fileList)
         fileList.splice(0, 1)
       }
       this.innerFile = file
-      this.$emit('changeFile', file)
-      this.$refs['pptUploadComponent'].clearValidate()
-      console.log(this.innerFile)
+      this.$emit('changeReportFile', file)
+      this.$refs['reportUploadComponent'].clearValidate()
+      // console.log(this.innerFile)
     },
     handleFileRemove(file, fileList) {
       console.log(fileList)
       this.innerFile = null
-      this.$emit('changeFile', null)
+      this.$emit('changeReportFile', null)
     },
     handleClose() {
       this.fileList = []
-      this.$emit('changeFile', null)
+      this.$emit('changeReportFile', null)
     }
   }
 }

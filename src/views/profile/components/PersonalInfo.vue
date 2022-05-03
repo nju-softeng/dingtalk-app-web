@@ -229,11 +229,11 @@ export default {
     downloadFile() {
       downloadContract().then(res => {
         let type
-        if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.pdf') {
+        if (this.personalInfoForm.leaseContractFileName.split('.').slice(-1)[0] === '.pdf') {
           type = 'application/pdf'
-        } else if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.jpg') {
+        } else if (this.personalInfoForm.leaseContractFileName.split('.').slice(-1)[0] === '.jpg') {
           type = 'image/jpeg'
-        } else if (this.personalInfoForm.leaseContractFileName.split('.')[-1] === '.png') {
+        } else if (this.personalInfoForm.leaseContractFileName.split('.').slice(-1)[0] === '.png') {
           type = 'image/png'
         }
         const binaryData = [res.data]

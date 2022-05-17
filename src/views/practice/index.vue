@@ -115,6 +115,8 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
               @blur="applyTime"
             />
           </el-col>
@@ -256,11 +258,17 @@ export default {
     acceptPractice(row) {
       const acceptForm = {
         id: row.id,
-        state: 1
+        state: 1,
+        companyName: row.companyName,
+        department: row.department,
+        practiceTime: row.practiceTime,
+        start: row.start,
+        end: row.end
       }
       addPractice(acceptForm).then(res => {
         if (res) {
           this.$notify.success('申请已通过！')
+          this.fetchPractice()
         }
       }).catch(err => {
         this.$notify.error('申请通过失败!')
@@ -270,11 +278,17 @@ export default {
     rejectPractice(row) {
       const rejectForm = {
         id: row.id,
-        state: 1
+        state: -1,
+        companyName: row.companyName,
+        department: row.department,
+        practiceTime: row.practiceTime,
+        start: row.start,
+        end: row.end
       }
       addPractice(rejectForm).then(res => {
         if (res) {
           this.$notify.success('申请已拒绝！')
+          this.fetchPractice()
         }
       }).catch(err => {
         this.$notify.error('申请拒绝失败!')

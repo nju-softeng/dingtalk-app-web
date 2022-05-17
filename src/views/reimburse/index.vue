@@ -208,7 +208,7 @@ export default {
       sessionStorage.setItem('inner-cur-page', val)
     },
     getDetail(id) {
-      this.$router.push('/reimburse/detail/' + id)
+      this.$router.push('/application/reimburse/detail/' + id)
     },
     deleteWholeReimburse(id) {
       deleteReimbursement(id).then(() => {

@@ -251,7 +251,7 @@ export default {
       return type
     },
     goBack() {
-      this.$router.push('/reimburse/index')
+      this.$router.push('/application/reimburse/index')
     },
     async handleFileUpload(data) {
       // console.log(data)

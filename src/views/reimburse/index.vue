@@ -66,7 +66,7 @@
                 >
                   <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifyReimburse(row)" />
                 </el-tooltip>
-                <el-button v-show="row.user.id !== uid || row.state !== -1" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled />
+                <el-button v-show="row.user.id !== uid || row.state === 0 || row.state === 1" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled />
                 <el-tooltip
                   v-show="row.user.id === uid"
                   effect="dark"

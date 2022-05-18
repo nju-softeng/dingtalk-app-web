@@ -44,7 +44,7 @@
                 >{{ row.state }}未知状态</el-tag>
               </template>
             </el-table-column>
-            <el-table-column v-show="uid === 38" label="申请人" width="100px" align="center">
+            <el-table-column v-if="uid === 38" label="申请人" width="100px" align="center">
               <template slot-scope="{ row }">
                 <span>{{ row.user.name }}</span>
               </template>

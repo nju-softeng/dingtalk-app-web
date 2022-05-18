@@ -347,6 +347,14 @@ export const asyncRoutes = [{
       title: '实习申请',
       icon: 'practice'
     }
+  }, {
+    path: 'vm/index',
+    name: 'VisualMachine',
+    component: () => import('@/views/vm/index'),
+    meta: {
+      title: '虚拟机申请',
+      icon: 'vm'
+    }
   }]
 },
 {

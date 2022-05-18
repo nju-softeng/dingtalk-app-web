@@ -44,7 +44,7 @@ export default {
     if (process.env.NODE_ENV === 'development') {
       // 配置测试状态无需钉钉登陆;
       this.$store
-        .dispatch('user/test_login', 104)
+        .dispatch('user/test_login', 38)
         .then(res => {
           this.$router.push({
             path: this.redirect || '/',

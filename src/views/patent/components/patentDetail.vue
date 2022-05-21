@@ -4,7 +4,7 @@
       <div class="layout-container">
         <div class="groupInfo">
           <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size:13px;width: 100%">
-            <el-breadcrumb-item :to="{ path: '/patent/index/' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/application/patent/index/' }"> <svg-icon icon-class="back" />  <span style="color: #409EFF">返回列表</span></el-breadcrumb-item>
             <el-breadcrumb-item>专利详情</el-breadcrumb-item>
           </el-breadcrumb>
           <div style="display: flex">

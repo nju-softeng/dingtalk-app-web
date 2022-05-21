@@ -49,6 +49,7 @@ export function getPaperFileDownloadInfo(data) {
   return axios({
     url: api.paperFileDownload(),
     method: 'post',
+    responseType: 'blob',
     data
   })
 }

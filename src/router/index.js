@@ -296,51 +296,65 @@ export const asyncRoutes = [{
   }]
 },
 {
-  path: '/patent',
+  path: '/application',
   component: Layout,
-  redirect: '/patent/index',
+  redirect: '/application/patent/',
+  meta: {
+    title: '申请管理',
+    icon: 'application'
+  },
   children: [{
-    path: 'index',
+    path: 'patent/index',
     name: 'Patent',
     component: () => import('@/views/patent/index'),
     meta: {
-      title: '专利管理',
+      title: '专利申请',
       icon: 'patent'
     }
   }, {
-    path: 'detail/:id',
+    path: 'patent/detail/:id',
     component: () => import('@/views/patent/components/patentDetail'),
     name: 'patentDetail',
     meta: {
       title: '专利详细',
       noCache: true,
-      activeMenu: '/patent/index'
+      activeMenu: '/application/patent'
     },
     hidden: true
-  }]
-},
-{
-  path: '/reimburse',
-  component: Layout,
-  redirect: '/reimburse/index',
-  children: [{
-    path: 'index',
+  }, {
+    path: 'reimburse/index',
     name: 'Reimburse',
     component: () => import('@/views/reimburse/index'),
     meta: {
-      title: '报销管理',
+      title: '报销申请',
       icon: 'reimburse'
     }
   }, {
-    path: 'detail/:id',
+    path: 'reimburse/detail/:id',
     component: () => import('@/views/reimburse/components/reimburseDetail'),
     name: 'reimburseDetail',
     meta: {
       title: '报销详细',
       noCache: true,
-      activeMenu: '/reimburse/index'
+      activeMenu: '/application/reimburse'
     },
     hidden: true
+  }, {
+    path: 'practice/index',
+    name: 'Practice',
+    component: () => import('@/views/practice/index'),
+    meta: {
+      title: '实习申请',
+      icon: 'practice'
+    }
+  }, {
+    path: 'vm/index',
+    name: 'VisualMachine',
+    component: () => import('@/views/vm/index'),
+    meta: {
+      title: '虚拟机申请',
+      icon: 'vm'
+    }
   }]
 },
 {

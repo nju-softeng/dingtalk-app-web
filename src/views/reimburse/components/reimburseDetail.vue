@@ -4,7 +4,7 @@
       <el-card shadow="hover" class="headCard">
         <el-page-header content="报销详情" style="margin-left: 50px" @back="goBack" />
         <div class="operation">
-          <el-button v-show="reimburseInfo.state === -1" type="primary" class="operationButtons" @click="submitReimbursement">提交审核</el-button>
+          <el-button v-show="reimburseInfo.state === -1 || reimburseInfo.state === 2" type="primary" class="operationButtons" @click="submitReimbursement">提交审核</el-button>
           <el-button v-show="reimburseInfo.state === 0 && role === 'admin'" type="success" class="operationButtons" @click="admitReimbursement">同意报销</el-button>
           <el-button v-show="reimburseInfo.state === 0 && role === 'admin'" type="danger" class="operationButtons" @click="rejectReimbursement">拒绝报销</el-button>
         </div>
@@ -43,7 +43,7 @@
       <el-card shadow="hover" class="bodyCard">
         <div class="fileHead">
           <div>报销文件</div>
-          <el-button v-show="reimburseInfo.state === -1" type="primary" @click="uploadFileVisible = true"> 上传文件</el-button>
+          <el-button v-show="reimburseInfo.state === -1 || reimburseInfo.state === 2" type="primary" @click="uploadFileVisible = true"> 上传文件</el-button>
         </div>
         <div class="fileBody">
           <div v-if="fileList.length !== 0">
@@ -251,7 +251,7 @@ export default {
       return type
     },
     goBack() {
-      this.$router.push('/reimburse/index')
+      this.$router.push('/application/reimburse/index')
     },
     async handleFileUpload(data) {
       // console.log(data)

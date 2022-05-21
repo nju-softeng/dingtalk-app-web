@@ -25,7 +25,7 @@
                       placement="top-start"
                     >
                       <router-link
-                        :to="'/patent/detail/' + scope.row.id"
+                        :to="'/application/patent/detail/' + scope.row.id"
                         class="link-type"
                       >
                         <i class="el-icon-collection" /> {{ scope.row.name }}

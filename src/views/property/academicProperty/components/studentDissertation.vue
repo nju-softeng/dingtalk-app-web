@@ -4,7 +4,7 @@
       <div class="action">
         <!--添加按钮-->
         <div
-          style="display: flex; justify-content: end; width: 100%; position: relative; bottom: 30px"
+          style="margin-bottom: 10px"
         >
           <el-button
             v-if="haveDissertation"

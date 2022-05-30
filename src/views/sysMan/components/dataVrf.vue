@@ -149,6 +149,10 @@ export default {
       decideConflict(row).then(res => {
         if (res) {
           this.conflictList.splice(0, 1)
+          if (this.conflictList.length === 0) {
+            this.tipText = '已解决全部冲突！'
+            this.buttonText = '再次核验'
+          }
           this.$message.success('已解决冲突！')
         }
       }).catch(err => {

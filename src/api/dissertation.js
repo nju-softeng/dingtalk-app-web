@@ -55,6 +55,7 @@ export function deleteDissertationFile(id, type) {
 export function downloadDissertationFile(id, type) {
   return axios({
     url: api.downloadDissertationFile(id, type),
-    method: 'post'
+    method: 'post',
+    responseType: 'blob'
   })
 }

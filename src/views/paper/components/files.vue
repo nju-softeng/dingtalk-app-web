@@ -45,7 +45,7 @@ export default {
     return {
       cards: [
         { fileName: '', fileId: '', fileTypeZHCN: '评审版本文件', fileType: 'reviewFile', fileShow: true },
-        { fileName: '', fileId: '', fileTypeZHCN: '提交时文件', fileType: 'submissionFile', fileShow: false },
+        { fileName: '', fileId: '', fileTypeZHCN: '提交版本文件', fileType: 'submissionFile', fileShow: false },
         { fileName: '', fileId: '', fileTypeZHCN: '文献评审结果', fileType: 'commentFile', fileShow: false },
         { fileName: '', fileId: '', fileTypeZHCN: '发表版本文件', fileType: 'publishedFile', fileShow: false },
         { fileName: '', fileId: '', fileTypeZHCN: '发表版本LATEX文件', fileType: 'publishedLatexFile', fileShow: false },

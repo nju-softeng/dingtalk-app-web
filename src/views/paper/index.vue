@@ -210,7 +210,8 @@
                     v-model="externalPaperForm.title"
                     type="textarea"
                     :rows="2"
-                    placeholder="请输入内容"></el-input>
+                    placeholder="请输入内容"
+                  />
                 </el-form-item>
                 <el-form-item prop="theme">
                   <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
@@ -228,7 +229,8 @@
                     range-separator="至"
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
-                    placeholder="选择时间范围"></el-time-picker>
+                    placeholder="选择时间范围"
+                  />
                 </el-form-item>
               </el-form>
             </div>
@@ -708,6 +710,7 @@ export default {
     // 关闭前清空表单
     closeAddReviewDialog() {
       this.addReviewContent = undefined
+      this.file = null
       // this.$refs.internalPaperForm.resetFields()
       this.internalPaperForm = {
         id: null,

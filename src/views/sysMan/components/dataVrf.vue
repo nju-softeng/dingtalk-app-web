@@ -60,7 +60,7 @@
                 title="确定保留区块链数据？"
                 @confirm="chooseOne(row, 'fabric')"
               >
-                <el-button slot="reference" icon="el-icon-bottom" style="padding: 2px 6px 2px 6px; font-size: 12px" @click="chooseOne(row, 'fabric')" />
+                <el-button slot="reference" icon="el-icon-bottom" style="padding: 2px 6px 2px 6px; font-size: 12px"/>
               </el-popconfirm>
             </el-tooltip>
           </template>
@@ -105,29 +105,29 @@ export default {
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].mysqlData === undefined) {
             res.data[i].mysqlData = {
-              id: '',
-              ac: '',
-              classify: '',
-              createTime: '',
-              reason: '',
-              auditor: { id: '' },
-              user: { id: '' }
+              id: null,
+              ac: null,
+              classify: null,
+              createTime: null,
+              reason: null,
+              auditor: { id: null },
+              user: { id: null }
             }
           } else if (res.data[i].mysqlData.auditor === undefined) {
-            res.data[i].mysqlData.auditor = { id: '' }
+            res.data[i].mysqlData.auditor = { id: null }
           }
           if (res.data[i].fabricData === undefined) {
             res.data[i].fabricData = {
-              id: '',
-              ac: '',
-              classify: '',
-              createTime: '',
-              reason: '',
-              auditor: { id: '' },
-              user: { id: '' }
+              id: null,
+              ac: null,
+              classify: null,
+              createTime: null,
+              reason: null,
+              auditor: { id: null },
+              user: { id: null }
             }
           } else if (res.data[i].fabricData.auditor === undefined) {
-            res.data[i].fabricData.auditor = { id: '' }
+            res.data[i].fabricData.auditor = { id: null }
           }
         }
         if (res) {

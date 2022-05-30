@@ -5,37 +5,37 @@
         <span>解决冲突数据</span>
       </div>
       <el-table v-if="conflictList.length > 0" :data="conflictList" :row-style="{ height: '41px' }">
-        <el-table-column label="AC ID" prop="id" width="80px" align="center">
+        <el-table-column label="AC ID"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.id }} <br> {{ row.fabricData.id }}
           </template>
         </el-table-column>
-        <el-table-column label="AC值" prop="ac" width="80px" align="center">
+        <el-table-column label="AC值"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.ac }} <br> {{ row.fabricData.ac }}
           </template>
         </el-table-column>
-        <el-table-column label="类别" prop="classify" width="80px" align="center">
+        <el-table-column label="类别"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.classify }} <br> {{ row.fabricData.classify }}
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="200px" align="center">
+        <el-table-column label="创建时间"  width="200px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.createTime }} <br> {{ row.fabricData.createTime }}
           </template>
         </el-table-column>
-        <el-table-column label="申请原因" prop="reason" min-width="200px" align="center">
+        <el-table-column label="申请原因"  min-width="200px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.reason }} <br> {{ row.fabricData.reason }}
           </template>
         </el-table-column>
-        <el-table-column label="审核人ID" prop="auditor" width="80px" align="center">
+        <el-table-column label="审核人ID"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.auditor.id }} <br> {{ row.fabricData.auditor.id }}
           </template>
         </el-table-column>
-        <el-table-column label="用户ID" prop="user" width="80px" align="center">
+        <el-table-column label="用户ID"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.user.id }} <br> {{ row.fabricData.user.id }}
           </template>
@@ -101,9 +101,38 @@ export default {
     startVerify() {
       this.verifying = true
       verifyData().then(res => {
+        console.log(res)
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].mysqlData === undefined) {
+            res.data[i].mysqlData = {
+              id: '',
+              ac: '',
+              classify: '',
+              createTime: '',
+              reason: '',
+              auditor: { id: '' },
+              user: { id: '' }
+            }
+          } else if (res.data[i].mysqlData.auditor === undefined) {
+            res.data[i].mysqlData.auditor = { id: '' }
+          }
+          if (res.data[i].fabricData === undefined) {
+            res.data[i].fabricData = {
+              id: '',
+              ac: '',
+              classify: '',
+              createTime: '',
+              reason: '',
+              auditor: { id: '' },
+              user: { id: '' }
+            }
+          } else if (res.data[i].fabricData.auditor === undefined) {
+            res.data[i].fabricData.auditor = { id: '' }
+          }
+        }
         if (res) {
           this.verifying = false
-          this.conflictList = res
+          this.conflictList = res.data
           if (this.conflictList.length === 0) {
             this.tipText = '验证通过！'
             this.buttonText = '再次核验'
@@ -114,6 +143,7 @@ export default {
         console.log(err)
       })
     },
+
     chooseOne(row, choice) {
       row.choice = choice
       decideConflict(row).then(res => {

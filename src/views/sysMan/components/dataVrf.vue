@@ -4,40 +4,40 @@
       <div v-if="conflictList.length > 0" slot="header">
         <span>解决冲突数据</span>
       </div>
-      <el-table v-if="conflictList.length > 0" :data="conflictList" :row-style="{ height: '41px' }">
+      <el-table v-if="conflictList.length > 0" max-height="600px" :data="conflictList" :row-style="{ height: '41px' }">
         <el-table-column label="AC ID"  width="80px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.id }} <br> {{ row.fabricData.id }}
+            {{ row.mysqlData.id }} <span> &nbsp; </span> <br> {{ row.fabricData.id }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="AC值"  width="80px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.ac }} <br> {{ row.fabricData.ac }}
+            {{ row.mysqlData.ac }} <span> &nbsp; </span> <br> {{ row.fabricData.ac }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="类别"  width="80px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.classify }} <br> {{ row.fabricData.classify }}
+            {{ row.mysqlData.classify }} <span> &nbsp; </span> <br> {{ row.fabricData.classify }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="创建时间"  width="200px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.createTime }} <br> {{ row.fabricData.createTime }}
+            {{ row.mysqlData.createTime }} <span> &nbsp; </span> <br> {{ row.fabricData.createTime }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="申请原因"  min-width="200px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.reason }} <br> {{ row.fabricData.reason }}
+            {{ row.mysqlData.reason }} <span> &nbsp; </span> <br> {{ row.fabricData.reason }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="审核人ID"  width="80px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.auditor.id }} <br> {{ row.fabricData.auditor.id }}
+            {{ row.mysqlData.auditor.id }} <span> &nbsp; </span> <br> {{ row.fabricData.auditor.id }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="用户ID"  width="80px" align="center">
           <template slot-scope="{ row }">
-            {{ row.mysqlData.user.id }} <br> {{ row.fabricData.user.id }}
+            {{ row.mysqlData.user.id }} <span> &nbsp; </span> <br> {{ row.fabricData.user.id }} <span> &nbsp; </span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80px" align="center">
@@ -69,13 +69,13 @@
       <div v-else style="display: flex; vertical-align: middle; height: 600px; justify-content: center">
         <div v-loading style="display: flex; align-items: center; width:100%; justify-content: center; font-size: 24px; flex-direction: column">
           <div>
-            <i v-if="tipText === '请点击按钮进行核验'" class="el-icon-warning-outline" />
-            <i v-else-if="verifying === true" class="el-icon-loading" />
+            <i v-if="verifying === true" class="el-icon-loading" />
+            <i v-else-if="tipText === '请点击按钮进行核验'" class="el-icon-warning-outline" />
             <i v-else class="el-icon-circle-check" style="color: #32ff64" />
             <span style="margin-left: 10px">{{ tipText }}</span>
           </div>
           <div style="margin-top: 20px">
-            <el-button style="font-size: 16px; padding: 10px 20px" @click="startVerify">{{ buttonText }}</el-button>
+            <el-button style="font-size: 16px; padding: 10px 20px" :disabled="verifying" @click="startVerify">{{ buttonText }}</el-button>
           </div>
         </div>
       </div>
@@ -100,6 +100,7 @@ export default {
   methods: {
     startVerify() {
       this.verifying = true
+      this.tipText = '核验中……'
       verifyData().then(res => {
         console.log(res)
         for (let i = 0; i < res.data.length; i++) {

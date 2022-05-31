@@ -90,7 +90,7 @@ export const asyncRoutes = [{
   redirect: '/performance/perfApplication',
   name: 'Performance',
   meta: {
-    title: '绩效管理',
+    title: '能力评价管理',
     icon: 'perf'
   },
   children: [{

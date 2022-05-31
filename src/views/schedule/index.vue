@@ -127,6 +127,7 @@
               start-placeholder="开始时间"
               end-placeholder="结束时间"
               style="width: 200px"
+              value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-col>
         </el-form-item>
@@ -252,7 +253,7 @@ export default {
   filters: {
     filterDate(date) {
       return (
-        date.getFullYear() + '年' + date.getMonth() + '月' + date.getDate() + '日' + ' ' + date.toString().split(' ')[4]
+        date.getFullYear() + '年' + (parseInt(date.getMonth()) + 1).toString() + '月' + date.getDate() + '日' + ' ' + date.toString().split(' ')[4]
       )
     }
   },
@@ -345,6 +346,7 @@ export default {
     fetchSchedule(page) {
       return new Promise((resolve, reject) => {
         getScheduleList(page, 10).then(res => {
+          console.log(res)
           this.scheduleList = res.data.list
           for (const i in this.scheduleList) {
             this.scheduleList[i].attendeesIdList = []
@@ -399,6 +401,7 @@ export default {
           this.addScheduleForm.start = this.addScheduleForm.time[0]
           this.addScheduleForm.end = this.addScheduleForm.time[1]
           // console.log(this.addScheduleForm)
+          console.log(this.addScheduleForm.start)
           addSchedule(this.addScheduleForm).then(() => {
             if (this.currentOperation === '新建日程') {
               this.$message.success('添加成功')

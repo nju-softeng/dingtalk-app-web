@@ -4,7 +4,7 @@
       <div v-if="conflictList.length > 0" slot="header">
         <span>解决冲突数据</span>
       </div>
-      <el-table v-if="conflictList.length > 0" max-height="600px" :data="conflictList" :row-style="{ height: '41px' }">
+      <el-table v-if="conflictList.length > 0" max-height="550px" :data="conflictList" :row-style="{ height: '41px' }">
         <el-table-column label="AC ID"  width="80px" align="center">
           <template slot-scope="{ row }">
             {{ row.mysqlData.id }} <span> &nbsp; </span> <br> {{ row.fabricData.id }} <span> &nbsp; </span>
@@ -41,13 +41,13 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80px" align="center">
-          <template slot-scope="{ row }">
+          <template slot-scope="{ row, $index }">
             <el-tooltip effect="dark" content="保留MySQL数据" placement="top">
               <el-popconfirm
                 icon="el-icon-warning-outline"
                 icon-color="red"
                 title="确定保留MySQL数据？"
-                @confirm="chooseOne(row, 'mysql')"
+                @confirm="chooseOne(row, 'mysql', $index)"
               >
                 <el-button slot="reference" icon="el-icon-top" style="padding: 2px 6px 2px 6px; font-size: 12px; margin-bottom: 3px" />
               </el-popconfirm>
@@ -58,7 +58,7 @@
                 icon="el-icon-warning-outline"
                 icon-color="red"
                 title="确定保留区块链数据？"
-                @confirm="chooseOne(row, 'fabric')"
+                @confirm="chooseOne(row, 'fabric', $index)"
               >
                 <el-button slot="reference" icon="el-icon-bottom" style="padding: 2px 6px 2px 6px; font-size: 12px"/>
               </el-popconfirm>
@@ -145,11 +145,11 @@ export default {
       })
     },
 
-    chooseOne(row, choice) {
+    chooseOne(row, choice, index) {
       row.choice = choice
       decideConflict(row).then(res => {
         if (res) {
-          this.conflictList.splice(0, 1)
+          this.conflictList.splice(index, 1)
           if (this.conflictList.length === 0) {
             this.tipText = '已解决全部冲突！'
             this.buttonText = '再次核验'

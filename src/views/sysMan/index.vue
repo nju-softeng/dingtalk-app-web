@@ -12,6 +12,11 @@
             <i class="el-icon-menu" />
             <span slot="title">参数设置</span>
           </el-menu-item>
+
+          <el-menu-item index="dataVrf">
+            <i class="el-icon-s-check" />
+            <span slot="title">数据核验</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main style="padding-top:0px">
@@ -27,7 +32,8 @@ export default {
 
   components: {
     userMan: () => import('./components/userMan'),
-    confMan: () => import('./components/confMan')
+    confMan: () => import('./components/confMan'),
+    dataVrf: () => import('./components/dataVrf')
   },
   data() {
     return {

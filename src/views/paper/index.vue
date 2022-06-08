@@ -565,9 +565,11 @@ export default {
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (formName === 'internalPaperForm') {
-            const formData = new FormData()
+          const formData = new FormData()
+          if (this.file) {
             formData.append('file', this.file.raw)
+          }
+          if (formName === 'internalPaperForm') {
             this.internalPaperForm.path = 'Property/Academic/Literature/' + this.internalPaperForm.journal + this.internalPaperForm.year + '/' + this.internalPaperForm.theme
             formData.append('paperFormJsonStr', JSON.stringify(this.internalPaperForm))
             this.internalPaperForm.file = this.file
@@ -594,8 +596,6 @@ export default {
                 this.$message.error('创建失败')
               })
           } else {
-            const formData = new FormData()
-            formData.append('file', this.file.raw)
             this.professorPaperForm.path = 'Property/Academic/Literature/' + this.professorPaperForm.journal + this.professorPaperForm.year + '/' + this.professorPaperForm.theme
             formData.append('paperFormJsonStr', JSON.stringify(this.professorPaperForm))
             this.professorPaperForm.file = this.file
@@ -639,7 +639,9 @@ export default {
           this.externalPaperForm.startTime = this.externalPaperForm.period[0]
           this.externalPaperForm.endTime = this.externalPaperForm.period[1]
           const formData = new FormData()
-          formData.append('file', this.file.raw)
+          if (this.file) {
+            formData.append('file', this.file.raw)
+          }
           this.externalPaperForm.path = 'Property/Academic/Literature/' + this.externalPaperForm.theme
           formData.append('externalPaperFormJsonStr', JSON.stringify(this.externalPaperForm))
           addExReview(formData)

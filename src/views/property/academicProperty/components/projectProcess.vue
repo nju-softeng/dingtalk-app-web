@@ -71,33 +71,30 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addProcessDialogVisible"
-      width="30%"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addProcessForm" :model="addProcessForm" :rules="rules" label-width="100px" style="margin-left: 36px">
-        <el-form-item prop="conferenceName" label="会议名称:">
-          <el-col :span="12">
-            <el-input v-model="addProcessForm.conferenceName" placeholder="请输入会议名称" style="width: 200px" />
-          </el-col>
-        </el-form-item>
-        <el-form-item prop="year" label="会议年份:">
-          <el-col :span="12">
-            <el-date-picker
-              v-model="addProcessForm.year"
-              value-format="yyyy"
-              format="yyyy 年"
-              type="year"
-              placeholder="选择年份"
-              style="width: 200px"
-            />
-          </el-col>
-        </el-form-item>
-        <process-ppt-upload v-show="currentOperation === '添加会议'" ref="child" :file="file" @changeFile="changeFile" />
-      </el-form>
-      <span slot="footer">
-        <el-button @click="cancelAddProcess">取 消</el-button>
-        <el-button type="primary" @click="addNewProcess('addProcessForm')">确 认</el-button>
-      </span>
+      <div>
+        <el-form ref="addProcessForm" :model="addProcessForm" :rules="rules" style="">
+          <el-form-item prop="conferenceName" label="会议名称:">
+              <el-input v-model="addProcessForm.conferenceName" placeholder="请输入会议名称"/>
+          </el-form-item>
+          <el-form-item prop="year" label="会议年份:">
+              <el-date-picker
+                v-model="addProcessForm.year"
+                value-format="yyyy"
+                format="yyyy 年"
+                type="year"
+                placeholder="选择年份"
+                style="width: fit-content;"
+              />
+          </el-form-item>
+          <process-ppt-upload v-show="currentOperation === '添加会议'" ref="child" :file="file" @changeFile="changeFile" />
+        </el-form>
+        <span slot="footer">
+          <el-button @click="cancelAddProcess">取 消</el-button>
+          <el-button type="primary" @click="addNewProcess('addProcessForm')">确 认</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>

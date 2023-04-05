@@ -155,7 +155,7 @@
     <!-- 投稿结果  dialog -->
     <el-dialog
       title="录用结果"
-      width="30%"
+      width="400px"
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
@@ -200,7 +200,7 @@
       title="发起投票"
       :visible.sync="voteDialog"
       :lock-scroll="false"
-      width="30%"
+      width="400px"
       top="24vh"
     >
       <div v-loading="loading">

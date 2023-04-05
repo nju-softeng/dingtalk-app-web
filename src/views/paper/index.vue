@@ -34,8 +34,8 @@
       :visible.sync="addReviewDialog"
       top="15vh"
       :lock-scroll="false"
-      :width="addReviewWidth"
       center
+      width="400px"
       @closed="closeAddReviewDialog"
     >
       <!-- dialog 标题 -->
@@ -75,9 +75,8 @@
                 ref="internalPaperForm"
                 :rules="rules"
                 :model="internalPaperForm"
-                label-width="110px"
               >
-                <el-form-item prop="title" style="width: 500px">
+                <el-form-item prop="title" style="width: inherit">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 论文名称</span>
                   <el-input
@@ -104,7 +103,7 @@
                     v-model="internalPaperForm.year"
                     value-format="yyyy"
                     format="yyyy年"
-                    style="width: 193px"
+                    style=""
                     type="year"
                     placeholder="刊物/会议年份"
                   />
@@ -114,7 +113,7 @@
                     <svg-icon icon-class="grade" /> 论文分类</span>
                   <el-select
                     v-model="internalPaperForm.paperType"
-                    style="width: 193px"
+                    style=""
                     placeholder="请选择"
                   >
                     <el-option
@@ -127,7 +126,7 @@
                 </el-form-item>
                 <el-form-item prop="theme">
                   <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="internalPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <el-input v-model="internalPaperForm.theme" placeholder="请输入论文主题" style="" />
                 </el-form-item>
                 <el-form-item
                   v-for="(author, index) in internalPaperForm.authors"
@@ -145,7 +144,7 @@
 
                   <el-select
                     v-model="author.uid"
-                    style="width: 193px"
+                    style=""
                     filterable
                     placeholder="请选择"
                   >
@@ -201,7 +200,6 @@
                 ref="externalPaperForm"
                 :rules="rules"
                 :model="externalPaperForm"
-                label-width="110px"
               >
                 <el-form-item prop="title">
                   <span slot="label">
@@ -214,7 +212,7 @@
                 </el-form-item>
                 <el-form-item prop="theme">
                   <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="externalPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <el-input v-model="externalPaperForm.theme" placeholder="请输入论文主题" style="" />
                 </el-form-item>
                 <file-upload v-if="externalPaperForm.id === null" :file="file" @changeFile="changeFile" />
                 <el-form-item prop="period">
@@ -250,9 +248,8 @@
                 ref="professorPaperForm"
                 :rules="rules"
                 :model="professorPaperForm"
-                label-width="110px"
               >
-                <el-form-item prop="title" style="width: 500px">
+                <el-form-item prop="title" style="">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 论文名称</span>
                   <el-input
@@ -279,7 +276,7 @@
                     v-model="professorPaperForm.year"
                     value-format="yyyy"
                     format="yyyy年"
-                    style="width: 193px"
+                    style=""
                     type="year"
                     placeholder="刊物/会议年份"
                   />
@@ -289,7 +286,7 @@
                     <svg-icon icon-class="grade" /> 论文分类</span>
                   <el-select
                     v-model="professorPaperForm.paperType"
-                    style="width: 193px"
+                    style=""
                     placeholder="请选择"
                   >
                     <el-option
@@ -302,14 +299,14 @@
                 </el-form-item>
                 <el-form-item prop="theme">
                   <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="professorPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <el-input v-model="professorPaperForm.theme" placeholder="请输入论文主题" style="" />
                 </el-form-item>
-                <el-form-item prop="firstAuthor" style="width: 500px">
+                <el-form-item prop="firstAuthor" style="">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 第一作者</span>
                   <el-input
                     v-model="professorPaperForm.firstAuthor"
-                    style="width: 193px"
+                    style=""
                     placeholder="请输入第一作者"
                   />
                 </el-form-item>
@@ -329,7 +326,7 @@
 
                   <el-select
                     v-model="author.uid"
-                    style="width: 193px"
+                    style=""
                     filterable
                     placeholder="请选择"
                   >
@@ -441,7 +438,7 @@ export default {
       userlist: [],
       //
       addReviewDialog: false,
-      addReviewWidth: '52%',
+      addReviewWidth: '400px',
       addReviewContent: undefined,
       addReviewDialogTitle: '请选择评审类型',
       file: null,
@@ -810,6 +807,7 @@ export default {
 }
 
 .dialog-content {
+  width: inherit;
   display: flex;
   justify-content: center;
 }

@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .files {
         min-height: calc(100vh - 280px);
         max-width: 1256px;

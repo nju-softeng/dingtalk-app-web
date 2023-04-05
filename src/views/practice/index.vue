@@ -93,22 +93,17 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addPracticeDialogVisible"
-      width="38%"
+      width="400px"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addPracticeForm" :model="addPracticeForm" :rules="rules" label-width="100px" style="margin-left: 36px">
+      <el-form ref="addPracticeForm" :model="addPracticeForm" :rules="rules">
         <el-form-item prop="companyName" label="实习单位:">
-          <el-col :span="12">
-            <el-input v-model="addPracticeForm.companyName" placeholder="请输入实习单位" style="width: 350px" />
-          </el-col>
+            <el-input v-model="addPracticeForm.companyName" placeholder="请输入实习单位"/>
         </el-form-item>
         <el-form-item prop="department" label="实习部门:">
-          <el-col :span="12">
-            <el-input v-model="addPracticeForm.department" placeholder="请输入实习部门" style="width: 350px" />
-          </el-col>
+            <el-input v-model="addPracticeForm.department" placeholder="请输入实习部门"/>
         </el-form-item>
         <el-form-item prop="practiceTime" label="实习时间:">
-          <el-col :span="12">
             <el-date-picker
               v-model="addPracticeForm.practiceTime"
               type="daterange"
@@ -117,9 +112,9 @@
               end-placeholder="结束日期"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
+              popper-class="global-date-style"
               @blur="applyTime"
             />
-          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">

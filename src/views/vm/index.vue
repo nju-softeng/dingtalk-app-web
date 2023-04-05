@@ -80,31 +80,24 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addVirtualMachineApplyDialogVisible"
-      width="38%"
+      width="400px"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addVirtualMachineApplyForm" :model="addVirtualMachineApplyForm" :rules="rules" label-width="100px" style="margin-left: 36px">
+      <el-form ref="addVirtualMachineApplyForm" :model="addVirtualMachineApplyForm" :rules="rules" style="">
         <el-form-item prop="projectTeam" label="项目组:">
-          <el-col :span="16">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.projectTeam }}</span>
-            <el-input v-else v-model="addVirtualMachineApplyForm.projectTeam" placeholder="请输入项目组" style="width: 350px" />
-          </el-col>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.projectTeam }}</span>
+            <el-input v-else v-model="addVirtualMachineApplyForm.projectTeam" placeholder="请输入项目组"/>
         </el-form-item>
         <el-form-item prop="subject" label="课题:">
-          <el-col :span="16">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.subject }}</span>
-            <el-input v-else v-model="addVirtualMachineApplyForm.subject" placeholder="请输入课题" style="width: 350px" />
-          </el-col>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.subject }}</span>
+            <el-input v-else v-model="addVirtualMachineApplyForm.subject" placeholder="请输入课题"/>
         </el-form-item>
         <el-form-item prop="email" label="E-mail:">
-          <el-col :span="16">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.email }}</span>
-            <el-input v-else v-model="addVirtualMachineApplyForm.email" placeholder="请输入E-mail" style="width: 350px" />
-          </el-col>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.email }}</span>
+            <el-input v-else v-model="addVirtualMachineApplyForm.email" placeholder="请输入E-mail"/>
         </el-form-item>
         <el-form-item prop="vmTime" label="虚拟机时间:">
-          <el-col :span="16">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.start }} 至 {{ tempForm.end }}</span>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.start }} 至 {{ tempForm.end }}</span>
             <el-date-picker
               v-else
               v-model="addVirtualMachineApplyForm.vmTime"
@@ -114,45 +107,31 @@
               end-placeholder="结束日期"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
+              popper-class="global-date-style"
               @blur="applyTime"
             />
-          </el-col>
         </el-form-item>
         <el-form-item prop="purpose" label="申请用途:">
-          <el-col :span="16">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.purpose }}</span>
-            <el-input v-else v-model="addVirtualMachineApplyForm.purpose" placeholder="请输入申请用途" style="width: 350px" />
-          </el-col>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.purpose }}</span>
+            <el-input v-else v-model="addVirtualMachineApplyForm.purpose" placeholder="请输入申请用途"/>
         </el-form-item>
         <el-form-item prop="coreNum" label="CPU核心数:">
-          <el-col :span="12">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.coreNum }}</span>
-            <el-input v-else v-model.number="addVirtualMachineApplyForm.coreNum" placeholder="请输入CPU核心数" style="width: 350px" />
-          </el-col>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.coreNum }}</span>
+            <el-input v-else v-model.number="addVirtualMachineApplyForm.coreNum" placeholder="请输入CPU核心数"/>
         </el-form-item>
         <el-form-item prop="memory" label="内存大小:">
-          <el-col>
-            <el-row>
-              <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.memory }}</span>
+              <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.memory }}</span>
               <el-input v-else v-model.number="addVirtualMachineApplyForm.memory" placeholder="请输入内存大小，单位为GB" style="width: 250px; display: inline-block" />
               <span style="display: inline; font-weight: bolder"> GB</span>
-            </el-row>
-          </el-col>
         </el-form-item>
         <el-form-item prop="capacity" label="硬盘容量:">
-          <el-col>
-            <el-row>
-              <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.capacity }}</span>
+              <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.capacity }}</span>
               <el-input v-else v-model.number="addVirtualMachineApplyForm.capacity" placeholder="请输入硬盘容量，单位为GB" style="width: 250px; display: inline-block" />
               <span style="display: inline; font-weight: bolder"> GB</span>
-            </el-row>
-          </el-col>
         </el-form-item>
         <el-form-item prop="operationSystem" label="操作系统:">
-          <el-col :span="12">
-            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold; margin-left: 30px">{{ tempForm.operationSystem }}</span>
+            <span v-if="currentOperation === '查看虚拟机'" style="font-weight: bold;">{{ tempForm.operationSystem }}</span>
             <el-input v-else v-model="addVirtualMachineApplyForm.operationSystem" placeholder="请输入操作系统" style="width: 350px" />
-          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">

@@ -30,7 +30,7 @@ import Item from './Item'
 import AppLink from './Link'
 
 export default {
-  name: 'SidebarItem',
+  name: 'VerticalItem',
   components: { Item, AppLink },
 
   props: {
@@ -93,6 +93,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .svg-icon {
-  margin-right: 8px;
+  // margin-right: 8px;
 }
 </style>

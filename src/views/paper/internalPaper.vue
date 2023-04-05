@@ -249,7 +249,7 @@
       title="发起投票"
       :visible.sync="voteDialog"
       :lock-scroll="false"
-      width="30%"
+      width="400px"
       top="24vh"
     >
       <div v-loading="loading">

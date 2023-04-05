@@ -166,3 +166,12 @@
   font-size: 14px;
 
 }
+
+// 解决手机端日期选择列表无法在一个屏幕内显示完全
+.global-date-style.el-date-range-picker {
+  width: 400px !important;
+  overflow-x: scroll !important;
+  .el-date-table td {
+    padding: 0 !important;
+  }
+}

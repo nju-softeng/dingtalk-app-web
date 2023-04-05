@@ -1,8 +1,13 @@
 <template>
   <div class="app-container">
     <el-container class="box">
-      <el-aside width="170px" style="background-color:#fff; padding:0px">
-        <el-menu default-active="userMan" class="menu" @select="handleSelect">
+      <el-aside width="auto" style="background-color:#fff; padding:0px">
+        <el-menu
+          default-active="userMan"
+          class="menu"
+          @select="handleSelect"
+          :collapse="device == 'mobile'"
+        >
           <el-menu-item index="userMan">
             <i class="el-icon-user" />
             <span slot="title">用户管理</span>
@@ -11,6 +16,11 @@
           <el-menu-item index="confMan">
             <i class="el-icon-menu" />
             <span slot="title">参数设置</span>
+          </el-menu-item>
+
+          <el-menu-item index="scrollBoard">
+            <i class="el-icon-data-board" />
+            <span slot="title">编辑公告栏</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -22,30 +32,34 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  name: 'Tab',
-
+  name: "Tab",
   components: {
-    userMan: () => import('./components/userMan'),
-    confMan: () => import('./components/confMan')
+    userMan: () => import("./components/userMan"),
+    confMan: () => import("./components/confMan"),
+    scrollBoard: () => import("./components/scrollBoard.vue"),
+  },
+  computed: {
+    ...mapGetters(["device"]),
   },
   data() {
     return {
-      activeName: 'userMan'
-    }
+      activeName: "userMan",
+    };
   },
   created() {},
   methods: {
     handleSelect(val) {
-      this.activeName = val
-    }
-  }
-}
+      this.activeName = val;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .menu {
-  width: 170px;
+  // width: 170px;
   min-height: 550px;
   .el-menu {
     border-right: 1px solid #f0f0f0;
@@ -81,9 +95,8 @@ export default {
 }
 
 @media only screen and (min-width: 1400px) {
-  .box  {
+  .box {
     max-width: 1800px !important;
   }
 }
-
 </style>

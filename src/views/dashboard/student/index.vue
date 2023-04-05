@@ -125,12 +125,10 @@
               <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
                 <div v-for="(msg, index) in messages" :key="index" class="message">
                   <div class="title">{{ msg.title }}</div>
+                  <span class="time">{{ new Date(msg.createTime) | timeAgo }}</span>
                   <div style="display:flex; justify-content:space-between;">
                     <div class="detail">
                       <span>{{ msg.content }}</span>
-                    </div>
-                    <div class="time">
-                      <span>{{ new Date(msg.createTime) | timeAgo }}</span>
                     </div>
                   </div>
                 </div>
@@ -430,8 +428,6 @@ export default {
   .time {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.45);
-    padding-top: 6px;
-    padding-left: 15px;
   }
 }
 

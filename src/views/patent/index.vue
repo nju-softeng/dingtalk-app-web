@@ -177,10 +177,8 @@
     <!-- 添加专利 dialog-->
     <el-dialog
       :visible.sync="addPatentDialog"
-      top="15vh"
       :lock-scroll="false"
-      :width="addPatentWidth"
-      center
+      width="400px"
       @closed="closeAddPatentDialog"
     >
       <div slot="title" class="header-title">
@@ -193,9 +191,8 @@
               ref="patentForm"
               :rules="rules"
               :model="patentForm"
-              label-width="120px"
             >
-              <el-form-item prop="name" style="width: 500px">
+              <el-form-item prop="name">
                 <span slot="label"><i class="el-icon-collection" /> 专利名</span>
                 <el-input
                   v-model="patentForm.name"
@@ -212,7 +209,7 @@
               </el-form-item>
               <el-form-item prop="type">
                 <span slot="label"><i class="el-icon-collection-tag" /> 类型</span>
-                <el-select v-model="patentForm.type" placeholder="请选择专利类型" style="width: 200px">
+                <el-select v-model="patentForm.type" placeholder="请选择专利类型">
                   <el-option
                     v-for="(item, index) in options"
                     :key="index"
@@ -227,7 +224,6 @@
                   v-model="patentForm.year"
                   value-format="yyyy"
                   format="yyyy年"
-                  style="width: 200px"
                   type="year"
                   placeholder="专利年份"
                 />
@@ -248,7 +244,6 @@
 
                 <el-select
                   v-model="inventors.uid"
-                  style="width: 200px"
                   filterable
                   placeholder="请选择"
                 >

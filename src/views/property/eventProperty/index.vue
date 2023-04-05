@@ -67,29 +67,24 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addEventDialogVisible"
-      width="30%"
+      width="400px"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addEventForm" :model="addEventForm" :rules="rules" label-width="100px">
+      <el-form ref="addEventForm" :model="addEventForm" :rules="rules">
         <el-form-item prop="name" label="活动名称:">
-          <el-col :span="12">
-            <el-input v-model="addEventForm.name" placeholder="请输入活动名称" style="width: 200px" />
-          </el-col>
+            <el-input v-model="addEventForm.name" placeholder="请输入活动名称"/>
         </el-form-item>
         <el-form-item prop="year" label="活动年份:">
-          <el-col :span="12">
             <el-date-picker
               v-model="addEventForm.year"
               value-format="yyyy"
               type="year"
               placeholder="选择年份"
-              style="width: 200px"
+              style="width: inherit"
             />
-          </el-col>
         </el-form-item>
         <el-form-item prop="type" label="活动类型:">
-          <el-col :span="8">
-            <el-select v-model="addEventForm.type" placeholder="请选择活动类型" style="width: 200px">
+            <el-select v-model="addEventForm.type" placeholder="请选择活动类型">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -97,7 +92,6 @@
                 :value="item.value"
               />
             </el-select>
-          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">

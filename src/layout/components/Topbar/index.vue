@@ -6,18 +6,18 @@
     </div>
 
     <el-menu :default-active="activeMenu" :text-color="variables.menuText" :unique-opened="false" :active-text-color="variables.menuActiveText" mode="horizontal">
-      <topbar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
+      <bar-item v-for="route in permission_routes" :key="route.index" :item="route" :base-path="route.path" />
     </el-menu>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import TopbarItem from './TopbarItem'
+import BarItem from './BarItem'
 import variables from '@/styles/variables.scss'
 
 export default {
-  components: { TopbarItem },
+  components: { BarItem },
   computed: {
     ...mapGetters(['permission_routes', 'sidebar']),
     activeMenu() {
@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     go() {
+      console.log("fdsf")
       this.$router.push({
         path: '/'
       })

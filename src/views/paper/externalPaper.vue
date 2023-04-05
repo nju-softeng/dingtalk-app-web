@@ -70,7 +70,7 @@
     <!-- 投稿结果  dialog -->
     <el-dialog
       title="录用结果"
-      width="30%"
+      width="400px"
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >

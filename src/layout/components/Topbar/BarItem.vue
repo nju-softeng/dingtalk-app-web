@@ -14,13 +14,16 @@
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="menu-item">
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="menu-item" :style="`width:${menuItemWidth}px;`">
       <template slot="title">
         <item v-if="item.meta" :title="item.meta.title" />
         <!-- 增加固定宽度解决箭头被遮挡的问题-->
-        <div style="display: inline-block; width:18px;" />
+        <!-- <div style="display: inline-block; width:18px;" /> -->
       </template>
-      <vertical-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
+      <vertical-item 
+        v-for="child in item.children" 
+        :key="child.path" :is-nest="true" :item="child" 
+        :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
   </div>
 </template>
@@ -31,11 +34,11 @@ import { isExternal } from '@/utils/index'
 import Item from './Item'
 import AppLink from './Link'
 
-import verticalItem from './verticalItem'
+import VerticalItem from './VerticalItem'
 
 export default {
-  name: 'SidebarItem',
-  components: { Item, AppLink, verticalItem },
+  name: 'BarItem',
+  components: { Item, AppLink, VerticalItem },
   props: {
     // route object
     item: {
@@ -49,6 +52,10 @@ export default {
     basePath: {
       type: String,
       default: ''
+    },
+    menuItemWidth: {
+      type: String,
+      default: '110'
     }
   },
   data() {
@@ -96,14 +103,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .menu-item {
-  text-align: center;
+  // text-align: center;
 
-  height: 48px;
-  line-height: 48px;
+  // height: 48px;
+  // line-height: 48px;
 }
-.svg-icon {
-  margin-right: 5px;
-}
+// .svg-icon {
+//   margin-right: 5px;
+// }
 
 .el-menu-item.is-active {
   border-bottom: 2px solid #409eff !important;

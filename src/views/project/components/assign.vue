@@ -149,88 +149,89 @@
       title="项目"
       :lock-scroll="false"
       :visible.sync="projectDialog"
-      width="32%"
+      width="400px"
       @submit.native.prevent
       @close="clearProjectForm"
     >
-      <el-form
-        ref="projectForm"
-        v-loading="loading"
-        style="width: 100%"
-        label-width="100px"
-        :rules="rules"
-        :model="projectForm"
-      >
-        <el-form-item prop="name" label="项目名称：">
-          <el-input v-model="projectForm.name" style="!important" />
-        </el-form-item>
-        <el-form-item prop="leader" label="项目负责人：">
-          <el-select
-            v-model="projectForm.leaderId"
-            style="width: 193px"
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in userList"
-              :key="index"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="支持搜索功能快速查找用户"
-            placement="right"
-          >
-            <span style="margin-left: 8px">
-              <svg-icon icon-class="hint"
-            /></span>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item prop="nature" label="项目性质：">
-          <el-select v-model="projectForm.nature" placeholder="请选择">
-            <el-option
-              v-for="item in projectNatureList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="level" label="项目级别：">
-          <el-select
-            v-if="projectForm.nature"
-            v-model="projectForm.horizontalLevel"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in projectHorizontalLevelList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-          <el-select
-            v-if="!projectForm.nature"
-            v-model="projectForm.longitudinalLevel"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in projectLongitudinalLevelList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" style="width: 100%" @click="submitProject"
-          >确 定</el-button
+      <div style="padding-bottom: 10px;;">
+        <el-form
+          ref="projectForm"
+          v-loading="loading"
+          style="width: 100%"
+          :rules="rules"
+          :model="projectForm"
         >
-      </span>
+          <el-form-item prop="name" label="项目名称：">
+            <el-input v-model="projectForm.name" style="!important" />
+          </el-form-item>
+          <el-form-item prop="leader" label="项目负责人：">
+            <el-select
+              v-model="projectForm.leaderId"
+              filterable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="(item, index) in userList"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="支持搜索功能快速查找用户"
+              placement="right"
+            >
+              <span style="margin-left: 8px">
+                <svg-icon icon-class="hint"
+              /></span>
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item prop="nature" label="项目性质：">
+            <el-select v-model="projectForm.nature" placeholder="请选择">
+              <el-option
+                v-for="item in projectNatureList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="level" label="项目级别：">
+            <el-select
+              v-if="projectForm.nature"
+              v-model="projectForm.horizontalLevel"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in projectHorizontalLevelList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <el-select
+              v-if="!projectForm.nature"
+              v-model="projectForm.longitudinalLevel"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in projectLongitudinalLevelList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" style="width: 100%;" @click="submitProject"
+            >确 定</el-button
+          >
+        </span>
+      </div>
     </el-dialog>
 
     <!-- 添加迭代dialog -->

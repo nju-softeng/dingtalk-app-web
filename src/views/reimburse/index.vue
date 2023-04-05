@@ -99,30 +99,25 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addReimburseDialogVisible"
-      width="30%"
+      width="400px"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addReimburseForm" :model="addReimburseForm" :rules="rules" label-width="100px" style="margin-left: 36px">
+      <el-form ref="addReimburseForm" :model="addReimburseForm" :rules="rules">
         <el-form-item prop="name" label="报销名称:">
-          <el-col :span="12">
-            <el-input v-model="addReimburseForm.name" placeholder="请输入报销名称" style="width: 200px" />
-          </el-col>
+          <el-input v-model="addReimburseForm.name" placeholder="请输入报销名称" />
         </el-form-item>
         <el-form-item prop="type" label="报销类型:">
-          <el-col :span="12">
-            <el-select
-              v-model="addReimburseForm.type"
-              placeholder="选择报销类型"
-              style="width: 200px"
-            >
-              <el-option
-                v-for="(item, index) in options"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-col>
+          <el-select
+            v-model="addReimburseForm.type"
+            placeholder="选择报销类型"
+          >
+            <el-option
+              v-for="(item, index) in options"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer">

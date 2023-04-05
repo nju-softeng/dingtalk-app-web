@@ -1,15 +1,28 @@
 <template>
   <div class="app-container">
     <div class="box-ac">
-      <el-button type="primary" style="margin-bottom: 8px; margin-left: 2px" icon="el-icon-document" @click="dialog = true">
+      <el-button
+        type="primary"
+        style="margin-bottom: 8px; margin-left: 2px"
+        icon="el-icon-document"
+        @click="dialog = true"
+      >
         导出AC数据
       </el-button>
-
     </div>
     <div class="box-ac">
       <!-- AC排名 -->
       <el-card shadow="never" class="box-ac-card" style="width: 35%;">
-        <el-table ref="table" class="table" height="83vh" :data="list" highlight-current-row style="width: 100%" :header-cell-style="{ background: '#eef1f6' }" @current-change="handleCurrentChange">
+        <el-table
+          ref="table"
+          class="table"
+          height="83vh"
+          :data="list"
+          highlight-current-row
+          style="width: 100%"
+          :header-cell-style="{ background: '#eef1f6' }"
+          @current-change="handleCurrentChange"
+        >
           <el-table-column type="index" />
           <el-table-column prop="name" label="姓名" />
           <el-table-column prop="total" label="总AC" />
@@ -25,14 +38,29 @@
         <!-- 详细AC -->
         <el-scrollbar v-if="aclist.length != 0" style="height: 93%;">
           <el-timeline>
-            <el-timeline-item v-for="(item, index) in aclist" :key="index" :timestamp="item.create_time" placement="top">
+            <el-timeline-item
+              v-for="(item, index) in aclist"
+              :key="index"
+              :timestamp="item.create_time"
+              placement="top"
+            >
               <div class="test">
                 <el-card shadow="never" class="ac-card">
-                  <p style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ item.reason }}</p>
+                  <p
+                    style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
+                  >
+                    {{ item.reason }}
+                  </p>
                   <p>
-                    <span v-if="item.ac > 0" style="padding-right:20px">AC值变化：+ {{ item.ac }}</span>
-                    <span v-else style="padding-right:20px">AC值变化： {{ item.ac }}</span>
-                    <span v-if="item.classify === 0" style="padding-right:20px">审核人: {{ item.auditor }}</span>
+                    <span v-if="item.ac > 0" style="padding-right:20px"
+                      >AC值变化：+ {{ item.ac }}</span
+                    >
+                    <span v-else style="padding-right:20px"
+                      >AC值变化： {{ item.ac }}</span
+                    >
+                    <span v-if="item.classify === 0" style="padding-right:20px"
+                      >审核人: {{ item.auditor }}</span
+                    >
                     <el-tag>{{ getClassify(item.classify) }}</el-tag>
                   </p>
                 </el-card>
@@ -50,7 +78,14 @@
     </div>
 
     <!-- 导出AC数据  dialog -->
-    <el-dialog class="download" title="导出AC数据" :lock-scroll="false" width="360px" :visible.sync="dialog" @submit.native.prevent>
+    <el-dialog
+      class="download"
+      title="导出AC数据"
+      :lock-scroll="false"
+      width="360px"
+      :visible.sync="dialog"
+      @submit.native.prevent
+    >
       <el-date-picker
         v-model="date"
         style="width:100%; margin-bottom: 0px"
@@ -60,17 +95,18 @@
       />
 
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" style="width:100%" @click="download"> 下 载 </el-button>
+        <el-button type="primary" style="width:100%" @click="download">
+          下 载
+        </el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { getAcSummary, listUserAc } from '@/api/performance'
-import { downloadAcData } from '@/api/excel'
-import fileDownload from 'js-file-download'
+import { getAcSummary, listUserAc } from "@/api/performance";
+import { downloadAcData } from "@/api/excel";
+import fileDownload from "js-file-download";
 
 export default {
   data() {
@@ -78,64 +114,92 @@ export default {
       dialog: false,
       loading: false,
       list: [],
-      name: '',
-      ac: '',
+      name: "",
+      ac: "",
       aclist: [],
-      date: null
-    }
+      date: null,
+    };
   },
   computed: {
     getClassify() {
-      return val => {
-        if (val === 0) return '周报申请'
-        else if (val === 1) return '项目AC'
-        else if (val === 2) return '论文AC'
-        else if (val === 4) return 'bug'
-        else return '投票AC'
-      }
-    }
+      return (val) => {
+        if (val === 0) return "周报申请";
+        else if (val === 1) return "项目AC";
+        else if (val === 2) return "论文AC";
+        else if (val === 4) return "bug";
+        else return "投票AC";
+      };
+    },
   },
   created() {
-    getAcSummary().then(res => {
-      this.list = res.data
-      this.setCurrent(this.list[0])
-      this.name = this.list[0].name
-      this.ac = this.list[0].total
-      listUserAc(this.list[0].id).then(res => {
-        this.aclist = res.data
-      })
-    })
+    getAcSummary().then((res) => {
+      this.list = res.data;
+      this.setCurrent(this.list[0]);
+      this.name = this.list[0].name;
+      this.ac = this.list[0].total;
+      listUserAc(this.list[0].id).then((res) => {
+        this.aclist = res.data;
+      });
+    });
   },
 
   methods: {
     setCurrent(row) {
-      this.$refs.table.setCurrentRow(row)
+      this.$refs.table.setCurrentRow(row);
     },
     handleCurrentChange(val) {
-      this.loading = true
-      this.name = val.name
-      this.ac = val.total
-      listUserAc(val.id).then(res => {
-        console.log(res.data)
-        this.aclist = res.data
-        this.loading = false
-      })
+      this.loading = true;
+      this.name = val.name;
+      this.ac = val.total;
+      listUserAc(val.id).then((res) => {
+        console.log(res.data);
+        this.aclist = res.data;
+        this.loading = false;
+      });
     },
     download() {
-      const dateValue = new Date(this.date)
-      downloadAcData(dateValue).then(res => {
-        if (this.date != null) {
-          fileDownload(res.data, dateValue.toISOString().substr(0, 7) + '-ac.xlsx')
-          this.dialog = false
-        } else {
-          this.$message('请选择日期')
-        }
-      }).catch(err => {
-        this.$message.error('下载失败')
-      })
-    }
-  }
-}
+      const dateValue = new Date(this.date);
+      downloadAcData(dateValue)
+        .then((res) => {
+          if (this.date != null) {
+            fileDownload(
+              res.data,
+              dateValue.toISOString().substr(0, 7) + "-ac.xlsx"
+            );
+            console.log(res);
+            // let blob = new Blob([res.data], { type: "application/xlsx" });
+            // console.log(blob);
+            // let url = window.URL.createObjectURL(blob);
+            // const link = document.createElement("a"); //创建a标签
+            // link.href = url;
+            // link.download = dateValue.toISOString().substr(0, 7) + "-ac.xlsx"; //重命名文件
+            // link.click();
+            // URL.revokeObjectURL(url);
+
+            // const fileName = dateValue.toISOString().substr(0, 7) + "-ac.xlsx";
+            // var blob = new Blob([res.data], {
+            //   type: "application/vnd.ms-excel;charset=utf-8",
+            // });
+            // const URL = window.URL || window.webkitURL;
+            // const downloadElement = document.createElement("a");
+            // const href = URL.createObjectURL(blob); // 创建下载的链接
+            // downloadElement.href = href;
+            // downloadElement.download = fileName; // 下载后文件名
+            // document.body.appendChild(downloadElement);
+            // downloadElement.click(); // 点击下载
+            // document.body.removeChild(downloadElement); // 下载完成移除元素
+            // URL.revokeObjectURL(href); // 释放掉blob对象
+            this.dialog = false;
+          } else {
+            this.$message("请选择日期");
+          }
+        })
+        .catch((err) => {
+          this.$message.error("下载失败");
+        });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .download ::v-deep .el-dialog__body {

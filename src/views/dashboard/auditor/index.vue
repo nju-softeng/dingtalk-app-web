@@ -84,11 +84,14 @@
         <el-row :gutter="6">
           <el-col :xs="24" :sm="16" :lg="16">
             <!-- 快捷导航 -->
-            <el-card class="box-card" shadow="never" style="margin-bottom: 5px; ">
+            <el-card class="box-card" shadow="never">
+              <div slot="header">
+                <span>快捷导航 >></span>
+              </div>
               <div class="shortcut">
-                <div class="item hiden-s">
+                <!-- <div class="item hiden-s">
                   <div style="padding: 5px 0; font-size: 14px">快捷导航 >> </div>
-                </div>
+                </div> -->
                 <div class="item">
                   <router-link to="/performance/perfAudit">
                     <el-button plain class="btn">绩效审核</el-button>
@@ -117,6 +120,19 @@
                 </div>
               </div>
             </el-card>
+            <!-- 滚动公告栏 -->
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clearfix">
+                <span>公告栏</span>
+                <i class="el-icon-s-opportunity"></i>
+
+                <router-link :to="{ path: '/system/boardEdit'}">
+                  <el-button style="float: right;padding:0" type="text" >编辑公告栏</el-button>
+                </router-link>
+                
+              </div>
+              <ScrollBoard></ScrollBoard>
+            </el-card>
             <!-- 消息面板 -->
             <el-card class="box-card" shadow="never">
               <!-- 消息卡片头 -->
@@ -130,12 +146,10 @@
               <div v-if="messages.length != 0" style="min-height:200px;font-size:14px;">
                 <div v-for="(msg, index) in messages" :key="index" class="message">
                   <div class="title">{{ msg.title }}</div>
+                  <span  class="time">{{ new Date(msg.createTime) | timeAgo }}</span>
                   <div style="display:flex;justify-content:space-between;">
                     <div class="detail">
                       <span>{{ msg.content }}</span>
-                    </div>
-                    <div class="time">
-                      <span>{{ new Date(msg.createTime) | timeAgo }}</span>
                     </div>
                   </div>
                 </div>
@@ -150,7 +164,7 @@
           <el-col :xs="24" :sm="8" :lg="8">
 
             <!-- AC排行 -->
-            <el-card class="box-card" shadow="never" style="margin-bottom: 5px;">
+            <el-card class="box-card" shadow="never">
               <el-table ref="table" class="table" height="83vh" :data="aclist" max-height="250" highlight-current-row style="width: 100%">
                 <el-table-column type="index" label="AC排行" width="90" align="center" />
                 <el-table-column prop="name" label="姓名" />
@@ -206,8 +220,12 @@ import { getAuditorBugCnt } from '@/api/bug'
 import { showHelloTime } from '@/utils/index'
 import { getYiYan } from '@/api/common'
 import { getAcSummary } from '@/api/performance'
+import ScrollBoard from '@/components/ScrollBoard'
 
 export default {
+  components: {
+    ScrollBoard
+  },
   data() {
     return {
       messages: [],
@@ -448,8 +466,8 @@ export default {
   .time {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.45);
-    padding-top: 6px;
-    padding-left: 15px;
+    // padding-top: 6px;
+    // padding-left: 15px;
   }
 }
 
@@ -468,5 +486,8 @@ export default {
   .auditor {
     margin-top: 15px;
   }
+}
+.box-card {
+  margin-bottom: 5px;
 }
 </style>

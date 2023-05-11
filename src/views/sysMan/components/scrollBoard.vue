@@ -43,7 +43,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="链接" min-width="200">
+      <!-- <el-table-column label="链接" min-width="200">
         <template slot-scope="scope">
           <el-tooltip
             effect="dark"
@@ -55,8 +55,19 @@
             </div>
           </el-tooltip>
         </template>
+      </el-table-column> -->
+      <el-table-column label="详情" min-width="200">
+        <template slot-scope="scope">
+          <!-- <v-md-editor v-model="scope.row.content" mode="preview" /> -->
+          <span class="content" @click="checkDetail(scope.row)">{{
+            scope.row.content
+          }}</span>
+        </template>
       </el-table-column>
       <el-table-column prop="releaseTime" label="日期" width="150">
+        <template slot-scope="scope">
+          {{ scope.row.releaseTime.replace("T", " ") }}
+        </template>
       </el-table-column>
       <el-table-column prop="authorName" label="发布人" width="150">
       </el-table-column>
@@ -115,13 +126,41 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog title="新增公告" :visible.sync="addNewsVisible" width="400px">
+    <el-dialog
+      title="新增公告"
+      :visible.sync="addNewsVisible"
+      :width="device === 'mobile' ? '400px' : '850px'"
+    >
       <el-form ref="form" :model="form" :rules="rules">
         <el-form-item label="公告标题" prop="title">
           <el-input v-model="form.title" placeholder="不宜超过25字"></el-input>
         </el-form-item>
-        <el-form-item label="公告链接" prop="link">
+        <!-- <el-form-item label="公告链接" prop="link">
           <el-input v-model="form.link"></el-input>
+        </el-form-item> -->
+        <el-form-item label="内容详情" prop="content">
+          <template v-if="device === 'mobile'">
+            <el-input
+              type="textarea"
+              :rows="3"
+              v-model="form.content"
+            ></el-input>
+            <el-tooltip content="电脑端支持md格式" placement="right">
+              <span style="align-self: center;">
+                <i class="el-icon-warning-outline"></i>
+              </span>
+            </el-tooltip>
+          </template>
+
+          <template v-else>
+            <v-md-editor
+              v-model="form.content"
+              mode="edit"
+              class="editor"
+              height="250px"
+              @save="save"
+            />
+          </template>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="_addNews('form')"
@@ -138,6 +177,13 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog
+      title="公告详情"
+      :visible.sync="newsContentVisible"
+      width="400px"
+    >
+      <v-md-editor v-model="activeRow.content" mode="preview" />
+    </el-dialog>
   </div>
 </template>
 
@@ -151,12 +197,21 @@ import {
   hideNews,
   showNews,
 } from "@/api/scrollBoard.js";
+import { mapState } from "vuex";
 
 export default {
   name: "ScrollBoardEdit",
   data() {
+    var checkContent = (rule, value, callback) => {
+      console.log("sdfsdf");
+      if (this.form.content === "") {
+        return callback(new Error("内容详情不能为空"));
+      }
+    };
+
     return {
       addNewsVisible: false,
+      newsContentVisible: false,
       newsData: [],
       total: 0,
       // 0 - 隐藏的新闻， 1 - 显示的新闻， 2 - 全部新闻
@@ -164,15 +219,24 @@ export default {
       currentPage: 1,
       form: {
         title: null,
-        link: null,
+        // link: null,
         authorId: sessionStorage.getItem("uid"),
+        content: localStorage.getItem("news-content") || "",
       },
       rules: {
         title: [{ required: true, message: "请输入公告标题", trigger: "blur" }],
-        link: [{ required: true, message: "请输入公告链接", trigger: "blur" }],
+        content: [{ required: true, validator: checkContent, trigger: "blur" }],
       },
       loading: false,
+      activeRow: {
+        content: "",
+      },
     };
+  },
+  computed: {
+    ...mapState({
+      device: (state) => state.app.device,
+    }),
   },
   created() {
     this.fetchNews(1);
@@ -236,6 +300,8 @@ export default {
     },
     // 分页获取数据
     handleCurrentChange(val) {
+      if (val == this.currentPage) return;
+      // console.log("handleCurrentChange");
       this.fetchNews(val);
     },
     // 上一页
@@ -244,6 +310,7 @@ export default {
     },
     // 下一页
     handleNext(val) {
+      // console.log("handleNext");
       this.fetchNews(val);
     },
     // 获取按类型筛选的新闻列表
@@ -275,7 +342,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true;
-          addNews(this.form.title, this.form.link, this.form.authorId)
+          addNews(this.form.title, this.form.authorId, this.form.content)
             .then((res) => {
               if (res.data.code === 0) {
                 this.$message.success(res.data.data);
@@ -343,6 +410,14 @@ export default {
           this.loading = false;
         });
     },
+    checkDetail(row) {
+      this.newsContentVisible = true;
+      this.activeRow = { ...row };
+      if (this.activeRow.content === "") this.activeRow.content = "无详情";
+    },
+    save() {
+      localStorage.setItem("news-content", this.form.content);
+    },
   },
 };
 </script>
@@ -361,6 +436,12 @@ export default {
 }
 
 .title {
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content {
   overflow: hidden; /*超出部分隐藏*/
   white-space: nowrap;
   text-overflow: ellipsis;

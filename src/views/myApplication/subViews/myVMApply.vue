@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="vmWrap">
       <div class="vmBox">
-        <!-- <el-button
+        <el-button
           type="primary"
           icon="el-icon-plus"
           style="margin-bottom: 10px;"
@@ -11,7 +11,7 @@
             addVirtualMachineApplyDialogVisible = true;
           "
           >申请虚拟机
-        </el-button> -->
+        </el-button>
         <div class="vmList">
           <el-table
             :data="vmList"
@@ -73,7 +73,7 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              min-width="150px"
+              min-width="110px"
               fixed="right"
               align="center"
             >
@@ -399,7 +399,7 @@ export default {
       currentPage: 1,
       vmListFilter: {
         projectTeam: "",
-        userId: 0,
+        userId: parseInt(sessionStorage.getItem("uid")),
         state: -2,
       },
     };
@@ -416,7 +416,6 @@ export default {
       deleteVMApply(id)
         .then(() => {
           this.$message.success("删除成功");
-          // this.fetchVM();
           this.fetchVMList(1);
         })
         .catch(() => {
@@ -535,7 +534,6 @@ export default {
         .then((res) => {
           if (res) {
             this.$notify.success("申请已拒绝！");
-            // this.fetchVM();
             this.fetchVMList(1);
             this.addVirtualMachineApplyDialogVisible = false;
           }
@@ -569,7 +567,7 @@ export default {
       console.log(command);
       this.vmListFilter = {
         projectTeam: "",
-        userId: 0,
+        userId: this.uid,
         state: command,
       };
       this.fetchVMList(1);
@@ -579,15 +577,15 @@ export default {
 </script>
 
 <style scoped>
-.app-container {
+/* .app-container {
   display: flex;
   align-content: center;
   padding: 0 12px;
   background-color: #fafafa;
   border-radius: 0;
-}
+} */
 
-.vmWrap {
+/* .vmWrap {
   border: 1px solid #e8e8e8;
   border-radius: 2px;
   margin-left: auto;
@@ -606,10 +604,16 @@ export default {
   .vmBox {
     max-width: 1305px !important;
   }
-}
+} */
 
-.vmList {
+/* .vmList {
   min-height: 500px;
+} */
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #8997a5;
+  font-size: 12px;
 }
 
 .modifyBtn {

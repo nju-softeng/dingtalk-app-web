@@ -1,9 +1,19 @@
 <template>
-  <div style="display:flex">
-    <el-card class="box-card" style="width:50%; height: 500px;margin-right:5px; min-width: 200px; overflow-y: auto;" shadow="never">
+  <div style="display:flex" class="app-container">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 500px;margin-right:5px; min-width: 200px; overflow-y: auto;"
+      shadow="never"
+    >
       <div slot="header">
         <span>津贴标准</span>
-        <el-button v-if="flag1" style="float: right; padding: 3px 0" type="text" @click="flag1 = false">编辑</el-button>
+        <el-button
+          v-if="flag1"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag1 = false"
+          >编辑</el-button
+        >
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -12,7 +22,8 @@
             flag1 = true;
             modifySubsidy();
           "
-        >保存</el-button>
+          >保存</el-button
+        >
       </div>
 
       <el-table :data="subsidylist" :row-style="{ height: '41px' }">
@@ -26,10 +37,20 @@
       </el-table>
     </el-card>
 
-    <el-card class="box-card" style="width:50%; height: 500px; min-width: 200px; overflow-y: auto;" shadow="never">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 500px; min-width: 200px; overflow-y: auto;"
+      shadow="never"
+    >
       <div slot="header">
         <span>论文AC标准</span>
-        <el-button v-if="flag2" style="float: right; padding: 3px 0" type="text" @click="flag2 = false">编辑</el-button>
+        <el-button
+          v-if="flag2"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag2 = false"
+          >编辑</el-button
+        >
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -38,7 +59,8 @@
             flag2 = true;
             modfiyPaperLevel();
           "
-        >保存</el-button>
+          >保存</el-button
+        >
       </div>
 
       <el-table :data="paperlevels" :row-style="{ height: '41px' }">
@@ -68,50 +90,50 @@ import {
   listSubsidy,
   updateSubsidy,
   listPaperLevel,
-  updatePaperLevel
-} from '@/api/system'
+  updatePaperLevel,
+} from "@/api/system";
 export default {
   data() {
     return {
       flag1: true,
       flag2: true,
       subsidylist: [],
-      paperlevels: []
-    }
+      paperlevels: [],
+    };
   },
   created() {
-    listSubsidy().then(res => {
-      this.subsidylist = res.data
-    })
-    listPaperLevel().then(res => {
-      this.paperlevels = res.data
-    })
+    listSubsidy().then((res) => {
+      this.subsidylist = res.data;
+    });
+    listPaperLevel().then((res) => {
+      this.paperlevels = res.data;
+    });
   },
   methods: {
     // 更新绩效标准
     modifySubsidy() {
       updateSubsidy(this.subsidylist).then(() => {
         this.$notify({
-          title: '成功',
-          message: '绩效标准保存成功',
-          position: 'bottom-right',
-          type: 'success'
-        })
-      })
+          title: "成功",
+          message: "绩效标准保存成功",
+          position: "bottom-right",
+          type: "success",
+        });
+      });
     },
     // 更新论文AC标准
     modfiyPaperLevel() {
       updatePaperLevel(this.paperlevels).then(() => {
         this.$notify({
-          title: '成功',
-          message: '论文标准保存成功',
-          position: 'bottom-right',
-          type: 'success'
-        })
-      })
-    }
-  }
-}
+          title: "成功",
+          message: "论文标准保存成功",
+          position: "bottom-right",
+          type: "success",
+        });
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .box-card {
@@ -124,5 +146,11 @@ export default {
 li {
   padding-bottom: 4px;
   font-size: 12px;
+}
+
+.app-container {
+  padding: 12px;
+  background-color: #fafafa;
+  border-radius: 0;
 }
 </style>

@@ -43,14 +43,14 @@ const api = {
 //   });
 // }
 
-export function addNews(title, link, authorId) {
+export function addNews(title, authorId, content) {
   return axios({
     url: api.addNews,
     method: "post",
     data: {
       title,
-      link,
       authorId,
+      content,
     },
   });
 }

@@ -19,7 +19,7 @@
             highlight-current-row
             class="tableClass"
           >
-            <el-table-column label="日程名称" width="360px" align="center">
+            <el-table-column label="日程名称" align="center">
               <template slot-scope="{ row }">
                 <span>{{ row.summary }}</span>
               </template>
@@ -32,7 +32,7 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column label="地点" width="200px" align="center">
+            <el-table-column label="地点" align="center">
               <template slot-scope="{ row }">
                 <span v-if="row.online"><el-tag>线上</el-tag></span>
                 <span v-else>{{ row.location }}</span>
@@ -62,7 +62,12 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column
+              label="操作"
+              align="center"
+              width="150"
+              fixed="right"
+            >
               <template slot-scope="{ row }">
                 <el-tooltip effect="dark" content="请假详情" placement="top">
                   <el-button
@@ -354,6 +359,7 @@ export default {
     };
   },
   created() {
+    sessionStorage.setItem("inner-cur-page", 1);
     this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
     this.nowTime = new Date();
     getUserList()

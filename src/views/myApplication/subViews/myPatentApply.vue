@@ -1,6 +1,18 @@
 <template>
   <div class="app-container">
     <div class="patent-box">
+      <div class="action">
+        <div
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <el-button
+            type="primary"
+            icon="el-icon-plus"
+            @click="addPatentDialog = true"
+            >添加专利
+          </el-button>
+        </div>
+      </div>
       <div class="list" style="height: 500px">
         <el-table :data="list" class="tableClass">
           <el-table-column label="专利信息" width="335">
@@ -92,7 +104,7 @@
             <template slot-scope="scope">
               <div class="info-item">
                 <el-tooltip
-                  :disabled="scope.row.patentDetailList.length <= 3"
+                  :disabled="scope.row.patentDetailList.length < 2"
                   class="item"
                   effect="dark"
                   placement="top"
@@ -124,48 +136,24 @@
             prop="applicant.name"
           >
           </el-table-column>
-
           <el-table-column
             label="操作"
             align="center"
-            width="160"
+            width="100"
             fixed="right"
           >
             <template slot-scope="scope">
               <div class="info-item">
-                <div style="font-size:14px">
+                <div style="font-size:14px;">
                   <el-tooltip
-                    v-if="scope.row.state === 0 && hasAuth()"
-                    effect="dark"
-                    content="设置内审结果"
-                    placement="top"
                     style="margin: 0 5px;"
-                  >
-                    <svg-icon
-                      icon-class="review"
-                      @click="updatePatentReviewResult(scope.row)"
-                    />
-                  </el-tooltip>
-
-                  <el-tooltip
-                    v-if="scope.row.state === 2 && hasAuth()"
-                    effect="dark"
-                    content="设置授权结果"
-                    placement="top"
-                    style="margin: 0 5px;"
-                  >
-                    <svg-icon
-                      icon-class="review"
-                      @click="updatePatentAuthorizationResult(scope.row)"
-                    />
-                  </el-tooltip>
-
-                  <el-tooltip
                     effect="dark"
                     content="编辑"
                     placement="top"
-                    style="margin: 0 5px;"
-                    v-if="scope.row.state === 0 && hasAuth()"
+                    v-if="
+                      isPatentInventor(scope.row.patentDetailList) &&
+                        scope.row.state === 0
+                    "
                   >
                     <svg-icon
                       icon-class="edit"
@@ -174,11 +162,13 @@
                   </el-tooltip>
 
                   <el-tooltip
-                    v-if="hasAuth()"
+                    style="margin: 0 5px;"
                     effect="dark"
                     content="删除"
                     placement="top"
-                    style="margin: 0 5px;"
+                    v-if="
+                      hasAuth() || isPatentInventor(scope.row.patentDetailList)
+                    "
                   >
                     <svg-icon
                       icon-class="remove"
@@ -217,7 +207,7 @@
         />
       </div>
     </div>
-    <!-- 编辑专利 dialog-->
+    <!-- 添加专利 dialog-->
     <el-dialog
       :visible.sync="addPatentDialog"
       :lock-scroll="false"
@@ -340,62 +330,6 @@
         </span>
       </div>
     </el-dialog>
-    <!-- 内审结果 dialog -->
-    <el-dialog
-      title="内审结果"
-      width="300px"
-      :visible.sync="reviewResultDialog"
-      :lock-scroll="false"
-    >
-      <div v-loading="loading" style="padding-left: 10px">
-        <el-form>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="patent" /> 内审结果 :
-            </span>
-            <el-radio-group v-model="reviewResultForm.result">
-              <el-radio :label="1">接收</el-radio>
-              <el-radio :label="0">拒绝</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <div class="dialog-footer">
-          <el-button @click="reviewResultDialog = false">取 消</el-button>
-          <el-button type="primary" @click="submitPatentReviewResult()"
-            >确 定</el-button
-          >
-        </div>
-      </div>
-    </el-dialog>
-    <!-- 授权结果 dialog -->
-    <el-dialog
-      title="授权结果"
-      width="300px"
-      :visible.sync="authorizationResultDialog"
-      :lock-scroll="false"
-    >
-      <div v-loading="loading" style="padding-left: 10px">
-        <el-form>
-          <el-form-item>
-            <span slot="label">
-              <svg-icon icon-class="patent" /> 授权结果 :
-            </span>
-            <el-radio-group v-model="authorizationResultForm.result">
-              <el-radio :label="1">接收</el-radio>
-              <el-radio :label="0">拒绝</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <div class="dialog-footer">
-          <el-button @click="authorizationResultDialog = false"
-            >取 消</el-button
-          >
-          <el-button type="primary" @click="submitPatentAuthorizationResult()"
-            >确 定</el-button
-          >
-        </div>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -403,12 +337,7 @@
 import { getUserList } from "@/api/common";
 import FileUpload from "@/views/patent/components/fileUpload";
 import { checkPermission, permissionEnum } from "@/utils/permission";
-import {
-  queryPatentList,
-  decideAudit,
-  decideAuthorization,
-  deletePatent,
-} from "@/api/patent";
+import { addPatent, deletePatent, queryPatentList } from "@/api/patent";
 export default {
   name: "Index",
   components: {
@@ -482,32 +411,20 @@ export default {
       query: {
         applicantId: 0,
         state: -2,
-        inventorsIdList: [],
+        inventorsIdList: [sessionStorage.getItem("uid")],
         year: "",
       },
     };
   },
   created() {
-    // sessionStorage.setItem("patent-cur-page", 1);
-    this.currentPage = sessionStorage.getItem("patent-cur-page") || 1;
+    this.currentPage = sessionStorage.getItem("my-patent-cur-page") || 1;
     getUserList().then((res) => {
       this.userList = res.data;
     });
     this.uid = sessionStorage.getItem("uid");
-    // this.role = sessionStorage.getItem("role");
-    // this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
     this.fetchPatent(this.currentPage);
   },
   methods: {
-    // 判断用户是否是改条专利发明人
-    isPatentInventor(patentDetailList) {
-      return (
-        patentDetailList.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
-      );
-    },
-    hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_PATENT_APPLICATION);
-    },
     // 对象转formData 暂时没用 但是写得真好 万一要用呢
     toFormData(data) {
       const formData = new FormData();
@@ -517,32 +434,8 @@ export default {
       return formData;
     },
     fetchPatent(page) {
-      sessionStorage.setItem("patent-cur-page", page);
+      sessionStorage.setItem("my-patent-cur-page", page);
       this.currentPage = page;
-      // return new Promise((resolve, reject) => {
-      //   getPatentList(page, 6)
-      //     .then((res) => {
-      //       this.list = res.data.list;
-      //       console.log(this.list);
-      //       for (const i in this.list) {
-      //         for (const j in this.list[i].patentDetailList) {
-      //           this.list[i].patentDetailList[j].num = j;
-      //           this.list[i].patentDetailList[j].name = this.list[
-      //             i
-      //           ].patentDetailList[j].user.name;
-      //           this.list[i].patentDetailList[j].uid = this.list[
-      //             i
-      //           ].patentDetailList[j].user.id;
-      //         }
-      //       }
-      //       this.total = res.data.total;
-      //       console.log(res.data);
-      //       resolve(res);
-      //     })
-      //     .catch((err) => {
-      //       reject(err);
-      //     });
-      // });
       queryPatentList(page, 6, this.query)
         .then((res) => {
           this.list = res.data.data.list;
@@ -566,111 +459,79 @@ export default {
     // 分页前一页
     handlePrev(val) {
       this.fetchPatent(val);
-      // sessionStorage.setItem("inner-cur-page", val);
     },
     // 分页下一页
     handleNext(val) {
       this.fetchPatent(val);
-      // sessionStorage.setItem("inner-cur-page", val);
     },
     // 分页当前页
     handleCurrentChange(val) {
       if (val === this.currentPage) return;
       this.fetchPatent(val);
-      // sessionStorage.setItem("inner-cur-page", val);
     },
-    // 更新专利状态
-    updatePatentReviewResult(item) {
-      this.reviewResultForm.patentId = item.id;
-      if (this.hasAuth()) {
-        this.reviewResultDialog = true;
-      } else {
-        this.$message({
-          message: "只有审核人才可以操作",
-          type: "warning",
-        });
-      }
-    },
-    updatePatentAuthorizationResult(item) {
-      this.authorizationResultForm.patentId = item.id;
-      if (this.hasAuth()) {
-        this.authorizationResultDialog = true;
-      } else {
-        this.$message({
-          message: "只有审核人，和专利发明人才可以操作",
-          type: "warning",
-        });
-      }
-    },
-    // 提交内审结果
-    submitPatentReviewResult() {
-      if (this.reviewResultForm.result !== null) {
-        this.loading = true;
-        decideAudit(
-          this.reviewResultForm.patentId,
-          this.reviewResultForm.result === 1
-        )
-          .then((res) => {
-            this.reviewResultDialog = false;
-            this.fetchPatent(this.currentPage);
-            this.$notify({
-              title: "更新成功",
-              message:
-                "投票结果  : " +
-                (this.reviewResultForm.result ? "ACCEPT" : "REJECT"),
-              type: "success",
+    // 提交内部专利评审记录
+    submit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const formData = new FormData();
+          if (this.file) {
+            formData.append("file", this.file.raw);
+          } else {
+            formData.append("file", null);
+          }
+          this.patentForm.filePath =
+            "Patent" +
+            "/" +
+            this.patentForm.type +
+            "/" +
+            this.patentForm.year +
+            "/" +
+            this.patentForm.obligee +
+            "/" +
+            this.patentForm.name;
+          this.patentForm.inventorsIdList = [];
+          for (const i in this.patentForm.patentDetailList) {
+            this.patentForm.inventorsIdList.push(
+              this.patentForm.patentDetailList[i].uid
+            );
+          }
+          formData.append("patentVOJsonStr", JSON.stringify(this.patentForm));
+          this.patentForm.file = this.file;
+          this.loading = true;
+          addPatent(formData)
+            .then(() => {
+              this.addPatentDialog = false;
+              this.loading = false;
+              this.fetchPatent(1);
+              //   this.currentPage = 1;
+              this.$notify({
+                title: "成功",
+                message: "专利提交成功",
+                type: "success",
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              this.loading = false;
+              this.$message.error("创建失败");
             });
-          })
-          .catch((err) => {
-            this.$message({
-              message: err.message,
-              type: "warning",
-            });
-          })
-          .finally(() => {
-            this.loading = false;
+        } else {
+          this.$notify({
+            title: "提交失败",
+            message: "请填写必要信息",
+            type: "warning",
           });
-      } else {
-        this.$message({
-          message: "请选择结果",
-          type: "warning",
-        });
-      }
+        }
+      });
     },
-    // 提交授权结果
-    submitPatentAuthorizationResult() {
-      if (this.authorizationResultForm.result !== null) {
-        this.loading = true;
-        decideAuthorization(
-          this.authorizationResultForm.patentId,
-          this.authorizationResultForm.result === 1
-        )
-          .then((res) => {
-            this.reviewResultDialog = false;
-            this.fetchPatent(this.currentPage);
-            this.$notify({
-              title: "更新成功",
-              message:
-                "投票结果  : " +
-                (this.authorizationResultForm.result ? "ACCEPT" : "REJECT"),
-              type: "success",
-            });
-          })
-          .catch((err) => {
-            this.$message({
-              message: err.message,
-              type: "warning",
-            });
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-      } else {
-        this.$message({
-          message: "请选择结果",
-          type: "warning",
-        });
-      }
+    // 判断用户是否是改条专利发明人
+    isPatentInventor(patentDetailList) {
+      return (
+        patentDetailList.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
+      );
+    },
+    hasAuth() {
+      return checkPermission(permissionEnum.REVIEW_PATENT_APPLICATION);
     },
     // 删除专利记录
     removePatent(item) {
@@ -704,7 +565,7 @@ export default {
     },
     modifyPatent(form) {
       console.log(form);
-      if (this.hasAuth() || this.isPatentInventor(item.patentDetailList)) {
+      if (this.isPatentInventor(form.patentDetailList)) {
         this.addPatentDialog = true;
         this.patentForm.id = form.id;
         this.patentForm.name = form.name;
@@ -798,9 +659,9 @@ export default {
   justify-content: center;
 }
 
-.app-container {
-  background-color: #fafafa;
-}
+// .app-container {
+//   background-color: #fafafa;
+// }
 
 .patent-box {
   max-width: 1280px;
@@ -888,6 +749,7 @@ export default {
   font-size: 12px;
 }
 </style>
+
 <style lang="scss">
 /* 解决上传文件名过长导致form表单显示过长的问题 */
 .paper-form {

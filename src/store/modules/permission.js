@@ -35,6 +35,38 @@ export function filterAsyncRoutes(routes, roles) {
   return res;
 }
 
+function dfsAsynRoutes(routes, permissionList) {
+  const res = [];
+  // console.log(routes instanceof Array);
+  routes.forEach((route) => {
+    const tmp = { ...route };
+    if (checkPermission(tmp, permissionList)) {
+      if (tmp.children) {
+        tmp.children = dfsAsynRoutes(tmp.children, permissionList);
+      }
+      res.push(tmp);
+    }
+  });
+
+  return res;
+}
+
+function checkPermission(route, permissionList) {
+  if (route.meta && route.meta.permission) {
+    // console.log(route.meta.permission);
+    // console.log(
+    //   permissionList.some((item) => {
+    //     return item.id === route.meta.permission.id;
+    //   })
+    // );
+    return permissionList.some((item) => {
+      return item.id === route.meta.permission.id;
+    });
+  } else {
+    return true;
+  }
+}
+
 const state = {
   routes: [],
   addRoutes: [],
@@ -57,6 +89,16 @@ const actions = {
       } else {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
       }
+      commit("SET_ROUTES", accessedRoutes);
+      // console.log(accessedRoutes);
+      resolve(accessedRoutes);
+    });
+  },
+
+  generateRoutesByPermissions({ commit }, permissionsList) {
+    // console.log(permissionsList);
+    return new Promise((resolve) => {
+      let accessedRoutes = dfsAsynRoutes(asyncRoutes, permissionsList);
       commit("SET_ROUTES", accessedRoutes);
       // console.log(accessedRoutes);
       resolve(accessedRoutes);

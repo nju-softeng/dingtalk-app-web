@@ -37,7 +37,8 @@ module.exports = {
     },
     proxy: {
       "/api": {
-        target: "http://localhost:8080/",
+        // target: "http://localhost:8080/",
+        target: "https://c2e8-2001-da8-1007-4001-00-53ae.ngrok-free.app",
         changeOrigin: true,
       },
     },

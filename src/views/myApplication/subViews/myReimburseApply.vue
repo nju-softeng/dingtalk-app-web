@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="reimburseWrap">
       <div class="reimburseBox">
-        <!-- <el-button
+        <el-button
           type="primary"
           icon="el-icon-plus"
           style="margin-bottom: 10px;"
@@ -11,7 +11,7 @@
             addReimburseDialogVisible = true;
           "
           >新建报销记录
-        </el-button> -->
+        </el-button>
         <div class="reimburseList">
           <el-table
             :data="reimburseList"
@@ -154,7 +154,7 @@
         </div>
       </div>
     </div>
-    <!-- <el-dialog
+    <el-dialog
       :title="currentOperation"
       :visible.sync="addReimburseDialogVisible"
       width="400px"
@@ -184,15 +184,15 @@
           >确 认</el-button
         >
       </span>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {
-  queryReimbursementList,
   deleteReimbursement,
   addReimbursement,
+  queryReimbursementList,
 } from "@/api/reimburse";
 export default {
   name: "Index",
@@ -233,14 +233,17 @@ export default {
       },
       uid: -1,
       query: {
-        userId: 0,
+        userId: sessionStorage.getItem("uid"),
         type: "",
         state: -2,
       },
     };
   },
   created() {
-    this.currentPage = sessionStorage.getItem("my-reimburse-cur-page") || 1;
+    // sessionStorage.setItem("my-reimburse-cur-page", 1);
+    // this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
+    this.currentPage =
+      parseInt(sessionStorage.getItem("my-reimburse-cur-page")) || 1;
     this.fetchReimburse(this.currentPage);
     this.uid = parseInt(sessionStorage.getItem("uid"));
   },
@@ -248,7 +251,7 @@ export default {
     // 分页获取报销
     fetchReimburse(page) {
       sessionStorage.setItem("my-reimburse-cur-page", page);
-      this.currentOperation = page;
+      this.currentPage = page;
       queryReimbursementList(page, 10, this.query)
         .then((res) => {
           this.reimburseList = res.data.data.list;
@@ -351,7 +354,7 @@ export default {
     filterTag(command) {
       console.log(command);
       (this.query = {
-        userId: 0,
+        userId: sessionStorage.getItem("uid"),
         type: "",
         state: command,
       }),
@@ -362,43 +365,10 @@ export default {
 </script>
 
 <style scoped>
-.app-container {
-  display: flex;
-  align-content: center;
-  padding: 0 12px;
-  background-color: #fafafa;
-  border-radius: 0;
-}
-
-.reimburseWrap {
-  border: 1px solid #e8e8e8;
-  border-radius: 2px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  width: 80%;
-}
-
-.reimburseBox {
-  background: #fff;
-  padding: 10px 15px;
-  min-height: 540px;
-}
-
-@media only screen and (min-width: 1400px) {
-  .reimburseBox {
-    max-width: 1305px !important;
-  }
-}
-
 .el-dropdown-link {
   cursor: pointer;
   color: #8997a5;
   font-size: 12px;
-}
-
-.reimburseList {
-  min-height: 500px;
 }
 
 .detailBtn {

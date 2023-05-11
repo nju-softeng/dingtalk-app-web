@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import { permissionEnum } from "@/utils/permission.js";
 
 Vue.use(Router);
 
@@ -27,6 +28,7 @@ Router.prototype.push = function push(location) {
     icon: 'svg-name'             the icon show in the sidebar
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    permission: permissionEnum.ALLOCATE_PERMISSION          访问该路由需要的权限
   }
  */
 
@@ -120,8 +122,9 @@ export const asyncRoutes = [
         component: () => import("@/views/perfAudit/index"),
         meta: {
           title: "绩效审核",
-          icon: "el-icon-s-check",
+          icon: "el-icon-coordinate",
           roles: ["admin", "auditor"],
+          permission: permissionEnum.REVIEW_PERFORMANCE_APPLICATION,
         },
       },
       {
@@ -130,7 +133,7 @@ export const asyncRoutes = [
         component: () => import("@/views/performance/dc-index"),
         meta: {
           title: "绩效汇总",
-          icon: "el-icon-s-management",
+          icon: "el-icon-notebook-2",
         },
       },
       {
@@ -139,7 +142,7 @@ export const asyncRoutes = [
         component: () => import("@/views/performance/ac-index"),
         meta: {
           title: "AC汇总",
-          icon: "el-icon-s-marketing",
+          icon: "el-icon-data-line",
         },
       },
       {
@@ -148,7 +151,7 @@ export const asyncRoutes = [
         component: () => import("@/views/schedule/index"),
         meta: {
           title: "日程汇总",
-          icon: "el-icon-s-order",
+          icon: "el-icon-date",
         },
       },
     ],
@@ -342,8 +345,9 @@ export const asyncRoutes = [
         name: "Patent",
         component: () => import("@/views/patent/index"),
         meta: {
-          title: "专利申请",
+          title: "专利申请审核",
           icon: "el-icon-files",
+          permission: permissionEnum.REVIEW_PATENT_APPLICATION,
         },
       },
       {
@@ -362,8 +366,9 @@ export const asyncRoutes = [
         name: "Reimburse",
         component: () => import("@/views/reimburse/index"),
         meta: {
-          title: "报销申请",
+          title: "报销申请审核",
           icon: "el-icon-money",
+          permission: permissionEnum.REVIEW_REIMBURSE_APPLICATION,
         },
       },
       {
@@ -382,8 +387,9 @@ export const asyncRoutes = [
         name: "Practice",
         component: () => import("@/views/practice/index"),
         meta: {
-          title: "实习申请",
+          title: "实习申请审核",
           icon: "el-icon-suitcase",
+          permission: permissionEnum.REVIEW_INTERNSHIP_APPLICATION,
         },
       },
       {
@@ -391,8 +397,18 @@ export const asyncRoutes = [
         name: "VisualMachine",
         component: () => import("@/views/vm/index"),
         meta: {
-          title: "虚拟机申请",
+          title: "虚拟机申请审核",
           icon: "el-icon-monitor",
+          permission: permissionEnum.REVIEW_VM_DEVICE_APPLICATION,
+        },
+      },
+      {
+        path: "myApplication/index",
+        name: "myApplication",
+        component: () => import("@/views/myApplication/index"),
+        meta: {
+          title: "我的申请",
+          icon: "el-icon-collection",
         },
       },
     ],
@@ -402,7 +418,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: "/system",
     meta: {
-      title: "系统设置",
+      title: "系统管理",
       icon: "dev",
       // breadCrumbHide: true, // 面包屑不显示
       breadcrumb: false,
@@ -415,8 +431,9 @@ export const asyncRoutes = [
         meta: {
           title: "系统设置",
           icon: "setting",
-          roles: ["admin", "auditor"],
+          // roles: ["admin", "auditor"],
         },
+        hidden: true,
       },
       {
         path: "boardEdit",
@@ -424,10 +441,35 @@ export const asyncRoutes = [
         component: () => import("@/views/sysMan/components/scrollBoard.vue"),
         meta: {
           title: "编辑公告栏",
-          icon: "setting",
-          roles: ["admin", "auditor"],
+          icon: "el-icon-news",
+          // roles: ["admin", "auditor"],
+          permission: permissionEnum.EDIT_SCROLL_NEWS_BOARD,
         },
-        hidden: true,
+        // hidden: true,
+      },
+      {
+        path: "confMan",
+        name: "confMan",
+        component: () => import("@/views/sysMan/components/confMan.vue"),
+        meta: {
+          title: "参数设置",
+          icon: "el-icon-set-up",
+          // roles: ["admin", "auditor"],
+          permission: permissionEnum.EDIT_STANDARD_PARAMETER,
+        },
+        // hidden: true,
+      },
+      {
+        path: "userMan",
+        name: "userMan",
+        component: () => import("@/views/sysMan/components/userMan.vue"),
+        meta: {
+          title: "用户管理",
+          icon: "el-icon-user",
+          // roles: ["admin", "auditor"],
+          permission: permissionEnum.EDIT_ANY_USER_INFO,
+        },
+        // hidden: true,
       },
     ],
   },

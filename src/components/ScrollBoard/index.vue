@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-table :data="scrollBoardData" style="width: 100%;" max-height="150px">
+    <el-table
+      :data="scrollBoardData"
+      style="width: 100%;"
+      max-height="150px"
+      @row-click="handleRowClick"
+      v-loading="loading"
+    >
       <!-- <el-table-column label="#" prop="id" width="50"> </el-table-column> -->
       <el-table-column label="发布时间" width="150">
         <template slot-scope="scope">
@@ -14,11 +20,9 @@
             :content="scope.row.title"
             placement="top-start"
           >
-            <div class="title">
-              <a :href="scope.row.link" type="primary" class="title">
-                {{ scope.row.title }}</a
-              >
-            </div>
+            <span class="title">
+              {{ scope.row.title }}
+            </span>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -26,6 +30,13 @@
       <el-table-column prop="authorName" label="发布人" width="150">
       </el-table-column>
     </el-table>
+    <el-dialog
+      title="公告详情"
+      :visible.sync="newsContentVisible"
+      width="400px"
+    >
+      <v-md-editor v-model="activeRow.content" mode="preview" />
+    </el-dialog>
   </div>
 </template>
 
@@ -39,9 +50,15 @@ export default {
       scrollBoardData: [],
       number: 0,
       isScroll: true,
+      newsContentVisible: false,
+      activeRow: {
+        content: "",
+      },
+      loading: false,
     };
   },
   created() {
+    this.loading = true;
     getShownNews()
       .then((res) => {
         console.log(res.data);
@@ -49,6 +66,9 @@ export default {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        this.loading = false;
       });
     this.$nextTick(() => {
       let div = document.getElementsByClassName("el-table__body-wrapper")[0];
@@ -81,6 +101,11 @@ export default {
   methods: {
     formatTime(time) {
       return time.replace("T", " ");
+    },
+    handleRowClick(row) {
+      this.newsContentVisible = true;
+      this.activeRow = { ...row };
+      if (this.activeRow.content === "") this.activeRow.content = "无详情";
     },
   },
 };
@@ -117,7 +142,6 @@ h2 {
 }
 
 .title {
-  color: #409eff;
   overflow: hidden; /*超出部分隐藏*/
   white-space: nowrap;
   text-overflow: ellipsis;

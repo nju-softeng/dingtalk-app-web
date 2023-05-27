@@ -23,7 +23,7 @@
               <template slot="header" slot-scope="scope">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
-                    状态<i class="el-icon-arrow-down el-icon--right"></i>
+                    状态<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="-2">全部</el-dropdown-item>
@@ -35,27 +35,30 @@
                 </el-dropdown>
               </template>
               <template slot-scope="{ row }">
-                <el-tag v-if="row.state === -1" class="reimburseTag" type="info"
-                  >未审核</el-tag
-                >
-                <el-tag v-else-if="row.state === 0" class="reimburseTag"
-                  >审核中</el-tag
-                >
+                <el-tag
+                  v-if="row.state === -1"
+                  class="reimburseTag"
+                  type="info"
+                >未审核</el-tag>
+                <el-tag
+                  v-else-if="row.state === 0"
+                  class="reimburseTag"
+                >审核中</el-tag>
                 <el-tag
                   v-else-if="row.state === 1"
                   class="reimburseTag"
                   type="success"
-                  >审核通过</el-tag
-                >
+                >审核通过</el-tag>
                 <el-tag
                   v-else-if="row.state === 2"
                   class="reimburseTag"
                   type="danger"
-                  >审核不通过</el-tag
-                >
-                <el-tag v-else class="reimburseTag" type="danger"
-                  >{{ row.state }}未知状态</el-tag
-                >
+                >审核不通过</el-tag>
+                <el-tag
+                  v-else
+                  class="reimburseTag"
+                  type="danger"
+                >{{ row.state }}未知状态</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="报销名称" align="center">
@@ -192,173 +195,173 @@
 import {
   queryReimbursementList,
   deleteReimbursement,
-  addReimbursement,
-} from "@/api/reimburse";
+  addReimbursement
+} from '@/api/reimburse'
 export default {
-  name: "Index",
+  name: 'Index',
   data() {
     return {
       total: 0,
       currentPage: 1,
       reimburseList: [],
       addReimburseDialogVisible: false,
-      currentOperation: "添加报销",
+      currentOperation: '添加报销',
       options: [
         {
-          label: "差旅报销",
-          value: "差旅报销",
+          label: '差旅报销',
+          value: '差旅报销'
         },
         {
-          label: "国内会议报销",
-          value: "国内会议报销",
+          label: '国内会议报销',
+          value: '国内会议报销'
         },
         {
-          label: "国际会议报销",
-          value: "国际会议报销",
+          label: '国际会议报销',
+          value: '国际会议报销'
         },
         {
-          label: "办公用品报销",
-          value: "办公用品报销",
-        },
+          label: '办公用品报销',
+          value: '办公用品报销'
+        }
       ],
       addReimburseForm: {
         id: null,
-        name: "",
+        name: '',
         type: null,
-        path: "",
+        path: ''
       },
       rules: {
-        name: [{ required: true, message: "请输入报销名称", trigger: "blur" }],
-        type: [{ required: true, message: "请选择报销类型", trigger: "blur" }],
+        name: [{ required: true, message: '请输入报销名称', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择报销类型', trigger: 'blur' }]
       },
       uid: -1,
       query: {
         userId: 0,
-        type: "",
-        state: -2,
-      },
-    };
+        type: '',
+        state: -2
+      }
+    }
   },
   created() {
-    this.currentPage = sessionStorage.getItem("my-reimburse-cur-page") || 1;
-    this.fetchReimburse(this.currentPage);
-    this.uid = parseInt(sessionStorage.getItem("uid"));
+    this.currentPage = sessionStorage.getItem('my-reimburse-cur-page') || 1
+    this.fetchReimburse(this.currentPage)
+    this.uid = parseInt(sessionStorage.getItem('uid'))
   },
   methods: {
     // 分页获取报销
     fetchReimburse(page) {
-      sessionStorage.setItem("my-reimburse-cur-page", page);
-      this.currentOperation = page;
+      sessionStorage.setItem('my-reimburse-cur-page', page)
+      this.currentOperation = page
       queryReimbursementList(page, 10, this.query)
         .then((res) => {
-          this.reimburseList = res.data.data.list;
-          this.total = res.data.data.total;
+          this.reimburseList = res.data.data.list
+          this.total = res.data.data.total
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     // 上一页
     handlePrev(val) {
-      this.fetchReimburse(val);
+      this.fetchReimburse(val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchReimburse(val);
+      this.fetchReimburse(val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      if (val === this.currentPage) return;
-      this.fetchReimburse(val);
+      if (val === this.currentPage) return
+      this.fetchReimburse(val)
     },
     getDetail(id) {
-      this.$router.push("/application/reimburse/detail/" + id);
+      this.$router.push('/application/reimburse/detail/' + id)
     },
     deleteWholeReimburse(id) {
       deleteReimbursement(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchReimburse(this.currentPage);
+          this.$message.success('删除成功')
+          this.fetchReimburse(this.currentPage)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     addNewReimburse(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addReimburseForm.path =
-            "Reimburse/" +
+            'Reimburse/' +
             this.addReimburseForm.type +
-            "/" +
-            this.addReimburseForm.name;
+            '/' +
+            this.addReimburseForm.name
           addReimbursement(this.addReimburseForm)
             .then(() => {
-              if (this.currentOperation === "添加报销") {
-                this.$message.success("添加成功");
-              } else if (this.currentOperation === "修改报销") {
-                this.$message.success("修改成功");
+              if (this.currentOperation === '添加报销') {
+                this.$message.success('添加成功')
+              } else if (this.currentOperation === '修改报销') {
+                this.$message.success('修改成功')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              this.cancelAddReimburse();
-              this.fetchReimburse(this.currentPage);
+              this.cancelAddReimburse()
+              this.fetchReimburse(this.currentPage)
             })
             .catch((err) => {
-              if (this.currentOperation === "添加报销") {
-                this.$message.error("添加失败");
-              } else if (this.currentOperation === "修改报销") {
-                this.$message.error("修改失败");
+              if (this.currentOperation === '添加报销') {
+                this.$message.error('添加失败')
+              } else if (this.currentOperation === '修改报销') {
+                this.$message.error('修改失败')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              console.log(err);
-            });
+              console.log(err)
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifyReimburse(row) {
-      this.currentOperation = "修改报销";
-      this.addReimburseForm.id = row.id;
-      this.addReimburseForm.name = row.name;
-      this.addReimburseForm.type = row.type;
-      this.addReimburseDialogVisible = true;
+      this.currentOperation = '修改报销'
+      this.addReimburseForm.id = row.id
+      this.addReimburseForm.name = row.name
+      this.addReimburseForm.type = row.type
+      this.addReimburseDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addReimburseForm = {
         id: null,
-        name: "",
+        name: '',
         type: null,
-        path: "",
-      };
-      return done(true);
+        path: ''
+      }
+      return done(true)
     },
     cancelAddReimburse() {
-      this.addReimburseDialogVisible = false;
+      this.addReimburseDialogVisible = false
       this.addReimburseForm = {
         id: null,
-        name: "",
+        name: '',
         type: null,
-        path: "",
-      };
+        path: ''
+      }
     },
     filterTag(command) {
-      console.log(command);
-      (this.query = {
+      console.log(command)
+      this.query = {
         userId: 0,
-        type: "",
-        state: command,
-      }),
-        this.fetchReimburse(1);
-    },
-  },
-};
+        type: '',
+        state: command
+      }
+      this.fetchReimburse(1)
+    }
+  }
+}
 </script>
 
 <style scoped>

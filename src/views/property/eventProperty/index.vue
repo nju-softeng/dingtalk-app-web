@@ -10,7 +10,7 @@
             currentOperation = '添加活动';
             addEventDialogVisible = true;
           "
-          >新建活动
+        >新建活动
         </el-button>
         <div class="eventList">
           <el-table
@@ -114,59 +114,60 @@
       </el-form>
       <span slot="footer">
         <el-button @click="cancelAddEvent">取 消</el-button>
-        <el-button type="primary" @click="addNewEvent('addEventForm')"
-          >确 认</el-button
-        >
+        <el-button
+          type="primary"
+          @click="addNewEvent('addEventForm')"
+        >确 认</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listEvent, addEvent, deleteEvent } from "@/api/eventProperty";
+import { listEvent, addEvent, deleteEvent } from '@/api/eventProperty'
 
 export default {
-  name: "EventProperty",
+  name: 'EventProperty',
   data() {
     return {
       total: 0,
       currentPage: 1,
       eventList: [],
       addEventDialogVisible: false,
-      typeConverter: ["项目会议", "团队组织/参与的活动", "实验室活动"],
-      currentOperation: "添加活动",
+      typeConverter: ['项目会议', '团队组织/参与的活动', '实验室活动'],
+      currentOperation: '添加活动',
       addEventForm: {
         id: null,
-        name: "",
+        name: '',
         year: null,
-        type: "",
-        path: "",
+        type: '',
+        path: ''
       },
       rules: {
-        name: [{ required: true, message: "请输入事件名称", trigger: "blur" }],
-        year: [{ required: true, message: "请输入事件年份", trigger: "blur" }],
-        type: [{ required: true, message: "请选择事件类型", trigger: "blur" }],
+        name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择事件类型', trigger: 'blur' }]
       },
       options: [
         {
-          value: "0",
-          label: "项目会议",
+          value: '0',
+          label: '项目会议'
         },
         {
-          value: "1",
-          label: "团队组织/参与的活动",
+          value: '1',
+          label: '团队组织/参与的活动'
         },
         {
-          value: "2",
-          label: "实验室活动",
-        },
-      ],
-    };
+          value: '2',
+          label: '实验室活动'
+        }
+      ]
+    }
   },
   created() {
-    sessionStorage.setItem("inner-cur-page", 1);
-    this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
-    this.fetchEvent(this.currentPage);
+    sessionStorage.setItem('inner-cur-page', 1)
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.fetchEvent(this.currentPage)
   },
   methods: {
     // 分页获取活动
@@ -175,117 +176,117 @@ export default {
       return new Promise((resolve, reject) => {
         listEvent(page, 10)
           .then((res) => {
-            this.eventList = res.data.list;
-            this.total = res.data.total;
-            console.log(res);
-            resolve(res);
+            this.eventList = res.data.list
+            this.total = res.data.total
+            console.log(res)
+            resolve(res)
           })
           .catch((err) => {
-            reject(err);
-          });
-      });
+            reject(err)
+          })
+      })
     },
     // 上一页
     handlePrev(val) {
-      this.fetchEvent(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchEvent(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchEvent(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchEvent(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     getDetail(id) {
-      this.$router.push("/property/eventDetail/" + id);
+      this.$router.push('/property/eventDetail/' + id)
     },
     deleteWholeEvent(id) {
       deleteEvent(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchEvent(this.currentPage);
+          this.$message.success('删除成功')
+          this.fetchEvent(this.currentPage)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     addNewEvent(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addEventForm.path =
-            "Property/Event/" +
+            'Property/Event/' +
             this.addEventForm.year +
-            "/" +
-            this.addEventForm.name;
-          const formData = new FormData();
+            '/' +
+            this.addEventForm.name
+          const formData = new FormData()
           formData.append(
-            "eventPropertyJsonStr",
+            'eventPropertyJsonStr',
             JSON.stringify(this.addEventForm)
-          );
+          )
           addEvent(formData)
             .then(() => {
-              if (this.currentOperation === "添加活动") {
-                this.$message.success("添加成功");
-              } else if (this.currentOperation === "修改活动") {
-                this.$message.success("修改成功");
+              if (this.currentOperation === '添加活动') {
+                this.$message.success('添加成功')
+              } else if (this.currentOperation === '修改活动') {
+                this.$message.success('修改成功')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              this.cancelAddEvent();
-              this.fetchEvent(this.currentPage);
+              this.cancelAddEvent()
+              this.fetchEvent(this.currentPage)
             })
             .catch(() => {
-              if (this.currentOperation === "添加活动") {
-                this.$message.error("添加失败");
-              } else if (this.currentOperation === "修改活动") {
-                this.$message.error("修改失败");
+              if (this.currentOperation === '添加活动') {
+                this.$message.error('添加失败')
+              } else if (this.currentOperation === '修改活动') {
+                this.$message.error('修改失败')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-            });
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifyEvent(row) {
-      this.currentOperation = "修改活动";
-      this.addEventForm.id = row.id;
-      this.addEventForm.name = row.name;
-      this.addEventForm.year = row.year;
-      this.addEventForm.type = row.type;
-      this.addEventDialogVisible = true;
+      this.currentOperation = '修改活动'
+      this.addEventForm.id = row.id
+      this.addEventForm.name = row.name
+      this.addEventForm.year = row.year
+      this.addEventForm.type = row.type
+      this.addEventDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addEventForm = {
         id: null,
-        name: "",
+        name: '',
         year: null,
-        type: "",
-        path: "",
-      };
-      return done(true);
+        type: '',
+        path: ''
+      }
+      return done(true)
     },
     cancelAddEvent() {
-      this.addEventDialogVisible = false;
+      this.addEventDialogVisible = false
       this.addEventForm = {
         id: null,
-        name: "",
+        name: '',
         year: null,
-        type: "",
-        path: "",
-      };
-    },
-  },
-};
+        type: '',
+        path: ''
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

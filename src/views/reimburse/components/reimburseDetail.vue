@@ -10,28 +10,25 @@
         <div class="operation">
           <el-button
             v-show="
-              userId == reimburseInfo.user.id &&
+              userId === reimburseInfo.user.id &&
                 (reimburseInfo.state === -1 || reimburseInfo.state === 2)
             "
             type="primary"
             class="operationButtons"
             @click="submitReimbursement"
-            >提交审核</el-button
-          >
+          >提交审核</el-button>
           <el-button
             v-show="reimburseInfo.state === 0 && hasAuth()"
             type="success"
             class="operationButtons"
             @click="admitReimbursement"
-            >同意报销</el-button
-          >
+          >同意报销</el-button>
           <el-button
             v-show="reimburseInfo.state === 0 && hasAuth()"
             type="danger"
             class="operationButtons"
             @click="rejectReimbursement"
-            >拒绝报销</el-button
-          >
+          >拒绝报销</el-button>
         </div>
         <div class="reimburseName">报销名称： {{ reimburseInfo.name }}</div>
         <div class="reimburseOtherAttributes">
@@ -43,26 +40,26 @@
               v-if="reimburseInfo.state === -1"
               class="reimburseTag"
               type="info"
-              >未审核</el-tag
-            >
-            <el-tag v-else-if="reimburseInfo.state === 0" class="reimburseTag"
-              >审核中</el-tag
-            >
+            >未审核</el-tag>
+            <el-tag
+              v-else-if="reimburseInfo.state === 0"
+              class="reimburseTag"
+            >审核中</el-tag>
             <el-tag
               v-else-if="reimburseInfo.state === 1"
               class="reimburseTag"
               type="success"
-              >审核通过</el-tag
-            >
+            >审核通过</el-tag>
             <el-tag
               v-else-if="reimburseInfo.state === 2"
               class="reimburseTag"
               type="danger"
-              >审核不通过</el-tag
-            >
-            <el-tag v-else class="reimburseTag" type="danger"
-              >{{ reimburseInfo.state }}未知状态</el-tag
-            >
+            >审核不通过</el-tag>
+            <el-tag
+              v-else
+              class="reimburseTag"
+              type="danger"
+            >{{ reimburseInfo.state }}未知状态</el-tag>
           </div>
         </div>
       </el-card>
@@ -74,8 +71,7 @@
             type="primary"
             @click="uploadFileVisible = true"
           >
-            上传文件</el-button
-          >
+            上传文件</el-button>
         </div>
         <div class="fileBody">
           <div v-if="fileList.length !== 0">
@@ -103,7 +99,7 @@
             </div>
             <div v-show="haveMoreFile" class="moreFile">
               <el-button class="moreBtn" @click="getMoreFile">
-                <i class="el-icon-more" style="font-size: 30px" /><br />
+                <i class="el-icon-more" style="font-size: 30px" /><br>
                 More
               </el-button>
             </div>
@@ -163,111 +159,111 @@ import {
   addReimbursementFile,
   downloadReimbursementFile,
   deleteReimbursementFile,
-  setState,
-} from "@/api/reimburse";
-import { checkPermission, permissionEnum } from "@/utils/permission";
+  setState
+} from '@/api/reimburse'
+import { checkPermission, permissionEnum } from '@/utils/permission'
 export default {
-  name: "ReimburseDetail",
+  name: 'ReimburseDetail',
   data() {
     return {
       fileEachPage: 6,
       id: 0,
-      invitationSrc: "",
+      invitationSrc: '',
       fileList: [],
-      fileType: "银行卡支付记录",
+      fileType: '银行卡支付记录',
       reimburseInfo: {
         id: -1,
-        name: "无报销名！",
-        type: "",
-        path: "",
+        name: '无报销名！',
+        type: '',
+        path: '',
         user: {
-          id: 0,
+          id: 0
         },
         reimbursementFileList: null,
-        state: -1,
+        state: -1
       },
       uploadFileVisible: false,
-      uploadType: "",
-      acceptFileType: ".jpg,.png",
-      updateFileType: "",
+      uploadType: '',
+      acceptFileType: '.jpg,.png',
+      updateFileType: '',
       haveMoreFile: false,
       fileMax: 5,
       options: [],
-      role: "",
-      userId: parseInt(sessionStorage.getItem("uid")),
-    };
+      role: '',
+      userId: parseInt(sessionStorage.getItem('uid'))
+    }
   },
   async created() {
-    this.id = this.$route.params.id;
-    this.role = sessionStorage.getItem("role");
+    this.id = this.$route.params.id
+    this.role = sessionStorage.getItem('role')
     await getReimbursementDetail(this.id)
-      .then(async (res) => {
+      .then(async(res) => {
         if (res) {
-          this.reimburseInfo = res.data;
-          if (this.reimburseInfo.type === "差旅报销") {
+          this.reimburseInfo = res.data
+          if (this.reimburseInfo.type === '差旅报销') {
             this.options = [
               {
-                label: "车票",
-                value: "车票",
+                label: '车票',
+                value: '车票'
               },
               {
-                label: "住宿发票",
-                value: "住宿发票",
+                label: '住宿发票',
+                value: '住宿发票'
               },
               {
-                label: "银行卡支付记录",
-                value: "银行卡支付记录",
-              },
-            ];
-          } else if (this.reimburseInfo.type === "国内会议报销") {
+                label: '银行卡支付记录',
+                value: '银行卡支付记录'
+              }
+            ]
+          } else if (this.reimburseInfo.type === '国内会议报销') {
             this.options = [
               {
-                label: "邀请函",
-                value: "邀请函",
+                label: '邀请函',
+                value: '邀请函'
               },
               {
-                label: "注册费、住宿费发票",
-                value: "注册费、住宿费发票",
+                label: '注册费、住宿费发票',
+                value: '注册费、住宿费发票'
               },
               {
-                label: "银行卡支付记录",
-                value: "银行卡支付记录",
-              },
-            ];
-          } else if (this.reimburseInfo.type === "国际会议报销") {
+                label: '银行卡支付记录',
+                value: '银行卡支付记录'
+              }
+            ]
+          } else if (this.reimburseInfo.type === '国际会议报销') {
             this.options = [
               {
-                label: "邀请函",
-                value: "邀请函",
+                label: '邀请函',
+                value: '邀请函'
               },
               {
-                label: "注册费、住宿费发票",
-                value: "注册费、住宿费发票",
+                label: '注册费、住宿费发票',
+                value: '注册费、住宿费发票'
               },
               {
-                label: "银行卡支付记录",
-                value: "银行卡支付记录",
+                label: '银行卡支付记录',
+                value: '银行卡支付记录'
               },
               {
-                label: "ehall因公访问记录",
-                value: "ehall因公访问记录",
-              },
-            ];
-          } else if (this.reimburseInfo.type === "办公用品报销") {
+                label: 'ehall因公访问记录',
+                value: 'ehall因公访问记录'
+              }
+            ]
+          } else if (this.reimburseInfo.type === '办公用品报销') {
             this.options = [
               {
-                label: "发票",
-                value: "发票",
+                label: '发票',
+                value: '发票'
               },
               {
-                label: "银行卡支付记录",
-                value: "银行卡支付记录",
-              },
-            ];
+                label: '银行卡支付记录',
+                value: '银行卡支付记录'
+              }
+            ]
           } else {
             this.$message.error(
-              "未知的报销类型：" + this.reimburseInfo.type + "!"
-            );
+              '未知的报销类型：' + this.reimburseInfo.type + '!'
+            )
           }
           // console.log(this.reimburseInfo)
           for (
@@ -278,75 +274,75 @@ export default {
             await downloadReimbursementFile(
               res.data.reimbursementFileList[i].id
             ).then((result) => {
-              const binaryData = [result.data];
+              const binaryData = [result.data]
               const url = window.URL.createObjectURL(
                 new Blob(binaryData, {
-                  type: this.getType(res.data.reimbursementFileList[i]),
+                  type: this.getType(res.data.reimbursementFileList[i])
                 })
-              );
+              )
               this.fileList = this.fileList.concat([
                 {
                   id: res.data.reimbursementFileList[i].id,
                   fileName: res.data.reimbursementFileList[i].fileName,
                   description: res.data.reimbursementFileList[i].description,
-                  url: url,
-                },
-              ]);
-            });
+                  url: url
+                }
+              ])
+            })
           }
         }
       })
       .catch((err) => {
-        console.log(err);
-        this.$message.error("无法获取报销信息");
-      });
+        console.log(err)
+        this.$message.error('无法获取报销信息')
+      })
     this.haveMoreFile =
-      this.fileList.length < this.reimburseInfo.reimbursementFileList.length;
+      this.fileList.length < this.reimburseInfo.reimbursementFileList.length
   },
   methods: {
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_REIMBURSE_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_REIMBURSE_APPLICATION)
     },
     getType(file) {
-      let type;
-      if (file.fileName.split(".").slice(-1)[0] === ".ppt") {
-        type = "application/vnd.ms-powerpoint";
-      } else if (file.fileName.split(".").slice(-1)[0] === ".pptx") {
+      let type
+      if (file.fileName.split('.').slice(-1)[0] === '.ppt') {
+        type = 'application/vnd.ms-powerpoint'
+      } else if (file.fileName.split('.').slice(-1)[0] === '.pptx') {
         type =
-          "application/vnd.openxmlformats-officedoucment.presentationml.presentation";
-      } else if (file.fileName.split(".").slice(-1)[0] === ".pdf") {
-        type = "application/pdf";
-      } else if (file.fileName.split(".").slice(-1)[0] === ".jpg") {
-        type = "image/jpeg";
-      } else if (file.fileName.split(".").slice(-1)[0] === ".png") {
-        type = "image/png";
+          'application/vnd.openxmlformats-officedoucment.presentationml.presentation'
+      } else if (file.fileName.split('.').slice(-1)[0] === '.pdf') {
+        type = 'application/pdf'
+      } else if (file.fileName.split('.').slice(-1)[0] === '.jpg') {
+        type = 'image/jpeg'
+      } else if (file.fileName.split('.').slice(-1)[0] === '.png') {
+        type = 'image/png'
       }
-      return type;
+      return type
     },
     goBack() {
       // this.$router.push("/application/reimburse/index");
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     async handleFileUpload(data) {
       // console.log(data)
-      const fd = new FormData();
-      fd.append("file", data.file);
-      fd.append("description", this.fileType);
-      const res1 = await addReimbursementFile(this.id, fd);
+      const fd = new FormData()
+      fd.append('file', data.file)
+      fd.append('description', this.fileType)
+      const res1 = await addReimbursementFile(this.id, fd)
       if (res1) {
-        this.$notify.success("上传成功!");
-        if (this.updateFileType === "invitationFile") {
-          this.refreshInvitation();
-        } else if (this.updateFileType === "PPTFile") {
-          this.refreshPPT();
+        this.$notify.success('上传成功!')
+        if (this.updateFileType === 'invitationFile') {
+          this.refreshInvitation()
+        } else if (this.updateFileType === 'PPTFile') {
+          this.refreshPPT()
         }
       } else {
-        this.$notify.error("上传失败!");
+        this.$notify.error('上传失败!')
       }
-      this.$refs.fileUpload.clearFiles();
+      this.$refs.fileUpload.clearFiles()
     },
     async getMoreFile() {
-      const init = this.fileList.length;
+      const init = this.fileList.length
       for (
         let i = init;
         i < init + this.fileEachPage &&
@@ -356,72 +352,72 @@ export default {
         await downloadReimbursementFile(
           this.reimburseInfo.reimbursementFileList[i].id
         ).then((result) => {
-          const binaryData = [result.data];
+          const binaryData = [result.data]
           const url = window.URL.createObjectURL(
             new Blob(binaryData, {
-              type: this.getType(this.reimburseInfo.reimbursementFileList[i]),
+              type: this.getType(this.reimburseInfo.reimbursementFileList[i])
             })
-          );
+          )
           this.fileList = this.fileList.concat([
             {
               id: this.reimburseInfo.reimbursementFileList[i].id,
               fileName: this.reimburseInfo.reimbursementFileList[i].fileName,
               description: this.reimburseInfo.reimbursementFileList[i]
                 .description,
-              url: url,
-            },
-          ]);
-        });
+              url: url
+            }
+          ])
+        })
       }
       this.haveMoreFile =
-        this.fileList.length < this.reimburseInfo.reimbursementFileList.length;
-      this.fileMax += this.fileEachPage;
+        this.fileList.length < this.reimburseInfo.reimbursementFileList.length
+      this.fileMax += this.fileEachPage
     },
     downloadFile(file) {
       downloadReimbursementFile(file.id).then((res) => {
-        const binaryData = [res.data];
+        const binaryData = [res.data]
         const url = window.URL.createObjectURL(
           new Blob(binaryData, { type: this.getType(file) })
-        );
-        const a = document.createElement("a");
-        a.download = file.fileName;
-        a.href = url;
-        a.click();
-      });
+        )
+        const a = document.createElement('a')
+        a.download = file.fileName
+        a.href = url
+        a.click()
+      })
     },
     deleteFile(file, index) {
       if (this.reimburseInfo.state === -1) {
         deleteReimbursementFile(file.id)
-          .then(async (res) => {
+          .then(async(res) => {
             if (res) {
-              this.$notify.success("删除完成！");
-              this.fileList.splice(index, 1);
-              await this.refreshFileList();
+              this.$notify.success('删除完成！')
+              this.fileList.splice(index, 1)
+              await this.refreshFileList()
               if (
                 this.reimburseInfo.reimbursementFileList.length <=
                 this.fileMax - this.fileEachPage
               ) {
-                this.fileMax -= this.fileEachPage;
+                this.fileMax -= this.fileEachPage
               }
             }
           })
           .catch(() => {
-            this.$notify.error("删除失败！");
-          });
+            this.$notify.error('删除失败！')
+          })
       } else {
-        this.$alert("报销已提交，无法删除！");
+        this.$alert('报销已提交，无法删除！')
       }
     },
     async refreshBeforeClose(done) {
-      await this.refreshFileList();
-      return done(true);
+      await this.refreshFileList()
+      return done(true)
     },
     async refreshFileList() {
-      const res = await getReimbursementDetail(this.id);
+      const res = await getReimbursementDetail(this.id)
       if (res) {
-        this.reimburseInfo = res.data;
+        this.reimburseInfo = res.data
       }
-      const init = this.fileList.length;
+      const init = this.fileList.length
       for (
         var i = init;
         i < this.fileMax && i < res.data.reimbursementFileList.length;
@@ -429,66 +425,66 @@ export default {
       ) {
         const result = await downloadReimbursementFile(
           res.data.reimbursementFileList[i].id
-        );
-        const binaryData = [result.data];
+        )
+        const binaryData = [result.data]
         const url = window.URL.createObjectURL(
           new Blob(binaryData, {
-            type: this.getType(res.data.reimbursementFileList[i]),
+            type: this.getType(res.data.reimbursementFileList[i])
           })
-        );
+        )
         this.fileList = this.fileList.concat([
           {
             id: res.data.reimbursementFileList[i].id,
             fileName: res.data.reimbursementFileList[i].fileName,
             description: res.data.reimbursementFileList[i].description,
-            url: url,
-          },
-        ]);
+            url: url
+          }
+        ])
       }
       this.haveMoreFile =
-        this.fileList.length < this.reimburseInfo.reimbursementFileList.length;
+        this.fileList.length < this.reimburseInfo.reimbursementFileList.length
     },
     submitReimbursement() {
       setState(this.reimburseInfo.id, 0)
         .then((res) => {
           if (res) {
-            this.$notify.success("提交成功！");
-            this.refreshFileList();
+            this.$notify.success('提交成功！')
+            this.refreshFileList()
           }
         })
         .catch((err) => {
-          this.$notify.error("提交失败!");
-          console.log(err);
-        });
+          this.$notify.error('提交失败!')
+          console.log(err)
+        })
     },
     admitReimbursement() {
       setState(this.reimburseInfo.id, 1)
         .then((res) => {
           if (res) {
-            this.$notify.success("已同意报销！");
-            this.refreshFileList();
+            this.$notify.success('已同意报销！')
+            this.refreshFileList()
           }
         })
         .catch((err) => {
-          this.$notify.error("设置失败!");
-          console.log(err);
-        });
+          this.$notify.error('设置失败!')
+          console.log(err)
+        })
     },
     rejectReimbursement() {
       setState(this.reimburseInfo.id, 2)
         .then((res) => {
           if (res) {
-            this.$notify.success("已拒绝报销！");
-            this.refreshFileList();
+            this.$notify.success('已拒绝报销！')
+            this.refreshFileList()
           }
         })
         .catch((err) => {
-          this.$notify.error("设置失败!");
-          console.log(err);
-        });
-    },
-  },
-};
+          this.$notify.error('设置失败!')
+          console.log(err)
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

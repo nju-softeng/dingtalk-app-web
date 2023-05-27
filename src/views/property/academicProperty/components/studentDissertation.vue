@@ -9,14 +9,14 @@
             type="primary"
             icon="el-icon-edit-outline"
             @click="goDetail(uid)"
-            >跳转至我的论文
+          >跳转至我的论文
           </el-button>
           <el-button
             v-else
             type="primary"
             icon="el-icon-plus"
             @click="addDissertationDialog = true"
-            >添加我的毕业论文
+          >添加我的毕业论文
           </el-button>
         </div>
       </div>
@@ -62,10 +62,10 @@
                           item.state == 0
                             ? 'red'
                             : item.state == 1
-                            ? 'yellow'
-                            : item.state == 2
-                            ? 'blue'
-                            : 'green',
+                              ? 'yellow'
+                              : item.state == 2
+                                ? 'blue'
+                                : 'green',
                       }"
                     />
                     论文状态: {{ stateConverter[item.state] }}
@@ -132,16 +132,16 @@
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit('dissertationForm')"
-            >确 定</el-button
-          >
+          <el-button
+            type="primary"
+            @click="submit('dissertationForm')"
+          >确 定</el-button>
           <el-button
             @click="
               closeAddDissertationDialog();
               addDissertationDialog = false;
             "
-            >取 消</el-button
-          >
+          >取 消</el-button>
         </span>
       </div>
     </el-dialog>
@@ -149,22 +149,22 @@
 </template>
 
 <script>
-import FileUpload from "@/views/paper/components/fileUpload";
+import FileUpload from '@/views/paper/components/fileUpload'
 import {
   getDissertationInfo,
   addDissertation,
-  getDissertationDetail,
-} from "@/api/dissertation";
+  getDissertationDetail
+} from '@/api/dissertation'
 
 export default {
-  name: "StudentDissertation",
+  name: 'StudentDissertation',
   components: { FileUpload },
   data() {
     return {
       list: [],
       uid: -1,
       currentPage: 1,
-      userName: "",
+      userName: '',
       total: 0,
       addDissertationDialog: false,
       loading: false,
@@ -175,124 +175,124 @@ export default {
         state: 0,
         file: null,
         graduateYear: null,
-        filePath: "/Property/Academic/Student/",
+        filePath: '/Property/Academic/Student/'
       },
       rules: {
         graduateYear: [
-          { required: true, message: "请选择毕业年份", trigger: "blur" },
+          { required: true, message: '请选择毕业年份', trigger: 'blur' }
         ],
         file: [
           {
-            trigger: "blur",
-            validator: async (rule, value, callback) => {
-              if (!this.file) callback(new Error("请上传预答辩论文文件"));
-            },
-          },
-        ],
+            trigger: 'blur',
+            validator: async(rule, value, callback) => {
+              if (!this.file) callback(new Error('请上传预答辩论文文件'))
+            }
+          }
+        ]
       },
-      stateConverter: ["预答辩", "审核中", "等待答辩", "答辩完成"],
-      haveDissertation: false,
-    };
+      stateConverter: ['预答辩', '审核中', '等待答辩', '答辩完成'],
+      haveDissertation: false
+    }
   },
   created() {
-    sessionStorage.setItem("dissertation-cur-page", 1);
+    sessionStorage.setItem('dissertation-cur-page', 1)
     this.currentPage =
-      parseInt(sessionStorage.getItem("dissertation-cur-page")) || 1;
-    this.userName = sessionStorage.getItem("name");
-    this.uid = sessionStorage.getItem("uid");
-    this.getAllDissertation(this.currentPage);
+      parseInt(sessionStorage.getItem('dissertation-cur-page')) || 1
+    this.userName = sessionStorage.getItem('name')
+    this.uid = sessionStorage.getItem('uid')
+    this.getAllDissertation(this.currentPage)
     getDissertationDetail(this.uid)
       .then((res) => {
         if (res) {
           if (res.data.id != null) {
-            this.haveDissertation = true;
+            this.haveDissertation = true
           } else {
-            this.haveDissertation = false;
+            this.haveDissertation = false
           }
         }
       })
       .catch((err) => {
-        this.haveDissertation = false;
-        console.log(err);
-      });
+        this.haveDissertation = false
+        console.log(err)
+      })
   },
   methods: {
     getAllDissertation(page) {
       getDissertationInfo(page, 8)
         .then((res) => {
-          this.list = res.data.list;
-          this.total = res.data.total;
+          this.list = res.data.list
+          this.total = res.data.total
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     // 分页前一页
     handlePrev(val) {
-      this.getAllDissertation(val);
-      sessionStorage.setItem("dissertation-cur-page", val);
+      this.getAllDissertation(val)
+      sessionStorage.setItem('dissertation-cur-page', val)
     },
     // 分页下一页
     handleNext(val) {
-      this.getAllDissertation(val);
-      sessionStorage.setItem("dissertation-cur-page", val);
+      this.getAllDissertation(val)
+      sessionStorage.setItem('dissertation-cur-page', val)
     },
     // 分页当前页
     handleCurrentChange(val) {
-      this.getAllDissertation(val);
-      sessionStorage.setItem("dissertation-cur-page", val);
+      this.getAllDissertation(val)
+      sessionStorage.setItem('dissertation-cur-page', val)
     },
     goDetail(id) {
       this.$router.push({
-        path: "/property/academic/dissertation-detail/" + id,
-      });
+        path: '/property/academic/dissertation-detail/' + id
+      })
     },
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (formName === "dissertationForm") {
-            const formData = new FormData();
-            formData.append("file", this.file.raw);
-            this.dissertationForm.userId = this.uid;
+          if (formName === 'dissertationForm') {
+            const formData = new FormData()
+            formData.append('file', this.file.raw)
+            this.dissertationForm.userId = this.uid
             this.dissertationForm.filePath =
-              "Property/Academic/Student/" +
+              'Property/Academic/Student/' +
               this.dissertationForm.graduateYear +
-              "/" +
-              this.userName;
+              '/' +
+              this.userName
             formData.append(
-              "dissertationVOJsonStr",
+              'dissertationVOJsonStr',
               JSON.stringify(this.dissertationForm)
-            );
-            this.dissertationForm.file = this.file;
-            this.loading = true;
+            )
+            this.dissertationForm.file = this.file
+            this.loading = true
             addDissertation(formData)
               .then(() => {
-                this.addDissertationDialog = false;
-                this.loading = false;
-                this.getAllDissertation(1);
-                this.currentPage = 1;
+                this.addDissertationDialog = false
+                this.loading = false
+                this.getAllDissertation(1)
+                this.currentPage = 1
                 this.$notify({
-                  title: "成功",
-                  message: "论文创建成功",
-                  type: "success",
-                });
-                this.$refs.child.handleClose();
-                this.goDetail(this.uid);
+                  title: '成功',
+                  message: '论文创建成功',
+                  type: 'success'
+                })
+                this.$refs.child.handleClose()
+                this.goDetail(this.uid)
               })
               .catch((err) => {
-                console.log(err);
-                this.loading = false;
-                this.$message.error("创建失败");
-              });
+                console.log(err)
+                this.loading = false
+                this.$message.error('创建失败')
+              })
           }
         } else {
           this.$notify({
-            title: "提交失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '提交失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     closeAddDissertationDialog() {
       this.dissertationForm = {
@@ -301,16 +301,16 @@ export default {
         state: 0,
         file: null,
         graduateYear: null,
-        filePath: "/Property/Academic/Student/",
-      };
-      this.file = null;
-      this.$refs.child.handleClose();
+        filePath: '/Property/Academic/Student/'
+      }
+      this.file = null
+      this.$refs.child.handleClose()
     },
     changeFile(file) {
-      this.file = file;
-    },
-  },
-};
+      this.file = file
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

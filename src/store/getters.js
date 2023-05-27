@@ -9,6 +9,6 @@ const getters = {
   permission_routes: (state) => state.permission.routes,
   size: (state) => state.app.size,
   introduction: (state) => state.user.introduction,
-  permissionList: (state) => state.user.permissionList,
-};
-export default getters;
+  permissionList: (state) => state.user.permissionList
+}
+export default getters

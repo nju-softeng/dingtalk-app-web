@@ -10,7 +10,7 @@
             currentOperation = '新建日程';
             addScheduleDialogVisible = true;
           "
-          >新建日程
+        >新建日程
         </el-button>
         <div class="scheduleList">
           <el-table
@@ -26,10 +26,8 @@
             </el-table-column>
             <el-table-column label="日程时间" width="300px" align="center">
               <template slot-scope="{ row }">
-                <span
-                  >{{ row.start | filterDate }} →
-                  {{ row.end | filterDate }}</span
-                >
+                <span>{{ row.start | filterDate }} →
+                  {{ row.end | filterDate }}</span>
               </template>
             </el-table-column>
             <el-table-column label="地点" align="center">
@@ -172,15 +170,17 @@
               placement="bottom"
             >
               <span style="margin-left: 8px">
-                <svg-icon icon-class="hint"
-              /></span>
+                <svg-icon
+                  icon-class="hint"
+                /></span>
             </el-tooltip>
           </el-form-item>
           <el-form-item>
             <el-button @click="cancelAddSchedule">取 消</el-button>
-            <el-button type="primary" @click="addNewSchedule('addScheduleForm')"
-              >确 认</el-button
-            >
+            <el-button
+              type="primary"
+              @click="addNewSchedule('addScheduleForm')"
+            >确 认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -199,12 +199,14 @@
         </el-form-item>
         <el-form-item label="状态:">
           <el-tag v-if="absentDetail.state === -1">待审批</el-tag>
-          <el-tag v-else-if="absentDetail.state === 0" type="danger"
-            >拒绝</el-tag
-          >
-          <el-tag v-else-if="absentDetail.state === 1" type="success"
-            >通过</el-tag
-          >
+          <el-tag
+            v-else-if="absentDetail.state === 0"
+            type="danger"
+          >拒绝</el-tag>
+          <el-tag
+            v-else-if="absentDetail.state === 1"
+            type="success"
+          >通过</el-tag>
           <el-tag v-else type="info">未知状态</el-tag>
         </el-form-item>
       </el-form>
@@ -215,19 +217,18 @@
           size="mini"
           class="noAbsentButton"
           @click="openAddAbsent"
-          >点击请假</el-button
-        >
+        >点击请假</el-button>
       </div>
       <span slot="footer">
         <el-button
           v-if="absentDetail.id"
           type="danger"
           @click="deleteAbsent(absentDetail.id)"
-          >删除</el-button
-        >
-        <el-button type="primary" @click="absentDetailVisible = false"
-          >关闭</el-button
-        >
+        >删除</el-button>
+        <el-button
+          type="primary"
+          @click="absentDetailVisible = false"
+        >关闭</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -257,39 +258,40 @@
       </el-form>
       <span slot="footer">
         <el-button @click="cancelAddAbsent">取 消</el-button>
-        <el-button type="primary" @click="addNewAbsent('addAbsentForm')"
-          >确 认</el-button
-        >
+        <el-button
+          type="primary"
+          @click="addNewAbsent('addAbsentForm')"
+        >确 认</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList } from "@/api/common";
+import { getUserList } from '@/api/common'
 import {
   getScheduleList,
   addSchedule,
   deleteSchedule,
   addAbsentOA,
   deleteAbsentOA,
-  getAbsentOADetail,
-} from "@/api/schedule";
+  getAbsentOADetail
+} from '@/api/schedule'
 export default {
-  name: "Index",
+  name: 'Index',
   filters: {
     filterDate(date) {
       return (
         date.getFullYear() +
-        "年" +
+        '年' +
         (parseInt(date.getMonth()) + 1).toString() +
-        "月" +
+        '月' +
         date.getDate() +
-        "日" +
-        " " +
-        date.toString().split(" ")[4]
-      );
-    },
+        '日' +
+        ' ' +
+        date.toString().split(' ')[4]
+      )
+    }
   },
   data() {
     return {
@@ -300,91 +302,91 @@ export default {
       addScheduleDialogVisible: false,
       absentDetailVisible: false,
       addAbsentDialogVisible: false,
-      currentOperation: "新建日程",
+      currentOperation: '新建日程',
       userList: [],
       addScheduleForm: {
         id: null,
-        summary: "",
+        summary: '',
         time: null,
         start: null,
         end: null,
         online: false,
-        location: "",
-        attendeesIdList: [],
+        location: '',
+        attendeesIdList: []
       },
       rules: {
         summary: [
-          { required: true, message: "请输入日程名称", trigger: "blur" },
+          { required: true, message: '请输入日程名称', trigger: 'blur' }
         ],
-        time: [{ required: true, message: "请选择日程时间", trigger: "blur" }],
+        time: [{ required: true, message: '请选择日程时间', trigger: 'blur' }],
         location: [
           {
-            trigger: "blur",
-            validator: async (rule, value, callback) => {
+            trigger: 'blur',
+            validator: async(rule, value, callback) => {
               if (!this.addScheduleForm.online) {
                 if (!this.addScheduleForm.location) {
-                  callback(new Error("请输入日程地点"));
+                  callback(new Error('请输入日程地点'))
                 }
               }
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       absentRules: {
-        type: [{ required: true, message: "请选择请假类型", trigger: "blur" }],
+        type: [{ required: true, message: '请选择请假类型', trigger: 'blur' }],
         reason: [
-          { required: true, message: "请输入请假缘由", trigger: "blur" },
-        ],
+          { required: true, message: '请输入请假缘由', trigger: 'blur' }
+        ]
       },
       options: [
         {
-          value: "事假",
-          label: "事 假",
+          value: '事假',
+          label: '事 假'
         },
         {
-          value: "病假",
-          label: "病 假",
+          value: '病假',
+          label: '病 假'
         },
         {
-          value: "其它",
-          label: "其 它",
-        },
+          value: '其它',
+          label: '其 它'
+        }
       ],
       absentDetail: {},
       addAbsentForm: {
-        type: "",
-        reason: "",
+        type: '',
+        reason: ''
       },
-      currentScheduleToAbsent: null,
-    };
+      currentScheduleToAbsent: null
+    }
   },
   created() {
-    sessionStorage.setItem("inner-cur-page", 1);
-    this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
-    this.nowTime = new Date();
+    sessionStorage.setItem('inner-cur-page', 1)
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.nowTime = new Date()
     getUserList()
       .then((res) => {
-        const tempUserList = [];
+        const tempUserList = []
         for (const i in res.data) {
           tempUserList.push({
             value: res.data[i].id,
-            label: res.data[i].name,
-          });
+            label: res.data[i].name
+          })
         }
         this.userList = [
           {
-            label: "第一组",
+            label: '第一组',
             value: 1,
-            children: tempUserList,
-          },
-        ];
-        console.log(this.userList);
+            children: tempUserList
+          }
+        ]
+        console.log(this.userList)
       })
       .catch((err) => {
-        this.$message.error("无法获取用户列表！");
-        console.log(err);
-      });
-    this.fetchSchedule(this.currentPage);
+        this.$message.error('无法获取用户列表！')
+        console.log(err)
+      })
+    this.fetchSchedule(this.currentPage)
   },
   methods: {
     // 分页获取日程
@@ -392,63 +394,63 @@ export default {
       return new Promise((resolve, reject) => {
         getScheduleList(page, 10)
           .then((res) => {
-            console.log(res);
-            this.scheduleList = res.data.list;
+            console.log(res)
+            this.scheduleList = res.data.list
             for (const i in this.scheduleList) {
-              this.scheduleList[i].attendeesIdList = [];
+              this.scheduleList[i].attendeesIdList = []
               for (const j in this.scheduleList[i].dingTalkScheduleDetailList) {
                 this.scheduleList[i].attendeesIdList.push([
                   1,
-                  this.scheduleList[i].dingTalkScheduleDetailList[j].user.id,
-                ]);
+                  this.scheduleList[i].dingTalkScheduleDetailList[j].user.id
+                ])
               }
               this.scheduleList[i].start = new Date(
                 Date.parse(this.scheduleList[i].start)
-              );
+              )
               this.scheduleList[i].end = new Date(
                 Date.parse(this.scheduleList[i].end)
-              );
+              )
               this.scheduleList[i].time = [
                 this.scheduleList[i].start,
-                this.scheduleList[i].end,
-              ];
+                this.scheduleList[i].end
+              ]
             }
-            this.total = res.data.total;
-            console.log(res);
-            resolve(res);
+            this.total = res.data.total
+            console.log(res)
+            resolve(res)
           })
           .catch((err) => {
-            reject(err);
-          });
-      });
+            reject(err)
+          })
+      })
     },
     // 上一页
     handlePrev(val) {
-      this.fetchSchedule(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchSchedule(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchSchedule(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchSchedule(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchSchedule(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchSchedule(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     getDetail(id) {
-      this.$router.push("/property/scheduleDetail/" + id);
+      this.$router.push('/property/scheduleDetail/' + id)
     },
     deleteWholeSchedule(id) {
       deleteSchedule(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchSchedule(this.currentPage);
+          this.$message.success('删除成功')
+          this.fetchSchedule(this.currentPage)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     addNewSchedule(formName) {
       this.$refs[formName].validate((valid) => {
@@ -456,147 +458,147 @@ export default {
           for (const i in this.addScheduleForm.attendeesIdList) {
             this.addScheduleForm.attendeesIdList[
               i
-            ] = this.addScheduleForm.attendeesIdList[i][1];
+            ] = this.addScheduleForm.attendeesIdList[i][1]
           }
-          this.addScheduleForm.start = this.addScheduleForm.time[0];
-          this.addScheduleForm.end = this.addScheduleForm.time[1];
+          this.addScheduleForm.start = this.addScheduleForm.time[0]
+          this.addScheduleForm.end = this.addScheduleForm.time[1]
           // console.log(this.addScheduleForm)
-          console.log(this.addScheduleForm.start);
+          console.log(this.addScheduleForm.start)
           addSchedule(this.addScheduleForm)
             .then(() => {
-              if (this.currentOperation === "新建日程") {
-                this.$message.success("添加成功");
-              } else if (this.currentOperation === "修改日程") {
-                this.$message.success("修改成功");
+              if (this.currentOperation === '新建日程') {
+                this.$message.success('添加成功')
+              } else if (this.currentOperation === '修改日程') {
+                this.$message.success('修改成功')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              this.cancelAddSchedule();
-              this.fetchSchedule(this.currentPage);
+              this.cancelAddSchedule()
+              this.fetchSchedule(this.currentPage)
             })
             .catch(() => {
-              if (this.currentOperation === "新建日程") {
-                this.$message.error("添加失败");
-              } else if (this.currentOperation === "修改日程") {
-                this.$message.error("修改失败");
+              if (this.currentOperation === '新建日程') {
+                this.$message.error('添加失败')
+              } else if (this.currentOperation === '修改日程') {
+                this.$message.error('修改失败')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-            });
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     addNewAbsent(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           addAbsentOA(this.currentScheduleToAbsent, this.addAbsentForm)
             .then(() => {
-              this.$message.success("申请成功");
-              this.cancelAddAbsent();
+              this.$message.success('申请成功')
+              this.cancelAddAbsent()
             })
             .catch(() => {
-              this.$message.error("申请失败");
-            });
+              this.$message.error('申请失败')
+            })
         } else {
           this.$notify({
-            title: "申请失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '申请失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifySchedule(row) {
-      console.log(row);
-      console.log(this.scheduleList);
-      this.currentOperation = "修改日程";
-      this.addScheduleForm.id = row.id;
-      this.addScheduleForm.summary = row.summary;
-      this.addScheduleForm.start = row.start;
-      this.addScheduleForm.end = row.end;
-      this.addScheduleForm.time = row.time;
-      this.addScheduleForm.online = row.online;
-      this.addScheduleForm.location = row.location;
-      this.addScheduleForm.attendeesIdList = row.attendeesIdList;
-      this.addScheduleDialogVisible = true;
+      console.log(row)
+      console.log(this.scheduleList)
+      this.currentOperation = '修改日程'
+      this.addScheduleForm.id = row.id
+      this.addScheduleForm.summary = row.summary
+      this.addScheduleForm.start = row.start
+      this.addScheduleForm.end = row.end
+      this.addScheduleForm.time = row.time
+      this.addScheduleForm.online = row.online
+      this.addScheduleForm.location = row.location
+      this.addScheduleForm.attendeesIdList = row.attendeesIdList
+      this.addScheduleDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addScheduleForm = {
         id: null,
-        summary: "",
+        summary: '',
         start: null,
         end: null,
         time: null,
         online: false,
-        location: "",
-        attendeesIdList: [],
-      };
-      return done(true);
+        location: '',
+        attendeesIdList: []
+      }
+      return done(true)
     },
     clearAbsentBeforeClose(done) {
       this.addAbsentForm = {
         type: null,
-        reason: null,
-      };
-      this.openAbsentDetail(this.currentScheduleToAbsent);
-      return done(true);
+        reason: null
+      }
+      this.openAbsentDetail(this.currentScheduleToAbsent)
+      return done(true)
     },
     cancelAddSchedule() {
-      this.addScheduleDialogVisible = false;
+      this.addScheduleDialogVisible = false
       this.addScheduleForm = {
         id: null,
-        summary: "",
+        summary: '',
         start: null,
         end: null,
         time: null,
         online: false,
-        location: "",
-        attendeesIdList: [],
-      };
+        location: '',
+        attendeesIdList: []
+      }
     },
     cancelAddAbsent() {
-      this.addAbsentDialogVisible = false;
+      this.addAbsentDialogVisible = false
       this.addAbsentForm = {
         type: null,
-        reason: null,
-      };
-      this.openAbsentDetail(this.currentScheduleToAbsent);
+        reason: null
+      }
+      this.openAbsentDetail(this.currentScheduleToAbsent)
     },
     openAbsentDetail(id) {
       getAbsentOADetail(id)
         .then((res) => {
-          this.absentDetail = res.data;
-          this.currentScheduleToAbsent = id;
-          this.absentDetailVisible = true;
+          this.absentDetail = res.data
+          this.currentScheduleToAbsent = id
+          this.absentDetailVisible = true
         })
         .catch((err) => {
-          this.$message("获取请假详情失败！");
-          console.log(err);
-        });
+          this.$message('获取请假详情失败！')
+          console.log(err)
+        })
     },
     deleteAbsent(id) {
       deleteAbsentOA(id)
         .then(() => {
-          this.$notify.success("删除成功！");
-          this.absentDetailVisible = false;
+          this.$notify.success('删除成功！')
+          this.absentDetailVisible = false
         })
         .catch((err) => {
-          this.$notify.error("删除失败！");
-          console.log(err);
-        });
+          this.$notify.error('删除失败！')
+          console.log(err)
+        })
     },
     openAddAbsent() {
-      this.absentDetailVisible = false;
-      this.addAbsentDialogVisible = true;
-    },
-  },
-};
+      this.absentDetailVisible = false
+      this.addAbsentDialogVisible = true
+    }
+  }
+}
 </script>
 
 <style scoped>

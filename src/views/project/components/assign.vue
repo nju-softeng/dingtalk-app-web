@@ -6,8 +6,7 @@
         type="primary"
         icon="el-icon-plus"
         @click="projectDialog = true"
-        >创建项目</el-button
-      >
+      >创建项目</el-button>
       <!-- <el-select style="width:100px;float:right;margin-right:10px">
         <el-option label="进行中" value="true"> </el-option>
         <el-option label="已结束" value="false"> </el-option>
@@ -41,13 +40,11 @@
                 <el-dropdown-item
                   icon="el-icon-edit"
                   @click.native="modifyProject(item)"
-                  >修改项目</el-dropdown-item
-                >
+                >修改项目</el-dropdown-item>
                 <el-dropdown-item
                   icon="el-icon-error"
                   @click.native="rmProject(item)"
-                  >删除项目</el-dropdown-item
-                >
+                >删除项目</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -64,8 +61,7 @@
                 type="info"
                 style="margin-left: 10px"
                 effect="plain"
-                >第 {{ item.cnt }} 次迭代</el-tag
-              >
+              >第 {{ item.cnt }} 次迭代</el-tag>
             </router-link>
           </div>
         </div>
@@ -77,47 +73,41 @@
             style="float: right"
             size="mini"
             @click="newIterate(item)"
-            >新建迭代</el-button
-          >
+          >新建迭代</el-button>
         </template>
         <!-- 项目迭代信息 -->
         <template v-else-if="!item.status">
           <p style="color: #586069">
             <span class="date" style="padding-right: 15px">
               <i class="el-icon-time" /> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span
-            >
+              {{ item.end_time }}</span>
             <span
               v-if="getRemainDay(item.end_time) >= 0"
               style="color: #67c23a"
             >
               剩余:
-              {{ getRemainDay(item.end_time) }} 天</span
-            >
+              {{ getRemainDay(item.end_time) }} 天</span>
             <span v-else style="color: #f56c6c">
-              延期: {{ -getRemainDay(item.end_time) }} 天</span
-            >
+              延期: {{ -getRemainDay(item.end_time) }} 天</span>
           </p>
           <div style="font-size: 12px; color: #bfbfbf; line-height: 28px">
-            <span style="padding-right: 15px"
-              >预期AC：{{ item.expectedac }}</span
-            >
+            <span
+              style="padding-right: 15px"
+            >预期AC：{{ item.expectedac }}</span>
             <!-- <span>按时交付: {{ item.success_cnt }} 次</span> -->
 
             <el-button
               style="float: right"
               size="mini"
               @click="finishIterate(item)"
-              >确认完成</el-button
-            >
+            >确认完成</el-button>
           </div>
         </template>
         <template v-else>
           <p style="color: #586069">
             <span class="date" style="padding-right: 15px">
               <i class="el-icon-time" /> : {{ item.begin_time }} ~
-              {{ item.end_time }}</span
-            >
+              {{ item.end_time }}</span>
             <span
               v-if="compareTime(item.end_time, item.finish_time)"
               style="color: #67c23a"
@@ -137,8 +127,7 @@
               style="float: right"
               size="mini"
               @click="newIterate(item)"
-              >新建迭代</el-button
-            >
+            >新建迭代</el-button>
           </div>
         </template>
       </el-card>
@@ -184,8 +173,9 @@
               placement="right"
             >
               <span style="margin-left: 8px">
-                <svg-icon icon-class="hint"
-              /></span>
+                <svg-icon
+                  icon-class="hint"
+                /></span>
             </el-tooltip>
           </el-form-item>
           <el-form-item prop="nature" label="项目性质：">
@@ -227,9 +217,11 @@
         </el-form>
 
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" style="width: 100%;" @click="submitProject"
-            >确 定</el-button
-          >
+          <el-button
+            type="primary"
+            style="width: 100%;"
+            @click="submitProject"
+          >确 定</el-button>
         </span>
       </div>
     </el-dialog>
@@ -253,32 +245,32 @@
   </div>
 </template>
 <script>
-import { getUserList } from "@/api/common";
+import { getUserList } from '@/api/common'
 import {
   createProject,
   listProject,
   rmProject,
-  getIteration,
-} from "@/api/project.js";
-import FinishDrawer from "./finishDrawer";
-import IterateDialog from "./iterateDialog";
+  getIteration
+} from '@/api/project.js'
+import FinishDrawer from './finishDrawer'
+import IterateDialog from './iterateDialog'
 const projectNature = [
-  { label: "横向项目", value: true },
-  { label: "纵向项目", value: false },
-];
+  { label: '横向项目', value: true },
+  { label: '纵向项目', value: false }
+]
 const projectLongitudinalLevel = [
-  { label: "国家级项目", value: "国家级项目" },
-  { label: "省部级项目", value: "省部级项目" },
-  { label: "厅局级项目", value: "厅局级项目" },
-  { label: "国家级学会和协会项目", value: "国家级学会和协会项目" },
-  { label: "省级学会和协会项目", value: "省级学会和协会项目" },
-];
+  { label: '国家级项目', value: '国家级项目' },
+  { label: '省部级项目', value: '省部级项目' },
+  { label: '厅局级项目', value: '厅局级项目' },
+  { label: '国家级学会和协会项目', value: '国家级学会和协会项目' },
+  { label: '省级学会和协会项目', value: '省级学会和协会项目' }
+]
 const projectHorizontalLevel = [
-  { label: "A", value: "A" },
-  { label: "B", value: "B" },
-  { label: "C", value: "C" },
-  { label: "D", value: "D" },
-];
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'C', value: 'C' },
+  { label: 'D', value: 'D' }
+]
 export default {
   components: { IterateDialog, FinishDrawer },
   data() {
@@ -286,9 +278,9 @@ export default {
       bdrawer_show: false,
       iteationDialog: false,
       projectDialog: false,
-      pid: "",
-      title: "",
-      cnt: "",
+      pid: '',
+      title: '',
+      cnt: '',
       list: [],
       userList: [],
       serial: 0,
@@ -297,144 +289,144 @@ export default {
       projectLongitudinalLevelList: projectLongitudinalLevel,
       projectHorizontalLevelList: projectHorizontalLevel,
       projectForm: {
-        id: "",
-        name: "",
-        leaderId: "",
-        nature: "",
-        longitudinalLevel: "",
-        horizontalLevel: "",
+        id: '',
+        name: '',
+        leaderId: '',
+        nature: '',
+        longitudinalLevel: '',
+        horizontalLevel: ''
       },
       tmp: {},
       rules: {
-        name: [{ required: true, message: "请输入项目名称", trigger: "blur" }],
-        dates: [{ required: true, message: "请选择时间", trigger: "blur" }],
-        dingIds: [{ required: true, message: "请分配任务", trigger: "blur" }],
-      },
-    };
+        name: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
+        dates: [{ required: true, message: '请选择时间', trigger: 'blur' }],
+        dingIds: [{ required: true, message: '请分配任务', trigger: 'blur' }]
+      }
+    }
   },
   computed: {
     getRemainDay() {
       return (endtime) => {
         const day =
           (new Date(endtime) - new Date().setHours(8, 0, 0, 0)) /
-          (24 * 3600 * 1000);
-        return day;
-      };
-    },
+          (24 * 3600 * 1000)
+        return day
+      }
+    }
+  },
+  watch: {
+    'projectForm.nature': function(newValue, oldValue) {
+      this.projectForm.horizontalLevel = null
+      this.projectForm.longitudinalLevel = null
+    }
   },
   created() {
-    this.fetchProjects();
+    this.fetchProjects()
     getUserList().then((res) => {
-      this.userList = res.data;
-    });
+      this.userList = res.data
+    })
   },
 
   methods: {
     compareTime(ddl, finish) {
-      const d1 = new Date(ddl);
-      const d2 = new Date(finish);
-      return d1.getTime() > d2.getTime();
+      const d1 = new Date(ddl)
+      const d2 = new Date(finish)
+      return d1.getTime() > d2.getTime()
     },
     // 更新数据
     fetchProjects() {
       listProject().then((res) => {
-        this.list = res.data;
-        console.log(this.list);
-      });
+        this.list = res.data
+        console.log(this.list)
+      })
     },
     // 创建或更新项目
     submitProject() {
       this.$refs.projectForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          console.log(this.projectForm);
+          this.loading = true
+          console.log(this.projectForm)
           createProject(this.projectForm)
             .then(() => {
-              this.projectDialog = false;
+              this.projectDialog = false
               this.$notify({
-                title: "成功",
-                message: "提交成功",
-                type: "success",
-              });
+                title: '成功',
+                message: '提交成功',
+                type: 'success'
+              })
               listProject().then((res) => {
-                this.list = res.data;
-              });
+                this.list = res.data
+              })
             })
             .finally(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
           this.$notify({
-            title: "提交失败",
-            message: "请填写项目名称",
-            type: "warning",
-          });
+            title: '提交失败',
+            message: '请填写项目名称',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     // 修改项目
     modifyProject(item) {
-      this.projectDialog = true;
+      this.projectDialog = true
       this.$nextTick(() => {
-        this.projectForm.id = item.id;
-        this.projectForm.title = item.title;
-      });
+        this.projectForm.id = item.id
+        this.projectForm.title = item.title
+      })
     },
     // 删除项目
     rmProject(item) {
-      console.log("/????");
+      console.log('/????')
       if (item.cnt !== 0) {
         this.$message({
           showClose: true,
-          message: "请删除项目的迭代之后，再删除项目",
-          type: "warning",
-        });
+          message: '请删除项目的迭代之后，再删除项目',
+          type: 'warning'
+        })
       } else {
         rmProject(item.id).then(() => {
           listProject().then((res) => {
-            this.list = res.data;
-          });
+            this.list = res.data
+          })
           this.$message({
             showClose: true,
-            message: "删除成功",
-            type: "success",
-          });
-        });
+            message: '删除成功',
+            type: 'success'
+          })
+        })
       }
     },
     // 清空dialog
     clearProjectForm() {
-      this.$refs.projectForm.resetFields();
-      this.projectForm.id = "";
+      this.$refs.projectForm.resetFields()
+      this.projectForm.id = ''
     },
     // 新建一个迭代
     newIterate(item) {
-      this.title = item.title;
-      this.pid = item.id;
-      this.cnt = item.cnt;
-      this.iteationDialog = true;
+      this.title = item.title
+      this.pid = item.id
+      this.cnt = item.cnt
+      this.iteationDialog = true
     },
     handleSubmit() {
-      this.fetchProjects();
+      this.fetchProjects()
     },
     finishIterate(item) {
-      console.log(item);
+      console.log(item)
       getIteration(item.itid).then((res) => {
-        console.log(res.data);
-        this.tmp = res.data;
-        this.title = item.title;
-        this.serial = item.cnt;
-        this.bdrawer_show = true;
-      });
-    },
-  },
-  watch: {
-    "projectForm.nature": function (newValue, oldValue) {
-      this.projectForm.horizontalLevel = null;
-      this.projectForm.longitudinalLevel = null;
-    },
-  },
-};
+        console.log(res.data)
+        this.tmp = res.data
+        this.title = item.title
+        this.serial = item.cnt
+        this.bdrawer_show = true
+      })
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .project ::v-deep .el-dialog__body {
@@ -461,13 +453,13 @@ a {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  min-width: 750px;
+  //min-width: 750px;
 }
 
 .item {
   margin: 5px 5px 5px 0;
-  height: 125px;
-  width: 49%;
+  height: fit-content;
+  width: 100%;
   background-color: #fff;
   border-radius: 3px;
 }

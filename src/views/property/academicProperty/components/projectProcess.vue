@@ -10,7 +10,7 @@
             currentOperation = '添加会议';
             addProcessDialogVisible = true;
           "
-          >新建会议记录
+        >新建会议记录
         </el-button>
         <div class="processList">
           <el-table
@@ -145,9 +145,10 @@
         </el-form>
         <span slot="footer">
           <el-button @click="cancelAddProcess">取 消</el-button>
-          <el-button type="primary" @click="addNewProcess('addProcessForm')"
-            >确 认</el-button
-          >
+          <el-button
+            type="primary"
+            @click="addNewProcess('addProcessForm')"
+          >确 认</el-button>
         </span>
       </div>
     </el-dialog>
@@ -155,14 +156,14 @@
 </template>
 
 <script>
-import ProcessPptUpload from "./processPptUpload";
+import ProcessPptUpload from './processPptUpload'
 import {
   getProcessProperty,
   addProcessProperty,
-  deleteProcessProperty,
-} from "@/api/processProperty";
+  deleteProcessProperty
+} from '@/api/processProperty'
 export default {
-  name: "ProjectProcess",
+  name: 'ProjectProcess',
   components: { ProcessPptUpload },
   data() {
     return {
@@ -170,157 +171,157 @@ export default {
       currentPage: 1,
       processList: [],
       addProcessDialogVisible: false,
-      currentOperation: "添加会议",
+      currentOperation: '添加会议',
       file: null,
       addProcessForm: {
         id: null,
-        conferenceName: "",
+        conferenceName: '',
         year: null,
-        filePath: "",
-        file: null,
+        filePath: '',
+        file: null
       },
       rules: {
         conferenceName: [
-          { required: true, message: "请输入事件名称", trigger: "blur" },
+          { required: true, message: '请输入事件名称', trigger: 'blur' }
         ],
-        year: [{ required: true, message: "请输入事件年份", trigger: "blur" }],
+        year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }]
       },
-      uid: -1,
-    };
+      uid: -1
+    }
   },
   created() {
-    sessionStorage.setItem("inner-cur-page", 1);
-    this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
-    this.fetchProcess(this.currentPage);
-    this.uid = parseInt(sessionStorage.getItem("uid"));
+    sessionStorage.setItem('inner-cur-page', 1)
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.fetchProcess(this.currentPage)
+    this.uid = parseInt(sessionStorage.getItem('uid'))
   },
   methods: {
     // 分页获取会议
     fetchProcess(page) {
-      console.log(this.processList);
+      console.log(this.processList)
       return new Promise((resolve, reject) => {
         getProcessProperty(page, 10)
           .then((res) => {
-            this.processList = res.data.list;
-            this.total = res.data.total;
-            console.log(res);
-            resolve(res);
+            this.processList = res.data.list
+            this.total = res.data.total
+            console.log(res)
+            resolve(res)
           })
           .catch((err) => {
-            reject(err);
-          });
-      });
+            reject(err)
+          })
+      })
     },
     // 上一页
     handlePrev(val) {
-      this.fetchProcess(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchProcess(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchProcess(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchProcess(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      this.fetchProcess(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchProcess(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     getDetail(id) {
-      this.$router.push("/property/academic/process-detail/" + id);
+      this.$router.push('/property/academic/process-detail/' + id)
     },
     deleteWholeProcess(id) {
       deleteProcessProperty(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchProcess(this.currentPage);
+          this.$message.success('删除成功')
+          this.fetchProcess(this.currentPage)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     addNewProcess(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addProcessForm.filePath =
-            "Property/Academic/Process/" +
+            'Property/Academic/Process/' +
             this.addProcessForm.conferenceName +
-            "/" +
+            '/' +
             this.addProcessForm.year +
-            "/" +
-            sessionStorage.getItem("name");
-          const formData = new FormData();
+            '/' +
+            sessionStorage.getItem('name')
+          const formData = new FormData()
           if (this.file != null) {
-            formData.append("file", this.file.raw);
+            formData.append('file', this.file.raw)
           } else {
-            formData.append("file", null);
+            formData.append('file', null)
           }
           formData.append(
-            "processPropertyVOJsonStr",
+            'processPropertyVOJsonStr',
             JSON.stringify(this.addProcessForm)
-          );
+          )
           addProcessProperty(formData)
             .then(() => {
-              if (this.currentOperation === "添加会议") {
-                this.$message.success("添加成功");
-              } else if (this.currentOperation === "修改会议") {
-                this.$message.success("修改成功");
+              if (this.currentOperation === '添加会议') {
+                this.$message.success('添加成功')
+              } else if (this.currentOperation === '修改会议') {
+                this.$message.success('修改成功')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              this.cancelAddProcess();
-              this.fetchProcess(this.currentPage);
+              this.cancelAddProcess()
+              this.fetchProcess(this.currentPage)
             })
             .catch(() => {
-              if (this.currentOperation === "添加会议") {
-                this.$message.error("添加失败");
-              } else if (this.currentOperation === "修改会议") {
-                this.$message.error("修改失败");
+              if (this.currentOperation === '添加会议') {
+                this.$message.error('添加失败')
+              } else if (this.currentOperation === '修改会议') {
+                this.$message.error('修改失败')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-            });
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifyProcess(row) {
-      this.currentOperation = "修改会议";
-      this.addProcessForm.id = row.id;
-      this.addProcessForm.conferenceName = row.conferenceName;
-      this.addProcessForm.year = row.year;
-      this.addProcessDialogVisible = true;
+      this.currentOperation = '修改会议'
+      this.addProcessForm.id = row.id
+      this.addProcessForm.conferenceName = row.conferenceName
+      this.addProcessForm.year = row.year
+      this.addProcessDialogVisible = true
     },
     clearBeforeClose(done) {
       this.addProcessForm = {
         id: null,
-        conferenceName: "",
+        conferenceName: '',
         year: 0,
-        filePath: "",
-      };
-      this.$refs.child.handleClose();
-      return done(true);
+        filePath: ''
+      }
+      this.$refs.child.handleClose()
+      return done(true)
     },
     cancelAddProcess() {
-      this.addProcessDialogVisible = false;
+      this.addProcessDialogVisible = false
       this.addProcessForm = {
         id: null,
-        conferenceName: "",
+        conferenceName: '',
         year: 0,
-        filePath: "",
-      };
-      this.$refs.child.handleClose();
+        filePath: ''
+      }
+      this.$refs.child.handleClose()
     },
     changeFile(file) {
-      this.file = file;
-    },
-  },
-};
+      this.file = file
+    }
+  }
+}
 </script>
 
 <style scoped>

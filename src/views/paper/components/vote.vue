@@ -62,8 +62,7 @@
                 class="radio"
                 border
                 label="true"
-                >ACCEPT [接受]</el-radio
-              >
+              >ACCEPT [接受]</el-radio>
             </div>
             <div class="choice">
               <el-radio
@@ -71,8 +70,7 @@
                 class="radio"
                 border
                 label="false"
-                >REJECT [拒绝]</el-radio
-              >
+              >REJECT [拒绝]</el-radio>
             </div>
           </div>
           <div style="padding:10px">
@@ -81,15 +79,17 @@
               size="medium"
               type="primary"
               @click="voting"
-              >确认提交</el-button
-            >
+            >确认提交</el-button>
           </div>
         </div>
         <div v-else>
           <div style="padding:10px">
-            <el-button style="width:100%" size="medium" type="success" plain
-              >您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button
-            >
+            <el-button
+              style="width:100%"
+              size="medium"
+              type="success"
+              plain
+            >您的投票结果: {{ vote_detail.myvote }}, 请耐心等待</el-button>
           </div>
         </div>
       </div>
@@ -105,14 +105,12 @@
         <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Accept
-            {{ vote_detail.accept }} 票</span
-          >
+            {{ vote_detail.accept }} 票</span>
           <span> {{ getNum(vote_detail.acceptedPercentage) }}% </span>
           <span
             v-if="vote_detail.myvote === 'accept'"
             style="color:#409EFF; font-weight:500"
-            >[已选]</span
-          >
+          >[已选]</span>
           <el-tooltip
             class="item"
             effect="dark"
@@ -129,14 +127,12 @@
         <el-form-item style="max-width: 360px">
           <span slot="label">
             <svg-icon icon-class="paper" /> Reject
-            {{ vote_detail.reject }} 票</span
-          >
+            {{ vote_detail.reject }} 票</span>
           {{ getNum(1.0 - vote_detail.acceptedPercentage) }}%
           <span
             v-if="vote_detail.myvote === 'reject'"
             style="color:#409EFF; font-weight:500"
-            >[已选]</span
-          >
+          >[已选]</span>
           <el-tooltip
             class="item"
             effect="dark"
@@ -152,12 +148,11 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">
-            <i class="el-icon-user" /> 参与人数 {{ vote_detail.total }} 人</span
-          >
+            <i class="el-icon-user" /> 参与人数 {{ vote_detail.total }} 人</span>
           <span
             v-if="vote_detail.myvote === 'unvote'"
             style="color:#409EFF; font-weight:500;margin-right:5px"
-            >[您未参与投票]
+          >[您未参与投票]
           </span>
           <el-link
             type="primary"
@@ -166,7 +161,7 @@
               flag = true;
               fetchVoteDetail();
             "
-            >详情
+          >详情
           </el-link>
         </el-form-item>
       </el-form>
@@ -187,8 +182,8 @@
                   item.workState == null
                     ? "未设置"
                     : item.workState
-                    ? "实习"
-                    : "在校"
+                      ? "实习"
+                      : "在校"
                 }}</el-descriptions-item>
                 <el-descriptions-item label="职位">{{
                   item.position == null ? "未设置" : item.position
@@ -215,8 +210,8 @@
                   item.workState == null
                     ? "未设置"
                     : item.workState
-                    ? "实习"
-                    : "在校"
+                      ? "实习"
+                      : "在校"
                 }}</el-descriptions-item>
                 <el-descriptions-item label="职位">{{
                   item.position == null ? "未设置" : item.position
@@ -245,7 +240,7 @@
             :key="index"
             type="info"
             style="margin:0px 4px;"
-            >{{ item }}
+          >{{ item }}
           </el-tag>
         </el-form-item>
       </el-form>
@@ -257,97 +252,97 @@ import {
   getPaperVote,
   getVoteDetailByVid,
   createVote,
-  addPoll,
-} from "@/api/paper";
-import { getExPaperVote } from "@/api/ex-paper";
+  addPoll
+} from '@/api/paper'
+import { getExPaperVote } from '@/api/ex-paper'
 export default {
   data() {
     return {
       vote_detail: {
-        vid: "",
-        status: "",
-        accept: "",
-        total: "",
-        reject: "",
-        myvote: "",
+        vid: '',
+        status: '',
+        accept: '',
+        total: '',
+        reject: '',
+        myvote: '',
         acceptUsers: [],
         rejectUsers: [],
         unvotenames: [],
-        acceptedPercentage: 0.0,
+        acceptedPercentage: 0.0
       },
       loading: false,
       voteform: {
-        paperid: "",
-        endTime: "",
+        paperid: '',
+        endTime: ''
       },
       pid: null,
       vote: {
-        id: "",
+        id: ''
       },
       pollform: {
-        result: "",
-        vid: "",
+        result: '',
+        vid: ''
       },
       isEnd: false,
-      flag: false,
-    };
+      flag: false
+    }
   },
   computed: {
     // 投票百分比数值
     getNum() {
       return (val) => {
-        return parseFloat((val * 100.0).toFixed(1));
-      };
+        return parseFloat((val * 100.0).toFixed(1))
+      }
     },
     hasVoted() {
-      return this.vote_detail.myvote !== "unvote";
-    },
+      return this.vote_detail.myvote !== 'unvote'
+    }
   },
   created() {
-    this.loading = true;
-    this.pid = this.$route.params.id;
-    const path = this.$route.path;
+    this.loading = true
+    this.pid = this.$route.params.id
+    const path = this.$route.path
 
-    if (path.slice(7, 16) === "ex-detail") {
+    if (path.slice(7, 16) === 'ex-detail') {
       // 如果是外部评审投票，则直接显示投票按钮
       getExPaperVote(this.pid)
         .then((res) => {
-          this.vote = res.data;
-          console.log(this.vote);
-          this.isEnd = res.data.status;
+          this.vote = res.data
+          console.log(this.vote)
+          this.isEnd = res.data.status
           this.fetchVoteDetail().then(() => {
-            this.initWebSocket();
-          });
+            this.initWebSocket()
+          })
         })
         .finally(() => {
           setTimeout(() => {
-            this.loading = false;
-          }, 300);
-        });
+            this.loading = false
+          }, 300)
+        })
     } else {
       // 如果是内部论文投票，则需先发起投票
       getPaperVote(this.pid)
         .then((res) => {
-          this.vote = res.data;
-          console.log(this.vote);
-          this.isEnd = res.data.status;
+          this.vote = res.data
+          console.log(this.vote)
+          this.isEnd = res.data.status
           if (this.vote.id !== undefined) {
             this.fetchVoteDetail().then(() => {
-              this.initWebSocket();
-            });
+              this.initWebSocket()
+            })
           }
         })
         .finally(() => {
           setTimeout(() => {
-            this.loading = false;
-          }, 300);
-        });
+            this.loading = false
+          }, 300)
+        })
     }
   },
   destroyed() {
     // 离开页面时关闭websocket连接
     if (this.ws !== undefined) {
-      this.ws.close();
+      this.ws.close()
     }
   },
   methods: {
@@ -355,92 +350,92 @@ export default {
     submitvote() {
       this.$refs.voteform.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          this.voteform.paperid = this.pid;
+          this.loading = true
+          this.voteform.paperid = this.pid
           this.voteform.endTime =
-            new Date().toISOString().slice(0, 10) + "T" + this.voteform.endTime;
+            new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
           createVote(this.voteform)
             .then((res) => {
-              console.log(res.data);
-              this.vote = res.data;
+              console.log(res.data)
+              this.vote = res.data
             })
             .finally(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         }
-      });
+      })
     },
     // 获取投票详情
     fetchVoteDetail() {
       return new Promise((resolve, reject) => {
         getVoteDetailByVid(this.vote.id)
           .then((res) => {
-            console.log("获取投票详情数据");
-            console.log(res.data);
-            this.vote_detail = res.data;
-            console.log(this.isVoted);
-            resolve();
+            console.log('获取投票详情数据')
+            console.log(res.data)
+            this.vote_detail = res.data
+            console.log(this.isVoted)
+            resolve()
           })
           .catch((error) => {
-            reject(error);
-          });
-      });
+            reject(error)
+          })
+      })
     },
 
     // 初始化websocket
     initWebSocket() {
-      const that = this;
+      const that = this
       if (window.WebSocket) {
-        var url = "ws://" + location.host + "/wsapi";
-        console.log("location.host for websocket: " + url);
-        const ws = new WebSocket(url);
-        that.ws = ws;
+        var url = 'ws://' + location.host + '/wsapi'
+        console.log('location.host for websocket: ' + url)
+        const ws = new WebSocket(url)
+        that.ws = ws
         ws.onopen = function() {
-          console.log("服务器连接成功: " + url);
-        };
+          console.log('服务器连接成功: ' + url)
+        }
         ws.onclose = function() {
-          console.log("服务器连接关闭: " + url);
-        };
+          console.log('服务器连接关闭: ' + url)
+        }
         ws.onerror = function() {
-          console.log("服务器连接出错: " + url);
-        };
+          console.log('服务器连接出错: ' + url)
+        }
         ws.onmessage = function(e) {
           // 接收服务器返回的数据
-          console.log("websocket 接收到数据：");
-          const data = JSON.parse(e.data);
+          console.log('websocket 接收到数据：')
+          const data = JSON.parse(e.data)
           // 判断websocket更新的投票数据，是否为当前页面的投票，若是则更新数据
           if (data.vid === that.vid) {
             if (data.isEnd) {
-              that.fetchVoteDetail();
-              return;
+              that.fetchVoteDetail()
+              return
             }
-            that.total = data.total;
-            that.accept = data.accept;
-            that.reject = data.reject;
-            that.acceptlist = data.acceptnames;
-            that.rejectlist = data.rejectnames;
+            that.total = data.total
+            that.accept = data.accept
+            that.reject = data.reject
+            that.acceptlist = data.acceptnames
+            that.rejectlist = data.rejectnames
           }
-        };
+        }
       }
     },
     voting() {
-      this.pollform.vid = this.vote.id;
-      this.loading = true;
+      this.pollform.vid = this.vote.id
+      this.loading = true
       addPoll(this.vote.id, this.pollform)
         .then((res) => {
-          this.vote_detail = res.data;
+          this.vote_detail = res.data
         })
         .catch((error) => {
           if (error.response.data.status === 409) {
-            this.fetchVoteDetail();
+            this.fetchVoteDetail()
           }
         })
         .finally(() => {
-          this.loading = false;
-        });
-    },
-  },
-};
+          this.loading = false
+        })
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .create {

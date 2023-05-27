@@ -20,10 +20,14 @@
         <!-- 增加固定宽度解决箭头被遮挡的问题-->
         <!-- <div style="display: inline-block; width:18px;" /> -->
       </template>
-      <vertical-item 
-        v-for="child in item.children" 
-        :key="child.path" :is-nest="true" :item="child" 
-        :base-path="resolvePath(child.path)" class="nest-menu" />
+      <vertical-item
+        v-for="child in item.children"
+        :key="child.path"
+        :is-nest="true"
+        :item="child"
+        :base-path="resolvePath(child.path)"
+        class="nest-menu"
+      />
     </el-submenu>
   </div>
 </template>

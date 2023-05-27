@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     go() {
-      console.log("fdsf")
+      console.log('fdsf')
       this.$router.push({
         path: '/'
       })

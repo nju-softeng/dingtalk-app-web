@@ -9,7 +9,7 @@
             type="primary"
             icon="el-icon-plus"
             @click="addPatentDialog = true"
-            >添加专利
+          >添加专利
           </el-button>
         </div>
       </div>
@@ -53,7 +53,7 @@
             <template slot="header" slot-scope="scope">
               <el-dropdown @command="filterTag">
                 <span class="el-dropdown-link">
-                  申请状态<i class="el-icon-arrow-down el-icon--right"></i>
+                  申请状态<i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="-2">全部</el-dropdown-item>
@@ -67,36 +67,35 @@
             </template>
             <template slot-scope="scope">
               <div class="info-item">
-                <el-tag v-if="scope.row.state === 0" class="patent-tag"
-                  >待内审</el-tag
-                >
+                <el-tag
+                  v-if="scope.row.state === 0"
+                  class="patent-tag"
+                >待内审</el-tag>
                 <el-tag
                   v-else-if="scope.row.state === 1"
                   class="patent-tag"
                   type="danger"
-                  >内审不通过</el-tag
-                >
+                >内审不通过</el-tag>
                 <el-tag
                   v-else-if="scope.row.state === 2"
                   class="patent-tag"
                   type="success"
-                  >内审通过</el-tag
-                >
+                >内审通过</el-tag>
                 <el-tag
                   v-else-if="scope.row.state === 3"
                   class="patent-tag"
                   type="success"
-                  >专利授权</el-tag
-                >
+                >专利授权</el-tag>
                 <el-tag
                   v-else-if="scope.row.state === 4"
                   class="patent-tag"
                   type="danger"
-                  >专利驳回</el-tag
-                >
-                <el-tag v-else class="patent-tag" type="danger"
-                  >{{ scope.row.state }}未知状态</el-tag
-                >
+                >专利驳回</el-tag>
+                <el-tag
+                  v-else
+                  class="patent-tag"
+                  type="danger"
+                >{{ scope.row.state }}未知状态</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -114,16 +113,14 @@
                       v-for="(o, index) in scope.row.patentDetailList"
                       :key="index"
                       style="padding:5px;"
-                      >{{ o.user.name }}</span
-                    >
+                    >{{ o.user.name }}</span>
                   </div>
                   <div class="nameList">
                     <span
                       v-for="(o, index) in scope.row.patentDetailList"
                       :key="index"
                       style="padding:5px;"
-                      >{{ o.user.name }}</span
-                    >
+                    >{{ o.user.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
@@ -134,8 +131,7 @@
             align="center"
             width="60"
             prop="applicant.name"
-          >
-          </el-table-column>
+          />
           <el-table-column
             label="操作"
             align="center"
@@ -146,14 +142,14 @@
               <div class="info-item">
                 <div style="font-size:14px;">
                   <el-tooltip
-                    style="margin: 0 5px;"
-                    effect="dark"
-                    content="编辑"
-                    placement="top"
                     v-if="
                       isPatentInventor(scope.row.patentDetailList) &&
                         scope.row.state === 0
                     "
+                    style="margin: 0 5px;"
+                    effect="dark"
+                    content="编辑"
+                    placement="top"
                   >
                     <svg-icon
                       icon-class="edit"
@@ -162,13 +158,13 @@
                   </el-tooltip>
 
                   <el-tooltip
+                    v-if="
+                      hasAuth() || isPatentInventor(scope.row.patentDetailList)
+                    "
                     style="margin: 0 5px;"
                     effect="dark"
                     content="删除"
                     placement="top"
-                    v-if="
-                      hasAuth() || isPatentInventor(scope.row.patentDetailList)
-                    "
                   >
                     <svg-icon
                       icon-class="remove"
@@ -182,7 +178,7 @@
           <template slot="empty">
             <div style="height:200px;">
               <div style="margin-top:100px;">
-                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                <svg-icon icon-class="null" style="font-size:32px" /> <br>
               </div>
               <div style="line-height: 10px;">
                 <span>没有专利记录</span>
@@ -222,9 +218,9 @@
           <div class="patent-form">
             <el-form ref="patentForm" :rules="rules" :model="patentForm">
               <el-form-item prop="name">
-                <span slot="label"
-                  ><i class="el-icon-collection" /> 专利名</span
-                >
+                <span
+                  slot="label"
+                ><i class="el-icon-collection" /> 专利名</span>
                 <el-input
                   v-model="patentForm.name"
                   placeholder="请输入专利名"
@@ -243,9 +239,9 @@
                 />
               </el-form-item>
               <el-form-item prop="type">
-                <span slot="label"
-                  ><i class="el-icon-collection-tag" /> 类型</span
-                >
+                <span
+                  slot="label"
+                ><i class="el-icon-collection-tag" /> 类型</span>
                 <el-select
                   v-model="patentForm.type"
                   placeholder="请选择专利类型"
@@ -279,8 +275,7 @@
                 }"
               >
                 <span slot="label">
-                  <svg-icon icon-class="people" /> 发明人 {{ index + 1 }}</span
-                >
+                  <svg-icon icon-class="people" /> 发明人 {{ index + 1 }}</span>
 
                 <el-select
                   v-model="inventors.uid"
@@ -301,8 +296,9 @@
                   placement="right"
                 >
                   <span style="margin-left: 8px">
-                    <svg-icon icon-class="hint"
-                  /></span>
+                    <svg-icon
+                      icon-class="hint"
+                    /></span>
                 </el-tooltip>
               </el-form-item>
               <el-button
@@ -310,22 +306,22 @@
                 style="margin-left: 20px"
                 icon="el-icon-plus"
                 @click="addAuthor"
-                >添加发明人
+              >添加发明人
               </el-button>
               <el-button
                 type="text"
                 style="margin-left: 20px"
                 icon="el-icon-minus"
                 @click="rmAuthor"
-                >减少发明人</el-button
-              >
+              >减少发明人</el-button>
             </el-form>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit('patentForm')"
-            >确 定</el-button
-          >
+          <el-button
+            type="primary"
+            @click="submit('patentForm')"
+          >确 定</el-button>
           <el-button @click="closeAddPatentDialog">取 消</el-button>
         </span>
       </div>
@@ -334,14 +330,14 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/common";
-import FileUpload from "@/views/patent/components/fileUpload";
-import { checkPermission, permissionEnum } from "@/utils/permission";
-import { addPatent, deletePatent, queryPatentList } from "@/api/patent";
+import { getUserList } from '@/api/common'
+import FileUpload from '@/views/patent/components/fileUpload'
+import { checkPermission, permissionEnum } from '@/utils/permission'
+import { addPatent, deletePatent, queryPatentList } from '@/api/patent'
 export default {
-  name: "Index",
+  name: 'Index',
   components: {
-    FileUpload,
+    FileUpload
   },
   data() {
     return {
@@ -353,277 +349,277 @@ export default {
       currentPage: 1,
       addPatentDialog: false,
       list: [],
-      addPatentWidth: "50%",
+      addPatentWidth: '50%',
       file: null,
       loading: false,
       options: [
         {
-          label: "专利",
-          value: "patent",
+          label: '专利',
+          value: 'patent'
         },
         {
-          label: "软著",
-          value: "copyright",
-        },
+          label: '软著',
+          value: 'copyright'
+        }
       ],
       patentForm: {
         id: null,
-        name: "",
-        type: "",
-        obligee: "",
+        name: '',
+        type: '',
+        obligee: '',
         year: null,
         patentDetailList: [
           {
             num: 1,
-            name: "",
-            uid: null,
-          },
+            name: '',
+            uid: null
+          }
         ],
-        filePath: "",
+        filePath: ''
       },
       rules: {
-        name: [{ required: true, message: "请输入专利名", trigger: "blur" }],
-        obligee: [{ required: true, message: "请输入权利人", trigger: "blur" }],
-        type: [{ required: true, message: "请选择类型", trigger: "blur" }],
+        name: [{ required: true, message: '请输入专利名', trigger: 'blur' }],
+        obligee: [{ required: true, message: '请输入权利人', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择类型', trigger: 'blur' }],
         year: [
-          { required: true, message: "请选择刊物/会议年份", trigger: "blur" },
+          { required: true, message: '请选择刊物/会议年份', trigger: 'blur' }
         ],
         inventors: [
-          { required: true, message: "请选择发明人", trigger: "blur" },
+          { required: true, message: '请选择发明人', trigger: 'blur' }
         ],
         file: [
           {
-            trigger: "blur",
-            validator: async (rule, value, callback) => {
-              if (!this.file) callback(new Error("请上传专利文件"));
-            },
-          },
-        ],
+            trigger: 'blur',
+            validator: async(rule, value, callback) => {
+              if (!this.file) callback(new Error('请上传专利文件'))
+            }
+          }
+        ]
       },
       reviewResultForm: {
-        patentId: "",
-        result: null,
+        patentId: '',
+        result: null
       },
       authorizationResultForm: {
-        patentId: "",
-        result: null,
+        patentId: '',
+        result: null
       },
       query: {
         applicantId: 0,
         state: -2,
-        inventorsIdList: [sessionStorage.getItem("uid")],
-        year: "",
-      },
-    };
+        inventorsIdList: [sessionStorage.getItem('uid')],
+        year: ''
+      }
+    }
   },
   created() {
-    this.currentPage = sessionStorage.getItem("my-patent-cur-page") || 1;
+    this.currentPage = parseInt(sessionStorage.getItem('my-patent-cur-page')) || 1
     getUserList().then((res) => {
-      this.userList = res.data;
-    });
-    this.uid = sessionStorage.getItem("uid");
-    this.fetchPatent(this.currentPage);
+      this.userList = res.data
+    })
+    this.uid = sessionStorage.getItem('uid')
+    this.fetchPatent(this.currentPage)
   },
   methods: {
     // 对象转formData 暂时没用 但是写得真好 万一要用呢
     toFormData(data) {
-      const formData = new FormData();
+      const formData = new FormData()
       Object.keys(data).forEach((key) => {
-        formData.append(key, data[key]);
-      });
-      return formData;
+        formData.append(key, data[key])
+      })
+      return formData
     },
     fetchPatent(page) {
-      sessionStorage.setItem("my-patent-cur-page", page);
-      this.currentPage = page;
+      sessionStorage.setItem('my-patent-cur-page', page)
+      this.currentPage = page
       queryPatentList(page, 6, this.query)
         .then((res) => {
-          this.list = res.data.data.list;
+          this.list = res.data.data.list
           for (const i in this.list) {
             for (const j in this.list[i].patentDetailList) {
-              this.list[i].patentDetailList[j].num = j;
+              this.list[i].patentDetailList[j].num = j
               this.list[i].patentDetailList[j].name = this.list[
                 i
-              ].patentDetailList[j].user.name;
+              ].patentDetailList[j].user.name
               this.list[i].patentDetailList[j].uid = this.list[
                 i
-              ].patentDetailList[j].user.id;
+              ].patentDetailList[j].user.id
             }
           }
-          this.total = res.data.data.total;
+          this.total = res.data.data.total
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     // 分页前一页
     handlePrev(val) {
-      this.fetchPatent(val);
+      this.fetchPatent(val)
     },
     // 分页下一页
     handleNext(val) {
-      this.fetchPatent(val);
+      this.fetchPatent(val)
     },
     // 分页当前页
     handleCurrentChange(val) {
-      if (val === this.currentPage) return;
-      this.fetchPatent(val);
+      if (val === this.currentPage) return
+      this.fetchPatent(val)
     },
     // 提交内部专利评审记录
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const formData = new FormData();
+          const formData = new FormData()
           if (this.file) {
-            formData.append("file", this.file.raw);
+            formData.append('file', this.file.raw)
           } else {
-            formData.append("file", null);
+            formData.append('file', null)
           }
           this.patentForm.filePath =
-            "Patent" +
-            "/" +
+            'Patent' +
+            '/' +
             this.patentForm.type +
-            "/" +
+            '/' +
             this.patentForm.year +
-            "/" +
+            '/' +
             this.patentForm.obligee +
-            "/" +
-            this.patentForm.name;
-          this.patentForm.inventorsIdList = [];
+            '/' +
+            this.patentForm.name
+          this.patentForm.inventorsIdList = []
           for (const i in this.patentForm.patentDetailList) {
             this.patentForm.inventorsIdList.push(
               this.patentForm.patentDetailList[i].uid
-            );
+            )
           }
-          formData.append("patentVOJsonStr", JSON.stringify(this.patentForm));
-          this.patentForm.file = this.file;
-          this.loading = true;
+          formData.append('patentVOJsonStr', JSON.stringify(this.patentForm))
+          this.patentForm.file = this.file
+          this.loading = true
           addPatent(formData)
             .then(() => {
-              this.addPatentDialog = false;
-              this.loading = false;
-              this.fetchPatent(1);
+              this.addPatentDialog = false
+              this.loading = false
+              this.fetchPatent(1)
               //   this.currentPage = 1;
               this.$notify({
-                title: "成功",
-                message: "专利提交成功",
-                type: "success",
-              });
+                title: '成功',
+                message: '专利提交成功',
+                type: 'success'
+              })
             })
             .catch((err) => {
-              console.log(err);
-              this.loading = false;
-              this.$message.error("创建失败");
-            });
+              console.log(err)
+              this.loading = false
+              this.$message.error('创建失败')
+            })
         } else {
           this.$notify({
-            title: "提交失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '提交失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     // 判断用户是否是改条专利发明人
     isPatentInventor(patentDetailList) {
       return (
         patentDetailList.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
-      );
+      )
     },
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_PATENT_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_PATENT_APPLICATION)
     },
     // 删除专利记录
     removePatent(item) {
       if (this.hasAuth() || this.isPatentInventor(item.patentDetailList)) {
-        this.$confirm("删除后，对应的AC变化也将被删除，请谨慎操作", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+        this.$confirm('删除后，对应的AC变化也将被删除，请谨慎操作', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
           .then(() => {
             deletePatent(item.id).then(() => {
-              this.fetchPatent(this.currentPage);
+              this.fetchPatent(this.currentPage)
               this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
-            });
+                type: 'success',
+                message: '删除成功!'
+              })
+            })
           })
           .catch(() => {
             this.$message({
-              type: "info",
-              message: "已取消删除",
-            });
-          });
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
-          message: "只有审核人，和专利发明人才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人，和专利发明人才可以操作',
+          type: 'warning'
+        })
       }
     },
     modifyPatent(form) {
-      console.log(form);
+      console.log(form)
       if (this.isPatentInventor(form.patentDetailList)) {
-        this.addPatentDialog = true;
-        this.patentForm.id = form.id;
-        this.patentForm.name = form.name;
-        this.patentForm.applicant = form.applicant;
-        this.patentForm.obligee = form.obligee;
-        this.patentForm.type = form.type;
-        this.patentForm.year = form.year;
-        this.patentForm.patentDetailList = form.patentDetailList;
+        this.addPatentDialog = true
+        this.patentForm.id = form.id
+        this.patentForm.name = form.name
+        this.patentForm.applicant = form.applicant
+        this.patentForm.obligee = form.obligee
+        this.patentForm.type = form.type
+        this.patentForm.year = form.year
+        this.patentForm.patentDetailList = form.patentDetailList
       } else {
         this.$message({
-          message: "只有审核人，和专利发明人才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人，和专利发明人才可以操作',
+          type: 'warning'
+        })
       }
     },
     // 关闭前清空表单
     closeAddPatentDialog() {
       this.patentForm = {
         id: null,
-        name: "",
-        type: "",
-        obligee: "",
+        name: '',
+        type: '',
+        obligee: '',
         year: null,
         patentDetailList: [
           {
             num: 1,
-            name: "",
-            uid: null,
-          },
+            name: '',
+            uid: null
+          }
         ],
-        filePath: "",
-      };
-      this.addPatentDialog = false;
+        filePath: ''
+      }
+      this.addPatentDialog = false
     },
     // 添加专利发明人
     addAuthor() {
-      const val = this.patentForm.patentDetailList.length + 1;
+      const val = this.patentForm.patentDetailList.length + 1
       this.patentForm.patentDetailList.push({
         num: val,
-        uid: "",
-      });
+        uid: ''
+      })
     },
     // 移除专利发明人
     rmAuthor() {
       if (this.patentForm.patentDetailList.length !== 1) {
-        this.patentForm.patentDetailList.pop();
+        this.patentForm.patentDetailList.pop()
       }
     },
     changeFile(file) {
-      this.file = file;
+      this.file = file
     },
     filterTag(command) {
       //   console.log(command);
-      this.query.state = command;
-      this.fetchPatent(1);
-    },
-  },
-};
+      this.query.state = command
+      this.fetchPatent(1)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

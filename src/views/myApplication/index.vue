@@ -5,8 +5,8 @@
         <el-menu
           :default-active="activeName"
           class="menu"
-          @select="handleSelect"
           :collapse="device == 'mobile'"
+          @select="handleSelect"
         >
           <el-menu-item index="myPatentApply">
             <i class="el-icon-files" />
@@ -37,32 +37,32 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "myApplication",
+  name: 'MyApplication',
   components: {
-    myInternshipApply: () => import("./subViews/myInternshipApply"),
-    myPatentApply: () => import("./subViews/myPatentApply"),
-    myVMApply: () => import("./subViews/myVMApply"),
-    myReimburseApply: () => import("./subViews/myReimburseApply"),
+    myInternshipApply: () => import('./subViews/myInternshipApply'),
+    myPatentApply: () => import('./subViews/myPatentApply'),
+    myVMApply: () => import('./subViews/myVMApply'),
+    myReimburseApply: () => import('./subViews/myReimburseApply')
   },
   computed: {
-    ...mapGetters(["device"]),
+    ...mapGetters(['device'])
   },
   data() {
     return {
       activeName:
-        sessionStorage.getItem("myAppicationActiveName") || "myVMApply",
-    };
+        sessionStorage.getItem('myAppicationActiveName') || 'myVMApply'
+    }
   },
   created() {},
   methods: {
     handleSelect(val) {
-      sessionStorage.setItem("myAppicationActiveName", val);
-      this.activeName = val;
-    },
-  },
-};
+      sessionStorage.setItem('myAppicationActiveName', val)
+      this.activeName = val
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

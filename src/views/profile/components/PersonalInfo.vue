@@ -36,8 +36,8 @@
           </el-form-item>
           <el-form-item label="当前状态">
             <el-select
-              disabled
               v-model="personalInfoForm.workState"
+              disabled
               placeholder="请选择"
             >
               <el-option label="实习" :value="true" />
@@ -50,18 +50,16 @@
               type="info"
               effect="plain"
               class="permission-tag"
-              >无管理员权限</el-tag
-            >
+            >无管理员权限</el-tag>
             <el-tag
               v-for="permission in permissionList"
               :key="permission.id"
               effect="plain"
               class="permission-tag"
-              >{{ permission.name }}</el-tag
-            >
+            >{{ permission.name }}</el-tag>
           </el-form-item>
           <el-form-item label="研究组">
-            <TeamEdit selectionWidth="100%" ref="teamEdit"></TeamEdit>
+            <TeamEdit ref="teamEdit" selection-width="100%" />
           </el-form-item>
         </div>
         <!--        住房信息-->
@@ -98,7 +96,7 @@
                 <span v-if="personalInfoForm.leaseContractFileName != null">{{
                   personalInfoForm.leaseContractFileName
                 }}</span>
-                <span v-else>请上传住房合同！</span><br />
+                <span v-else>请上传住房合同！</span><br>
                 <span style="display: flex">
                   <el-upload
                     class="uploadFIle"
@@ -113,8 +111,7 @@
                       type="success"
                       style="margin-right: 30px"
                       round
-                      >上 传</el-button
-                    >
+                    >上 传</el-button>
                   </el-upload>
                   <el-button
                     icon="el-icon-download"
@@ -122,8 +119,7 @@
                     style="margin-top: 1px"
                     round
                     @click="downloadFile"
-                    >下 载</el-button
-                  >
+                  >下 载</el-button>
                 </span>
               </el-form-item>
             </el-col>
@@ -148,8 +144,7 @@
         size="medium"
         style="margin-bottom: 10px"
         @click="confirmModify('personalInfoForm')"
-        >确认修改</el-button
-      >
+      >确认修改</el-button>
     </el-row>
   </div>
 </template>
@@ -159,14 +154,14 @@ import {
   getUserDetail,
   updateUserInfo,
   updateContract,
-  downloadContract,
-} from "@/api/user";
+  downloadContract
+} from '@/api/user'
 // import { mapGetters } from "vuex";
-import { getPersonalPermissions } from "@/api/permission.js";
-import PermissionEdit from "@/components/PermissionsEdit";
-import TeamEdit from "@/components/TeamsEdit";
+import { getPersonalPermissions } from '@/api/permission.js'
+import PermissionEdit from '@/components/PermissionsEdit'
+import TeamEdit from '@/components/TeamsEdit'
 export default {
-  name: "PersonalInfo",
+  name: 'PersonalInfo',
   components: { PermissionEdit, TeamEdit },
   data() {
     return {
@@ -184,20 +179,20 @@ export default {
         address: null,
         leaseContractFileName: null,
         leaseContractFilePath: null,
-        remark: null,
+        remark: null
       },
       rules: {
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        stuNum: [{ required: true, message: "请输入学号", trigger: "blur" }],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        stuNum: [{ required: true, message: '请输入学号', trigger: 'blur' }],
         undergraduateCollege: [
-          { required: true, message: "请输入本科学校", trigger: "blur" },
+          { required: true, message: '请输入本科学校', trigger: 'blur' }
         ],
         masterCollege: [
-          { required: true, message: "请输入硕士学校", trigger: "blur" },
-        ],
+          { required: true, message: '请输入硕士学校', trigger: 'blur' }
+        ]
       },
-      permissionList: [],
-    };
+      permissionList: []
+    }
   },
   // computed: {
   //   ...mapGetters(["uid", "device"]),
@@ -205,108 +200,108 @@ export default {
   created() {
     getUserDetail().then((res) => {
       // console.log(res)
-      this.personalInfoForm = res.data;
+      this.personalInfoForm = res.data
       // console.log(this.personalInfoForm)
-    });
+    })
     getPersonalPermissions().then((res) => {
-      this.permissionList = res.data.data;
-    });
+      this.permissionList = res.data.data
+    })
   },
   methods: {
     confirmModify(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.personalInfoForm.name === "") {
+          if (this.personalInfoForm.name === '') {
             this.$message({
               showClose: true,
-              message: "请填写必要信息",
-              type: "warning",
-            });
-            return;
+              message: '请填写必要信息',
+              type: 'warning'
+            })
+            return
           }
           updateUserInfo(this.personalInfoForm)
             .then(() => {
               this.$message({
                 showClose: true,
-                message: "更新成功",
-                type: "success",
-              });
+                message: '更新成功',
+                type: 'success'
+              })
             })
             .then(() => {
-              this.$refs.teamEdit.submitTeamChange();
+              this.$refs.teamEdit.submitTeamChange()
             })
             .finally(() => {
               getUserDetail().then((res) => {
-                this.personalInfoForm = res.data;
-              });
-            });
+                this.personalInfoForm = res.data
+              })
+            })
         } else {
           this.$notify({
-            title: "提交失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '提交失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     handleFileChange(file, fileList) {
       if (fileList.length > 1) {
-        fileList.splice(0, 1);
+        fileList.splice(0, 1)
       }
-      const formData = new FormData();
-      formData.append("file", file.raw);
+      const formData = new FormData()
+      formData.append('file', file.raw)
       updateContract(formData)
         .then(() => {
           this.$notify({
-            title: "成功",
-            message: "论文文件上传成功",
-            type: "success",
-          });
+            title: '成功',
+            message: '论文文件上传成功',
+            type: 'success'
+          })
         })
         .catch(() => {
-          this.$message.error("上传失败");
+          this.$message.error('上传失败')
         })
         .finally(() => {
           getUserDetail().then((res) => {
             this.personalInfoForm.leaseContractFileName =
-              res.data.leaseContractFileName;
-          });
-        });
+              res.data.leaseContractFileName
+          })
+        })
     },
     downloadFile() {
       downloadContract().then((res) => {
-        let type;
+        let type
         if (
           this.personalInfoForm.leaseContractFileName
-            .split(".")
-            .slice(-1)[0] === ".pdf"
+            .split('.')
+            .slice(-1)[0] === '.pdf'
         ) {
-          type = "application/pdf";
+          type = 'application/pdf'
         } else if (
           this.personalInfoForm.leaseContractFileName
-            .split(".")
-            .slice(-1)[0] === ".jpg"
+            .split('.')
+            .slice(-1)[0] === '.jpg'
         ) {
-          type = "image/jpeg";
+          type = 'image/jpeg'
         } else if (
           this.personalInfoForm.leaseContractFileName
-            .split(".")
-            .slice(-1)[0] === ".png"
+            .split('.')
+            .slice(-1)[0] === '.png'
         ) {
-          type = "image/png";
+          type = 'image/png'
         }
-        const binaryData = [res.data];
+        const binaryData = [res.data]
         const url = window.URL.createObjectURL(
           new Blob(binaryData, { type: type })
-        );
-        const a = document.createElement("a");
-        a.download = this.personalInfoForm.leaseContractFileName;
-        a.href = url;
-        a.click();
-      });
-    },
-  },
-};
+        )
+        const a = document.createElement('a')
+        a.download = this.personalInfoForm.leaseContractFileName
+        a.href = url
+        a.click()
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

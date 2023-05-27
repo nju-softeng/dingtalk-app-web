@@ -1,62 +1,62 @@
-import axios from "@/utils/request";
+import axios from '@/utils/request'
 
 const api = {
-  addVirtualMachineApply: "/vmApply",
+  addVirtualMachineApply: '/vmApply',
   getVMApplyList: (page, size) => `/vmApply/page/${page}/${size}`,
-  getAuditingVMApplyList: "/vmApply/auditingList",
+  getAuditingVMApplyList: '/vmApply/auditingList',
   getUserVMApplyList: (uid) => `/vmApply/user/${uid}`,
   setVMApplyResult: (id, data) => `/vmApply/${id}/${data}`,
   deleteVMApply: (id) => `/vmApply/${id}`,
-  queryVMApplyList: (page, size) => `/v2/vmApply/page/${page}/${size}`,
-};
+  queryVMApplyList: (page, size) => `/v2/vmApply/page/${page}/${size}`
+}
 
 export function addVirtualMachineApply(data) {
   return axios({
     url: api.addVirtualMachineApply,
-    method: "post",
-    data,
-  });
+    method: 'post',
+    data
+  })
 }
 
 export function getVMApplyList(page, size) {
   return axios({
     url: api.getVMApplyList(page, size),
-    method: "get",
-  });
+    method: 'get'
+  })
 }
 
 export function getAuditingVMApplyList() {
   return axios({
     url: api.getAuditingVMApplyList,
-    method: "get",
-  });
+    method: 'get'
+  })
 }
 
 export function getUserVMApplyList(uid) {
   return axios({
     url: api.getUserVMApplyList(uid),
-    method: "get",
-  });
+    method: 'get'
+  })
 }
 
 export function setVMApplyResult(id, data) {
   return axios({
     url: api.setVMApplyResult(id, data),
-    method: "patch",
-  });
+    method: 'patch'
+  })
 }
 
 export function deleteVMApply(id) {
   return axios({
     url: api.deleteVMApply(id),
-    method: "delete",
-  });
+    method: 'delete'
+  })
 }
 
 export function queryVMApplyList(page, size, filter) {
   return axios({
     url: api.queryVMApplyList(page, size),
-    method: "post",
-    data: filter,
-  });
+    method: 'post',
+    data: filter
+  })
 }

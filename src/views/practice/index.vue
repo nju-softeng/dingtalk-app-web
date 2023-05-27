@@ -7,16 +7,17 @@
           <el-tooltip placement="top">
             <div slot="content">
               推荐时间段内的实习申请会快速通过，无需审核
-              <br />
+              <br>
               实习状态下无需填写周报
             </div>
             <span style="align-self: center; margin-right: 5px">
-              <svg-icon icon-class="hint"
-            /></span>
+              <svg-icon
+                icon-class="hint"
+              /></span>
           </el-tooltip>
           <el-date-picker
-            :disabled="editPeriodButtonVisible"
             v-model="internshipPeriod"
+            :disabled="editPeriodButtonVisible"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -28,36 +29,33 @@
           />
           <el-button
             v-if="editPeriodButtonVisible"
-            @click="editPeriodButtonVisible = false"
             type="primary"
             plain
             size="mini"
             style="margin: 5px;"
-            >修改</el-button
-          >
+            @click="editPeriodButtonVisible = false"
+          >修改</el-button>
           <el-button
             v-if="!editPeriodButtonVisible"
-            @click="submitPeriod"
             type="success"
             plain
             size="mini"
             style="margin: 5px;"
-            >提交</el-button
-          >
+            @click="submitPeriod"
+          >提交</el-button>
           <el-button
             v-if="!editPeriodButtonVisible"
+            type="danger"
+            plain
+            size="mini"
+            style="margin: 5px;"
             @click="
               {
                 editPeriodButtonVisible = true;
                 getInternshipPeriod();
               }
             "
-            type="danger"
-            plain
-            size="mini"
-            style="margin: 5px;"
-            >取消</el-button
-          >
+          >取消</el-button>
         </div>
 
         <div class="practiceList">
@@ -71,7 +69,7 @@
               <template slot="header" slot-scope="scope">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
-                    状态<i class="el-icon-arrow-down el-icon--right"></i>
+                    状态<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="-2">全部</el-dropdown-item>
@@ -82,24 +80,25 @@
                 </el-dropdown>
               </template>
               <template slot-scope="{ row }">
-                <el-tag v-if="row.state === 0" class="practiceTag"
-                  >审核中</el-tag
-                >
+                <el-tag
+                  v-if="row.state === 0"
+                  class="practiceTag"
+                >审核中</el-tag>
                 <el-tag
                   v-else-if="row.state === 1"
                   class="practiceTag"
                   type="success"
-                  >审核通过</el-tag
-                >
+                >审核通过</el-tag>
                 <el-tag
                   v-else-if="row.state === -1"
                   class="practiceTag"
                   type="danger"
-                  >审核不通过</el-tag
-                >
-                <el-tag v-else class="practiceTag" type="danger"
-                  >{{ row.state }}未知状态</el-tag
-                >
+                >审核不通过</el-tag>
+                <el-tag
+                  v-else
+                  class="practiceTag"
+                  type="danger"
+                >{{ row.state }}未知状态</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="实习单位" align="center">
@@ -129,8 +128,8 @@
                       row.user.workState == null
                         ? "未设置"
                         : row.user.workState
-                        ? "实习"
-                        : "在校"
+                          ? "实习"
+                          : "在校"
                     }}</el-descriptions-item>
                     <el-descriptions-item label="职位">{{
                       row.user.position == null ? "未设置" : row.user.position
@@ -142,11 +141,10 @@
                         effect="plain"
                         class="team-tag"
                         size="mini"
-                        >未设置</el-tag
-                      >
+                      >未设置</el-tag>
                       <el-tag
-                        :key="tag.id"
                         v-for="tag in row.user.teamList"
+                        :key="tag.id"
                         class="team-tag"
                         size="mini"
                       >
@@ -260,8 +258,8 @@
         </el-form-item>
         <el-form-item prop="practiceTime" label="实习时间:">
           <el-date-picker
-            disabled
             v-model="addPracticeForm.practiceTime"
+            disabled
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -275,77 +273,76 @@
       </el-form>
       <span slot="footer">
         <el-button @click="cancelAddPractice">取 消</el-button>
-        <el-button type="primary" @click="editPractice('addPracticeForm')"
-          >确 认</el-button
-        >
+        <el-button
+          type="primary"
+          @click="editPractice('addPracticeForm')"
+        >确 认</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { checkPermission, permissionEnum } from "@/utils/permission";
+import { checkPermission, permissionEnum } from '@/utils/permission'
 import {
   queryPracticeList,
   deletePractice,
-  addPractice,
-  addPracticeV2,
-  modifyPractice,
-} from "@/api/practice";
-import { addPeriod, getPeriod } from "@/api/internshipPeriod";
+  modifyPractice
+} from '@/api/practice'
+import { addPeriod, getPeriod } from '@/api/internshipPeriod'
 export default {
-  name: "Index",
+  name: 'Index',
   data() {
     return {
       practiceList: [],
       addPracticeDialogVisible: false,
-      currentOperation: "修改实习",
+      currentOperation: '修改实习',
       addPracticeForm: {
         id: null,
-        companyName: "",
-        department: "",
+        companyName: '',
+        department: '',
         practiceTime: [],
         start: null,
         end: null,
-        userId: 0,
+        userId: 0
       },
       rules: {
         companyName: [
-          { required: true, message: "请输入实习单位", trigger: "blur" },
+          { required: true, message: '请输入实习单位', trigger: 'blur' }
         ],
         department: [
-          { required: true, message: "请输入实习部门", trigger: "blur" },
+          { required: true, message: '请输入实习部门', trigger: 'blur' }
         ],
         practiceTime: [
-          { required: true, message: "请选择实习时间", trigger: "blur" },
-        ],
+          { required: true, message: '请选择实习时间', trigger: 'blur' }
+        ]
       },
       uid: -1,
-      role: "",
+      role: '',
       query: {
         userId: 0,
-        state: -2,
+        state: -2
       },
       currentPage: 1,
       total: 0,
       internshipPeriod: [],
-      editPeriodButtonVisible: true,
-    };
+      editPeriodButtonVisible: true
+    }
   },
   created() {
-    this.currentPage = 1;
-    this.fetchPractice(1);
-    this.getInternshipPeriod();
-    this.uid = parseInt(sessionStorage.getItem("uid"));
+    this.currentPage = 1
+    this.fetchPractice(1)
+    this.getInternshipPeriod()
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     // this.role = parseInt(sessionStorage.getItem("role"));
   },
   methods: {
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_INTERNSHIP_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_INTERNSHIP_APPLICATION)
     },
     // 分页获取实习
     fetchPractice(page) {
-      this.currentPage = page;
+      this.currentPage = page
       //   return new Promise((resolve, reject) => {
       //     getPracticeList()
       //       .then((res) => {
@@ -359,27 +356,27 @@ export default {
       //   });
       queryPracticeList(page, 10, this.query)
         .then((res) => {
-          this.practiceList = res.data.data.list;
-          this.total = res.data.data.total;
+          this.practiceList = res.data.data.list
+          this.total = res.data.data.total
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     deleteWholePractice(id) {
       deletePractice(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchPractice(this.currentPage);
+          this.$message.success('删除成功')
+          this.fetchPractice(this.currentPage)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     applyTime() {
       if (this.addPracticeForm.practiceTime != null) {
-        this.addPracticeForm.start = this.addPracticeForm.practiceTime[0];
-        this.addPracticeForm.end = this.addPracticeForm.practiceTime[1];
+        this.addPracticeForm.start = this.addPracticeForm.practiceTime[0]
+        this.addPracticeForm.end = this.addPracticeForm.practiceTime[1]
       }
     },
     editPractice(formName) {
@@ -388,60 +385,60 @@ export default {
           modifyPractice(this.addPracticeForm)
             .then((res) => {
               if (res.data.code === 0) {
-                this.$message.success(res.data.data);
-                this.cancelAddPractice();
-                this.fetchPractice(1);
+                this.$message.success(res.data.data)
+                this.cancelAddPractice()
+                this.fetchPractice(1)
               } else {
-                this.$message.error(res.data.message);
+                this.$message.error(res.data.message)
               }
             })
             .catch((err) => {
-              this.$message.error("网络开小差了~");
-              console.log(err);
-            });
+              this.$message.error('网络开小差了~')
+              console.log(err)
+            })
         } else {
           this.$notify({
-            title: "编辑失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '编辑失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     _modifyPractice(row) {
-      this.currentOperation = "修改实习";
-      this.addPracticeForm.id = row.id;
-      this.addPracticeForm.companyName = row.companyName;
-      this.addPracticeForm.department = row.department;
-      this.addPracticeForm.start = row.start;
-      this.addPracticeForm.end = row.end;
-      this.addPracticeForm.practiceTime = [row.start, row.end];
-      this.addPracticeDialogVisible = true;
-      this.addPracticeForm.userId = row.user.id;
+      this.currentOperation = '修改实习'
+      this.addPracticeForm.id = row.id
+      this.addPracticeForm.companyName = row.companyName
+      this.addPracticeForm.department = row.department
+      this.addPracticeForm.start = row.start
+      this.addPracticeForm.end = row.end
+      this.addPracticeForm.practiceTime = [row.start, row.end]
+      this.addPracticeDialogVisible = true
+      this.addPracticeForm.userId = row.user.id
     },
     clearBeforeClose(done) {
       this.addPracticeForm = {
         id: null,
-        companyName: "",
-        department: "",
+        companyName: '',
+        department: '',
         start: null,
         end: null,
         practiceTime: [],
-        userId: 0,
-      };
-      return done(true);
+        userId: 0
+      }
+      return done(true)
     },
     cancelAddPractice() {
-      this.addPracticeDialogVisible = false;
+      this.addPracticeDialogVisible = false
       this.addPracticeForm = {
         id: null,
-        companyName: "",
-        department: "",
+        companyName: '',
+        department: '',
         start: null,
         end: null,
         practiceTime: [],
-        userId: 0,
-      };
+        userId: 0
+      }
     },
     acceptPractice(row) {
       const acceptForm = {
@@ -452,25 +449,25 @@ export default {
         department: row.department,
         practiceTime: row.practiceTime,
         start: row.start,
-        end: row.end,
-      };
-      console.log(acceptForm);
+        end: row.end
+      }
+      console.log(acceptForm)
       modifyPractice(acceptForm)
         .then((res) => {
           if (res) {
-            console.log(res.data.code);
+            console.log(res.data.code)
             if (res.data.code !== 0) {
-              this.$notify.warning(res.data.message);
+              this.$notify.warning(res.data.message)
             } else {
-              this.$notify.success("申请已通过！");
-              this.fetchPractice(this.currentPage);
+              this.$notify.success('申请已通过！')
+              this.fetchPractice(this.currentPage)
             }
           }
         })
         .catch((err) => {
-          this.$notify.error("申请通过失败!");
-          console.log(err);
-        });
+          this.$notify.error('申请通过失败!')
+          console.log(err)
+        })
     },
     rejectPractice(row) {
       const rejectForm = {
@@ -481,78 +478,78 @@ export default {
         department: row.department,
         practiceTime: row.practiceTime,
         start: row.start,
-        end: row.end,
-      };
-      console.log(rejectForm);
+        end: row.end
+      }
+      console.log(rejectForm)
       modifyPractice(rejectForm)
         .then((res) => {
           if (res) {
             if (res.data.code !== 0) {
-              this.$notify.warning(res.data.message);
+              this.$notify.warning(res.data.message)
             } else {
-              this.$notify.success("申请已拒绝！");
-              this.fetchPractice(this.currentPage);
+              this.$notify.success('申请已拒绝！')
+              this.fetchPractice(this.currentPage)
             }
           }
         })
         .catch((err) => {
-          this.$notify.error("申请拒绝失败!");
-          console.log(err);
-        });
+          this.$notify.error('申请拒绝失败!')
+          console.log(err)
+        })
     },
     filterTag(command) {
-      console.log(command);
-      (this.query = {
+      console.log(command)
+      this.query = {
         userId: 0,
-        state: command,
-      }),
-        this.fetchPractice(1);
+        state: command
+      }
+      this.fetchPractice(1)
     },
     handlePrev(val) {
-      this.fetchPractice(val);
+      this.fetchPractice(val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchPractice(val);
+      this.fetchPractice(val)
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      if (val === this.currentPage) return;
-      this.fetchPractice(val);
+      if (val === this.currentPage) return
+      this.fetchPractice(val)
     },
     submitPeriod() {
       addPeriod({
         start: this.internshipPeriod[0],
         end: this.internshipPeriod[1],
-        authorId: parseInt(sessionStorage.getItem("uid")),
+        authorId: parseInt(sessionStorage.getItem('uid'))
       })
         .then((res) => {
           if (res.data.code === 0) {
-            this.$notify.success(res.data.data);
-            this.getInternshipPeriod();
-            this.editPeriodButtonVisible = true;
+            this.$notify.success(res.data.data)
+            this.getInternshipPeriod()
+            this.editPeriodButtonVisible = true
           } else {
-            this.$notify.error(res.data.message);
+            this.$notify.error(res.data.message)
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.$notify.error("网络开小差了~");
-        });
+          console.log(err)
+          this.$notify.error('网络开小差了~')
+        })
     },
     getInternshipPeriod() {
       getPeriod()
         .then((res) => {
           if (res.data.code === 0) {
-            this.internshipPeriod = [res.data.data.start, res.data.data.end];
+            this.internshipPeriod = [res.data.data.start, res.data.data.end]
           }
         })
         .catch((err) => {
-          console.log(err);
-        });
-    },
-  },
-};
+          console.log(err)
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

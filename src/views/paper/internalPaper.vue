@@ -57,16 +57,14 @@
                       v-for="(o, index) in scope.row.authors"
                       :key="index"
                       style="padding:5px;"
-                      >{{ o.name }}</span
-                    >
+                    >{{ o.name }}</span>
                   </div>
                   <div class="namelist">
                     <span
                       v-for="(o, index) in scope.row.authors"
                       :key="index"
                       style="padding:5px;"
-                      >{{ o.name }}</span
-                    >
+                    >{{ o.name }}</span>
                   </div>
                 </el-tooltip>
               </div>
@@ -80,8 +78,7 @@
                   type="primary"
                   @click="newVote(scope.row)"
                 >
-                  发起投票</el-link
-                >
+                  发起投票</el-link>
 
                 <router-link
                   v-else-if="scope.row.v_status === false"
@@ -99,14 +96,12 @@
                     v-if="scope.row.v_result === 1"
                     class="paper-tag"
                     type="success"
-                    >ACCEPT</el-tag
-                  >
+                  >ACCEPT</el-tag>
                   <el-tag
                     v-else-if="scope.row.v_result === 0"
                     class="paper-tag"
                     type="danger"
-                    >REJECT</el-tag
-                  >
+                  >REJECT</el-tag>
                   <div v-else-if="scope.row.v_result === 2">
                     <el-tag class="paper-tag" type="info">FLAT</el-tag>
                   </div>
@@ -117,39 +112,35 @@
           <el-table-column label="论文状态" align="center" width="110">
             <template slot-scope="scope">
               <div class="info-item">
-                <el-tag v-if="scope.row.result === 0" class="paper-tag"
-                  >待内部投票</el-tag
-                >
+                <el-tag
+                  v-if="scope.row.result === 0"
+                  class="paper-tag"
+                >待内部投票</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 1"
                   class="paper-tag"
                   type="danger"
-                  >未通过</el-tag
-                >
+                >未通过</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 2"
                   class="paper-tag"
                   type="info"
-                  >审稿中</el-tag
-                >
+                >审稿中</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 3"
                   class="paper-tag"
                   type="danger"
-                  >REJECT</el-tag
-                >
+                >REJECT</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 4"
                   class="paper-tag"
                   type="success"
-                  >ACCEPT</el-tag
-                >
+                >ACCEPT</el-tag>
                 <el-tag
                   v-else-if="scope.row.result === 5"
                   class="paper-tag"
                   type="info"
-                  >FLAT</el-tag
-                >
+                >FLAT</el-tag>
                 <el-tag v-else class="paper-tag" type="info">SUSPEND</el-tag>
               </div>
             </template>
@@ -192,7 +183,7 @@
           <template slot="empty">
             <div style="height:200px;">
               <div style="margin-top:100px;">
-                <svg-icon icon-class="null" style="font-size:32px" /> <br />
+                <svg-icon icon-class="null" style="font-size:32px" /> <br>
               </div>
               <div style="line-height: 10px;">
                 <span>没有论文记录</span>
@@ -252,9 +243,10 @@
         </el-form>
         <div class="dialog-footer">
           <el-button @click="resultDialog = false">取 消</el-button>
-          <el-button type="primary" @click="submitPaperResult()"
-            >确 定</el-button
-          >
+          <el-button
+            type="primary"
+            @click="submitPaperResult()"
+          >确 定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -301,164 +293,164 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/common";
-import { checkPermission, permissionEnum } from "@/utils/permission";
-import { listPaper, createVote, submitResult, rmPaper } from "@/api/paper";
+import { getUserList } from '@/api/common'
+import { checkPermission, permissionEnum } from '@/utils/permission'
+import { listPaper, createVote, submitResult, rmPaper } from '@/api/paper'
 
 const levels = [
   {
-    value: "JOURNAL_A",
-    label: "Journal A",
+    value: 'JOURNAL_A',
+    label: 'Journal A'
   },
   {
-    value: "CONFERENCE_A",
-    label: "Conference A",
+    value: 'CONFERENCE_A',
+    label: 'Conference A'
   },
   {
-    value: "JOURNAL_B",
-    label: "Journal B",
+    value: 'JOURNAL_B',
+    label: 'Journal B'
   },
   {
-    value: "CONFERENCE_B",
-    label: "Conference B",
+    value: 'CONFERENCE_B',
+    label: 'Conference B'
   },
   {
-    value: "JOURNAL_C",
-    label: "Journal C",
+    value: 'JOURNAL_C',
+    label: 'Journal C'
   },
   {
-    value: "CONFERENCE_C",
-    label: "Conference C",
-  },
-];
+    value: 'CONFERENCE_C',
+    label: 'Conference C'
+  }
+]
 
 export default {
-  name: "PaperInternal",
+  name: 'PaperInternal',
   data() {
     return {
       userlist: [],
       total: 0,
       resultDialog: false,
-      state: "",
+      state: '',
       currentPage: 1,
       voteform: {
-        paperid: "",
-        endTime: "",
+        paperid: '',
+        endTime: ''
       },
       options: levels,
       list: [],
       loading: false,
       voteDialog: false,
-      uid: "",
-      role: "",
+      uid: '',
+      role: '',
       resultForm: {
-        paperid: "",
+        paperid: '',
         result: null,
-        updateDate: null,
-      },
-    };
+        updateDate: null
+      }
+    }
   },
   created() {
     // sessionStorage.setItem("inner-cur-page", 1);
     getUserList().then((res) => {
-      this.userlist = res.data;
-    });
-    this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
-    this.fetchPaper(this.currentPage);
-    this.uid = sessionStorage.getItem("uid");
-    this.role = sessionStorage.getItem("role");
+      this.userlist = res.data
+    })
+    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.fetchPaper(this.currentPage)
+    this.uid = sessionStorage.getItem('uid')
+    this.role = sessionStorage.getItem('role')
     this.$message({
       showClose: true,
       duration: 1000,
-      message: "点击论文标题可以查看详情",
-    });
+      message: '点击论文标题可以查看详情'
+    })
   },
   methods: {
     // 分页获取论文信息
     fetchPaper(page) {
-      sessionStorage.setItem("inner-cur-page", page);
+      sessionStorage.setItem('inner-cur-page', page)
       return new Promise((resolve, reject) => {
         listPaper(page, 6)
           .then((res) => {
-            this.list = res.data.list;
-            this.total = res.data.total;
+            this.list = res.data.list
+            this.total = res.data.total
             // console.log(res.data)
-            resolve(res);
+            resolve(res)
           })
           .catch((err) => {
-            reject(err);
-          });
-      });
+            reject(err)
+          })
+      })
     },
     // 分页前一页
     handlePrev(val) {
-      this.fetchPaper(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页下一页
     handleNext(val) {
-      this.fetchPaper(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页当前页
     handleCurrentChange(val) {
-      this.fetchPaper(val);
-      sessionStorage.setItem("inner-cur-page", val);
+      this.fetchPaper(val)
+      sessionStorage.setItem('inner-cur-page', val)
     },
     // 创建投票，唤起dialog
     newVote(item) {
-      this.voteform.paperid = item.id;
+      this.voteform.paperid = item.id
       if (item.vote === undefined) {
-        console.log(item);
-        this.voteDialog = true;
+        console.log(item)
+        this.voteDialog = true
       } else {
         this.$router.push({
-          path: "/paper/vote/" + item.id,
-        });
+          path: '/paper/vote/' + item.id
+        })
       }
     },
     // 提交新创建的投票
     submitvote() {
       this.$refs.voteform.validate((valid) => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.voteform.endTime =
-            new Date().toISOString().slice(0, 10) + "T" + this.voteform.endTime;
+            new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
           createVote(this.voteform)
             .then(() => {
-              this.voteDialog = false;
+              this.voteDialog = false
               this.$notify({
-                message: "发起投票成功",
-                type: "success",
-              });
+                message: '发起投票成功',
+                type: 'success'
+              })
               this.$router.push({
-                path: "/paper/in-detail/" + this.voteform.paperid + "/vote",
-              });
+                path: '/paper/in-detail/' + this.voteform.paperid + '/vote'
+              })
             })
             .finally(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         }
-      });
+      })
     },
     // 判断用户是否有设置论文录用结果的审核权限
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION)
     },
     // 查看是否本用户是某个论文作者
     isAuthor(authors) {
-      return authors.map((item) => item.uid).indexOf(eval(this.uid)) !== -1;
+      return authors.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
     },
     // 更新论文投稿结果, 唤醒dialog
     updatePaperResult(item) {
-      this.resultForm.paperid = item.id;
+      this.resultForm.paperid = item.id
       if (this.hasAuth()) {
-        this.resultDialog = true;
+        this.resultDialog = true
       } else {
         this.$message({
-          message: "只有审核人才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人才可以操作',
+          type: 'warning'
+        })
       }
     },
     // 提交论文投稿结果
@@ -467,95 +459,95 @@ export default {
         this.resultForm.result !== null &&
         this.resultForm.updateDate !== null
       ) {
-        this.loading = true;
+        this.loading = true
         submitResult(this.resultForm.paperid, this.resultForm)
           .then((res) => {
             // console.log(res);
             if (res.data) {
               this.$message({
                 message: res.data.message,
-                type: "warning",
-              });
+                type: 'warning'
+              })
             } else {
-              this.resultDialog = false;
-              this.fetchPaper(this.currentPage);
+              this.resultDialog = false
+              this.fetchPaper(this.currentPage)
               this.$notify({
-                title: "更新成功",
+                title: '更新成功',
                 message:
-                  "投票结果  : " +
-                  (this.resultForm.result ? "ACCEPT" : "REJECT"),
-                type: "success",
-              });
+                  '投票结果  : ' +
+                  (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+                type: 'success'
+              })
               this.resultForm = {
-                paperId: "",
+                paperId: '',
                 result: null,
-                updateDate: null,
-              };
+                updateDate: null
+              }
             }
           })
           .catch((err) => {
             this.$message({
               message: err.message,
-              type: "warning",
-            });
+              type: 'warning'
+            })
           })
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
       } else {
         this.$message({
-          message: "请选择结果",
-          type: "warning",
-        });
+          message: '请选择结果',
+          type: 'warning'
+        })
       }
     },
     // 修改论文记录
     modifyPaper(item) {
       if (this.isAuthor(item.authors) && item.result == 0) {
-        this.$emit("modifyInternal", item);
+        this.$emit('modifyInternal', item)
       } else {
         this.$message({
-          message: "只有论文作者(且论文状态为“待内部投票”)才可以操作",
-          type: "warning",
-        });
+          message: '只有论文作者(且论文状态为“待内部投票”)才可以操作',
+          type: 'warning'
+        })
       }
     },
     // 删除论文记录
     removePaper(item) {
       if (this.isAuthor(item.authors) || this.hasAuth()) {
         this.$confirm(
-          "删除后，对应的AC变化和投票记录也将被删除，请谨慎操作",
-          "提示",
+          '删除后，对应的AC变化和投票记录也将被删除，请谨慎操作',
+          '提示',
           {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
           }
         )
           .then(() => {
             rmPaper(item.id).then(() => {
-              this.fetchPaper(this.currentPage);
+              this.fetchPaper(this.currentPage)
               this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
-            });
+                type: 'success',
+                message: '删除成功!'
+              })
+            })
           })
           .catch(() => {
             this.$message({
-              type: "info",
-              message: "已取消删除",
-            });
-          });
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       } else {
         this.$message({
-          message: "只有审核人，和论文作者才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人，和论文作者才可以操作',
+          type: 'warning'
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

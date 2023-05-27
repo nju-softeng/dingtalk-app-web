@@ -5,8 +5,8 @@
         <el-menu
           default-active="userMan"
           class="menu"
-          @select="handleSelect"
           :collapse="device == 'mobile'"
+          @select="handleSelect"
         >
           <el-menu-item index="userMan">
             <i class="el-icon-user" />
@@ -32,29 +32,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "Tab",
+  name: 'Tab',
   components: {
-    userMan: () => import("./components/userMan"),
-    confMan: () => import("./components/confMan"),
-    scrollBoard: () => import("./components/scrollBoard.vue"),
+    userMan: () => import('./components/userMan'),
+    confMan: () => import('./components/confMan'),
+    scrollBoard: () => import('./components/scrollBoard.vue')
   },
   computed: {
-    ...mapGetters(["device"]),
+    ...mapGetters(['device'])
   },
   data() {
     return {
-      activeName: "userMan",
-    };
+      activeName: 'userMan'
+    }
   },
   created() {},
   methods: {
     handleSelect(val) {
-      this.activeName = val;
-    },
-  },
-};
+      this.activeName = val
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

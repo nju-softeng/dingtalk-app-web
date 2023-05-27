@@ -12,8 +12,7 @@
           style="float: right; padding: 3px 0"
           type="text"
           @click="flag1 = false"
-          >编辑</el-button
-        >
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -22,8 +21,7 @@
             flag1 = true;
             modifySubsidy();
           "
-          >保存</el-button
-        >
+        >保存</el-button>
       </div>
 
       <el-table :data="subsidylist" :row-style="{ height: '41px' }">
@@ -49,8 +47,7 @@
           style="float: right; padding: 3px 0"
           type="text"
           @click="flag2 = false"
-          >编辑</el-button
-        >
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -59,8 +56,7 @@
             flag2 = true;
             modfiyPaperLevel();
           "
-          >保存</el-button
-        >
+        >保存</el-button>
       </div>
 
       <el-table :data="paperlevels" :row-style="{ height: '41px' }">
@@ -90,50 +86,50 @@ import {
   listSubsidy,
   updateSubsidy,
   listPaperLevel,
-  updatePaperLevel,
-} from "@/api/system";
+  updatePaperLevel
+} from '@/api/system'
 export default {
   data() {
     return {
       flag1: true,
       flag2: true,
       subsidylist: [],
-      paperlevels: [],
-    };
+      paperlevels: []
+    }
   },
   created() {
     listSubsidy().then((res) => {
-      this.subsidylist = res.data;
-    });
+      this.subsidylist = res.data
+    })
     listPaperLevel().then((res) => {
-      this.paperlevels = res.data;
-    });
+      this.paperlevels = res.data
+    })
   },
   methods: {
     // 更新绩效标准
     modifySubsidy() {
       updateSubsidy(this.subsidylist).then(() => {
         this.$notify({
-          title: "成功",
-          message: "绩效标准保存成功",
-          position: "bottom-right",
-          type: "success",
-        });
-      });
+          title: '成功',
+          message: '绩效标准保存成功',
+          position: 'bottom-right',
+          type: 'success'
+        })
+      })
     },
     // 更新论文AC标准
     modfiyPaperLevel() {
       updatePaperLevel(this.paperlevels).then(() => {
         this.$notify({
-          title: "成功",
-          message: "论文标准保存成功",
-          position: "bottom-right",
-          type: "success",
-        });
-      });
-    },
-  },
-};
+          title: '成功',
+          message: '论文标准保存成功',
+          position: 'bottom-right',
+          type: 'success'
+        })
+      })
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .box-card {

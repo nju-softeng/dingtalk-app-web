@@ -60,14 +60,12 @@
                   v-show="addShow"
                   type="primary"
                   @click="modifyPropertyClick(scope.row)"
-                  >修改</el-button
-                >
+                >修改</el-button>
                 <el-button
                   v-show="addShow"
                   type="danger"
                   @click="deletePropertyClick(scope.row)"
-                  >删除</el-button
-                >
+                >删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -126,12 +124,13 @@
           </el-form-item>
         </el-form>
         <span slot="footer">
-          <el-button @click="addPropertyDialogueVisible = false"
-            >取 消</el-button
-          >
-          <el-button type="primary" @click="addProperty('addPropertyForm')"
-            >添 加</el-button
-          >
+          <el-button
+            @click="addPropertyDialogueVisible = false"
+          >取 消</el-button>
+          <el-button
+            type="primary"
+            @click="addProperty('addPropertyForm')"
+          >添 加</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -180,173 +179,171 @@
           </el-form-item>
         </el-form>
         <span slot="footer">
-          <el-button @click="modifyPropertyDialogueVisible = false"
-            >取 消</el-button
-          >
+          <el-button
+            @click="modifyPropertyDialogueVisible = false"
+          >取 消</el-button>
           <el-button
             type="primary"
             @click="confirmModifyProperty('modifyPropertyForm')"
-            >确认</el-button
-          >
+          >确认</el-button>
         </span>
       </el-dialog>
     </div>
-  </div></template
->
+  </div></template>
 
 <script>
 import {
   getUserProperties,
   addProperty,
   deleteProperty,
-  updateProperty,
-} from "@/api/user";
-import { getUserList } from "@/api/common";
-import { downloadUserPropertyData } from "@/api/excel";
-import fileDownload from "js-file-download";
+  updateProperty
+} from '@/api/user'
+import { getUserList } from '@/api/common'
+import { downloadUserPropertyData } from '@/api/excel'
+import fileDownload from 'js-file-download'
 
 export default {
-  name: "Property",
+  name: 'Property',
   data() {
     return {
       addPropertyDialogueVisible: false,
       modifyPropertyDialogueVisible: false,
       userList: [],
       fixedList: [],
-      name: "",
+      name: '',
       loading: false,
       currentId: 0,
-      typeConvertor: ["校级", "省级", "国家级", "国际级"],
+      typeConvertor: ['校级', '省级', '国家级', '国际级'],
       addPropertyForm: {},
       modifyPropertyForm: {},
       rules: {
-        name: [{ required: true, message: "请输入物品名称", trigger: "blur" }],
+        name: [{ required: true, message: '请输入物品名称', trigger: 'blur' }],
         startTime: [
-          { required: true, message: "请输入开始时间", trigger: "blur" },
+          { required: true, message: '请输入开始时间', trigger: 'blur' }
         ],
-        type: [{ required: true, message: "请选择物品类型", trigger: "blur" }],
+        type: [{ required: true, message: '请选择物品类型', trigger: 'blur' }]
       },
       types: [
-        { value: "图书", label: "图书" },
-        { value: "材料", label: "材料" },
-        { value: "设备", label: "设备" },
-      ],
-    };
+        { value: '图书', label: '图书' },
+        { value: '材料', label: '材料' },
+        { value: '设备', label: '设备' }
+      ]
+    }
   },
   computed: {
     addShow() {
       return (
-        sessionStorage.getItem("role") === "admin" ||
-        sessionStorage.getItem("role") === "editor" ||
-        sessionStorage.getItem("uid") === this.currentId.toString()
-      );
-    },
+        sessionStorage.getItem('role') === 'admin' ||
+        sessionStorage.getItem('role') === 'editor' ||
+        sessionStorage.getItem('uid') === this.currentId.toString()
+      )
+    }
   },
   created() {
     getUserList().then((res) => {
-      this.userList = res.data;
-      this.setCurrent(this.userList[0]);
-      this.name = this.userList[0].name;
-      this.currentId = this.userList[0].id;
+      this.userList = res.data
+      this.setCurrent(this.userList[0])
+      this.name = this.userList[0].name
+      this.currentId = this.userList[0].id
       getUserProperties(this.currentId).then((res) => {
-        this.fixedList = res.data;
-      });
-    });
+        this.fixedList = res.data
+      })
+    })
   },
   methods: {
     addProperty(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.addPropertyForm.preserver = this.currentId;
+          this.addPropertyForm.preserver = this.currentId
           addProperty(this.currentId, this.addPropertyForm).then((res) => {
-            this.addPropertyForm = {};
+            this.addPropertyForm = {}
             if (res) {
               this.$message({
                 showClose: true,
-                message: "固定资产信息添加成功！",
-                type: "success",
-              });
+                message: '固定资产信息添加成功！',
+                type: 'success'
+              })
             }
             getUserProperties(this.currentId).then((res) => {
-              this.fixedList = res.data;
-            });
-            this.addPropertyDialogueVisible = false;
-          });
+              this.fixedList = res.data
+            })
+            this.addPropertyDialogueVisible = false
+          })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifyPropertyClick(data) {
-      this.modifyPropertyDialogueVisible = true;
-      this.modifyPropertyForm = JSON.parse(JSON.stringify(data));
+      this.modifyPropertyDialogueVisible = true
+      this.modifyPropertyForm = JSON.parse(JSON.stringify(data))
     },
     async confirmModifyProperty(formName) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          this.modifyPropertyForm.preserver = this.currentId;
-          var res = await updateProperty(this.modifyPropertyForm);
+          this.modifyPropertyForm.preserver = this.currentId
+          var res = await updateProperty(this.modifyPropertyForm)
           if (res) {
             this.$message({
               showClose: true,
-              message: "固定资产信息修改成功！",
-              type: "success",
-            });
+              message: '固定资产信息修改成功！',
+              type: 'success'
+            })
           }
-          this.modifyPropertyDialogueVisible = false;
+          this.modifyPropertyDialogueVisible = false
           getUserProperties(this.currentId).then((res) => {
-            this.fixedList = res.data;
-          });
+            this.fixedList = res.data
+          })
         } else {
           this.$notify({
-            title: "修改失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '修改失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
 
     async deletePropertyClick(data) {
       // 有bug
-      await deleteProperty(data.id);
+      await deleteProperty(data.id)
       this.$message({
         showClose: true,
-        message: "固定资产信息删除成功！",
-        type: "success",
-      });
+        message: '固定资产信息删除成功！',
+        type: 'success'
+      })
       getUserProperties(this.currentId).then((res) => {
-        this.fixedList = res.data;
-      });
+        this.fixedList = res.data
+      })
     },
     download() {
       downloadUserPropertyData()
         .then((res) => {
-          fileDownload(res.data, "固定资产表.xlsx");
+          fileDownload(res.data, '固定资产表.xlsx')
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error("下载失败");
-        });
+          console.log(err)
+          this.$message.error('下载失败')
+        })
     },
     setCurrent(row) {
-      this.$refs.table.setCurrentRow(row);
+      this.$refs.table.setCurrentRow(row)
     },
     handleCurrentChange(val) {
-      this.loading = true;
-      this.name = val.name;
-      this.currentId = val.id;
+      this.loading = true
+      this.name = val.name
+      this.currentId = val.id
       getUserProperties(val.id).then((res) => {
-        this.fixedList = res.data;
-        this.loading = false;
-      });
-    },
-  },
-};
+        this.fixedList = res.data
+        this.loading = false
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-table
+      v-loading="loading"
       :data="scrollBoardData"
       style="width: 100%;"
       max-height="150px"
       @row-click="handleRowClick"
-      v-loading="loading"
     >
       <!-- <el-table-column label="#" prop="id" width="50"> </el-table-column> -->
       <el-table-column label="发布时间" width="150">
@@ -27,8 +27,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="authorName" label="发布人" width="150">
-      </el-table-column>
+      <el-table-column prop="authorName" label="发布人" width="150" />
     </el-table>
     <el-dialog
       title="公告详情"
@@ -41,10 +40,10 @@
 </template>
 
 <script>
-import { getShownNews } from "@/api/scrollBoard.js";
+import { getShownNews } from '@/api/scrollBoard.js'
 
 export default {
-  name: "ScrollBoard",
+  name: 'ScrollBoard',
   data() {
     return {
       scrollBoardData: [],
@@ -52,63 +51,63 @@ export default {
       isScroll: true,
       newsContentVisible: false,
       activeRow: {
-        content: "",
+        content: ''
       },
-      loading: false,
-    };
+      loading: false
+    }
   },
   created() {
-    this.loading = true;
+    this.loading = true
     getShownNews()
       .then((res) => {
-        console.log(res.data);
-        this.scrollBoardData = res.data.data;
+        console.log(res.data)
+        this.scrollBoardData = res.data.data
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
       })
       .finally(() => {
-        this.loading = false;
-      });
+        this.loading = false
+      })
     this.$nextTick(() => {
-      let div = document.getElementsByClassName("el-table__body-wrapper")[0];
-      div.style.height = "120px";
-      div.addEventListener("mouseenter", () => {
-        this.isScroll = false;
-        console.log(this.isScroll);
-      });
-      div.addEventListener("mouseleave", () => {
-        this.isScroll = true;
-      });
-      let t = document.getElementsByClassName("el-table__body")[0];
+      const div = document.getElementsByClassName('el-table__body-wrapper')[0]
+      div.style.height = '120px'
+      div.addEventListener('mouseenter', () => {
+        this.isScroll = false
+        console.log(this.isScroll)
+      })
+      div.addEventListener('mouseleave', () => {
+        this.isScroll = true
+      })
+      const t = document.getElementsByClassName('el-table__body')[0]
       setInterval(() => {
         if (this.isScroll) {
-          let data = this.scrollBoardData[0];
+          const data = this.scrollBoardData[0]
           setTimeout(() => {
-            this.scrollBoardData.push(data);
-            t.style.transition = "all .5s";
-            t.style.marginTop = "-41px";
-          }, 500);
+            this.scrollBoardData.push(data)
+            t.style.transition = 'all .5s'
+            t.style.marginTop = '-41px'
+          }, 500)
           setTimeout(() => {
-            this.scrollBoardData.splice(0, 1);
-            t.style.transition = "all 0s ease 0s";
-            t.style.marginTop = "0";
-          }, 1000);
+            this.scrollBoardData.splice(0, 1)
+            t.style.transition = 'all 0s ease 0s'
+            t.style.marginTop = '0'
+          }, 1000)
         }
-      }, 2500);
-    });
+      }, 2500)
+    })
   },
   methods: {
     formatTime(time) {
-      return time.replace("T", " ");
+      return time.replace('T', ' ')
     },
     handleRowClick(row) {
-      this.newsContentVisible = true;
-      this.activeRow = { ...row };
-      if (this.activeRow.content === "") this.activeRow.content = "无详情";
-    },
-  },
-};
+      this.newsContentVisible = true
+      this.activeRow = { ...row }
+      if (this.activeRow.content === '') this.activeRow.content = '无详情'
+    }
+  }
+}
 </script>
 
 <style scoped>

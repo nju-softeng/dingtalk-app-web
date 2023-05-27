@@ -29,41 +29,38 @@
                     v-if="item.vote.result === 1"
                     class="tag"
                     type="success"
-                    >ACCEPT</el-tag
-                  >
+                  >ACCEPT</el-tag>
                   <el-tag
                     v-else-if="item.vote.result === -1"
                     class="tag"
                     type="message"
-                    >未结束</el-tag
-                  >
+                  >未结束</el-tag>
                   <el-tag
                     v-else-if="item.vote.result === 2"
                     class="tag"
                     type="message"
-                    >FLAT</el-tag
-                  >
+                  >FLAT</el-tag>
                   <el-tag v-else class="tag" type="danger">REJECT</el-tag>
                 </span>
               </div>
               <div class="info-item">
                 <span>录用结果 : </span>
                 <span>
-                  <el-tag v-if="item.result === 0" class="tag" type="danger"
-                    >REJECT</el-tag
-                  >
+                  <el-tag
+                    v-if="item.result === 0"
+                    class="tag"
+                    type="danger"
+                  >REJECT</el-tag>
                   <el-tag
                     v-else-if="item.result === 1"
                     class="tag"
                     type="success"
-                    >ACCEPT</el-tag
-                  >
+                  >ACCEPT</el-tag>
                   <el-tag
                     v-else-if="item.result === 2"
                     class="tag"
                     type="danger"
-                    >SUSPEND</el-tag
-                  >
+                  >SUSPEND</el-tag>
                   <el-tag v-else class="tag" type="message">等待中</el-tag>
                 </span>
               </div>
@@ -169,11 +166,11 @@
                 updateDate: null,
               };
             "
-            >取 消</el-button
-          >
-          <el-button type="primary" @click="submitPaperResult()"
-            >确 定</el-button
-          >
+          >取 消</el-button>
+          <el-button
+            type="primary"
+            @click="submitPaperResult()"
+          >确 定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -181,10 +178,10 @@
 </template>
 
 <script>
-import { listExPaper, deleteExPaper, addExpaperResult } from "@/api/ex-paper";
-
+import { listExPaper, deleteExPaper, addExpaperResult } from '@/api/ex-paper'
+import { checkPermission, permissionEnum } from '@/utils/permission'
 export default {
-  name: "PaperExternal",
+  name: 'PaperExternal',
   data() {
     return {
       currentPage: 1,
@@ -194,47 +191,47 @@ export default {
       resultDialog: false,
       loading: false,
       resultForm: {
-        paperId: "",
+        paperId: '',
         result: null,
-        updateDate: null,
-      },
-    };
+        updateDate: null
+      }
+    }
   },
   created() {
-    this.role = sessionStorage.getItem("role");
+    this.role = sessionStorage.getItem('role')
     this.currentPage =
-      parseInt(sessionStorage.getItem("external-cur-page")) || 1;
-    this.fetchExPaper(this.currentPage);
+      parseInt(sessionStorage.getItem('external-cur-page')) || 1
+    this.fetchExPaper(this.currentPage)
   },
   methods: {
     // 分页前一页
     handlePrev(val) {
-      this.fetchExPaper(val);
+      this.fetchExPaper(val)
     },
     // 分页下一页
     handleNext(val) {
-      this.fetchExPaper(val);
+      this.fetchExPaper(val)
     },
     // 分页当前页
     handleCurrentChange(val) {
-      this.fetchExPaper(val);
+      this.fetchExPaper(val)
     },
     goDetail(id) {
       this.$router.push({
-        path: "/paper/ex-detail/" + id + "/vote",
-      });
+        path: '/paper/ex-detail/' + id + '/vote'
+      })
     },
     fetchExPaper(page) {
-      sessionStorage.setItem("external-cur-page", page);
+      sessionStorage.setItem('external-cur-page', page)
       listExPaper(page, 8)
         .then((res) => {
-          this.list = res.data.list;
-          this.total = res.data.total;
-          console.log(res);
+          this.list = res.data.list
+          this.total = res.data.total
+          console.log(res)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     // 是否有审核权限
     // hasAuth() {
@@ -247,59 +244,59 @@ export default {
 
     // 判断用户是否有设置论文录用结果的审核权限
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION)
     },
     // 修改论文记录
     modifyExPaper(item) {
       if (this.hasAuth()) {
-        this.$emit("modifyExternal", item);
+        this.$emit('modifyExternal', item)
       } else {
         this.$message({
-          message: "只有审核人才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人才可以操作',
+          type: 'warning'
+        })
       }
     },
     // 删除外部评审论文
     rmExPaper(id) {
       if (!this.hasAuth()) {
         this.$message({
-          message: "只有审核人才可以操作",
-          type: "warning",
-        });
-        return;
+          message: '只有审核人才可以操作',
+          type: 'warning'
+        })
+        return
       }
-      this.$confirm("对应的投票和AC记录也会被删除, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('对应的投票和AC记录也会被删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           deleteExPaper(id).then(() => {
-            this.fetchExPaper(this.currentPage);
+            this.fetchExPaper(this.currentPage)
             this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-          });
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     // 更新论文投稿结果, 唤醒dialog
     showPaperResultDialog(item) {
-      this.resultForm.paperId = item.id;
+      this.resultForm.paperId = item.id
       if (this.hasAuth()) {
-        this.resultDialog = true;
+        this.resultDialog = true
       } else {
         this.$message({
-          message: "只有审核人，和论文作者才可以操作",
-          type: "warning",
-        });
+          message: '只有审核人，和论文作者才可以操作',
+          type: 'warning'
+        })
       }
     },
     // 提交论文投稿结果
@@ -308,44 +305,44 @@ export default {
         this.resultForm.result !== null &&
         this.resultForm.updateDate !== null
       ) {
-        this.loading = true;
+        this.loading = true
         addExpaperResult(this.resultForm.paperId, this.resultForm)
           .then((res) => {
             if (res.data) {
               this.$message({
                 message: res.data.message,
-                type: "warning",
-              });
+                type: 'warning'
+              })
             } else {
-              this.resultDialog = false;
-              this.fetchExPaper(this.currentPage);
+              this.resultDialog = false
+              this.fetchExPaper(this.currentPage)
               this.$notify({
-                title: "更新成功",
+                title: '更新成功',
                 message:
-                  "投票结果  : " +
-                  (this.resultForm.result ? "ACCEPT" : "REJECT"),
-                type: "success",
-              });
+                  '投票结果  : ' +
+                  (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+                type: 'success'
+              })
               this.resultForm = {
-                paperId: "",
+                paperId: '',
                 result: null,
-                updateDate: null,
-              };
+                updateDate: null
+              }
             }
           })
           .catch()
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
       } else {
         this.$message({
-          message: "请选择结果",
-          type: "warning",
-        });
+          message: '请选择结果',
+          type: 'warning'
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

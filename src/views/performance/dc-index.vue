@@ -14,8 +14,10 @@
         />
         <el-button-group style="margin-left:5px">
           <el-button icon="el-icon-arrow-left" @click="prev">上一月</el-button>
-          <el-button @click="next"
-            >下一月<i class="el-icon-arrow-right el-icon--right"
+          <el-button
+            @click="next"
+          >下一月<i
+            class="el-icon-arrow-right el-icon--right"
           /></el-button>
         </el-button-group>
         <el-button-group style="margin-left:5px">
@@ -139,10 +141,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { getDcSummary, updateTopup } from "@/api/performance";
-import { downloadDcSummaryData } from "@/api/excel";
-import fileDownload from "js-file-download";
+import { mapGetters } from 'vuex'
+import { getDcSummary, updateTopup } from '@/api/performance'
+import { downloadDcSummaryData } from '@/api/excel'
+import fileDownload from 'js-file-download'
 
 export default {
   data() {
@@ -150,124 +152,124 @@ export default {
       loading: false,
       list: null,
       downloadLoading: false,
-      date: new Date().toISOString().slice(0, 10),
-    };
+      date: new Date().toISOString().slice(0, 10)
+    }
   },
   created() {
-    this.fetchDcSummary(new Date());
+    this.fetchDcSummary(new Date())
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(['roles']),
     filename() {
-      return this.date + "-绩效汇总";
-    },
+      return this.date + '-绩效汇总'
+    }
   },
   methods: {
     desc() {
-      this.fetchDcSummary(this.date, true);
+      this.fetchDcSummary(this.date, true)
     },
     asc() {
-      this.fetchDcSummary(this.date, false);
+      this.fetchDcSummary(this.date, false)
     },
     handleDownload() {
-      const dateValue = new Date(this.date);
-      this.downloadLoading = true;
+      const dateValue = new Date(this.date)
+      this.downloadLoading = true
       downloadDcSummaryData(dateValue)
         .then((res) => {
           if (this.date != null) {
             fileDownload(
               res.data,
-              dateValue.toISOString().substr(0, 7) + "-dc.xlsx"
-            );
-            this.dialog = false;
+              dateValue.toISOString().substr(0, 7) + '-dc.xlsx'
+            )
+            this.dialog = false
           } else {
-            this.$message("请选择日期");
+            this.$message('请选择日期')
           }
         })
         .catch(() => {
-          this.$message.error("下载失败");
+          this.$message.error('下载失败')
         })
         .finally(() => {
-          this.downloadLoading = false;
-        });
+          this.downloadLoading = false
+        })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map((v) =>
         filterVal.map((j) => {
-          console.log(j);
-          return v[j];
+          console.log(j)
+          return v[j]
         })
-      );
+      )
     },
     updateTopup(row) {
       const vo = {
         uid: row.uid,
-        yearmonth: this.date.slice(0, 8).replace(/-/g, ""),
-        topup: row.topup,
-      };
-      console.log(vo);
+        yearmonth: this.date.slice(0, 8).replace(/-/g, ''),
+        topup: row.topup
+      }
+      console.log(vo)
       updateTopup(vo).then(() => {
-        this.date = new Date(this.date);
-        this.date = this.date.toISOString().slice(0, 10);
-        this.fetchDcSummary(this.date);
+        this.date = new Date(this.date)
+        this.date = this.date.toISOString().slice(0, 10)
+        this.fetchDcSummary(this.date)
         this.$message({
           showClose: true,
-          message: "编辑成功",
-          type: "success",
-        });
-      });
+          message: '编辑成功',
+          type: 'success'
+        })
+      })
     },
     fetchDcSummary(day, isDesc = true) {
-      this.loading = true;
+      this.loading = true
       getDcSummary({ date: day, desc: isDesc })
         .then((res) => {
           this.list = res.data.map((item) => {
-            item.edit = false;
-            return item;
-          });
+            item.edit = false
+            return item
+          })
           // console.log(this.list)
         })
         .finally(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     filtrate() {
       if (this.date !== undefined) {
-        this.fetchDcSummary(this.date);
+        this.fetchDcSummary(this.date)
       } else {
         this.$message({
           showClose: true,
-          message: "请选择月份",
-          type: "warning",
-        });
+          message: '请选择月份',
+          type: 'warning'
+        })
       }
     },
     next() {
-      if (typeof this.date === "string") {
-        this.date = new Date(this.date);
+      if (typeof this.date === 'string') {
+        this.date = new Date(this.date)
       }
       // this.loading = true
-      this.date.setMonth(this.date.getMonth() + 1);
-      this.date = this.date.toISOString().slice(0, 10);
-      this.fetchDcSummary(this.date);
+      this.date.setMonth(this.date.getMonth() + 1)
+      this.date = this.date.toISOString().slice(0, 10)
+      this.fetchDcSummary(this.date)
       // setTimeout(() => {
       //   this.loading = false
       // }, 400)
     },
     prev() {
-      if (typeof this.date === "string") {
-        this.date = new Date(this.date);
+      if (typeof this.date === 'string') {
+        this.date = new Date(this.date)
       }
       // this.loading = true
-      this.date.setMonth(this.date.getMonth() - 1);
-      this.date = this.date.toISOString().slice(0, 10);
-      this.fetchDcSummary(this.date);
+      this.date.setMonth(this.date.getMonth() - 1)
+      this.date = this.date.toISOString().slice(0, 10)
+      this.fetchDcSummary(this.date)
       // setTimeout(() => {
       //   this.loading = false
       // }, 400)
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style scoped>
 .app-container >>> .el-table th.gutter {

@@ -9,7 +9,7 @@
                 <el-avatar :icon="avatar" :src="avatar">{{ name }}</el-avatar>
               </div>
               <div class="hello-text">
-                {{ helloTime }}{{ name }}，祝你开心每一天！<br />
+                {{ helloTime }}{{ name }}，祝你开心每一天！<br>
                 <div class="day-text hiden-xs">
                   『 {{ yiyan.hitokoto }}』 —— 《{{ yiyan.from }}》
                   <a @click="getYiYan">
@@ -124,9 +124,9 @@
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>公告栏</span>
-                <i class="el-icon-s-opportunity"></i>
+                <i class="el-icon-s-opportunity" />
               </div>
-              <ScrollBoard></ScrollBoard>
+              <ScrollBoard />
             </el-card>
             <!-- 消息面板 -->
             <el-card class="box-card" shadow="never">
@@ -136,9 +136,10 @@
                 <router-link
                   :to="{ path: '/profile/index', query: { tab: 'msg' } }"
                 >
-                  <el-button style="float: right;padding:0" type="text"
-                    >查看更多</el-button
-                  >
+                  <el-button
+                    style="float: right;padding:0"
+                    type="text"
+                  >查看更多</el-button>
                 </router-link>
               </div>
               <!-- 消息内容 -->
@@ -201,9 +202,10 @@
               <div slot="header" class="clearfix">
                 <span>AC变动公告</span>
                 <router-link to="/performance/performance_ac">
-                  <el-button style="float: right; padding:0" type="text"
-                    >查看详情</el-button
-                  >
+                  <el-button
+                    style="float: right; padding:0"
+                    type="text"
+                  >查看详情</el-button>
                 </router-link>
               </div>
               <el-carousel
@@ -248,16 +250,16 @@
 </template>
 
 <script>
-import { getMessages } from "@/api/message";
-import { lastAc, getPerformance, getAcSummary } from "@/api/performance";
-import { getUnCheckCnt } from "@/api/audit";
-import { showHelloTime } from "@/utils/index";
-import { getYiYan } from "@/api/common";
-import ScrollBoard from "@/components/ScrollBoard";
+import { getMessages } from '@/api/message'
+import { lastAc, getPerformance, getAcSummary } from '@/api/performance'
+import { getUnCheckCnt } from '@/api/audit'
+import { showHelloTime } from '@/utils/index'
+import { getYiYan } from '@/api/common'
+import ScrollBoard from '@/components/ScrollBoard'
 
 export default {
   components: {
-    ScrollBoard,
+    ScrollBoard
   },
   data() {
     return {
@@ -266,74 +268,74 @@ export default {
       unCheckCnt: 0,
       aclist: [],
       perf: {
-        dcTotal: "",
-        acTotal: "",
-        w1: "",
-        w2: "",
-        w3: "",
-        w4: "",
-        w5: "",
+        dcTotal: '',
+        acTotal: '',
+        w1: '',
+        w2: '',
+        w3: '',
+        w4: '',
+        w5: ''
       },
-      name: "",
+      name: '',
       avatar: null,
       count: 0,
-      yiyan: {},
-    };
+      yiyan: {}
+    }
   },
   computed: {
     helloTime() {
-      return showHelloTime();
-    },
+      return showHelloTime()
+    }
   },
   created() {
-    this.avatar = sessionStorage.getItem("avatar");
-    this.name = sessionStorage.getItem("name");
-    this.getYiYan();
+    this.avatar = sessionStorage.getItem('avatar')
+    this.name = sessionStorage.getItem('name')
+    this.getYiYan()
     // 消息
     getMessages(0, 5).then((res) => {
-      this.messages = res.data.content;
-    });
+      this.messages = res.data.content
+    })
     // 实验室最近AC变更
     lastAc().then((res) => {
-      this.lastAcs = res.data;
-    });
+      this.lastAcs = res.data
+    })
     // 绩效
     getPerformance().then((res) => {
-      this.perf = res.data;
-    });
+      this.perf = res.data
+    })
     // 审核人未审核数
     getUnCheckCnt().then((res) => {
-      this.unCheckCnt = res.data;
-    });
+      this.unCheckCnt = res.data
+    })
     // 获取ac排名
     getAcSummary().then((res) => {
-      this.aclist = res.data;
-    });
+      this.aclist = res.data
+    })
   },
   methods: {
     getYiYan() {
       getYiYan().then((res) => {
-        this.yiyan = res.data;
-      });
+        this.yiyan = res.data
+      })
     },
     goAc() {
       this.$router.push({
-        path: "/profile/index",
+        path: '/profile/index',
         query: {
-          tab: "actab",
-        },
-      });
+          tab: 'actab'
+        }
+      })
     },
     goBug() {
       this.$router.push({
-        path: "/project/index",
+        path: '/project/index',
         query: {
-          tab: "userbug",
-        },
-      });
-    },
-  },
-};
+          tab: 'userbug'
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

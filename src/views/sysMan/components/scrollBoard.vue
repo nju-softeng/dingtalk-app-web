@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
     <el-table
+      v-loading="loading"
       :data="newsData"
       fit
       highlight-current-row
       style="width: 100%"
       :header-cell-style="{ background: '#eef1f6' }"
-      v-loading="loading"
     >
-      <el-table-column label="#" prop="id" width="50"> </el-table-column>
+      <el-table-column label="#" prop="id" width="50" />
       <el-table-column prop="isShown" width="100">
         <template slot="header" slot-scope="scope">
           <el-dropdown @command="filterTag">
             <span class="el-dropdown-link">
-              是否显示<i class="el-icon-arrow-down el-icon--right"></i>
+              是否显示<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="0">隐藏</el-dropdown-item>
@@ -26,8 +26,7 @@
           <el-tag
             :type="scope.row.isShown === 0 ? 'primary' : 'success'"
             disable-transitions
-            >{{ scope.row.isShown === 1 ? "显示" : "隐藏" }}</el-tag
-          >
+          >{{ scope.row.isShown === 1 ? "显示" : "隐藏" }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="标题" min-width="200">
@@ -69,8 +68,7 @@
           {{ scope.row.releaseTime.replace("T", " ") }}
         </template>
       </el-table-column>
-      <el-table-column prop="authorName" label="发布人" width="150">
-      </el-table-column>
+      <el-table-column prop="authorName" label="发布人" width="150" />
       <el-table-column align="center" label="操作" width="120" fixed="right">
         <template slot="header" slot-scope="scope">
           <el-button
@@ -80,7 +78,7 @@
                 addNewsVisible = true;
               }
             "
-            >新增
+          >新增
           </el-button>
         </template>
         <template slot-scope="{ row }">
@@ -89,7 +87,7 @@
             size="mini"
             icon="el-icon-delete"
             @click="_deleteNews(row)"
-            >删除
+          >删除
           </el-button>
           <template v-if="row.isShown">
             <el-button
@@ -97,7 +95,7 @@
               size="mini"
               icon="el-icon-edit"
               @click="hide(row)"
-              >隐藏
+            >隐藏
             </el-button>
           </template>
           <template v-else>
@@ -106,7 +104,7 @@
               size="mini"
               icon="el-icon-edit"
               @click="show(row)"
-              >显示
+            >显示
             </el-button>
           </template>
         </template>
@@ -133,7 +131,7 @@
     >
       <el-form ref="form" :model="form" :rules="rules">
         <el-form-item label="公告标题" prop="title">
-          <el-input v-model="form.title" placeholder="不宜超过25字"></el-input>
+          <el-input v-model="form.title" placeholder="不宜超过25字" />
         </el-form-item>
         <!-- <el-form-item label="公告链接" prop="link">
           <el-input v-model="form.link"></el-input>
@@ -141,13 +139,13 @@
         <el-form-item label="内容详情" prop="content">
           <template v-if="device === 'mobile'">
             <el-input
+              v-model="form.content"
               type="textarea"
               :rows="3"
-              v-model="form.content"
-            ></el-input>
+            />
             <el-tooltip content="电脑端支持md格式" placement="right">
               <span style="align-self: center;">
-                <i class="el-icon-warning-outline"></i>
+                <i class="el-icon-warning-outline" />
               </span>
             </el-tooltip>
           </template>
@@ -163,17 +161,17 @@
           </template>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="_addNews('form')"
-            >立即创建</el-button
-          >
+          <el-button
+            type="primary"
+            @click="_addNews('form')"
+          >立即创建</el-button>
           <el-button
             @click="
               () => {
                 addNewsVisible = false;
               }
             "
-            >取消</el-button
-          >
+          >取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -195,19 +193,20 @@ import {
   deleteNews,
   addNews,
   hideNews,
-  showNews,
-} from "@/api/scrollBoard.js";
-import { mapState } from "vuex";
+  showNews
+} from '@/api/scrollBoard.js'
+import { mapState } from 'vuex'
 
 export default {
-  name: "ScrollBoardEdit",
+  name: 'ScrollBoardEdit',
   data() {
     var checkContent = (rule, value, callback) => {
-      console.log("sdfsdf");
-      if (this.form.content === "") {
-        return callback(new Error("内容详情不能为空"));
+      // console.log(this.form.content);
+      if (this.form.content === '') {
+        return callback(new Error('内容详情不能为空'))
       }
-    };
+      callback()
+    }
 
     return {
       addNewsVisible: false,
@@ -220,206 +219,209 @@ export default {
       form: {
         title: null,
         // link: null,
-        authorId: sessionStorage.getItem("uid"),
-        content: localStorage.getItem("news-content") || "",
+        authorId: sessionStorage.getItem('uid'),
+        content: localStorage.getItem('news-content') || ''
       },
       rules: {
-        title: [{ required: true, message: "请输入公告标题", trigger: "blur" }],
-        content: [{ required: true, validator: checkContent, trigger: "blur" }],
+        title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
+        content: [{ required: true, validator: checkContent, trigger: 'blur' }]
       },
       loading: false,
       activeRow: {
-        content: "",
-      },
-    };
+        content: ''
+      }
+    }
   },
   computed: {
     ...mapState({
-      device: (state) => state.app.device,
-    }),
+      device: (state) => state.app.device
+    })
   },
   created() {
-    this.fetchNews(1);
+    this.fetchNews(1)
   },
   methods: {
     // 获取申请记录
     fetchNews(page) {
-      this.currentPage = page;
-      this.loading = true;
+      this.currentPage = page
+      this.loading = true
       if (this.newsType === 2) {
         getAllNewsByPage(page, 10)
           .then((res) => {
-            this.newsData = res.data.data.newsList;
-            this.total = res.data.data.total;
-            console.log(res.data.data.newsList);
+            this.newsData = res.data.data.newsList
+            this.total = res.data.data.total
+            console.log(res.data.data.newsList)
           })
           .catch((err) => {
-            console.log(err);
-            this.$message.error("网络开小差了~");
+            console.log(err)
+            this.$message.error('网络开小差了~')
           })
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
       } else if (this.newsType === 1) {
         getShownNewsByPage(page, 10)
           .then((res) => {
             if (res.data.code === 0) {
-              this.newsData = res.data.data.newsList;
-              this.total = res.data.data.total;
-              console.log(res.data.data.newsList);
+              this.newsData = res.data.data.newsList
+              this.total = res.data.data.total
+              console.log(res.data.data.newsList)
             } else {
-              this.$message.error(res.data.message);
+              this.$message.error(res.data.message)
             }
           })
           .catch((err) => {
-            console.log(err);
-            this.$message.error("网络开小差了~");
+            console.log(err)
+            this.$message.error('网络开小差了~')
           })
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
       } else {
         getNotShownNewsByPage(page, 10)
           .then((res) => {
             if (res.data.code === 0) {
-              this.newsData = res.data.data.newsList;
-              this.total = res.data.data.total;
-              console.log(res.data.data.newsList);
+              this.newsData = res.data.data.newsList
+              this.total = res.data.data.total
+              console.log(res.data.data.newsList)
             } else {
-              this.$message.error(res.data.message);
+              this.$message.error(res.data.message)
             }
           })
           .catch((err) => {
-            console.log(err);
-            this.$message.error("网络开小差了~");
+            console.log(err)
+            this.$message.error('网络开小差了~')
           })
           .finally(() => {
-            this.loading = false;
-          });
+            this.loading = false
+          })
       }
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      if (val == this.currentPage) return;
+      if (val == this.currentPage) return
       // console.log("handleCurrentChange");
-      this.fetchNews(val);
+      this.fetchNews(val)
     },
     // 上一页
     handlePrev(val) {
-      this.fetchNews(val);
+      this.fetchNews(val)
     },
     // 下一页
     handleNext(val) {
       // console.log("handleNext");
-      this.fetchNews(val);
+      this.fetchNews(val)
     },
     // 获取按类型筛选的新闻列表
     filterTag(command) {
-      console.log(command);
-      this.newsType = command;
-      this.fetchNews(1);
+      console.log(command)
+      this.newsType = command
+      this.fetchNews(1)
     },
     _deleteNews(row) {
-      this.loading = true;
+      this.loading = true
       deleteNews(row.id)
         .then((res) => {
           if (res.data.code === 0) {
-            this.$message.success(res.data.data);
-            this.fetchNews(1);
+            this.$message.success(res.data.data)
+            this.fetchNews(1)
           } else {
-            this.$message.error(res.data.message);
+            this.$message.error(res.data.message)
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error("网络开小差了~");
+          console.log(err)
+          this.$message.error('网络开小差了~')
         })
         .finally(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     _addNews(formName) {
+      console.log(this.form)
       this.$refs[formName].validate((valid) => {
+        console.log('valid')
         if (valid) {
-          this.loading = true;
+          this.loading = true
           addNews(this.form.title, this.form.authorId, this.form.content)
             .then((res) => {
               if (res.data.code === 0) {
-                this.$message.success(res.data.data);
-                this.fetchNews(1);
-                this.cancelForm();
+                this.$message.success(res.data.data)
+                this.fetchNews(1)
+                this.cancelForm()
               } else {
-                this.$message.error(res.data.message);
+                this.$message.error(res.data.message)
               }
             })
             .catch((err) => {
-              this.$message.error("网络开小差了~");
-              console.log(err);
+              this.$message.error('网络开小差了~')
+              console.log(err)
             })
             .finally(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     cancelForm() {
-      this.form.title = null;
-      this.form.link = null;
+      this.form.title = null
+      this.form.link = null
+      this.form.content = ''
     },
     hide(row) {
-      this.loading = true;
+      this.loading = true
       hideNews(row.id)
         .then((res) => {
           if (res.data.code === 0) {
-            this.$message.success(res.data.data);
-            this.fetchNews(1);
+            this.$message.success(res.data.data)
+            this.fetchNews(1)
           } else {
-            this.$message.error(res.data.message);
+            this.$message.error(res.data.message)
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error("网络开小差了~");
+          console.log(err)
+          this.$message.error('网络开小差了~')
         })
         .finally(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     show(row) {
-      this.loading = true;
+      this.loading = true
       showNews(row.id)
         .then((res) => {
           if (res.data.code === 0) {
-            this.$message.success(res.data.data);
-            this.fetchNews(1);
+            this.$message.success(res.data.data)
+            this.fetchNews(1)
           } else {
-            this.$message.error(res.data.message);
+            this.$message.error(res.data.message)
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error("网络开小差了~");
+          console.log(err)
+          this.$message.error('网络开小差了~')
         })
         .finally(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     checkDetail(row) {
-      this.newsContentVisible = true;
-      this.activeRow = { ...row };
-      if (this.activeRow.content === "") this.activeRow.content = "无详情";
+      this.newsContentVisible = true
+      this.activeRow = { ...row }
+      if (this.activeRow.content === '') this.activeRow.content = '无详情'
     },
     save() {
-      localStorage.setItem("news-content", this.form.content);
-    },
-  },
-};
+      localStorage.setItem('news-content', this.form.content)
+    }
+  }
+}
 </script>
 
 <style scoped>

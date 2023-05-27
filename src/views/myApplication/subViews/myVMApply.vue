@@ -10,7 +10,7 @@
             currentOperation = '申请虚拟机';
             addVirtualMachineApplyDialogVisible = true;
           "
-          >申请虚拟机
+        >申请虚拟机
         </el-button>
         <div class="vmList">
           <el-table
@@ -23,7 +23,7 @@
               <template slot="header" slot-scope="scope">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
-                    状态<i class="el-icon-arrow-down el-icon--right"></i>
+                    状态<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item :command="-2">全部</el-dropdown-item>
@@ -35,15 +35,21 @@
               </template>
               <template slot-scope="{ row }">
                 <el-tag v-if="row.state === 0" class="vmTag">审核中</el-tag>
-                <el-tag v-else-if="row.state === 1" class="vmTag" type="success"
-                  >审核通过</el-tag
-                >
-                <el-tag v-else-if="row.state === -1" class="vmTag" type="danger"
-                  >审核不通过</el-tag
-                >
-                <el-tag v-else class="vmTag" type="danger"
-                  >{{ row.state }}未知状态</el-tag
-                >
+                <el-tag
+                  v-else-if="row.state === 1"
+                  class="vmTag"
+                  type="success"
+                >审核通过</el-tag>
+                <el-tag
+                  v-else-if="row.state === -1"
+                  class="vmTag"
+                  type="danger"
+                >审核不通过</el-tag>
+                <el-tag
+                  v-else
+                  class="vmTag"
+                  type="danger"
+                >{{ row.state }}未知状态</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="项目组" align="center">
@@ -134,8 +140,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.projectTeam }}</span
-          >
+          >{{ tempForm.projectTeam }}</span>
           <el-input
             v-else
             v-model="addVirtualMachineApplyForm.projectTeam"
@@ -146,8 +151,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.subject }}</span
-          >
+          >{{ tempForm.subject }}</span>
           <el-input
             v-else
             v-model="addVirtualMachineApplyForm.subject"
@@ -158,8 +162,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.email }}</span
-          >
+          >{{ tempForm.email }}</span>
           <el-input
             v-else
             v-model="addVirtualMachineApplyForm.email"
@@ -170,8 +173,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.start }} 至 {{ tempForm.end }}</span
-          >
+          >{{ tempForm.start }} 至 {{ tempForm.end }}</span>
           <el-date-picker
             v-else
             v-model="addVirtualMachineApplyForm.vmTime"
@@ -189,8 +191,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.purpose }}</span
-          >
+          >{{ tempForm.purpose }}</span>
           <el-input
             v-else
             v-model="addVirtualMachineApplyForm.purpose"
@@ -201,8 +202,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.coreNum }}</span
-          >
+          >{{ tempForm.coreNum }}</span>
           <el-input
             v-else
             v-model.number="addVirtualMachineApplyForm.coreNum"
@@ -213,8 +213,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.memory }}</span
-          >
+          >{{ tempForm.memory }}</span>
           <el-input
             v-else
             v-model.number="addVirtualMachineApplyForm.memory"
@@ -227,8 +226,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.capacity }}</span
-          >
+          >{{ tempForm.capacity }}</span>
           <el-input
             v-else
             v-model.number="addVirtualMachineApplyForm.capacity"
@@ -241,8 +239,7 @@
           <span
             v-if="currentOperation === '查看虚拟机'"
             style="font-weight: bold;"
-            >{{ tempForm.operationSystem }}</span
-          >
+          >{{ tempForm.operationSystem }}</span>
           <el-input
             v-else
             v-model="addVirtualMachineApplyForm.operationSystem"
@@ -255,24 +252,21 @@
         <el-button
           v-if="currentOperation === '编辑虚拟机'"
           @click="cancelModifyVM"
-          >取 消</el-button
-        >
+        >取 消</el-button>
         <el-button
           v-else-if="currentOperation === '申请虚拟机'"
           @click="cancelAddVM"
-          >取 消</el-button
-        >
+        >取 消</el-button>
         <el-button
           v-if="currentOperation === '查看虚拟机'"
           type="primary"
-          @click="modifyVM"
           :disabled="
             !(
               tempForm.state === 0 && uid === addVirtualMachineApplyForm.user.id
             )
           "
-          >编 辑</el-button
-        >
+          @click="modifyVM"
+        >编 辑</el-button>
         <el-button
           v-else-if="
             (currentOperation === '编辑虚拟机' &&
@@ -281,20 +275,17 @@
           "
           type="primary"
           @click="addNewVM('addVirtualMachineApplyForm')"
-          >确 认</el-button
-        >
+        >确 认</el-button>
         <el-button
           v-if="currentOperation === '查看虚拟机' && hasAuth()"
           type="success"
           @click="acceptVM(tempForm)"
-          >通 过</el-button
-        >
+        >通 过</el-button>
         <el-button
           v-if="currentOperation === '查看虚拟机' && hasAuth()"
           type="danger"
           @click="rejectVM(tempForm)"
-          >拒 绝</el-button
-        >
+        >拒 绝</el-button>
       </span>
     </el-dialog>
   </div>
@@ -305,31 +296,31 @@ import {
   addVirtualMachineApply,
   setVMApplyResult,
   deleteVMApply,
-  queryVMApplyList,
-} from "@/api/vm";
-import { checkPermission, permissionEnum } from "@/utils/permission";
+  queryVMApplyList
+} from '@/api/vm'
+import { checkPermission, permissionEnum } from '@/utils/permission'
 export default {
-  name: "vm",
+  name: 'Vm',
   data() {
     return {
       vmList: [],
       addVirtualMachineApplyDialogVisible: false,
-      currentOperation: "申请虚拟机",
+      currentOperation: '申请虚拟机',
       addVirtualMachineApplyForm: {
         id: null,
         // 项目组
-        projectTeam: "",
+        projectTeam: '',
         // 课题
-        subject: "",
+        subject: '',
         // email
-        email: "",
+        email: '',
         vmTime: [],
         // 开始时间
         start: null,
         // 结束时间
         end: null,
         // 申请用途
-        purpose: "",
+        purpose: '',
         // CPU核心数
         coreNum: null,
         // 内存大小 GB为单位
@@ -337,95 +328,97 @@ export default {
         // 硬盘容量 GB为单位
         capacity: null,
         // 操作系统
-        operationSystem: "",
+        operationSystem: '',
         user: {
-          id: 0,
-        },
+          id: 0
+        }
       },
       rules: {
         projectTeam: [
-          { required: true, message: "请输入项目组", trigger: "blur" },
+          { required: true, message: '请输入项目组', trigger: 'blur' }
         ],
-        subject: [{ required: true, message: "请输入课题", trigger: "blur" }],
+        subject: [{ required: true, message: '请输入课题', trigger: 'blur' }],
         email: [
           {
             required: true,
-            type: "email",
-            message: "请输入正确的邮箱",
-            trigger: "blur",
-          },
+            type: 'email',
+            message: '请输入正确的邮箱',
+            trigger: 'blur'
+          }
         ],
         vmTime: [
-          { required: true, message: "请选择虚拟机时间", trigger: "blur" },
+          { required: true, message: '请选择虚拟机时间', trigger: 'blur' }
         ],
         purpose: [
-          { required: true, message: "请输入申请用途", trigger: "blur" },
+          { required: true, message: '请输入申请用途', trigger: 'blur' }
         ],
         coreNum: [
           {
             required: true,
-            type: "integer",
+            type: 'integer',
             min: 1,
-            message: "请输入CPU核心数",
-            trigger: "blur",
-          },
+            message: '请输入CPU核心数',
+            trigger: 'blur'
+          }
         ],
         memory: [
           {
             required: true,
-            type: "integer",
+            type: 'integer',
             min: 1,
-            message: "请输入内存大小",
-            trigger: "blur",
-          },
+            message: '请输入内存大小',
+            trigger: 'blur'
+          }
         ],
         capacity: [
           {
             required: true,
-            type: "integer",
+            type: 'integer',
             min: 1,
-            message: "请输入硬盘容量",
-            trigger: "blur",
-          },
+            message: '请输入硬盘容量',
+            trigger: 'blur'
+          }
         ],
         operationSystem: [
-          { required: true, message: "请输入操作系统", trigger: "blur" },
-        ],
+          { required: true, message: '请输入操作系统', trigger: 'blur' }
+        ]
       },
       uid: -1,
-      role: "",
+      role: '',
       tempForm: {},
       total: 0,
       currentPage: 1,
       vmListFilter: {
-        projectTeam: "",
-        userId: parseInt(sessionStorage.getItem("uid")),
-        state: -2,
-      },
-    };
+        projectTeam: '',
+        userId: parseInt(sessionStorage.getItem('uid')),
+        state: -2
+      }
+    }
   },
   created() {
-    this.uid = parseInt(sessionStorage.getItem("uid"));
-    this.fetchVMList(1);
+    this.currentPage =
+        parseInt(sessionStorage.getItem('my-vm-apply-cur-page')) || 1
+    this.uid = parseInt(sessionStorage.getItem('uid'))
+    this.fetchVMList(1)
   },
   methods: {
     hasAuth() {
-      return checkPermission(permissionEnum.REVIEW_VM_DEVICE_APPLICATION);
+      return checkPermission(permissionEnum.REVIEW_VM_DEVICE_APPLICATION)
     },
     deleteWholeVM(id) {
       deleteVMApply(id)
         .then(() => {
-          this.$message.success("删除成功");
-          this.fetchVMList(1);
+          this.$message.success('删除成功')
+          this.fetchVMList(1)
         })
         .catch(() => {
-          this.$message.error("删除失败");
-        });
+          this.$message.error('删除失败')
+        })
     },
     applyTime() {
       if (this.addVirtualMachineApplyForm.vmTime != null) {
-        this.addVirtualMachineApplyForm.start = this.addVirtualMachineApplyForm.vmTime[0];
-        this.addVirtualMachineApplyForm.end = this.addVirtualMachineApplyForm.vmTime[1];
+        this.addVirtualMachineApplyForm.start = this.addVirtualMachineApplyForm.vmTime[0]
+        this.addVirtualMachineApplyForm.end = this.addVirtualMachineApplyForm.vmTime[1]
       }
     },
     addNewVM(formName) {
@@ -433,183 +426,151 @@ export default {
         if (valid) {
           addVirtualMachineApply(this.addVirtualMachineApplyForm)
             .then(() => {
-              if (this.currentOperation === "申请虚拟机") {
-                this.$message.success("申请成功");
-              } else if (this.currentOperation === "编辑虚拟机") {
-                this.$message.success("修改成功");
+              if (this.currentOperation === '申请虚拟机') {
+                this.$message.success('申请成功')
+              } else if (this.currentOperation === '编辑虚拟机') {
+                this.$message.success('修改成功')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              this.cancelAddVM();
-              this.fetchVMList(1);
+              this.cancelAddVM()
+              this.fetchVMList(1)
             })
             .catch((err) => {
-              if (this.currentOperation === "申请虚拟机") {
-                this.$message.error("申请失败");
-              } else if (this.currentOperation === "编辑虚拟机") {
-                this.$message.error("修改失败");
+              if (this.currentOperation === '申请虚拟机') {
+                this.$message.error('申请失败')
+              } else if (this.currentOperation === '编辑虚拟机') {
+                this.$message.error('修改失败')
               } else {
-                this.$message.error("未知的状态！");
+                this.$message.error('未知的状态！')
               }
-              console.log(err);
-            });
+              console.log(err)
+            })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     getVMDetail(row) {
-      this.currentOperation = "查看虚拟机";
-      this.addVirtualMachineApplyForm = row;
-      this.addVirtualMachineApplyForm.vmTime = [row.start, row.end];
-      this.addVirtualMachineApplyDialogVisible = true;
-      this.tempForm = this.addVirtualMachineApplyForm;
+      this.currentOperation = '查看虚拟机'
+      this.addVirtualMachineApplyForm = row
+      this.addVirtualMachineApplyForm.vmTime = [row.start, row.end]
+      this.addVirtualMachineApplyDialogVisible = true
+      this.tempForm = this.addVirtualMachineApplyForm
     },
     modifyVM() {
-      this.currentOperation = "编辑虚拟机";
+      this.currentOperation = '编辑虚拟机'
     },
     clearBeforeClose(done) {
       this.addVirtualMachineApplyForm = {
         id: null,
-        projectTeam: "",
-        subject: "",
-        email: "",
+        projectTeam: '',
+        subject: '',
+        email: '',
         vmTime: [],
         start: null,
         end: null,
-        purpose: "",
+        purpose: '',
         coreNum: null,
         memory: null,
         capacity: null,
-        operationSystem: "",
+        operationSystem: '',
         user: {
-          id: 0,
-        },
-      };
-      return done(true);
+          id: 0
+        }
+      }
+      return done(true)
     },
     cancelModifyVM() {
-      this.currentOperation = "查看虚拟机";
+      this.currentOperation = '查看虚拟机'
     },
     cancelAddVM() {
-      this.addVirtualMachineApplyDialogVisible = false;
+      this.addVirtualMachineApplyDialogVisible = false
       this.addVirtualMachineApplyForm = {
         id: null,
-        projectTeam: "",
-        subject: "",
-        email: "",
+        projectTeam: '',
+        subject: '',
+        email: '',
         vmTime: [],
         start: null,
         end: null,
-        purpose: "",
+        purpose: '',
         coreNum: null,
         memory: null,
         capacity: null,
-        operationSystem: "",
+        operationSystem: '',
         user: {
-          id: 0,
-        },
-      };
+          id: 0
+        }
+      }
     },
     acceptVM(row) {
       setVMApplyResult(row.id, true)
         .then((res) => {
           if (res) {
-            this.$notify.success("申请已通过！");
-            this.fetchVMList(1);
-            this.addVirtualMachineApplyDialogVisible = false;
+            this.$notify.success('申请已通过！')
+            this.fetchVMList(1)
+            this.addVirtualMachineApplyDialogVisible = false
           }
         })
         .catch((err) => {
-          this.$notify.error("申请通过失败!");
-          console.log(err);
-        });
+          this.$notify.error('申请通过失败!')
+          console.log(err)
+        })
     },
     rejectVM(row) {
       setVMApplyResult(row.id, false)
         .then((res) => {
           if (res) {
-            this.$notify.success("申请已拒绝！");
-            this.fetchVMList(1);
-            this.addVirtualMachineApplyDialogVisible = false;
+            this.$notify.success('申请已拒绝！')
+            this.fetchVMList(1)
+            this.addVirtualMachineApplyDialogVisible = false
           }
         })
         .catch((err) => {
-          this.$notify.error("申请拒绝失败!");
-          console.log(err);
-        });
+          this.$notify.error('申请拒绝失败!')
+          console.log(err)
+        })
     },
     // 分页获取数据
     handleCurrentChange(val) {
-      if (val == this.currentPage) return;
-      this.fetchVMList(val);
+      if (val === this.currentPage) return
+      this.fetchVMList(val)
     },
     // 上一页
     handlePrev(val) {
-      this.fetchVMList(val);
+      this.fetchVMList(val)
     },
     // 下一页
     handleNext(val) {
-      this.fetchVMList(val);
+      this.fetchVMList(val)
     },
     fetchVMList(page) {
-      this.currentPage = page;
+      sessionStorage.setItem('my-vm-apply-cur-page', page)
+      this.currentPage = page
       queryVMApplyList(page, 10, this.vmListFilter).then((res) => {
-        this.vmList = res.data.data.list;
-        this.total = res.data.data.total;
-      });
+        this.vmList = res.data.data.list
+        this.total = res.data.data.total
+      })
     },
     filterTag(command) {
-      console.log(command);
+      console.log(command)
       this.vmListFilter = {
-        projectTeam: "",
+        projectTeam: '',
         userId: this.uid,
-        state: command,
-      };
-      this.fetchVMList(1);
-    },
-  },
-};
+        state: command
+      }
+      this.fetchVMList(1)
+    }
+  }
+}
 </script>
 
 <style scoped>
-/* .app-container {
-  display: flex;
-  align-content: center;
-  padding: 0 12px;
-  background-color: #fafafa;
-  border-radius: 0;
-} */
-
-/* .vmWrap {
-  border: 1px solid #e8e8e8;
-  border-radius: 2px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  width: 80%;
-}
-
-.vmBox {
-  background: #fff;
-  padding: 10px 15px;
-  min-height: 540px;
-}
-
-@media only screen and (min-width: 1400px) {
-  .vmBox {
-    max-width: 1305px !important;
-  }
-} */
-
-/* .vmList {
-  min-height: 500px;
-} */
-
 .el-dropdown-link {
   cursor: pointer;
   color: #8997a5;

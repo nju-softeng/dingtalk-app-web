@@ -34,8 +34,9 @@
               placement="right"
             >
               <span style="align-self: center; margin-right: 5px">
-                <svg-icon icon-class="hint"
-              /></span>
+                <svg-icon
+                  icon-class="hint"
+                /></span>
             </el-tooltip>
             <el-upload
               v-if="card.fileName == null && dissertationUid === uid"
@@ -51,8 +52,7 @@
                 type="success"
                 style="margin-right: 10px"
                 round
-                >上 传</el-button
-              >
+              >上 传</el-button>
             </el-upload>
             <el-button
               v-if="card.fileName != null"
@@ -60,16 +60,14 @@
               type="primary"
               round
               @click="downloadFile"
-              >下 载</el-button
-            >
+            >下 载</el-button>
             <el-button
               v-show="card.fileName != null && dissertationUid === uid"
               icon="el-icon-delete"
               type="danger"
               round
               @click="deleteFile"
-              >删 除</el-button
-            >
+            >删 除</el-button>
           </span>
         </div>
       </div>
@@ -81,56 +79,56 @@
 import {
   addDissertationFile,
   downloadDissertationFile,
-  deleteDissertationFile,
-} from "@/api/dissertation";
+  deleteDissertationFile
+} from '@/api/dissertation'
 export default {
-  name: "FileCard",
+  name: 'FileCard',
   props: {
     card: {
       type: Object,
       default: function() {
-        return null;
-      },
+        return null
+      }
     },
     dissertationUid: {
       type: Number,
-      default: -1,
+      default: -1
     },
     filePath: {
       type: String,
-      default: "",
+      default: ''
     },
     dissertationId: {
       type: Number,
-      default: -1,
-    },
+      default: -1
+    }
   },
   data() {
     return {
-      tipContent: "",
-      acceptType: "",
-      uid: -1,
-    };
+      tipContent: '',
+      acceptType: '',
+      uid: -1
+    }
   },
   computed: {
     getPath() {
       return (
         this.filePath +
-        "/" +
+        '/' +
         this.card.fileType.substring(0, 1).toUpperCase() +
         this.card.fileType.substring(1, this.card.fileType.length - 4)
-      );
-    },
+      )
+    }
   },
   created() {
-    this.uid = parseInt(sessionStorage.getItem("uid"));
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     // console.log(this.card)
-    if (this.card.fileType === "finalFile") {
-      this.tipContent = "仅支持Zip/Rar格式文件";
-      this.acceptType = ".zip,.rar";
+    if (this.card.fileType === 'finalFile') {
+      this.tipContent = '仅支持Zip/Rar格式文件'
+      this.acceptType = '.zip,.rar'
     } else {
-      this.tipContent = "仅支持Word/PDF格式文件";
-      this.acceptType = ".pdf,.doc,.docx";
+      this.tipContent = '仅支持Word/PDF格式文件'
+      this.acceptType = '.pdf,.doc,.docx'
     }
   },
   methods: {
@@ -139,55 +137,55 @@ export default {
     // },
     handleFileChange(file, fileList) {
       while (fileList.length > 1) {
-        fileList.splice(0, 1);
+        fileList.splice(0, 1)
       }
-      const formData = new FormData();
-      formData.append("file", file.raw);
-      formData.append("fileType", this.card.fileType);
+      const formData = new FormData()
+      formData.append('file', file.raw)
+      formData.append('fileType', this.card.fileType)
       addDissertationFile(this.dissertationId, formData)
         .then(() => {
           this.$notify({
-            title: "成功",
-            message: "论文文件上传成功",
-            type: "success",
-          });
-          this.$emit("init");
+            title: '成功',
+            message: '论文文件上传成功',
+            type: 'success'
+          })
+          this.$emit('init')
         })
         .catch(() => {
-          this.$message.error("上传失败");
-        });
+          this.$message.error('上传失败')
+        })
     },
     downloadFile() {
       if (!this.card.fileName) {
-        this.$message.warning("文件未上传！请上传文件！");
-        return;
+        this.$message.warning('文件未上传！请上传文件！')
+        return
       }
       downloadDissertationFile(this.dissertationId, this.card.fileType).then(
         (res) => {
-          let type;
-          if (this.card.fileName.split(".").slice(-1)[0] === ".zip") {
-            type = "application/zip";
-          } else if (this.card.fileName.split(".").slice(-1)[0] === ".rar") {
-            type = "application/x-rar-compressed";
-          } else if (this.card.fileName.split(".").slice(-1)[0] === ".pdf") {
-            type = "application/pdf";
-          } else if (this.card.fileName.split(".").slice(-1)[0] === ".doc") {
-            type = "application/msword";
-          } else if (this.card.fileName.split(".").slice(-1)[0] === ".docx") {
+          let type
+          if (this.card.fileName.split('.').slice(-1)[0] === '.zip') {
+            type = 'application/zip'
+          } else if (this.card.fileName.split('.').slice(-1)[0] === '.rar') {
+            type = 'application/x-rar-compressed'
+          } else if (this.card.fileName.split('.').slice(-1)[0] === '.pdf') {
+            type = 'application/pdf'
+          } else if (this.card.fileName.split('.').slice(-1)[0] === '.doc') {
+            type = 'application/msword'
+          } else if (this.card.fileName.split('.').slice(-1)[0] === '.docx') {
             type =
-              "application/vnd.openxmlformats-officedoucment.wordprocessingml.document";
+              'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
           }
 
-          const binaryData = [res.data];
+          const binaryData = [res.data]
           const url = window.URL.createObjectURL(
             new Blob(binaryData, { type: type })
-          );
-          const a = document.createElement("a");
-          a.download = this.card.fileName;
-          a.href = url;
-          a.click();
+          )
+          const a = document.createElement('a')
+          a.download = this.card.fileName
+          a.href = url
+          a.click()
         }
-      );
+      )
     },
     deleteFile() {
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
@@ -195,21 +193,21 @@ export default {
         deleteDissertationFile(this.dissertationId, this.card.fileType)
           .then(() => {
             this.$notify({
-              title: "成功",
-              message: "论文文件删除成功",
-              type: "success",
-            });
-            this.$emit("init");
+              title: '成功',
+              message: '论文文件删除成功',
+              type: 'success'
+            })
+            this.$emit('init')
           })
           .catch(() => {
-            this.$message.error("删除失败");
-          });
+            this.$message.error('删除失败')
+          })
       } else {
-        this.$message.error("未上传文件！");
+        this.$message.error('未上传文件！')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

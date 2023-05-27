@@ -53,8 +53,7 @@
         size="mini"
         icon="el-icon-search"
         @click="search"
-        >搜索</el-button
-      >
+      >搜索</el-button>
       <el-button
         size="mini"
         icon="el-icon-refresh-right"
@@ -109,11 +108,10 @@
             <div style="overflow: auto; height: 30px;">
               <template v-if="row.permissionList.length !== 0">
                 <el-tag
-                  :key="permission.id"
                   v-for="permission in row.permissionList"
+                  :key="permission.id"
                   effect="plain"
-                  >{{ permission.name }}</el-tag
-                >
+                >{{ permission.name }}</el-tag>
               </template>
               <template v-else>
                 <el-tag type="info" effect="plain">无</el-tag>
@@ -131,11 +129,10 @@
             <div style="overflow: auto; height: 30px;">
               <template v-if="row.teamList.length !== 0">
                 <el-tag
-                  :key="team.id"
                   v-for="team in row.teamList"
+                  :key="team.id"
                   effect="plain"
-                  >{{ team.name }}</el-tag
-                >
+                >{{ team.name }}</el-tag>
               </template>
               <template v-else>
                 <el-tag type="info" effect="plain">无</el-tag>
@@ -149,8 +146,7 @@
               type="text"
               style="padding-right:8px"
               @click="editUserInfo(row)"
-              >编辑</el-button
-            >
+            >编辑</el-button>
 
             <el-popover
               v-model="row.visible"
@@ -161,9 +157,11 @@
               trigger="manual"
             >
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="row.visible = false"
-                  >取消</el-button
-                >
+                <el-button
+                  size="mini"
+                  type="text"
+                  @click="row.visible = false"
+                >取消</el-button>
                 <el-button
                   type="primary"
                   size="mini"
@@ -171,22 +169,20 @@
                     row.visible = false;
                     disableU(row.id);
                   "
-                  >确定</el-button
-                >
+                >确定</el-button>
               </div>
               <el-button
                 slot="reference"
                 type="text"
                 @click="row.visible = true"
-                >停用</el-button
-              >
+              >停用</el-button>
             </el-popover>
           </template>
         </el-table-column>
         <template slot="empty">
           <div style="height:200px;">
             <div style="margin-top:100px;">
-              <svg-icon icon-class="null" style="font-size:32px" /> <br />
+              <svg-icon icon-class="null" style="font-size:32px" /> <br>
             </div>
             <div style="line-height: 10px;">
               <span>无记录</span>
@@ -265,11 +261,11 @@
             </el-select> -->
             <PermissionEdit
               ref="permissionEdit"
-              :userId="this.userForm.id"
-            ></PermissionEdit>
+              :user-id="this.userForm.id"
+            />
           </el-form-item>
           <el-form-item label="研究组">
-            <TeamEdit ref="teamEdit" :userId="this.userForm.id"> </TeamEdit>
+            <TeamEdit ref="teamEdit" :user-id="this.userForm.id" />
           </el-form-item>
         </el-form>
       </div>
@@ -316,11 +312,11 @@ import {
   updateUserInfo,
   disableUser,
   enableUser,
-  queryDisableUser,
-} from "@/api/system";
-import { listAuditors } from "@/api/user";
-import PermissionEdit from "@/components/PermissionsEdit";
-import TeamEdit from "@/components/TeamsEdit";
+  queryDisableUser
+} from '@/api/system'
+import { listAuditors } from '@/api/user'
+import PermissionEdit from '@/components/PermissionsEdit'
+import TeamEdit from '@/components/TeamsEdit'
 export default {
   components: { PermissionEdit, TeamEdit },
   data() {
@@ -334,151 +330,151 @@ export default {
       list: [],
       disablelist: [],
       queryForm: {
-        stuNum: "",
-        name: "",
-        position: "",
-        authority: null,
+        stuNum: '',
+        name: '',
+        position: '',
+        authority: null
       },
       currentPage: 1,
-      options: ["本科生", "专硕", "学硕", "博士生", "待定", "教师"],
+      options: ['本科生', '专硕', '学硕', '博士生', '待定', '教师'],
       authorityList: [
-        { label: "普通用户", value: 0 },
-        { label: "评审人", value: 1 },
-      ],
-    };
+        { label: '普通用户', value: 0 },
+        { label: '评审人', value: 1 }
+      ]
+    }
   },
   created() {
-    this.fetchUserList(0);
+    this.fetchUserList(0)
     listAuditors().then((res) => {
-      this.auditors = res.data.auditorlist;
-    });
+      this.auditors = res.data.auditorlist
+    })
   },
   methods: {
     showDisableUser() {
-      this.disableDialog = true;
+      this.disableDialog = true
       queryDisableUser().then((res) => {
-        this.disablelist = res.data;
-      });
+        this.disablelist = res.data
+      })
     },
     recoverU(uid) {
       enableUser(uid).then(() => {
         queryDisableUser().then((res) => {
-          this.disablelist = res.data;
-        });
-        this.fetchUserList(this.currentPage - 1);
+          this.disablelist = res.data
+        })
+        this.fetchUserList(this.currentPage - 1)
         this.$message({
           showClose: true,
-          message: "恢复成功",
-          type: "success",
-        });
-      });
+          message: '恢复成功',
+          type: 'success'
+        })
+      })
     },
     disableU(uid) {
       disableUser(uid).then(() => {
-        this.fetchUserList(this.currentPage - 1);
+        this.fetchUserList(this.currentPage - 1)
         this.$message({
           showClose: true,
-          message: "禁用成功",
-          type: "success",
-        });
-      });
+          message: '禁用成功',
+          type: 'success'
+        })
+      })
     },
     editUserInfo(data) {
-      console.log(data);
-      this.userForm = data;
-      this.dialog = true;
+      console.log(data)
+      this.userForm = data
+      this.dialog = true
     },
     submitUserInfo() {
-      this.loading = true;
+      this.loading = true
       updateUserInfo(this.userForm)
         .then(() => {
           this.$notify({
-            title: "成功",
-            message: this.userForm.name + " 的信息保存成功",
-            position: "bottom-right",
-            type: "success",
-          });
+            title: '成功',
+            message: this.userForm.name + ' 的信息保存成功',
+            position: 'bottom-right',
+            type: 'success'
+          })
         })
         .then(() => {
-          this.$refs.permissionEdit.submitPermissionChange();
+          this.$refs.permissionEdit.submitPermissionChange()
         })
         .then(() => {
-          this.$refs.teamEdit.submitTeamChange();
+          this.$refs.teamEdit.submitTeamChange()
         })
         .then(() => {
           // 保证前面两个then中的异步操作都执行完之后再更新页面
           setTimeout(() => {
-            this.loading = false;
-            this.dialog = false;
-            this.fetchUserList(this.currentPage - 1);
-          }, 1000);
-        });
+            this.loading = false
+            this.dialog = false
+            this.fetchUserList(this.currentPage - 1)
+          }, 1000)
+        })
     },
 
     // 分页获取数据
     handleCurrentChange(val) {
-      if (val == this.currentPage) return;
-      this.fetchUserList(val - 1);
+      if (val == this.currentPage) return
+      this.fetchUserList(val - 1)
       // console.log("handleCurrentChange");
     },
     handlePrev(val) {
-      console.log(val);
+      console.log(val)
       // this.currentPage = this.currentPage - 1;
-      this.fetchUserList(val - 1);
+      this.fetchUserList(val - 1)
     },
     handleNext(val) {
-      console.log(val);
-      this.loading = true;
+      console.log(val)
+      this.loading = true
       // this.currentPage = this.currentPage + 1;
-      this.fetchUserList(val - 1);
+      this.fetchUserList(val - 1)
       // console.log("handleNext");
     },
     fetchUserList(page) {
       // if (page === undefined) {
       //   page = 0;
       // }
-      this.currentPage = page + 1;
+      this.currentPage = page + 1
       queryUser(this.queryForm, page)
         .then((res) => {
-          this.list = res.data.content;
-          this.total = res.data.total;
+          this.list = res.data.content
+          this.total = res.data.total
           // console.log(this.list);
         })
         .finally(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     search() {
-      this.fetchUserList(0);
+      this.fetchUserList(0)
     },
     refresh() {
       this.queryForm = {
-        name: "",
-        position: "",
-      };
-      console.log(this.currentPage);
-      this.fetchUserList(this.currentPage - 1);
+        name: '',
+        position: ''
+      }
+      console.log(this.currentPage)
+      this.fetchUserList(this.currentPage - 1)
     },
     // 拉取用户信息
     refreshUser() {
       fetchAllUser().then(() => {
         this.$message({
-          message: "拉取成功",
-          type: "success",
-        });
-        this.fetchUserList(0);
-      });
+          message: '拉取成功',
+          type: 'success'
+        })
+        this.fetchUserList(0)
+      })
     },
 
     closeEdit() {
-      this.dialog = false;
-      this.$refs.permissionEdit.getPermission();
-      this.$refs.permissionEdit.updateOptions();
-      this.$refs.teamEdit.getTeams();
-      this.$refs.teamEdit.updateOptions();
-    },
-  },
-};
+      this.dialog = false
+      this.$refs.permissionEdit.getPermission()
+      this.$refs.permissionEdit.updateOptions()
+      this.$refs.teamEdit.getTeams()
+      this.$refs.teamEdit.updateOptions()
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .filtrate {

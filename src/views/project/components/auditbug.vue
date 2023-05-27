@@ -148,7 +148,7 @@ export default {
     fetchAuditorBug() {
       listAuditorBug(this.uid).then(res => {
         this.alllist = res.data
-        this.checklist = res.data.filter(item => item.status != undefined)
+        this.checklist = res.data.filter(item => item.status !== undefined)
         this.unchecklist = res.data.filter(item => item.status === undefined)
         if (this.radio === '全部') {
           this.list = this.alllist

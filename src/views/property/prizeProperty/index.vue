@@ -65,14 +65,12 @@
                   v-show="addShow"
                   type="primary"
                   @click="modifyPrizeClick(scope.row)"
-                  >修改</el-button
-                >
+                >修改</el-button>
                 <el-button
                   v-show="addShow"
                   type="danger"
                   @click="deletePrizeClick(scope.row)"
-                  >删除</el-button
-                >
+                >删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -131,9 +129,10 @@
       </el-form>
       <span slot="footer">
         <el-button @click="addPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addPrize('addPrizeForm')"
-          >添 加</el-button
-        >
+        <el-button
+          type="primary"
+          @click="addPrize('addPrizeForm')"
+        >添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog
@@ -175,166 +174,168 @@
         </el-form-item>
         <el-form-item label="备注:">
           <el-col :span="12">
-            <el-input v-model="modifyPrizeForm.remark"
-          /></el-col>
+            <el-input
+              v-model="modifyPrizeForm.remark"
+            /></el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="modifyPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmModifyPrize('modifyPrizeForm')"
-          >确认</el-button
-        >
+        <el-button
+          type="primary"
+          @click="confirmModifyPrize('modifyPrizeForm')"
+        >确认</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserPrizes, addPrize, deletePrize, updatePrize } from "@/api/user";
-import { getUserList } from "@/api/common";
-import { downloadUserPrizeData } from "@/api/excel";
-import fileDownload from "js-file-download";
+import { getUserPrizes, addPrize, deletePrize, updatePrize } from '@/api/user'
+import { getUserList } from '@/api/common'
+import { downloadUserPrizeData } from '@/api/excel'
+import fileDownload from 'js-file-download'
 
 export default {
-  name: "Prize",
+  name: 'Prize',
   data() {
     return {
       addPrizeDialogueVisible: false,
       modifyPrizeDialogueVisible: false,
       userList: [],
       prizeList: [],
-      name: "",
+      name: '',
       loading: false,
       currentId: 0,
-      levelConvertor: ["校级", "省级", "国家级", "国际级"],
+      levelConvertor: ['校级', '省级', '国家级', '国际级'],
       addPrizeForm: {},
       modifyPrizeForm: {},
       rules: {
         prizeName: [
-          { required: true, message: "请输入奖项名称", trigger: "blur" },
+          { required: true, message: '请输入奖项名称', trigger: 'blur' }
         ],
         prizeTime: [
-          { required: true, message: "请输入获奖时间", trigger: "blur" },
+          { required: true, message: '请输入获奖时间', trigger: 'blur' }
         ],
-        level: [{ required: true, message: "请输入奖项等级", trigger: "blur" }],
-      },
-    };
+        level: [{ required: true, message: '请输入奖项等级', trigger: 'blur' }]
+      }
+    }
   },
   computed: {
     addShow() {
       return (
-        sessionStorage.getItem("role") === "admin" ||
-        sessionStorage.getItem("role") === "editor" ||
-        sessionStorage.getItem("uid") === this.currentId.toString()
-      );
-    },
+        sessionStorage.getItem('role') === 'admin' ||
+        sessionStorage.getItem('role') === 'editor' ||
+        sessionStorage.getItem('uid') === this.currentId.toString()
+      )
+    }
   },
   created() {
     getUserList().then((res) => {
-      this.userList = res.data;
-      this.setCurrent(this.userList[0]);
-      this.name = this.userList[0].name;
-      this.currentId = this.userList[0].id;
+      this.userList = res.data
+      this.setCurrent(this.userList[0])
+      this.name = this.userList[0].name
+      this.currentId = this.userList[0].id
       getUserPrizes(this.currentId).then((res) => {
-        this.prizeList = res.data;
-      });
-    });
+        this.prizeList = res.data
+      })
+    })
   },
   methods: {
     addPrize(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           addPrize(this.currentId, this.addPrizeForm).then((res) => {
-            this.addPrizeForm = {};
+            this.addPrizeForm = {}
             if (res) {
               this.$message({
                 showClose: true,
-                message: "奖项信息添加成功！",
-                type: "success",
-              });
+                message: '奖项信息添加成功！',
+                type: 'success'
+              })
             }
             getUserPrizes(this.currentId).then((res) => {
-              this.prizeList = res.data;
-            });
-            this.addPrizeDialogueVisible = false;
-          });
+              this.prizeList = res.data
+            })
+            this.addPrizeDialogueVisible = false
+          })
         } else {
           this.$notify({
-            title: "添加失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '添加失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     modifyPrizeClick(data) {
-      console.log(data);
-      this.modifyPrizeDialogueVisible = true;
-      this.modifyPrizeForm = JSON.parse(JSON.stringify(data));
+      console.log(data)
+      this.modifyPrizeDialogueVisible = true
+      this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
     },
     async confirmModifyPrize(formName) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async(valid) => {
         if (valid) {
           var res = await updatePrize(
-            sessionStorage.getItem("uid"),
+            sessionStorage.getItem('uid'),
             this.modifyPrizeForm.id,
             this.modifyPrizeForm
-          );
+          )
           if (res) {
             this.$message({
               showClose: true,
-              message: "奖项信息修改成功！",
-              type: "success",
-            });
+              message: '奖项信息修改成功！',
+              type: 'success'
+            })
           }
-          this.modifyPrizeDialogueVisible = false;
+          this.modifyPrizeDialogueVisible = false
           getUserPrizes(this.currentId).then((res) => {
-            this.prizeList = res.data;
-          });
+            this.prizeList = res.data
+          })
         } else {
           this.$notify({
-            title: "修改失败",
-            message: "请填写必要信息",
-            type: "warning",
-          });
+            title: '修改失败',
+            message: '请填写必要信息',
+            type: 'warning'
+          })
         }
-      });
+      })
     },
     async deletePrizeClick(data) {
-      await deletePrize(sessionStorage.getItem("uid"), data.id);
+      await deletePrize(sessionStorage.getItem('uid'), data.id)
       this.$message({
         showClose: true,
-        message: "奖项信息删除成功！",
-        type: "success",
-      });
+        message: '奖项信息删除成功！',
+        type: 'success'
+      })
       getUserPrizes(this.currentId).then((res) => {
-        this.prizeList = res.data;
-      });
+        this.prizeList = res.data
+      })
     },
     download() {
       downloadUserPrizeData()
         .then((res) => {
-          fileDownload(res.data, "荣誉表.xlsx");
+          fileDownload(res.data, '荣誉表.xlsx')
         })
         .catch((err) => {
-          console.log(err);
-          this.$message.error("下载失败");
-        });
+          console.log(err)
+          this.$message.error('下载失败')
+        })
     },
     setCurrent(row) {
-      this.$refs.table.setCurrentRow(row);
+      this.$refs.table.setCurrentRow(row)
     },
     handleCurrentChange(val) {
-      this.loading = true;
-      this.name = val.name;
-      this.currentId = val.id;
+      this.loading = true
+      this.name = val.name
+      this.currentId = val.id
       getUserPrizes(val.id).then((res) => {
-        this.prizeList = res.data;
-        this.loading = false;
-      });
-    },
-  },
-};
+        this.prizeList = res.data
+        this.loading = false
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

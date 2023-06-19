@@ -2,16 +2,6 @@
   <div class="app-container">
     <div class="vmWrap">
       <div class="vmBox">
-        <!-- <el-button
-          type="primary"
-          icon="el-icon-plus"
-          style="margin-bottom: 10px;"
-          @click="
-            currentOperation = '申请虚拟机';
-            addVirtualMachineApplyDialogVisible = true;
-          "
-          >申请虚拟机
-        </el-button> -->
         <div class="vmList">
           <el-table
             :data="vmList"
@@ -20,7 +10,7 @@
             style="max-height: 500px"
           >
             <el-table-column align="center">
-              <template slot="header" slot-scope="scope">
+              <template slot="header">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
                     状态<i class="el-icon-arrow-down el-icon--right" />
@@ -79,7 +69,7 @@
             </el-table-column>
             <el-table-column
               label="操作"
-              min-width="150px"
+              min-width="120px"
               fixed="right"
               align="center"
             >
@@ -105,21 +95,21 @@
                 </el-tooltip>
               </template>
             </el-table-column>
+            <div style="text-align:center; margin-top:5px">
+              <el-pagination
+                background
+                :hide-on-single-page="total < 10"
+                small
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="10"
+                :current-page="currentPage"
+                @prev-click="handlePrev"
+                @next-click="handleNext"
+                @current-change="handleCurrentChange"
+              />
+            </div>
           </el-table>
-          <div style="text-align:center; margin-top:5px">
-            <el-pagination
-              background
-              :hide-on-single-page="total < 10 ? true : false"
-              small
-              layout="prev, pager, next"
-              :total="total"
-              :page-size="10"
-              :current-page="currentPage"
-              @prev-click="handlePrev"
-              @next-click="handleNext"
-              @current-change="handleCurrentChange"
-            />
-          </div>
         </div>
       </div>
     </div>
@@ -613,5 +603,11 @@ export default {
   padding: 2px 6px;
   border-radius: 5px;
   margin-left: 16px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #8997a5;
+  font-size: 12px;
 }
 </style>

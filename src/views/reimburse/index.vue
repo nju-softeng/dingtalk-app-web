@@ -2,16 +2,6 @@
   <div class="app-container">
     <div class="reimburseWrap">
       <div class="reimburseBox">
-        <!-- <el-button
-          type="primary"
-          icon="el-icon-plus"
-          style="margin-bottom: 10px;"
-          @click="
-            currentOperation = '添加报销';
-            addReimburseDialogVisible = true;
-          "
-          >新建报销记录
-        </el-button> -->
         <div class="reimburseList">
           <el-table
             :data="reimburseList"
@@ -20,7 +10,7 @@
             class="tableClass"
           >
             <el-table-column label="状态" align="center">
-              <template slot="header" slot-scope="scope">
+              <template slot="header">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
                     状态<i class="el-icon-arrow-down el-icon--right" />
@@ -140,54 +130,23 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div style="text-align:center; margin-top:5px">
-          <el-pagination
-            background
-            :current-page="currentPage"
-            :hide-on-single-page="total < 10 ? true : false"
-            small
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="10"
-            @prev-click="handlePrev"
-            @next-click="handleNext"
-            @current-change="handleCurrentChange"
-          />
+          <div style="text-align:center; margin-top:5px">
+            <el-pagination
+              background
+              :current-page="currentPage"
+              :hide-on-single-page="total < 10 ? true : false"
+              small
+              layout="prev, pager, next"
+              :total="total"
+              :page-size="10"
+              @prev-click="handlePrev"
+              @next-click="handleNext"
+              @current-change="handleCurrentChange"
+            />
+          </div>
         </div>
       </div>
     </div>
-    <!-- <el-dialog
-      :title="currentOperation"
-      :visible.sync="addReimburseDialogVisible"
-      width="400px"
-      :before-close="clearBeforeClose"
-    >
-      <el-form ref="addReimburseForm" :model="addReimburseForm" :rules="rules">
-        <el-form-item prop="name" label="报销名称:">
-          <el-input
-            v-model="addReimburseForm.name"
-            placeholder="请输入报销名称"
-          />
-        </el-form-item>
-        <el-form-item prop="type" label="报销类型:">
-          <el-select v-model="addReimburseForm.type" placeholder="选择报销类型">
-            <el-option
-              v-for="(item, index) in options"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer">
-        <el-button @click="cancelAddReimburse">取 消</el-button>
-        <el-button type="primary" @click="addNewReimburse('addReimburseForm')"
-          >确 认</el-button
-        >
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -243,7 +202,7 @@ export default {
     }
   },
   created() {
-    this.currentPage = sessionStorage.getItem('my-reimburse-cur-page') || 1
+    this.currentPage = parseInt(sessionStorage.getItem('my-reimburse-cur-page')) || 1
     this.fetchReimburse(this.currentPage)
     this.uid = parseInt(sessionStorage.getItem('uid'))
   },

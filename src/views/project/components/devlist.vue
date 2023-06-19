@@ -108,7 +108,7 @@ export default {
     }
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     listAllProject().then(res => {
       this.list = res.data
       console.log(this.list)

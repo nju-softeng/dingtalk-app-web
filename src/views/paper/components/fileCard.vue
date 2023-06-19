@@ -149,7 +149,7 @@ export default {
       formData.append('file', file.raw)
       formData.append('fileType', this.card.fileType)
       if (this.paperType === 0 || this.paperType === 2) {
-        addPaperFile(sessionStorage.getItem('uid'), this.paperId, formData)
+        addPaperFile(parseInt(sessionStorage.getItem('uid')), this.paperId, formData)
           .then(() => {
             this.$notify({
               title: '成功',
@@ -163,7 +163,7 @@ export default {
           })
       } else if (this.paperType === 1) {
         addExternalPaperFile(
-          sessionStorage.getItem('uid'),
+          parseInt(sessionStorage.getItem('uid')),
           this.paperId,
           formData
         )
@@ -223,7 +223,7 @@ export default {
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
         console.log(this.card.fileName)
         if (this.paperType === 0 || this.paperType === 2) {
-          deletePaperFile(sessionStorage.getItem('uid'), this.paperId, formData)
+          deletePaperFile(parseInt(sessionStorage.getItem('uid')), this.paperId, formData)
             .then(() => {
               this.$notify({
                 title: '成功',
@@ -237,7 +237,7 @@ export default {
             })
         } else if (this.paperType === 1) {
           deleteExternalPaperFile(
-            sessionStorage.getItem('uid'),
+              parseInt(sessionStorage.getItem('uid')),
             this.paperId,
             formData
           )

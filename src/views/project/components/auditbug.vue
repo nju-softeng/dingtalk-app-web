@@ -141,7 +141,7 @@ export default {
     }
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.fetchAuditorBug()
   },
   methods: {

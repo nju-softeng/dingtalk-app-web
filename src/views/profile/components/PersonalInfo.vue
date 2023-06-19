@@ -19,6 +19,9 @@
           <el-form-item label="身份证号">
             <el-input v-model="personalInfoForm.idCardNo" />
           </el-form-item>
+          <el-form-item label="电话号码">
+            <el-input v-model="personalInfoForm.tel" />
+          </el-form-item>
           <el-form-item label="银行卡号">
             <el-input v-model="personalInfoForm.creditCard" />
           </el-form-item>
@@ -156,13 +159,11 @@ import {
   updateContract,
   downloadContract
 } from '@/api/user'
-// import { mapGetters } from "vuex";
 import { getPersonalPermissions } from '@/api/permission.js'
-import PermissionEdit from '@/components/PermissionsEdit'
 import TeamEdit from '@/components/TeamsEdit'
 export default {
   name: 'PersonalInfo',
-  components: { PermissionEdit, TeamEdit },
+  components: { TeamEdit },
   data() {
     return {
       personalInfoForm: {

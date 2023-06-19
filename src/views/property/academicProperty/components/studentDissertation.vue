@@ -199,7 +199,7 @@ export default {
     this.currentPage =
       parseInt(sessionStorage.getItem('dissertation-cur-page')) || 1
     this.userName = sessionStorage.getItem('name')
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.getAllDissertation(this.currentPage)
     getDissertationDetail(this.uid)
       .then((res) => {

@@ -87,6 +87,7 @@ const actions = {
           const { data } = response
 
           if (!data) reject('Verification failed, please Login again.')
+          console.log(data)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_ROLES', sessionStorage.getItem('role'))

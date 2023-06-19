@@ -34,7 +34,7 @@
                 <span>{{ row.user.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" width="200px" >
               <template slot-scope="{ row }">
                 <el-tooltip effect="dark" content="详情" placement="top">
                   <el-button

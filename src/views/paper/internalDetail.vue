@@ -305,7 +305,7 @@ export default {
     // 是否可以决定平票结果
     isAbleToMakeFlatDecision() {
       if (this.paper.result === 5) {
-        const uid = sessionStorage.getItem('uid')
+        const uid = parseInt(sessionStorage.getItem('uid'))
         // console.log('uid', uid)
         for (let i = 0; i < this.paper.paperDetails.length; i++) {
           if (uid === this.paper.paperDetails[i].user.id.toString()) {

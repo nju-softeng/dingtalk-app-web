@@ -20,7 +20,7 @@
             class="tableClass"
           >
             <el-table-column label="状态" align="center">
-              <template slot="header" slot-scope="scope">
+              <template slot="header">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
                     状态<i class="el-icon-arrow-down el-icon--right" />
@@ -140,20 +140,20 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div style="text-align:center; margin-top:5px">
-          <el-pagination
-            background
-            :current-page="currentPage"
-            :hide-on-single-page="total < 10 ? true : false"
-            small
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="10"
-            @prev-click="handlePrev"
-            @next-click="handleNext"
-            @current-change="handleCurrentChange"
-          />
+          <div style="text-align:center; margin-top:5px">
+            <el-pagination
+              background
+              :current-page="currentPage"
+              :hide-on-single-page="total < 10"
+              small
+              layout="prev, pager, next"
+              :total="total"
+              :page-size="10"
+              @prev-click="handlePrev"
+              @next-click="handleNext"
+              @current-change="handleCurrentChange"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -237,15 +237,13 @@ export default {
       },
       uid: -1,
       query: {
-        userId: sessionStorage.getItem('uid'),
+        userId: parseInt(sessionStorage.getItem('uid')),
         type: '',
         state: -2
       }
     }
   },
   created() {
-    // sessionStorage.setItem("my-reimburse-cur-page", 1);
-    // this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
     this.currentPage =
       parseInt(sessionStorage.getItem('my-reimburse-cur-page')) || 1
     this.fetchReimburse(this.currentPage)
@@ -358,7 +356,7 @@ export default {
     filterTag(command) {
       console.log(command)
       this.query = {
-        userId: sessionStorage.getItem('uid'),
+        userId: parseInt(sessionStorage.getItem('uid')),
         type: '',
         state: command
       }

@@ -34,7 +34,7 @@
                 <span>{{ typeConverter[row.type] }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" width="150px">
               <template slot-scope="{ row }">
                 <el-tooltip effect="dark" content="详情" placement="top">
                   <el-button
@@ -70,7 +70,7 @@
           <el-pagination
             background
             :current-page.sync="currentPage"
-            :hide-on-single-page="total < 10 ? true : false"
+            :hide-on-single-page="total < 10"
             small
             layout="prev, pager, next"
             :total="total"

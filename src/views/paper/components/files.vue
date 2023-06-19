@@ -112,12 +112,12 @@ export default {
   methods: {
     init() {
       if (this.paperType === 0 || this.paperType === 2) {
-        getPaperFileInfo(sessionStorage.getItem('uid'), this.id).then((res) =>
+        getPaperFileInfo(parseInt(sessionStorage.getItem('uid')), this.id).then((res) =>
           this.handleRes(res)
         )
       } else if (this.paperType === 1) {
         getExternalPaperFileInfo(
-          sessionStorage.getItem('uid'),
+            parseInt(sessionStorage.getItem('uid')),
           this.id
         ).then((res) => this.handleRes(res))
       }

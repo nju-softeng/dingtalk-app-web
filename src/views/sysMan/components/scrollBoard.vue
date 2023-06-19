@@ -219,7 +219,7 @@ export default {
       form: {
         title: null,
         // link: null,
-        authorId: sessionStorage.getItem('uid'),
+        authorId: parseInt(sessionStorage.getItem('uid')),
         content: localStorage.getItem('news-content') || ''
       },
       rules: {

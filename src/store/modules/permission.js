@@ -4,6 +4,7 @@ import { asyncRoutes, constantRoutes } from '@/router'
  * Use meta.role to determine if the current user has permission
  * @param roles
  * @param route
+ * @deprecated
  */
 function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
@@ -17,6 +18,7 @@ function hasPermission(roles, route) {
  * Filter asynchronous routing tables by recursion
  * @param routes asyncRoutes
  * @param roles
+ * @deprecated
  */
 export function filterAsyncRoutes(routes, roles) {
   const res = []
@@ -35,16 +37,20 @@ export function filterAsyncRoutes(routes, roles) {
   return res
 }
 
-function dfsAsynRoutes(routes, permissionList) {
+function dfsAsyncRoutes(routes, permissionList) {
   const res = []
-  // console.log(routes instanceof Array);
   routes.forEach((route) => {
     const tmp = { ...route }
     if (checkPermission(tmp, permissionList)) {
       if (tmp.children) {
-        tmp.children = dfsAsynRoutes(tmp.children, permissionList)
+        tmp.children = dfsAsyncRoutes(tmp.children, permissionList)
       }
-      res.push(tmp)
+      // console.log(tmp.children)
+      if (tmp.children instanceof Array) {
+        if (tmp.children.length !== 0) res.push(tmp)
+      } else {
+        res.push(tmp)
+      }
     }
   })
 
@@ -53,12 +59,6 @@ function dfsAsynRoutes(routes, permissionList) {
 
 function checkPermission(route, permissionList) {
   if (route.meta && route.meta.permission) {
-    // console.log(route.meta.permission);
-    // console.log(
-    //   permissionList.some((item) => {
-    //     return item.id === route.meta.permission.id;
-    //   })
-    // );
     return permissionList.some((item) => {
       return item.id === route.meta.permission.id
     })
@@ -80,6 +80,12 @@ const mutations = {
 }
 
 const actions = {
+  /**
+   * @deprecated
+   * @param commit
+   * @param roles
+   * @returns {Promise<unknown>}
+   */
   generateRoutes({ commit }, roles) {
     return new Promise((resolve) => {
       let accessedRoutes
@@ -98,7 +104,7 @@ const actions = {
   generateRoutesByPermissions({ commit }, permissionsList) {
     // console.log(permissionsList);
     return new Promise((resolve) => {
-      const accessedRoutes = dfsAsynRoutes(asyncRoutes, permissionsList)
+      const accessedRoutes = dfsAsyncRoutes(asyncRoutes, permissionsList)
       commit('SET_ROUTES', accessedRoutes)
       // console.log(accessedRoutes);
       resolve(accessedRoutes)

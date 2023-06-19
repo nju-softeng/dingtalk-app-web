@@ -24,7 +24,7 @@
                   <p>
                     <i class="el-icon-house" />
                     <span style="margin-right:8px">
-                      权利人：{{ patent.obligee }}</span>
+                      学生权利人：{{ patent.obligee }}</span>
                     <el-tag>{{ patent.type }}</el-tag>
                   </p>
                   <p>

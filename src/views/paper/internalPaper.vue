@@ -357,7 +357,7 @@ export default {
     })
     this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
     this.fetchPaper(this.currentPage)
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
     this.$message({
       showClose: true,

@@ -7,12 +7,6 @@
       max-height="150px"
       @row-click="handleRowClick"
     >
-      <!-- <el-table-column label="#" prop="id" width="50"> </el-table-column> -->
-      <el-table-column label="发布时间" width="150">
-        <template slot-scope="scope">
-          {{ formatTime(scope.row.releaseTime) }}
-        </template>
-      </el-table-column>
       <el-table-column label="标题" min-width="300">
         <template slot-scope="scope">
           <el-tooltip
@@ -24,6 +18,12 @@
               {{ scope.row.title }}
             </span>
           </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="发布时间" width="150">
+        <template slot-scope="scope">
+          {{ formatTime(scope.row.releaseTime) }}
         </template>
       </el-table-column>
 

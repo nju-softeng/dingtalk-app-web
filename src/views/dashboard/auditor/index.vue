@@ -128,7 +128,7 @@
             <el-card class="box-card" shadow="never">
               <div slot="header" class="clearfix">
                 <span>公告栏</span>
-                <i class="el-icon-s-opportunity" />
+<!--                <i class="el-icon-s-opportunity" />-->
 
                 <router-link :to="{ path: '/system/boardEdit' }">
                   <el-button

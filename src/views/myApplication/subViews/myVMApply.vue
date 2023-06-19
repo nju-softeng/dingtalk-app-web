@@ -105,21 +105,22 @@
                 </el-tooltip>
               </template>
             </el-table-column>
+            <div style="text-align:center; margin-top:5px">
+              <el-pagination
+                background
+                :hide-on-single-page="total < 10"
+                small
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="10"
+                :current-page="currentPage"
+                @prev-click="handlePrev"
+                @next-click="handleNext"
+                @current-change="handleCurrentChange"
+              />
+            </div>
           </el-table>
-          <div style="text-align:center; margin-top:5px">
-            <el-pagination
-              background
-              :hide-on-single-page="total < 10 ? true : false"
-              small
-              layout="prev, pager, next"
-              :total="total"
-              :page-size="10"
-              :current-page="currentPage"
-              @prev-click="handlePrev"
-              @next-click="handleNext"
-              @current-change="handleCurrentChange"
-            />
-          </div>
+
         </div>
       </div>
     </div>

@@ -595,7 +595,7 @@ export default {
       this.userlist = res.data
     })
 
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
   },
   methods: {

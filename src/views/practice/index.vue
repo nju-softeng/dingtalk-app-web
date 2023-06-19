@@ -66,7 +66,7 @@
             class="tableClass"
           >
             <el-table-column label="状态" align="center">
-              <template slot="header" slot-scope="scope">
+              <template slot="header">
                 <el-dropdown @command="filterTag">
                   <span class="el-dropdown-link">
                     状态<i class="el-icon-arrow-down el-icon--right" />
@@ -182,7 +182,7 @@
                   <el-button
                     class="modifyBtn"
                     type="success"
-                    :disabled="row.state != 0"
+                    :disabled="row.state !== 0"
                     icon="el-icon-check"
                     size="mini"
                     @click="acceptPractice(row)"
@@ -199,7 +199,7 @@
                     type="danger"
                     icon="el-icon-close"
                     size="mini"
-                    :disabled="row.state != 0"
+                    :disabled="row.state !== 0"
                     @click="rejectPractice(row)"
                   />
                 </el-tooltip>
@@ -220,20 +220,20 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-        <div style="text-align:center; margin-top:5px">
-          <el-pagination
-            background
-            :current-page="currentPage"
-            :hide-on-single-page="total < 10 ? true : false"
-            small
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="10"
-            @prev-click="handlePrev"
-            @next-click="handleNext"
-            @current-change="handleCurrentChange"
-          />
+          <div style="text-align:center; margin-top:5px">
+            <el-pagination
+              background
+              :current-page="currentPage"
+              :hide-on-single-page="total < 10"
+              small
+              layout="prev, pager, next"
+              :total="total"
+              :page-size="10"
+              @prev-click="handlePrev"
+              @next-click="handleNext"
+              @current-change="handleCurrentChange"
+            />
+          </div>
         </div>
       </div>
     </div>

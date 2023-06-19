@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="patent-box">
-      <div class="list" style="height: 500px">
+      <div class="list" style="height: 550px">
         <el-table :data="list" class="tableClass">
           <el-table-column label="专利信息" width="335">
             <template slot-scope="scope">
@@ -38,7 +38,7 @@
             </template>
           </el-table-column>
           <el-table-column label="状态" align="center" width="110">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <el-dropdown @command="filterTag">
                 <span class="el-dropdown-link">
                   申请状态<i class="el-icon-arrow-down el-icon--right" />
@@ -196,21 +196,21 @@
             </div>
           </template>
         </el-table>
-      </div>
-      <!-- 分页 -->
-      <div class="pagination">
-        <el-pagination
-          background
-          :current-page="currentPage"
-          :hide-on-single-page="total < 6 ? true : false"
-          small
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="6"
-          @prev-click="handlePrev"
-          @next-click="handleNext"
-          @current-change="handleCurrentChange"
-        />
+        <!-- 分页 -->
+        <div class="pagination">
+          <el-pagination
+            background
+            :current-page="currentPage"
+            :hide-on-single-page="total < 6"
+            small
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="6"
+            @prev-click="handlePrev"
+            @next-click="handleNext"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
     <!-- 编辑专利 dialog-->
@@ -242,10 +242,10 @@
                 @changeFile="changeFile"
               />
               <el-form-item prop="obligee">
-                <span slot="label"><i class="el-icon-house" /> 权利人</span>
+                <span slot="label"><i class="el-icon-house" /> 学生权利人</span>
                 <el-input
                   v-model="patentForm.obligee"
-                  placeholder="请输入权利人"
+                  placeholder="请输入学生权利人"
                 />
               </el-form-item>
               <el-form-item prop="type">
@@ -452,7 +452,7 @@ export default {
       },
       rules: {
         name: [{ required: true, message: '请输入专利名', trigger: 'blur' }],
-        obligee: [{ required: true, message: '请输入权利人', trigger: 'blur' }],
+        obligee: [{ required: true, message: '请输入学生权利人', trigger: 'blur' }],
         type: [{ required: true, message: '请选择类型', trigger: 'blur' }],
         year: [
           { required: true, message: '请选择刊物/会议年份', trigger: 'blur' }
@@ -487,11 +487,11 @@ export default {
   },
   created() {
     // sessionStorage.setItem("patent-cur-page", 1);
-    this.currentPage = sessionStorage.getItem('patent-cur-page') || 1
+    this.currentPage = parseInt(sessionStorage.getItem('patent-cur-page')) || 1
     getUserList().then((res) => {
       this.userList = res.data
     })
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     // this.role = sessionStorage.getItem("role");
     // this.currentPage = parseInt(sessionStorage.getItem("inner-cur-page")) || 1;
     this.fetchPatent(this.currentPage)
@@ -500,7 +500,7 @@ export default {
     // 判断用户是否是改条专利发明人
     isPatentInventor(patentDetailList) {
       return (
-        patentDetailList.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
+        patentDetailList.map((item) => item.uid).indexOf(this.uid) !== -1
       )
     },
     hasAuth() {
@@ -517,30 +517,6 @@ export default {
     fetchPatent(page) {
       sessionStorage.setItem('patent-cur-page', page)
       this.currentPage = page
-      // return new Promise((resolve, reject) => {
-      //   getPatentList(page, 6)
-      //     .then((res) => {
-      //       this.list = res.data.list;
-      //       console.log(this.list);
-      //       for (const i in this.list) {
-      //         for (const j in this.list[i].patentDetailList) {
-      //           this.list[i].patentDetailList[j].num = j;
-      //           this.list[i].patentDetailList[j].name = this.list[
-      //             i
-      //           ].patentDetailList[j].user.name;
-      //           this.list[i].patentDetailList[j].uid = this.list[
-      //             i
-      //           ].patentDetailList[j].user.id;
-      //         }
-      //       }
-      //       this.total = res.data.total;
-      //       console.log(res.data);
-      //       resolve(res);
-      //     })
-      //     .catch((err) => {
-      //       reject(err);
-      //     });
-      // });
       queryPatentList(page, 6, this.query)
         .then((res) => {
           this.list = res.data.data.list
@@ -813,7 +789,7 @@ export default {
 }
 
 .pagination {
-  margin-top: 16px;
+  margin-top: 5px;
   display: flex;
   justify-content: center;
 }

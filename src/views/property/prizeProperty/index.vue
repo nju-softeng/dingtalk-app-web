@@ -302,7 +302,7 @@ export default {
       })
     },
     async deletePrizeClick(data) {
-      await deletePrize(sessionStorage.getItem('uid'), data.id)
+      await deletePrize(parseInt(sessionStorage.getItem('uid')), data.id)
       this.$message({
         showClose: true,
         message: '奖项信息删除成功！',

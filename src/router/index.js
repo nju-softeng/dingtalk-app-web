@@ -51,11 +51,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -90,6 +85,16 @@ export const constantRoutes = [
         }
       }
     ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]
 
@@ -103,7 +108,6 @@ export const asyncRoutes = [
     meta: {
       title: '绩效管理',
       icon: 'perf',
-      // breadCrumbHide: true, // 面包屑不显示
       breadcrumb: false
     },
     children: [
@@ -197,7 +201,6 @@ export const asyncRoutes = [
     meta: {
       title: '资产管理',
       icon: 'prop',
-      // breadCrumbHide: true, // 面包屑不显示
       breadcrumb: false
     },
     children: [
@@ -336,7 +339,6 @@ export const asyncRoutes = [
     meta: {
       title: '申请管理',
       icon: 'application',
-      // breadCrumbHide: true, // 面包屑不显示
       breadcrumb: false
     },
     children: [
@@ -416,25 +418,24 @@ export const asyncRoutes = [
   {
     path: '/system',
     component: Layout,
-    redirect: '/system',
+    redirect: '/system/index',
     meta: {
       title: '系统管理',
       icon: 'dev',
-      // breadCrumbHide: true, // 面包屑不显示
       breadcrumb: false
     },
     children: [
-      {
-        path: 'index',
-        name: 'System',
-        component: () => import('@/views/sysMan/index'),
-        meta: {
-          title: '系统设置',
-          icon: 'setting'
-          // roles: ["admin", "auditor"],
-        },
-        hidden: true
-      },
+      // {
+      //   path: 'index',
+      //   name: 'System',
+      //   component: () => import('@/views/sysMan/index'),
+      //   meta: {
+      //     title: '系统设置',
+      //     icon: 'setting'
+      //     // roles: ["admin", "auditor"],
+      //   },
+      //   hidden: true
+      // },
       {
         path: 'boardEdit',
         name: 'scrollBoardEdit',
@@ -445,7 +446,6 @@ export const asyncRoutes = [
           // roles: ["admin", "auditor"],
           permission: permissionEnum.EDIT_SCROLL_NEWS_BOARD
         }
-        // hidden: true,
       },
       {
         path: 'confMan',
@@ -457,7 +457,6 @@ export const asyncRoutes = [
           // roles: ["admin", "auditor"],
           permission: permissionEnum.EDIT_STANDARD_PARAMETER
         }
-        // hidden: true,
       },
       {
         path: 'userMan',
@@ -469,14 +468,8 @@ export const asyncRoutes = [
           // roles: ["admin", "auditor"],
           permission: permissionEnum.EDIT_ANY_USER_INFO
         }
-        // hidden: true,
       }
     ]
-  },
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
   }
 ]
 

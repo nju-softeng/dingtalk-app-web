@@ -148,7 +148,7 @@ export default {
       .then(() => {
         this.fetchApplication(1)
       })
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
   },
   methods: {

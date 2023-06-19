@@ -50,7 +50,7 @@
             </template>
           </el-table-column>
           <el-table-column label="状态" align="center" width="110">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <el-dropdown @command="filterTag">
                 <span class="el-dropdown-link">
                   申请状态<i class="el-icon-arrow-down el-icon--right" />
@@ -186,23 +186,24 @@
             </div>
           </template>
         </el-table>
-      </div>
-      <!-- 分页 -->
-      <div class="pagination">
-        <el-pagination
-          background
-          :current-page="currentPage"
-          :hide-on-single-page="total < 6 ? true : false"
-          small
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="6"
-          @prev-click="handlePrev"
-          @next-click="handleNext"
-          @current-change="handleCurrentChange"
-        />
+        <!-- 分页 -->
+        <div class="pagination">
+          <el-pagination
+            background
+            :current-page="currentPage"
+            :hide-on-single-page="total < 6"
+            small
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="6"
+            @prev-click="handlePrev"
+            @next-click="handleNext"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
+
     <!-- 添加专利 dialog-->
     <el-dialog
       :visible.sync="addPatentDialog"
@@ -232,10 +233,10 @@
                 @changeFile="changeFile"
               />
               <el-form-item prop="obligee">
-                <span slot="label"><i class="el-icon-house" /> 权利人</span>
+                <span slot="label"><i class="el-icon-house" /> 学生权利人</span>
                 <el-input
                   v-model="patentForm.obligee"
-                  placeholder="请输入权利人"
+                  placeholder="请输入学生权利人"
                 />
               </el-form-item>
               <el-form-item prop="type">
@@ -379,7 +380,7 @@ export default {
       },
       rules: {
         name: [{ required: true, message: '请输入专利名', trigger: 'blur' }],
-        obligee: [{ required: true, message: '请输入权利人', trigger: 'blur' }],
+        obligee: [{ required: true, message: '请输入学生权利人', trigger: 'blur' }],
         type: [{ required: true, message: '请选择类型', trigger: 'blur' }],
         year: [
           { required: true, message: '请选择刊物/会议年份', trigger: 'blur' }
@@ -407,7 +408,7 @@ export default {
       query: {
         applicantId: 0,
         state: -2,
-        inventorsIdList: [sessionStorage.getItem('uid')],
+        inventorsIdList: [parseInt(sessionStorage.getItem('uid'))],
         year: ''
       }
     }
@@ -417,7 +418,7 @@ export default {
     getUserList().then((res) => {
       this.userList = res.data
     })
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.fetchPatent(this.currentPage)
   },
   methods: {
@@ -672,7 +673,7 @@ export default {
 }
 
 .pagination {
-  margin-top: 16px;
+  margin-top: 5px;
   display: flex;
   justify-content: center;
 }
@@ -748,7 +749,7 @@ export default {
 
 <style lang="scss">
 /* 解决上传文件名过长导致form表单显示过长的问题 */
-.paper-form {
+.patent-form {
   form.el-form {
     width: 350px;
   }

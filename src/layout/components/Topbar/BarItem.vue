@@ -34,7 +34,7 @@
 
 <script>
 import path from 'path'
-import { isExternal } from '@/utils/index'
+import { isExternal } from '@/utils'
 import Item from './Item'
 import AppLink from './Link'
 

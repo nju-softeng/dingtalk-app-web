@@ -14,7 +14,7 @@ FROM node:16.1.0 as builder
 #LABEL maintainer="191250075@smail.nju.edu.cn"
 COPY . /app/
 WORKDIR /app
-RUN npm install --registry=https://registry.npm.taobao.org --cache=$HOME/.npm/.cache/cnpm --disturl=https://npm.taobao.org/dist --userconfig=$HOME/.cnpmrc
+RUN npm install
 RUN npm run build
 
 FROM nginx:latest

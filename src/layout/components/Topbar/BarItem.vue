@@ -34,11 +34,11 @@
 
 <script>
 import path from 'path'
-import { isExternal } from '@/utils'
+import { isExternal } from '@/utils/index'
 import Item from './Item'
 import AppLink from './Link'
 
-import VerticalItem from './VerticalItem.vue'
+import VerticalItem from '@/layout/components/Topbar/VerticalItem.vue'
 
 export default {
   name: 'BarItem',

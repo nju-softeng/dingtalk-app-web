@@ -10,7 +10,7 @@
 # exec nginx -g 'daemon off;'
 
 
-FROM node:16.14.0 as builder
+FROM node:16.1.0 as builder
 #LABEL maintainer="191250075@smail.nju.edu.cn"
 COPY . /app/
 WORKDIR /app

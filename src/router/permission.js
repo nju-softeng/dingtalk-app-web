@@ -13,7 +13,7 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   if (sessionStorage.getItem('token')) {
     // 判断是否有token
-    console.log('判断是否有token')
+    // console.log('判断是否有token', to.path)
     if (to.path === '/login') {
       // next({ path: '/' }) // 如果已登录，重定向到'/'
       next()
@@ -21,10 +21,10 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
-        console.log('hasGetUserInfo')
+        // console.log('hasGetUserInfo')
         next()
       } else {
-        console.log('!hasGetUserInfo')
+        // console.log('!hasGetUserInfo')
         try {
           await store.dispatch('user/_getInfo') // 获取用户信息
 

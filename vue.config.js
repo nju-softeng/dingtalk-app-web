@@ -11,7 +11,7 @@ module.exports = {
   // 生成环境配置
   // 默认按部署在服务器根路径配置
   // 编译时资源按相对路径声明，可部署在任意路径
-  publicPath: './',
+  publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',

@@ -87,6 +87,55 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/paper',
+    component: Layout,
+    redirect: '/paper/index/',
+    children: [
+      {
+        path: 'index/:type',
+        name: 'Paper',
+        component: () => import('@/views/paper/index'),
+        meta: {
+          title: '论文管理',
+          icon: 'el-icon-collection'
+        }
+      },
+      {
+        path: 'in-detail/:id/:tab',
+        component: () => import('@/views/paper/internalDetail'),
+        name: 'internalDetail',
+        meta: {
+          title: '论文详细',
+          noCache: true,
+          activeMenu: '/paper/index'
+        },
+        hidden: true
+      },
+      {
+        path: 'ex-detail/:id/:tab',
+        component: () => import('@/views/paper/externalDetail'),
+        name: 'externalDetail',
+        meta: {
+          title: '论文详细',
+          noCache: true,
+          activeMenu: '/paper/index'
+        },
+        hidden: true
+      },
+      {
+        path: 'pro-detail/:id/:tab',
+        component: () => import('@/views/paper/paperByProfessorDetail'),
+        name: 'professorPaperDetail',
+        meta: {
+          title: '论文详细',
+          noCache: true,
+          activeMenu: '/paper/index'
+        },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -280,55 +329,6 @@ export const asyncRoutes = [
           title: '固定资产',
           icon: 'el-icon-box'
         }
-      }
-    ]
-  },
-  {
-    path: '/paper',
-    component: Layout,
-    redirect: '/paper/index/',
-    children: [
-      {
-        path: 'index/:type',
-        name: 'Paper',
-        component: () => import('@/views/paper/index'),
-        meta: {
-          title: '论文管理',
-          icon: 'el-icon-collection'
-        }
-      },
-      {
-        path: 'in-detail/:id/:tab',
-        component: () => import('@/views/paper/internalDetail'),
-        name: 'internalDetail',
-        meta: {
-          title: '论文详细',
-          noCache: true,
-          activeMenu: '/paper/index'
-        },
-        hidden: true
-      },
-      {
-        path: 'ex-detail/:id/:tab',
-        component: () => import('@/views/paper/externalDetail'),
-        name: 'externalDetail',
-        meta: {
-          title: '论文详细',
-          noCache: true,
-          activeMenu: '/paper/index'
-        },
-        hidden: true
-      },
-      {
-        path: 'pro-detail/:id/:tab',
-        component: () => import('@/views/paper/paperByProfessorDetail'),
-        name: 'professorPaperDetail',
-        meta: {
-          title: '论文详细',
-          noCache: true,
-          activeMenu: '/paper/index'
-        },
-        hidden: true
       }
     ]
   },

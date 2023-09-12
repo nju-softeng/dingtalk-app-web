@@ -38,6 +38,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://localhost:8080/',
+        // target: "https://c2e8-2001-da8-1007-4001-00-53ae.ngrok-free.app",
         changeOrigin: true
       }
     }
@@ -69,7 +70,7 @@ module.exports = {
       .rule('vue')
       .use('vue-loader')
       .loader('vue-loader')
-      .tap(options => {
+      .tap((options) => {
         options.compilerOptions.preserveWhitespace = true
         return options
       })
@@ -77,11 +78,11 @@ module.exports = {
 
     config
       // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development', config =>
+      .when(process.env.NODE_ENV === 'development', (config) =>
         config.devtool('cheap-source-map')
       )
 
-    config.when(process.env.NODE_ENV !== 'development', config => {
+    config.when(process.env.NODE_ENV !== 'development', (config) => {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')

@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 import '@/icons' // icon
-import '@/permission' // permission control
+import '@/router/permission' // permission control
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import '@/styles/element-variables.scss'
@@ -16,6 +16,8 @@ import * as filters from './filters' // global filters
 import VueMarkdownEditor from '@kangc/v-md-editor'
 import '@kangc/v-md-editor/lib/style/base-editor.css'
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
+
+import './mock'
 
 VueMarkdownEditor.use(vuepressTheme)
 
@@ -27,12 +29,12 @@ Vue.use(ElementUI, {
 })
 
 // register global utility filters.
-Object.keys(filters).forEach(key => {
+Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')

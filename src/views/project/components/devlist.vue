@@ -108,7 +108,7 @@ export default {
     }
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     listAllProject().then(res => {
       this.list = res.data
       console.log(this.list)
@@ -149,12 +149,13 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  min-width: 750px;
+  //min-width: 750px;
 }
 
 .item {
   margin: 5px 5px 5px 0;
-  height: 120px;
-  width: 49%;
+  height: fit-content;
+  //width: 49%;
+  width: 100%;
 }
 </style>

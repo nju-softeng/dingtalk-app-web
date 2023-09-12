@@ -1,6 +1,6 @@
 {
-  "name": "dingtalk-vue",
-  "version": "0.1.0",
+  "name": "dingtalk-performance-system",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -25,6 +25,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@types/mockjs": "^1.0.7",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
     "@vue/cli-plugin-router": "^4.1.0",
@@ -35,6 +36,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
+    "mockjs": "^1.1.0",
     "prettier": "^1.19.1",
     "sass": "^1.43.5",
     "sass-loader": "^8.0.2",

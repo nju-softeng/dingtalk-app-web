@@ -263,7 +263,7 @@ export default {
     }
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.pid = this.$route.params.id
     if (this.$route.params.tab) {
       this.radio = this.$route.params.tab

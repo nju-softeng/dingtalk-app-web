@@ -141,14 +141,14 @@ export default {
     }
   },
   created() {
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.fetchAuditorBug()
   },
   methods: {
     fetchAuditorBug() {
       listAuditorBug(this.uid).then(res => {
         this.alllist = res.data
-        this.checklist = res.data.filter(item => item.status != undefined)
+        this.checklist = res.data.filter(item => item.status !== undefined)
         this.unchecklist = res.data.filter(item => item.status === undefined)
         if (this.radio === '全部') {
           this.list = this.alllist

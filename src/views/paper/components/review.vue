@@ -62,7 +62,7 @@ export default {
     console.log(this.isExternal)
     this.fetchReview()
     this.value = localStorage.getItem('review-content') || ''
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.avatar = sessionStorage.getItem('avatar')
     this.name = sessionStorage.getItem('name')
   },

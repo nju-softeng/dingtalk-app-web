@@ -1,6 +1,4 @@
-import {
-  authenticate
-} from '@/api/common' // jsapi 鉴权时获取签名信息
+import { authenticate } from '@/api/common' // jsapi 鉴权时获取签名信息
 import * as dd from 'dingtalk-jsapi/entry/union' // 按需应用，微应用部分
 import requestAuthCode from 'dingtalk-jsapi/api/runtime/permission/requestAuthCode' // 登陆用临时授权码
 import choose from 'dingtalk-jsapi/api/biz/contact/choose' // PC 通讯录选人
@@ -10,7 +8,7 @@ import choose from 'dingtalk-jsapi/api/biz/contact/choose' // PC 通讯录选人
  * @param url 前端当前的url
  */
 function ddconfig(url) {
-  return authenticate(url).then(res => {
+  return authenticate(url).then((res) => {
     dd.config({
       agentId: res.data.agentId, // 必填，微应用ID
       corpId: res.data.corpId, // 必填，企业ID
@@ -39,14 +37,17 @@ export function contactChoose(url, userids) {
         choose({
           users: userids,
           multiple: true, // 是否多选：true多选 false单选； 默认true
-          corpId: process.env.NODE_ENV === 'production' ? sessionStorage.getItem('CORP_ID') : process.env.VUE_APP_CORPID, // 企业id
+          corpId:
+            process.env.NODE_ENV === 'production'
+              ? sessionStorage.getItem('CORP_ID')
+              : process.env.VUE_APP_CORPID, // 企业id
           max: 10 // 人数限制，当multiple为true才生效，可选范围1-1500
-        }).then(res => {
+        }).then((res) => {
           res = JSON.parse(JSON.stringify(res).replace(/emplId/g, 'userid'))
           resolve(res)
         })
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err)
       })
   })

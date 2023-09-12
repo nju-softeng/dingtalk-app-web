@@ -1,9 +1,18 @@
 <template>
-  <div style="display:flex">
-    <el-card class="box-card" style="width:50%; height: 260px;margin-right:5px" shadow="never">
+  <div style="display:flex" class="app-container">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 500px;margin-right:5px; min-width: 200px; overflow-y: auto;"
+      shadow="never"
+    >
       <div slot="header">
         <span>津贴标准</span>
-        <el-button v-if="flag1" style="float: right; padding: 3px 0" type="text" @click="flag1 = false">编辑</el-button>
+        <el-button
+          v-if="flag1"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag1 = false"
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -26,10 +35,19 @@
       </el-table>
     </el-card>
 
-    <el-card class="box-card" style="width:50%; height: 500px;" shadow="never">
+    <el-card
+      class="box-card"
+      style="width:50%; height: 500px; min-width: 200px; overflow-y: auto;"
+      shadow="never"
+    >
       <div slot="header">
         <span>论文AC标准</span>
-        <el-button v-if="flag2" style="float: right; padding: 3px 0" type="text" @click="flag2 = false">编辑</el-button>
+        <el-button
+          v-if="flag2"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="flag2 = false"
+        >编辑</el-button>
         <el-button
           v-else
           style="float: right; padding: 3px 0"
@@ -80,10 +98,10 @@ export default {
     }
   },
   created() {
-    listSubsidy().then(res => {
+    listSubsidy().then((res) => {
       this.subsidylist = res.data
     })
-    listPaperLevel().then(res => {
+    listPaperLevel().then((res) => {
       this.paperlevels = res.data
     })
   },
@@ -124,5 +142,11 @@ export default {
 li {
   padding-bottom: 4px;
   font-size: 12px;
+}
+
+.app-container {
+  padding: 12px;
+  background-color: #fafafa;
+  border-radius: 0;
 }
 </style>

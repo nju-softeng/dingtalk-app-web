@@ -1,54 +1,111 @@
 <template>
   <div>
     <el-row :gutter="10" style="min-height: 400px;">
-      <el-col v-for="(item,index) in list" :key="index" :xs="24" :sm="8" :md="6" :lg="6">
+      <el-col
+        v-for="(item, index) in list"
+        :key="index"
+        :xs="24"
+        :sm="8"
+        :md="6"
+        :lg="6"
+      >
         <div class="card">
           <div style="cursor:pointer;" @click="goDetail(item.id)">
             <div class="title" style="min-height: 53px">
               {{ item.title }}
             </div>
-            <div v-if="item.vote.result === undefined " class="info">
+            <div v-if="item.vote.result === undefined" class="info">
               <div class="info-item">投票时间</div>
-              <div class="info-item">{{ item.vote.startTime | parseTime("{h}:{i}") }} ~ {{ item.vote.endTime | parseTime("{h}:{i}") }}</div>
+              <div class="info-item">
+                {{ item.vote.startTime | parseTime("{h}:{i}") }} ~
+                {{ item.vote.endTime | parseTime("{h}:{i}") }}
+              </div>
             </div>
             <div v-else class="info">
               <div class="info-item">
                 <span>投票意见 : </span>
                 <span>
-                  <el-tag v-if="item.vote.result === 1" class="tag" type="success">ACCEPT</el-tag>
-                  <el-tag v-else-if="item.vote.result === -1" class="tag" type="message">未结束</el-tag>
-                  <el-tag v-else-if="item.vote.result === 2" class="tag" type="message">FLAT</el-tag>
+                  <el-tag
+                    v-if="item.vote.result === 1"
+                    class="tag"
+                    type="success"
+                  >ACCEPT</el-tag>
+                  <el-tag
+                    v-else-if="item.vote.result === -1"
+                    class="tag"
+                    type="message"
+                  >未结束</el-tag>
+                  <el-tag
+                    v-else-if="item.vote.result === 2"
+                    class="tag"
+                    type="message"
+                  >FLAT</el-tag>
                   <el-tag v-else class="tag" type="danger">REJECT</el-tag>
                 </span>
               </div>
               <div class="info-item">
                 <span>录用结果 : </span>
                 <span>
-                  <el-tag v-if="item.result === 0" class="tag" type="danger">REJECT</el-tag>
-                  <el-tag v-else-if="item.result === 1" class="tag" type="success">ACCEPT</el-tag>
-                  <el-tag v-else-if="item.result === 2" class="tag" type="danger">SUSPEND</el-tag>
+                  <el-tag
+                    v-if="item.result === 0"
+                    class="tag"
+                    type="danger"
+                  >REJECT</el-tag>
+                  <el-tag
+                    v-else-if="item.result === 1"
+                    class="tag"
+                    type="success"
+                  >ACCEPT</el-tag>
+                  <el-tag
+                    v-else-if="item.result === 2"
+                    class="tag"
+                    type="danger"
+                  >SUSPEND</el-tag>
                   <el-tag v-else class="tag" type="message">等待中</el-tag>
                 </span>
               </div>
             </div>
           </div>
 
-          <div class="action" style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px">
+          <div
+            class="action"
+            style=" display:flex; justify-content: space-between; align-items: center; padding-right: 16px; padding-left: 16px"
+          >
             <div style="font-size: 12px;color: gray;">
-              更新日期：{{ item.updateDate || '未设置' }}
+              更新日期：{{ item.updateDate || "未设置" }}
             </div>
             <div style="display: flex">
-              <el-button circle plain type="primary" icon="el-icon-check" @click="showPaperResultDialog(item)" />
-              <el-button circle plain type="primary" icon="el-icon-edit" @click="modifyExPaper(item)" />
-              <el-button circle plain type="danger" icon="el-icon-delete" @click="rmExPaper(item.id)" />
+              <el-button
+                circle
+                plain
+                type="primary"
+                icon="el-icon-check"
+                @click="showPaperResultDialog(item)"
+              />
+              <el-button
+                circle
+                plain
+                type="primary"
+                icon="el-icon-edit"
+                @click="modifyExPaper(item)"
+              />
+              <el-button
+                circle
+                plain
+                type="danger"
+                icon="el-icon-delete"
+                @click="rmExPaper(item.id)"
+              />
             </div>
-
           </div>
         </div>
       </el-col>
     </el-row>
     <!-- 论文列表 -->
-    <div v-if="list.length === 0" style="height:200px;text-align:center;margin-top: 180px">
+    <div
+      v-if="list.length === 0"
+      style="height:200px;text-align:center;margin-top: 180px"
+    >
       <svg-icon icon-class="null" style="font-size:32px" />
       <div style="font-size: 11px; color: #97a8be">空空如也~</div>
     </div>
@@ -70,7 +127,7 @@
     <!-- 投稿结果  dialog -->
     <el-dialog
       title="录用结果"
-      width="30%"
+      width="400px"
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
@@ -97,17 +154,18 @@
               type="date"
               placeholder="选择日期"
             />
-
           </el-form-item>
         </el-form>
         <div class="dialog-footer">
           <el-button
-            @click="resultDialog = false
-            resultForm = {
-              paperId: '',
-              result: null,
-              updateDate: null
-            }"
+            @click="
+              resultDialog = false;
+              resultForm = {
+                paperId: '',
+                result: null,
+                updateDate: null,
+              };
+            "
           >取 消</el-button>
           <el-button
             type="primary"
@@ -121,7 +179,7 @@
 
 <script>
 import { listExPaper, deleteExPaper, addExpaperResult } from '@/api/ex-paper'
-
+import { checkPermission, permissionEnum } from '@/utils/permission'
 export default {
   name: 'PaperExternal',
   data() {
@@ -141,24 +199,22 @@ export default {
   },
   created() {
     this.role = sessionStorage.getItem('role')
-    this.currentPage = parseInt(sessionStorage.getItem('external-cur-page')) || 1
+    this.currentPage =
+      parseInt(sessionStorage.getItem('external-cur-page')) || 1
     this.fetchExPaper(this.currentPage)
   },
   methods: {
     // 分页前一页
     handlePrev(val) {
       this.fetchExPaper(val)
-      sessionStorage.setItem('external-cur-page', val)
     },
     // 分页下一页
     handleNext(val) {
       this.fetchExPaper(val)
-      sessionStorage.setItem('external-cur-page', val)
     },
     // 分页当前页
     handleCurrentChange(val) {
       this.fetchExPaper(val)
-      sessionStorage.setItem('external-cur-page', val)
     },
     goDetail(id) {
       this.$router.push({
@@ -166,21 +222,29 @@ export default {
       })
     },
     fetchExPaper(page) {
-      listExPaper(page, 8).then(res => {
-        this.list = res.data.list
-        this.total = res.data.total
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      sessionStorage.setItem('external-cur-page', page)
+      listExPaper(page, 8)
+        .then((res) => {
+          this.list = res.data.list
+          this.total = res.data.total
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     // 是否有审核权限
+    // hasAuth() {
+    //   if (this.role === "admin" || this.role === "auditor") {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
+
+    // 判断用户是否有设置论文录用结果的审核权限
     hasAuth() {
-      if (this.role === 'admin' || this.role === 'auditor') {
-        return true
-      } else {
-        return false
-      }
+      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION)
     },
     // 修改论文记录
     modifyExPaper(item) {
@@ -206,20 +270,22 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        deleteExPaper(id).then(() => {
-          this.fetchExPaper(this.currentPage)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+      })
+        .then(() => {
+          deleteExPaper(id).then(() => {
+            this.fetchExPaper(this.currentPage)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
           })
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
         })
-      })
     },
     // 更新论文投稿结果, 唤醒dialog
     showPaperResultDialog(item) {
@@ -235,23 +301,36 @@ export default {
     },
     // 提交论文投稿结果
     submitPaperResult() {
-      if (this.resultForm.result !== null && this.resultForm.updateDate !== null) {
+      if (
+        this.resultForm.result !== null &&
+        this.resultForm.updateDate !== null
+      ) {
         this.loading = true
         addExpaperResult(this.resultForm.paperId, this.resultForm)
-          .then(res => {
-            this.resultDialog = false
-            this.fetchExPaper(this.currentPage)
-            this.$notify({
-              title: '更新成功',
-              message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
-              type: 'success'
-            })
-            this.resultForm = {
-              paperId: '',
-              result: null,
-              updateDate: null
+          .then((res) => {
+            if (res.data) {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            } else {
+              this.resultDialog = false
+              this.fetchExPaper(this.currentPage)
+              this.$notify({
+                title: '更新成功',
+                message:
+                  '投票结果  : ' +
+                  (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+                type: 'success'
+              })
+              this.resultForm = {
+                paperId: '',
+                result: null,
+                updateDate: null
+              }
             }
-          }).catch()
+          })
+          .catch()
           .finally(() => {
             this.loading = false
           })
@@ -267,15 +346,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .pagination {
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 }
 
 .tag {
-  line-height:14px;
-  height:14px;
+  line-height: 14px;
+  height: 14px;
 }
 
 .dialog-footer {
@@ -284,18 +362,18 @@ export default {
 }
 
 .card {
-  margin-bottom:10px;
+  margin-bottom: 10px;
   border-radius: 4px;
   border: 1px solid #e6ebf5;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   .title {
     padding: 16px 16px 1px;
   }
   .info {
     height: 64px;
     .info-item {
-      text-align:center;
-      padding-top:10px;
+      text-align: center;
+      padding-top: 10px;
       font-size: 13px;
     }
   }
@@ -304,18 +382,17 @@ export default {
     border-top: 1px solid #e6ebf5;
     //background: #e5e9f2;
   }
-
 }
 
 .title {
-  overflow:hidden;
-  text-overflow:ellipsis;
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
-.box-card {
-}
+// .box-card {
+// }
 .el-col {
   border-radius: 4px;
 }

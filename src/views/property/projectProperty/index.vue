@@ -236,20 +236,16 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addProjectDialogVisible"
-      width="30%"
+      width="400px"
       :before-close="clearBeforeClose"
     >
       <el-form
         ref="addProjectForm"
         :model="addProjectForm"
         :rules="rules"
-        label-width="100px"
-        style="margin-left: 36px"
       >
         <el-form-item prop="name" label="项目名称:">
-          <el-col :span="12">
-            <el-input v-model="addProjectForm.name" placeholder="请输入项目名称" style="width: 200px" />
-          </el-col>
+            <el-input v-model="addProjectForm.name" placeholder="请输入项目名称"/>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -260,20 +256,16 @@
     <el-dialog
       :title="currentVersionOperation"
       :visible.sync="addVersionDialogVisible"
-      width="30%"
+      width="400px"
       :before-close="clearBeforeVersionClose"
     >
       <el-form
         ref="addVersionForm"
         :model="addVersionForm"
         :rules="rules"
-        label-width="100px"
-        style="margin-left: 36px"
       >
         <el-form-item prop="version" label="版本名:">
-          <el-col :span="12">
-            <el-input v-model="addVersionForm.version" placeholder="请输入版本名" style="width: 200px" />
-          </el-col>
+            <el-input v-model="addVersionForm.version" placeholder="请输入版本名"/>
         </el-form-item>
         <project-code-upload v-if="currentVersionOperation === '添加版本'" ref="codeChild" :file="codeFile" @changeCodeFile="changeCodeFile" />
         <project-report-upload v-if="currentVersionOperation === '添加版本'" ref="reportChild" :file="reportFile" @changeReportFile="changeReportFile" />

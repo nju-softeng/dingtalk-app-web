@@ -155,7 +155,7 @@
     <!-- 投稿结果  dialog -->
     <el-dialog
       title="录用结果"
-      width="30%"
+      width="400px"
       :visible.sync="resultDialog"
       :lock-scroll="false"
     >
@@ -182,7 +182,6 @@
               type="date"
               placeholder="选择日期"
             />
-
           </el-form-item>
         </el-form>
         <div class="dialog-footer">
@@ -200,7 +199,7 @@
       title="发起投票"
       :visible.sync="voteDialog"
       :lock-scroll="false"
-      width="30%"
+      width="400px"
       top="24vh"
     >
       <div v-loading="loading">
@@ -210,7 +209,7 @@
             :rules="{
               required: true,
               message: '请选择截止时间',
-              trigger: 'change'
+              trigger: 'change',
             }"
           >
             <span slot="label">截止时间 </span>
@@ -220,7 +219,7 @@
               value-format="HH:mm"
               format="HH:mm"
               :picker-options="{
-                selectableRange: '07:00:00 - 21:30:00'
+                selectableRange: '07:00:00 - 21:30:00',
               }"
               placeholder="选择时间"
             />
@@ -238,7 +237,7 @@
 
 <script>
 import { getUserList } from '@/api/common'
-
+import { checkPermission, permissionEnum } from '@/utils/permission'
 import {
   listProfessorPaper,
   createVote,
@@ -300,12 +299,13 @@ export default {
     }
   },
   created() {
-    getUserList().then(res => {
+    getUserList().then((res) => {
       this.userlist = res.data
     })
-    this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
+    this.currentPage =
+      parseInt(sessionStorage.getItem('professor-cur-page')) || 1
     this.fetchPaper(this.currentPage)
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
     this.$message({
       showClose: true,
@@ -317,14 +317,15 @@ export default {
     // 分页获取论文信息
     fetchPaper(page) {
       return new Promise((resolve, reject) => {
+        sessionStorage.setItem('professor-cur-page', page)
         listProfessorPaper(page, 6)
-          .then(res => {
+          .then((res) => {
             this.list = res.data.list
             this.total = res.data.total
             console.log(res.data)
             resolve(res)
           })
-          .catch(err => {
+          .catch((err) => {
             reject(err)
           })
       })
@@ -332,17 +333,14 @@ export default {
     // 分页前一页
     handlePrev(val) {
       this.fetchPaper(val)
-      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页下一页
     handleNext(val) {
       this.fetchPaper(val)
-      sessionStorage.setItem('inner-cur-page', val)
     },
     // 分页当前页
     handleCurrentChange(val) {
       this.fetchPaper(val)
-      sessionStorage.setItem('inner-cur-page', val)
     },
     // 创建投票，唤起dialog
     newVote(item) {
@@ -358,10 +356,11 @@ export default {
     },
     // 提交新创建的投票
     submitvote() {
-      this.$refs.voteform.validate(valid => {
+      this.$refs.voteform.validate((valid) => {
         if (valid) {
           this.loading = true
-          this.voteform.endTime = new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
+          this.voteform.endTime =
+            new Date().toISOString().slice(0, 10) + 'T' + this.voteform.endTime
           createVote(this.voteform)
             .then(() => {
               this.voteDialog = false
@@ -380,44 +379,69 @@ export default {
       })
     },
     // 判断用户是否有修改论文记录的权限
-    hasAuth(authors) {
-      if (
-        this.role === 'admin' ||
-                this.role === 'auditor' ||
-        // eslint-disable-next-line no-eval
-                authors.map(item => item.uid).indexOf(eval(this.uid)) !== -1
-      ) {
-        return true
-      } else {
-        return false
-      }
+    // hasAuth(authors) {
+    //   if (
+    //     this.role === "admin" ||
+    //     this.role === "auditor" ||
+    //     // eslint-disable-next-line no-eval
+    //     authors.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
+    //   ) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // },
+    hasAuth() {
+      return checkPermission(permissionEnum.REVIEW_PAPER_APPLICATION)
+    },
+    // 查看是否本用户是某个论文作者
+    isAuthor(authors) {
+      return authors.map((item) => item.uid).indexOf(eval(this.uid)) !== -1
     },
     // 更新论文投稿结果, 唤醒dialog
     updatePaperResult(item) {
       this.resultForm.paperid = item.id
-      if (this.hasAuth(item.authors)) {
+      if (this.hasAuth()) {
         this.resultDialog = true
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
+          message: '只有审核人才可以操作',
           type: 'warning'
         })
       }
     },
     // 提交论文投稿结果
     submitPaperResult() {
-      if (this.resultForm.result !== null && this.resultForm.updateDate !== null) {
+      if (
+        this.resultForm.result !== null &&
+        this.resultForm.updateDate !== null
+      ) {
         this.loading = true
         submitResult(this.resultForm.paperid, this.resultForm)
-          .then(res => {
-            this.resultDialog = false
-            this.fetchPaper(this.currentPage)
-            this.$notify({
-              title: '更新成功',
-              message: '投票结果  : ' + (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
-              type: 'success'
-            })
-          }).catch(err => {
+          .then((res) => {
+            if (res.data) {
+              this.$message({
+                message: res.data.message,
+                type: 'warning'
+              })
+            } else {
+              this.resultDialog = false
+              this.fetchPaper(this.currentPage)
+              this.$notify({
+                title: '更新成功',
+                message:
+                  '投票结果  : ' +
+                  (this.resultForm.result ? 'ACCEPT' : 'REJECT'),
+                type: 'success'
+              })
+              this.resultForm = {
+                paperId: '',
+                result: null,
+                updateDate: null
+              }
+            }
+          })
+          .catch((err) => {
             this.$message({
               message: err.message,
               type: 'warning'
@@ -435,18 +459,18 @@ export default {
     },
     // 修改论文记录
     modifyPaper(item) {
-      if (this.hasAuth(item.authors)) {
+      if (this.isAuthor(item.authors) && item.result === 0) {
         this.$emit('modifyProfessor', item)
       } else {
         this.$message({
-          message: '只有审核人，和论文作者才可以操作',
+          message: '只有论文作者（且论文状态处于“审稿中”）才可以操作',
           type: 'warning'
         })
       }
     },
     // 删除论文记录
     removePaper(item) {
-      if (this.hasAuth(item.authors)) {
+      if (this.isAuthor(item.authors) || this.hasAuth()) {
         this.$confirm(
           '删除后，对应的AC变化和投票记录也将被删除，请谨慎操作',
           '提示',
@@ -483,80 +507,79 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .pagination {
-    margin-top:16px;
-    display:flex;
-    justify-content:center;
-  }
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
 
-  .tableClass {
-    ::v-deep .el-table__fixed-right {
-      height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
-    }
-    ::v-deep .el-table__fixed-right::before {
-      height: 0px !important; //设置高优先，以覆盖内联样式
-    }
+.tableClass {
+  ::v-deep .el-table__fixed-right {
+    height: calc(100% - 11px) !important; //设置高优先，以覆盖内联样式
   }
-
-  .list {
-    min-height: 500px;
+  ::v-deep .el-table__fixed-right::before {
+    height: 0px !important; //设置高优先，以覆盖内联样式
   }
+}
 
-  .dialog-footer {
+.list {
+  min-height: 500px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.paper-item {
+  padding: 3px 12px 3px 0;
+  border-width: 0 0 1px 0;
+  .left-content {
+    font-size: 13px;
     display: flex;
-    justify-content: flex-end;
-  }
-
-  .paper-item {
-    padding: 3px 12px 3px 0;
-    border-width: 0 0 1px 0;
-    .left-content {
-      font-size: 13px;
+    flex-direction: column;
+    .title {
+      a {
+        color: #0366d6;
+      }
+      color: #409eff;
+      font-weight: 500;
+      margin-bottom: 5px;
+      width: 330px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .detail {
       display: flex;
-      flex-direction: column;
-      .title {
-        a {
-          color: #0366d6;
-        }
-        color: #409eff;
-        font-weight: 500;
-        margin-bottom: 5px;
-        width: 330px;
+      color: gray;
+      font-size: 13px;
+      padding-top: 7px;
+      .journal {
+        width: 180px;
         overflow: hidden; /*超出部分隐藏*/
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .detail {
-        display: flex;
-        color: gray;
-        font-size: 13px;
-        padding-top: 7px;
-        .journal {
-          width: 180px;
-          overflow: hidden; /*超出部分隐藏*/
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        .time {
-          padding-left: 5px;
-        }
+      .time {
+        padding-left: 5px;
       }
     }
-    //
-    //.info-item {
-    //  color: gray;
-    //  display: flex;
-    //  justify-content: flex-start;
-    //  font-size: 13px;
-    //  align-items: center;
-    //}
   }
+  //
+  //.info-item {
+  //  color: gray;
+  //  display: flex;
+  //  justify-content: flex-start;
+  //  font-size: 13px;
+  //  align-items: center;
+  //}
+}
 
-  .namelist {
-    min-width: 100px;
-    overflow: hidden; /*超出部分隐藏*/
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
+.namelist {
+  min-width: 100px;
+  overflow: hidden; /*超出部分隐藏*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>

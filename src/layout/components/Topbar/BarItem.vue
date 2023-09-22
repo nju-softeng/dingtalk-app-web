@@ -38,7 +38,7 @@ import { isExternal } from '@/utils/index'
 import Item from './Item'
 import AppLink from './Link'
 
-import VerticalItem from '@/layout/components/Topbar/verticalItem.vue'
+import VerticalItem from '@/layout/components/Topbar/VerticalItem.vue'
 
 export default {
   name: 'BarItem',

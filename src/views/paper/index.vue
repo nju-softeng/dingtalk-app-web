@@ -776,6 +776,7 @@ export default {
     // 关闭前清空表单
     closeAddReviewDialog() {
       this.addReviewContent = undefined
+      this.file = null
       // this.$refs.internalPaperForm.resetFields()
       this.internalPaperForm = {
         id: null,

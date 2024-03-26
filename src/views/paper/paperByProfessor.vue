@@ -459,7 +459,7 @@ export default {
     },
     // 修改论文记录
     modifyPaper(item) {
-      if (this.isAuthor(item.authors) && item.result === 2) {
+      if (this.isAuthor(item.authors) && item.result == 2) {
         this.$emit('modifyProfessor', item)
       } else {
         this.$message({

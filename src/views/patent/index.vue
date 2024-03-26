@@ -712,6 +712,7 @@ export default {
         filePath: ''
       }
       this.addPatentDialog = false
+      this.file = null
     },
     // 添加专利发明人
     addAuthor() {

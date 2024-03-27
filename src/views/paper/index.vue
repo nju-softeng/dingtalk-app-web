@@ -34,8 +34,8 @@
       :visible.sync="addReviewDialog"
       top="15vh"
       :lock-scroll="false"
-      :width="addReviewWidth"
       center
+      width="400px"
       @closed="closeAddReviewDialog"
     >
       <!-- dialog 标题 -->
@@ -75,9 +75,9 @@
                 ref="internalPaperForm"
                 :rules="rules"
                 :model="internalPaperForm"
-                label-width="110px"
+                width="300px"
               >
-                <el-form-item prop="title" style="width: 500px">
+                <el-form-item prop="title" style="width: inherit">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 论文名称</span>
                   <el-input
@@ -87,7 +87,11 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload v-if="internalPaperForm.id === null" :file="file" @changeFile="changeFile" />
+                <file-upload
+                  v-if="internalPaperForm.id === null"
+                  :file="file"
+                  @changeFile="changeFile"
+                />
                 <el-form-item prop="journal">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -104,7 +108,7 @@
                     v-model="internalPaperForm.year"
                     value-format="yyyy"
                     format="yyyy年"
-                    style="width: 193px"
+                    style=""
                     type="year"
                     placeholder="刊物/会议年份"
                   />
@@ -114,7 +118,7 @@
                     <svg-icon icon-class="grade" /> 论文分类</span>
                   <el-select
                     v-model="internalPaperForm.paperType"
-                    style="width: 193px"
+                    style=""
                     placeholder="请选择"
                   >
                     <el-option
@@ -126,8 +130,14 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item prop="theme">
-                  <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="internalPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <span
+                    slot="label"
+                  ><i class="el-icon-collection-tag" /> 主题</span>
+                  <el-input
+                    v-model="internalPaperForm.theme"
+                    placeholder="请输入论文主题"
+                    style=""
+                  />
                 </el-form-item>
                 <el-form-item
                   v-for="(author, index) in internalPaperForm.authors"
@@ -145,7 +155,7 @@
 
                   <el-select
                     v-model="author.uid"
-                    style="width: 193px"
+                    style=""
                     filterable
                     placeholder="请选择"
                   >
@@ -189,7 +199,10 @@
               type="primary"
               @click="submit('internalPaperForm')"
             >确 定</el-button>
-            <el-button v-if="internalPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
+            <el-button
+              v-if="internalPaperForm.id === null"
+              @click="closeAddReviewDialog"
+            >取 消</el-button>
             <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
@@ -201,7 +214,6 @@
                 ref="externalPaperForm"
                 :rules="rules"
                 :model="externalPaperForm"
-                label-width="110px"
               >
                 <el-form-item prop="title">
                   <span slot="label">
@@ -214,10 +226,20 @@
                   />
                 </el-form-item>
                 <el-form-item prop="theme">
-                  <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="externalPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <span
+                    slot="label"
+                  ><i class="el-icon-collection-tag" /> 主题</span>
+                  <el-input
+                    v-model="externalPaperForm.theme"
+                    placeholder="请输入论文主题"
+                    style=""
+                  />
                 </el-form-item>
-                <file-upload v-if="externalPaperForm.id === null" :file="file" @changeFile="changeFile" />
+                <file-upload
+                  v-if="externalPaperForm.id === null"
+                  :file="file"
+                  @changeFile="changeFile"
+                />
                 <el-form-item prop="period">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 投票时间</span>
@@ -240,21 +262,26 @@
               type="primary"
               @click="addExternalReview('externalPaperForm')"
             >确 定</el-button>
-            <el-button v-if="externalPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
+            <el-button
+              v-if="externalPaperForm.id === null"
+              @click="closeAddReviewDialog"
+            >取 消</el-button>
             <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
         <!-- 添加非学生一作 -->
-        <div v-if="addReviewContent === 'paperByProfessorReview'" v-loading="loading">
+        <div
+          v-if="addReviewContent === 'paperByProfessorReview'"
+          v-loading="loading"
+        >
           <div class="dialog-content">
             <div class="paper-form">
               <el-form
                 ref="professorPaperForm"
                 :rules="rules"
                 :model="professorPaperForm"
-                label-width="110px"
               >
-                <el-form-item prop="title" style="width: 500px">
+                <el-form-item prop="title" style="">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 论文名称</span>
                   <el-input
@@ -264,7 +291,11 @@
                     placeholder="请输入内容"
                   />
                 </el-form-item>
-                <file-upload v-if="professorPaperForm.id === null" :file="file" @changeFile="changeFile" />
+                <file-upload
+                  v-if="professorPaperForm.id === null"
+                  :file="file"
+                  @changeFile="changeFile"
+                />
                 <el-form-item prop="journal">
                   <span slot="label">
                     <svg-icon icon-class="school" /> 刊物/会议</span>
@@ -281,7 +312,7 @@
                     v-model="professorPaperForm.year"
                     value-format="yyyy"
                     format="yyyy年"
-                    style="width: 193px"
+                    style=""
                     type="year"
                     placeholder="刊物/会议年份"
                   />
@@ -291,7 +322,7 @@
                     <svg-icon icon-class="grade" /> 论文分类</span>
                   <el-select
                     v-model="professorPaperForm.paperType"
-                    style="width: 193px"
+                    style=""
                     placeholder="请选择"
                   >
                     <el-option
@@ -303,15 +334,21 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item prop="theme">
-                  <span slot="label"><i class="el-icon-collection-tag" /> 主题</span>
-                  <el-input v-model="professorPaperForm.theme" placeholder="请输入论文主题" style="width: 193px" />
+                  <span
+                    slot="label"
+                  ><i class="el-icon-collection-tag" /> 主题</span>
+                  <el-input
+                    v-model="professorPaperForm.theme"
+                    placeholder="请输入论文主题"
+                    style=""
+                  />
                 </el-form-item>
-                <el-form-item prop="firstAuthor" style="width: 500px">
+                <el-form-item prop="firstAuthor" style="">
                   <span slot="label">
                     <svg-icon icon-class="paper" /> 第一作者</span>
                   <el-input
                     v-model="professorPaperForm.firstAuthor"
-                    style="width: 193px"
+                    style=""
                     placeholder="请输入第一作者"
                   />
                 </el-form-item>
@@ -331,7 +368,7 @@
 
                   <el-select
                     v-model="author.uid"
-                    style="width: 193px"
+                    style=""
                     filterable
                     placeholder="请选择"
                   >
@@ -375,7 +412,10 @@
               type="primary"
               @click="submit('professorPaperForm')"
             >确 定</el-button>
-            <el-button v-if="professorPaperForm.id === null" @click="closeAddReviewDialog">取 消</el-button>
+            <el-button
+              v-if="professorPaperForm.id === null"
+              @click="closeAddReviewDialog"
+            >取 消</el-button>
             <el-button v-else @click="addReviewDialog = false">取 消</el-button>
           </span>
         </div>
@@ -443,7 +483,7 @@ export default {
       userlist: [],
       //
       addReviewDialog: false,
-      addReviewWidth: '52%',
+      addReviewWidth: '400px',
       addReviewContent: undefined,
       addReviewDialogTitle: '请选择评审类型',
       file: null,
@@ -495,8 +535,12 @@ export default {
 
       rules: {
         title: [{ required: true, message: '请输入论文名称', trigger: 'blur' }],
-        journal: [{ required: true, message: '请输入刊物/会议', trigger: 'blur' }],
-        year: [{ required: true, message: '请选择刊物/会议年份', trigger: 'blur' }],
+        journal: [
+          { required: true, message: '请输入刊物/会议', trigger: 'blur' }
+        ],
+        year: [
+          { required: true, message: '请选择刊物/会议年份', trigger: 'blur' }
+        ],
         theme: [{ required: true, message: '请输入主题', trigger: 'blur' }],
         author: [
           { required: true, message: '请输入第一作者', trigger: 'blur' }
@@ -551,7 +595,7 @@ export default {
       this.userlist = res.data
     })
 
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
   },
   methods: {
@@ -567,11 +611,21 @@ export default {
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (formName === 'internalPaperForm') {
-            const formData = new FormData()
+          const formData = new FormData()
+          if (this.file) {
             formData.append('file', this.file.raw)
-            this.internalPaperForm.path = 'Property/Academic/Literature/' + this.internalPaperForm.journal + this.internalPaperForm.year + '/' + this.internalPaperForm.theme
-            formData.append('paperFormJsonStr', JSON.stringify(this.internalPaperForm))
+          }
+          if (formName === 'internalPaperForm') {
+            this.internalPaperForm.path =
+              'Property/Academic/Literature/' +
+              this.internalPaperForm.journal +
+              this.internalPaperForm.year +
+              '/' +
+              this.internalPaperForm.theme
+            formData.append(
+              'paperFormJsonStr',
+              JSON.stringify(this.internalPaperForm)
+            )
             this.internalPaperForm.file = this.file
             this.loading = true
             addPaper(formData)
@@ -596,10 +650,16 @@ export default {
                 this.$message.error('创建失败')
               })
           } else {
-            const formData = new FormData()
-            formData.append('file', this.file.raw)
-            this.professorPaperForm.path = 'Property/Academic/Literature/' + this.professorPaperForm.journal + this.professorPaperForm.year + '/' + this.professorPaperForm.theme
-            formData.append('paperFormJsonStr', JSON.stringify(this.professorPaperForm))
+            this.professorPaperForm.path =
+              'Property/Academic/Literature/' +
+              this.professorPaperForm.journal +
+              this.professorPaperForm.year +
+              '/' +
+              this.professorPaperForm.theme
+            formData.append(
+              'paperFormJsonStr',
+              JSON.stringify(this.professorPaperForm)
+            )
             this.professorPaperForm.file = this.file
             this.loading = true
             addPaper(formData)
@@ -641,9 +701,15 @@ export default {
           this.externalPaperForm.startTime = this.externalPaperForm.period[0]
           this.externalPaperForm.endTime = this.externalPaperForm.period[1]
           const formData = new FormData()
-          formData.append('file', this.file.raw)
-          this.externalPaperForm.path = 'Property/Academic/Literature/' + this.externalPaperForm.theme
-          formData.append('externalPaperFormJsonStr', JSON.stringify(this.externalPaperForm))
+          if (this.file) {
+            formData.append('file', this.file.raw)
+          }
+          this.externalPaperForm.path =
+            'Property/Academic/Literature/' + this.externalPaperForm.theme
+          formData.append(
+            'externalPaperFormJsonStr',
+            JSON.stringify(this.externalPaperForm)
+          )
           addExReview(formData)
             .then(() => {
               this.addReviewDialog = false
@@ -811,6 +877,7 @@ export default {
 }
 
 .dialog-content {
+  width: inherit;
   display: flex;
   justify-content: center;
 }
@@ -828,6 +895,15 @@ export default {
 @media only screen and (min-width: 1400px) {
   .paper-box {
     max-width: 1305px !important;
+  }
+}
+</style>
+
+<style lang="scss">
+/* 解决上传文件名过长导致form表单显示过长的问题 */
+.paper-form {
+  form.el-form {
+    width: 350px;
   }
 }
 </style>

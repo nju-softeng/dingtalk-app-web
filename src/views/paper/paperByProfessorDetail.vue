@@ -60,7 +60,13 @@
     </div>
 
     <div class="container">
-      <component :is="activeTab" :paperid="id" :paper-type="2" :paper-path="paper.path"/>
+      <component
+        :is="activeTab"
+        :paperid="id"
+        :paper-type="2"
+        :paper-path="paper.path"
+        :first-author-id="firstAuthorId"
+      />
     </div>
   </div>
 </template>
@@ -110,7 +116,8 @@ export default {
       level: levels,
       id: null,
       paper: {},
-      activeTab: 'vote'
+      activeTab: 'vote',
+      firstAuthorId: 0
     }
   },
   computed: {
@@ -175,7 +182,8 @@ export default {
     getPaper(this.id)
       .then(res => {
         this.paper = res.data
-        console.log('paper info', this.paper)
+        // console.log('paper info', this.paper)
+        this.firstAuthorId = this.paper.paperDetails[0].user.id
       })
       .catch(() => {
         this.$router.push({ path: '/404' })

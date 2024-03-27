@@ -6,7 +6,8 @@ const api = {
   getAuditingVMApplyList: '/vmApply/auditingList',
   getUserVMApplyList: (uid) => `/vmApply/user/${uid}`,
   setVMApplyResult: (id, data) => `/vmApply/${id}/${data}`,
-  deleteVMApply: (id) => `/vmApply/${id}`
+  deleteVMApply: (id) => `/vmApply/${id}`,
+  queryVMApplyList: (page, size) => `/v2/vmApply/page/${page}/${size}`
 }
 
 export function addVirtualMachineApply(data) {
@@ -49,5 +50,13 @@ export function deleteVMApply(id) {
   return axios({
     url: api.deleteVMApply(id),
     method: 'delete'
+  })
+}
+
+export function queryVMApplyList(page, size, filter) {
+  return axios({
+    url: api.queryVMApplyList(page, size),
+    method: 'post',
+    data: filter
   })
 }

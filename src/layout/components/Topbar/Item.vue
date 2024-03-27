@@ -14,10 +14,12 @@ export default {
   },
   render(h, context) {
     const { icon, title } = context.props
+    // console.log(icon)
     const vnodes = []
 
     if (icon) {
-      vnodes.push(<svg-icon icon-class={icon} />)
+      // vnodes.push(<svg-icon icon-class={icon} />)
+      vnodes.push(<i class={icon} />)
     }
 
     if (title) {

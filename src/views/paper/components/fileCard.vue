@@ -1,39 +1,88 @@
 <template>
-  <el-timeline-item v-show="card.fileShow" :timestamp="card.fileTypeZHCN" placement="top">
+  <el-timeline-item
+    v-show="true"
+    :timestamp="card.fileTypeZHCN"
+    placement="top"
+  >
     <el-card>
-      <h3 v-if="card.fileName == null">文件未上传！</h3>
-      <h3 v-else>{{ card.fileName }}</h3>
-      <div v-show="card.fileName != null" style="font-weight: bold; font-size: 12px; float: left">文件路径： {{ getPath }} </div>
-      <div>
-        <span class="rightFooter">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="tipContent"
-            placement="right"
-          >
-            <span style="align-self: center; margin-right: 20px"> <svg-icon icon-class="hint" /></span>
-          </el-tooltip>
-          <el-upload
-            class="uploadFIle"
-            :on-change="handleFileChange"
-            :show-file-list="false"
-            action=""
-            :auto-upload="false"
-            :accept="acceptType"
-          >
-            <el-button icon="el-icon-upload2" type="success" style="margin-right: 20px" round>上 传</el-button>
-          </el-upload>
-          <el-button icon="el-icon-download" type="primary" style="margin-right: 10px" round @click="downloadFile">下 载</el-button>
-          <el-button icon="el-icon-delete" type="danger" style="margin-right: 15px" round @click="deleteFile">删 除</el-button>
-        </span>
+      <div style="display: flex; flex-direction: column;">
+        <div
+          v-if="card.fileName == null"
+          style="font-weight: bold; font-size: 12px; margin-bottom: 5px;"
+        >
+          文件未上传！
+        </div>
+        <div
+          v-else
+          style="font-weight: bold; font-size: 12px; margin-bottom: 5px;"
+        >
+          文件名：{{ card.fileName }}
+        </div>
+        <div
+          v-show="card.fileName != null"
+          style="font-size: 12px; margin-bottom: 5px;"
+        >
+          文件路径： {{ getPath }}
+        </div>
+        <div>
+          <span class="rightFooter">
+            <el-tooltip
+              v-if="card.fileName == null && firstAuthorId === userId"
+              class="item"
+              effect="dark"
+              :content="tipContent"
+              placement="right"
+            >
+              <span style="align-self: center; margin-right: 5px">
+                <svg-icon
+                  icon-class="hint"
+                /></span>
+            </el-tooltip>
+            <el-upload
+              v-if="card.fileName == null && firstAuthorId === userId"
+              class="uploadFIle"
+              :on-change="handleFileChange"
+              :show-file-list="false"
+              action=""
+              :auto-upload="false"
+              :accept="acceptType"
+            >
+              <el-button
+                icon="el-icon-upload2"
+                type="success"
+                round
+                style="margin-right: 10px"
+              >上 传</el-button>
+            </el-upload>
+            <el-button
+              v-if="card.fileName != null"
+              icon="el-icon-download"
+              type="primary"
+              round
+              @click="downloadFile"
+            >下 载</el-button>
+            <el-button
+              v-if="card.fileName != null && firstAuthorId === userId"
+              icon="el-icon-delete"
+              type="danger"
+              round
+              @click="deleteFile"
+            >删 除</el-button>
+          </span>
+        </div>
       </div>
     </el-card>
   </el-timeline-item>
 </template>
 
 <script>
-import { addPaperFile, addExternalPaperFile, getPaperFileDownloadInfo, deletePaperFile, deleteExternalPaperFile } from '@/api/paperFile'
+import {
+  addPaperFile,
+  addExternalPaperFile,
+  getPaperFileDownloadInfo,
+  deletePaperFile,
+  deleteExternalPaperFile
+} from '@/api/paperFile'
 export default {
   name: 'FileCard',
   props: {
@@ -54,17 +103,28 @@ export default {
     paperPath: {
       type: String,
       default: ''
+    },
+    firstAuthorId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data() {
     return {
       tipContent: '',
-      acceptType: ''
+      acceptType: '',
+      userId: parseInt(sessionStorage.getItem('uid'))
     }
   },
   computed: {
     getPath() {
-      return this.paperPath + '/' + this.card.fileType.substring(0, 1).toUpperCase() + this.card.fileType.substring(1, this.card.fileType.length - 4)
+      return (
+        this.paperPath +
+        '/' +
+        this.card.fileType.substring(0, 1).toUpperCase() +
+        this.card.fileType.substring(1, this.card.fileType.length - 4)
+      )
     }
   },
   created() {
@@ -89,27 +149,35 @@ export default {
       formData.append('file', file.raw)
       formData.append('fileType', this.card.fileType)
       if (this.paperType === 0 || this.paperType === 2) {
-        addPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '论文文件上传成功',
-            type: 'success'
+        addPaperFile(parseInt(sessionStorage.getItem('uid')), this.paperId, formData)
+          .then(() => {
+            this.$notify({
+              title: '成功',
+              message: '论文文件上传成功',
+              type: 'success'
+            })
+            this.$emit('init')
           })
-          this.$emit('init')
-        }).catch(() => {
-          this.$message.error('上传失败')
-        })
+          .catch(() => {
+            this.$message.error('上传失败')
+          })
       } else if (this.paperType === 1) {
-        addExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '论文文件上传成功',
-            type: 'success'
+        addExternalPaperFile(
+          parseInt(sessionStorage.getItem('uid')),
+          this.paperId,
+          formData
+        )
+          .then(() => {
+            this.$notify({
+              title: '成功',
+              message: '论文文件上传成功',
+              type: 'success'
+            })
+            this.$emit('init')
           })
-          this.$emit('init')
-        }).catch(() => {
-          this.$message.error('上传失败')
-        })
+          .catch(() => {
+            this.$message.error('上传失败')
+          })
       }
     },
     downloadFile() {
@@ -120,7 +188,7 @@ export default {
       var fd = new FormData()
       fd.append('fileName', this.card.fileName)
       fd.append('filePath', this.card.fileId)
-      getPaperFileDownloadInfo(fd).then(res => {
+      getPaperFileDownloadInfo(fd).then((res) => {
         let type
         if (this.card.fileName.split('.').slice(-1)[0] === '.tex') {
           type = 'application/x-tex'
@@ -133,11 +201,14 @@ export default {
         } else if (this.card.fileName.split('.').slice(-1)[0] === '.doc') {
           type = 'application/msword'
         } else if (this.card.fileName.split('.').slice(-1)[0] === '.docx') {
-          type = 'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
+          type =
+            'application/vnd.openxmlformats-officedoucment.wordprocessingml.document'
         }
 
         const binaryData = [res.data]
-        const url = window.URL.createObjectURL(new Blob(binaryData, { type: type }))
+        const url = window.URL.createObjectURL(
+          new Blob(binaryData, { type: type })
+        )
         const a = document.createElement('a')
         a.download = this.card.fileName
         a.href = url
@@ -152,27 +223,35 @@ export default {
       if (this.card.fileName !== undefined && this.card.fileName !== null) {
         console.log(this.card.fileName)
         if (this.paperType === 0 || this.paperType === 2) {
-          deletePaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '论文文件删除成功',
-              type: 'success'
+          deletePaperFile(parseInt(sessionStorage.getItem('uid')), this.paperId, formData)
+            .then(() => {
+              this.$notify({
+                title: '成功',
+                message: '论文文件删除成功',
+                type: 'success'
+              })
+              this.$emit('init')
             })
-            this.$emit('init')
-          }).catch(() => {
-            this.$message.error('删除失败')
-          })
+            .catch(() => {
+              this.$message.error('删除失败')
+            })
         } else if (this.paperType === 1) {
-          deleteExternalPaperFile(sessionStorage.getItem('uid'), this.paperId, formData).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '论文文件删除成功',
-              type: 'success'
+          deleteExternalPaperFile(
+              parseInt(sessionStorage.getItem('uid')),
+            this.paperId,
+            formData
+          )
+            .then(() => {
+              this.$notify({
+                title: '成功',
+                message: '论文文件删除成功',
+                type: 'success'
+              })
+              this.$emit('init')
             })
-            this.$emit('init')
-          }).catch(() => {
-            this.$message.error('删除失败')
-          })
+            .catch(() => {
+              this.$message.error('删除失败')
+            })
         } else {
           this.$message.error('未知的论文类型！')
         }
@@ -185,8 +264,8 @@ export default {
 </script>
 
 <style scoped>
-  .rightFooter {
-    display: flex;
-    justify-content: flex-end;
-  }
+.rightFooter {
+  display: flex;
+  /* justify-content: flex-end; */
+}
 </style>

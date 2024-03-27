@@ -12,7 +12,11 @@
     </div>
     <div class="prizeList">
       <!-- 用户名单 -->
-      <el-card shadow="never" class="box-prize-card" style="width: 35%; padding: 0">
+      <el-card
+        shadow="never"
+        class="box-prize-card"
+        style="width: 35%; padding: 0"
+      >
         <el-table
           ref="table"
           class="table"
@@ -32,48 +36,42 @@
         <!-- 标题 -->
         <div class="title">
           <span style="padding-right:20px">{{ name }} 的奖项</span>
-          <el-button v-show="addShow" type="primary" style="margin-left: 50px" @click="addPrizeDialogueVisible=true">
+          <el-button
+            v-show="addShow"
+            type="primary"
+            style="margin-left: 50px"
+            @click="addPrizeDialogueVisible = true"
+          >
             新建奖项
           </el-button>
         </div>
-        <el-scrollbar v-if="prizeList.length != 0" style="height: 93%;" wrap-style="overflow-x: hidden;">
-          <el-table
-            :data="prizeList"
-            style="width: 90%; margin-left: 20px;"
-          >
-            <el-table-column
-              prop="prizeTime"
-              label="获奖时间"
-              width="100"
-            />
-            <el-table-column
-              prop="prizeName"
-              label="奖项名称"
-              width="200"
-            />
-            <el-table-column
-              prop="level"
-              label="级别"
-              width="100"
-            >
+        <el-scrollbar
+          v-if="prizeList.length != 0"
+          style="height: 93%;"
+          wrap-style="overflow-x: hidden;"
+        >
+          <el-table :data="prizeList" style="width: 90%; margin-left: 20px;">
+            <el-table-column prop="prizeTime" label="获奖时间" width="100" />
+            <el-table-column prop="prizeName" label="奖项名称" width="200" />
+            <el-table-column prop="level" label="级别" width="100">
               <template slot-scope="scope">
                 {{ levelConvertor[scope.row.level] }}
               </template>
             </el-table-column>
-            <el-table-column
-              prop="remark"
-              label="备注"
-              width="200"
-            />
-            <el-table-column
-              label="操作"
-              width="150"
-            >
+            <el-table-column prop="remark" label="备注" width="200" />
+            <el-table-column label="操作" width="150">
               <template slot-scope="scope">
-                <el-button v-show="addShow" type="primary" @click="modifyPrizeClick(scope.row)">修改</el-button>
-                <el-button v-show="addShow" type="danger" @click="deletePrizeClick(scope.row)">删除</el-button>
+                <el-button
+                  v-show="addShow"
+                  type="primary"
+                  @click="modifyPrizeClick(scope.row)"
+                >修改</el-button>
+                <el-button
+                  v-show="addShow"
+                  type="danger"
+                  @click="deletePrizeClick(scope.row)"
+                >删除</el-button>
               </template>
-
             </el-table-column>
           </el-table>
         </el-scrollbar>
@@ -89,9 +87,14 @@
     <el-dialog
       title="新增奖项"
       :visible.sync="addPrizeDialogueVisible"
-      width="30%"
+      width="400px"
     >
-      <el-form ref="addPrizeForm" :model="addPrizeForm" :rules="rules" label-width="100px">
+      <el-form
+        ref="addPrizeForm"
+        :model="addPrizeForm"
+        :rules="rules"
+        label-width="100px"
+      >
         <el-form-item prop="prizeName" label="获奖名称:">
           <el-col :span="12">
             <el-input v-model="addPrizeForm.prizeName" size="mini" />
@@ -109,7 +112,7 @@
           </el-col>
         </el-form-item>
         <el-form-item prop="level" label="级别:">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-select v-model="addPrizeForm.level" placeholder="请选择">
               <el-option label="校级" :value="0" />
               <el-option label="省级" :value="1" />
@@ -119,20 +122,30 @@
           </el-col>
         </el-form-item>
         <el-form-item label="备注:">
-          <el-input v-model="addPrizeForm.remark" />
+          <el-col :span="12">
+            <el-input v-model="addPrizeForm.remark" />
+          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="addPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addPrize('addPrizeForm')">添 加</el-button>
+        <el-button
+          type="primary"
+          @click="addPrize('addPrizeForm')"
+        >添 加</el-button>
       </span>
     </el-dialog>
     <el-dialog
       title="修改奖项信息"
       :visible.sync="modifyPrizeDialogueVisible"
-      width="30%"
+      width="400px"
     >
-      <el-form ref="modifyPrizeForm" :model="modifyPrizeForm" :rules="rules" label-width="100px">
+      <el-form
+        ref="modifyPrizeForm"
+        :model="modifyPrizeForm"
+        :rules="rules"
+        label-width="100px"
+      >
         <el-form-item prop="prizeName" label="获奖名称:">
           <el-col :span="12">
             <el-input v-model="modifyPrizeForm.prizeName" size="mini" />
@@ -150,7 +163,7 @@
           </el-col>
         </el-form-item>
         <el-form-item prop="level" label="级别:">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-select v-model="modifyPrizeForm.level" placeholder="请选择">
               <el-option label="校级" :value="0" />
               <el-option label="省级" :value="1" />
@@ -160,12 +173,18 @@
           </el-col>
         </el-form-item>
         <el-form-item label="备注:">
-          <el-input v-model="modifyPrizeForm.remark" />
+          <el-col :span="12">
+            <el-input
+              v-model="modifyPrizeForm.remark"
+            /></el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="modifyPrizeDialogueVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmModifyPrize('modifyPrizeForm')">确认</el-button>
+        <el-button
+          type="primary"
+          @click="confirmModifyPrize('modifyPrizeForm')"
+        >确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -192,33 +211,41 @@ export default {
       addPrizeForm: {},
       modifyPrizeForm: {},
       rules: {
-        prizeName: [{ required: true, message: '请输入奖项名称', trigger: 'blur' }],
-        prizeTime: [{ required: true, message: '请输入获奖时间', trigger: 'blur' }],
+        prizeName: [
+          { required: true, message: '请输入奖项名称', trigger: 'blur' }
+        ],
+        prizeTime: [
+          { required: true, message: '请输入获奖时间', trigger: 'blur' }
+        ],
         level: [{ required: true, message: '请输入奖项等级', trigger: 'blur' }]
       }
     }
   },
   computed: {
     addShow() {
-      return sessionStorage.getItem('role') === 'admin' || sessionStorage.getItem('role') === 'editor' || sessionStorage.getItem('uid') === this.currentId.toString()
+      return (
+        sessionStorage.getItem('role') === 'admin' ||
+        sessionStorage.getItem('role') === 'editor' ||
+        sessionStorage.getItem('uid') === this.currentId.toString()
+      )
     }
   },
   created() {
-    getUserList().then(res => {
+    getUserList().then((res) => {
       this.userList = res.data
       this.setCurrent(this.userList[0])
       this.name = this.userList[0].name
       this.currentId = this.userList[0].id
-      getUserPrizes(this.currentId).then(res => {
+      getUserPrizes(this.currentId).then((res) => {
         this.prizeList = res.data
       })
     })
   },
   methods: {
     addPrize(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          addPrize(this.currentId, this.addPrizeForm).then(res => {
+          addPrize(this.currentId, this.addPrizeForm).then((res) => {
             this.addPrizeForm = {}
             if (res) {
               this.$message({
@@ -227,7 +254,7 @@ export default {
                 type: 'success'
               })
             }
-            getUserPrizes(this.currentId).then(res => {
+            getUserPrizes(this.currentId).then((res) => {
               this.prizeList = res.data
             })
             this.addPrizeDialogueVisible = false
@@ -247,9 +274,13 @@ export default {
       this.modifyPrizeForm = JSON.parse(JSON.stringify(data))
     },
     async confirmModifyPrize(formName) {
-      this.$refs[formName].validate(async valid => {
+      this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          var res = await updatePrize(sessionStorage.getItem('uid'), this.modifyPrizeForm.id, this.modifyPrizeForm)
+          var res = await updatePrize(
+            sessionStorage.getItem('uid'),
+            this.modifyPrizeForm.id,
+            this.modifyPrizeForm
+          )
           if (res) {
             this.$message({
               showClose: true,
@@ -258,7 +289,7 @@ export default {
             })
           }
           this.modifyPrizeDialogueVisible = false
-          getUserPrizes(this.currentId).then(res => {
+          getUserPrizes(this.currentId).then((res) => {
             this.prizeList = res.data
           })
         } else {
@@ -271,23 +302,25 @@ export default {
       })
     },
     async deletePrizeClick(data) {
-      await deletePrize(sessionStorage.getItem('uid'), data.id)
+      await deletePrize(parseInt(sessionStorage.getItem('uid')), data.id)
       this.$message({
         showClose: true,
         message: '奖项信息删除成功！',
         type: 'success'
       })
-      getUserPrizes(this.currentId).then(res => {
+      getUserPrizes(this.currentId).then((res) => {
         this.prizeList = res.data
       })
     },
     download() {
-      downloadUserPrizeData().then(res => {
-        fileDownload(res.data, '荣誉表.xlsx')
-      }).catch(err => {
-        console.log(err)
-        this.$message.error('下载失败')
-      })
+      downloadUserPrizeData()
+        .then((res) => {
+          fileDownload(res.data, '荣誉表.xlsx')
+        })
+        .catch((err) => {
+          console.log(err)
+          this.$message.error('下载失败')
+        })
     },
     setCurrent(row) {
       this.$refs.table.setCurrentRow(row)
@@ -296,7 +329,7 @@ export default {
       this.loading = true
       this.name = val.name
       this.currentId = val.id
-      getUserPrizes(val.id).then(res => {
+      getUserPrizes(val.id).then((res) => {
         this.prizeList = res.data
         this.loading = false
       })
@@ -306,42 +339,42 @@ export default {
 </script>
 
 <style scoped>
-    .prize-container {
-        padding: 12px;
-        /*background-color: #fafafa;*/
-        border-radius: 0;
-    }
-    .buttons {
-        max-width: 1305px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-between;
-    }
-    .title {
-        min-height: 36px;
-        padding: 5px 40px;
-        margin-bottom: 5px;
-    }
-    .prizeList {
-        max-width: 1305px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-between;
-    }
-    .box-prize-card {
-        border-radius: 4px;
-        border: 1px solid #ebeef5;
-        height: 85vh;
-        padding: 10px 0;
-        background-color: white;
-    }
-    .null {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        flex-direction: column;
-    }
+.prize-container {
+  padding: 12px;
+  /*background-color: #fafafa;*/
+  border-radius: 0;
+}
+.buttons {
+  max-width: 1305px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+}
+.title {
+  min-height: 36px;
+  padding: 5px 40px;
+  margin-bottom: 5px;
+}
+.prizeList {
+  max-width: 1305px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+}
+.box-prize-card {
+  border-radius: 4px;
+  border: 1px solid #ebeef5;
+  height: 85vh;
+  padding: 10px 0;
+  background-color: white;
+}
+.null {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+}
 </style>

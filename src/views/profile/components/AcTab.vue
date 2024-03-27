@@ -41,7 +41,7 @@ export default {
     }
   },
   created() {
-    const uid = sessionStorage.getItem('uid')
+    const uid = parseInt(sessionStorage.getItem('uid'))
     listUserAc(uid).then(res => {
       this.list = res.data
     })

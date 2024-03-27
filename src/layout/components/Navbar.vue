@@ -11,17 +11,6 @@
       </template>
 
       <div class="right-menu">
-        <!-- <el-dropdown class="right-menu-item ">
-        <span class=" el-dropdown-link" style="color:#409EFF">
-          <i class="el-icon-circle-plus el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>选项1</el-dropdown-item>
-          <el-dropdown-item>选项2</el-dropdown-item>
-          <el-dropdown-item>选项3</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
-
         <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">
             <el-avatar fit="fill" shape="square" :size="35" class="user-avatar" :src="avatar">
@@ -34,7 +23,7 @@
               <el-dropdown-item>个人中心</el-dropdown-item>
             </router-link>
             <router-link to="/">
-              <el-dropdown-item>首页</el-dropdown-item>
+              <el-dropdown-item>工作台</el-dropdown-item>
             </router-link>
           </el-dropdown-menu>
         </el-dropdown>

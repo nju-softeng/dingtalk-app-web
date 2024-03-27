@@ -4,9 +4,9 @@
       <!-- 周绩效申请 drawer -->
       <drawer :show.sync="show" :direction="direction" :tmp="tmp" :auditors="auditors" @submitted="submitted" />
       <div class="box">
-          <!-- 申请按钮 -->
-          <el-button type="primary" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;" @click="addApply()">提交申请
-          </el-button>
+        <!-- 申请按钮 -->
+        <el-button type="primary" icon="el-icon-plus" style="margin : 0px 0px 10px 0px;" @click="addApply()">提交申请
+        </el-button>
         <!-- 已提的交申请 -->
         <div style="height:430px">
           <el-table
@@ -148,7 +148,7 @@ export default {
       .then(() => {
         this.fetchApplication(1)
       })
-    this.uid = sessionStorage.getItem('uid')
+    this.uid = parseInt(sessionStorage.getItem('uid'))
     this.role = sessionStorage.getItem('role')
   },
   methods: {

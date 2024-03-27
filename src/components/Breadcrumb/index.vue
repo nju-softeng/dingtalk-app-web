@@ -2,7 +2,12 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-        <span v-if="item.redirect === 'noRedirect' || index === levelList.length - 1" class="no-redirect">{{ item.meta.title }}</span>
+        <span
+          v-if="
+            item.redirect === 'noRedirect' || index === levelList.length - 1
+          "
+          class="no-redirect"
+        >{{ item.meta.title }}</span>
         <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
@@ -32,17 +37,29 @@ export default {
   methods: {
     getBreadcrumb() {
       // only show routes with meta.title
+      // 且标题组不会显示
+
       let matched = this.$route.matched.filter(
-        item => item.meta && item.meta.title
+        (item) => item.meta && item.meta.title
       )
+
+      // let matched = this.$route.matched.filter(
+      //   (item) => {
+      //     if(item.meta && item.meta.title) {
+      //       if(item.meta.breadCrumbHide) return false;
+      //       return true;
+      //     }
+      //     return false;
+      //   }
+      // )
       const first = matched[0]
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(
+        matched = [{ path: '/dashboard', meta: { title: '工作台' }}].concat(
           matched
         )
       }
       this.levelList = matched.filter(
-        item => item.meta && item.meta.title && item.meta.breadcrumb !== false
+        (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
       )
     },
     isDashboard(route) {
@@ -66,7 +83,9 @@ export default {
         this.$router.push(redirect)
         return
       }
-      this.$router.push(this.pathCompile(path))
+      // 下面这个函数会影响到工作台的跳转
+      // this.$router.push(this.pathCompile(path))
+      this.$router.push(path)
     }
   }
 }

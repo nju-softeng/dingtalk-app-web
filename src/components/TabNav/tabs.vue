@@ -30,20 +30,22 @@ export default {
   props: ['actived'],
   data() {
     return {
-      navList: []
+      navList: [],
+      // 不能直接修改props中的actived，否则会报warning
+      activedCopy: this.$props.actived
     }
   },
   watch: {
-    actived() {
+    activedCopy() {
       // 通知父组件 actived 值被更新
-      this.$emit('handleChange', this.actived)
+      this.$emit('handleChange', this.activedCopy)
     }
   },
   methods: {
     // 改变activeKey，并监听activeKey重新更新显示状态
     handleChange(index) {
       const nav = this.navList[index]
-      this.actived = nav.name
+      this.activedCopy = nav.name
     },
     // 初始化更新
     initTabs() {
@@ -55,14 +57,14 @@ export default {
           name: pane.name || index
         })
         // 如果不传value,默认选中第一项
-        if (index === 0 && !this.actived) {
-          this.actived = pane.name
+        if (index === 0 && !this.activedCopy) {
+          this.activedCopy = pane.name
         }
       })
     },
     // 获取tabs下的所有pane实例
     getTabs() {
-      return this.$children.filter(item => item.$options.name === 'TabPane')
+      return this.$children.filter((item) => item.$options.name === 'TabPane')
     }
   }
 }

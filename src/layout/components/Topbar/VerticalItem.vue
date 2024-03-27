@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden" class="container" style="display:inline-block;">
+  <div v-if="!item.hidden">
     <template
       v-if="
         hasOneShowingChild(item.children, item) &&
@@ -8,34 +8,31 @@
       "
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" class="menu-item">
-          <item :title="onlyOneChild.meta.title" />
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
+          <item :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="menu-item">
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <item v-if="item.meta" :title="item.meta.title" />
-        <!-- 增加固定宽度解决箭头被遮挡的问题-->
-        <div style="display: inline-block; width:18px;" />
+        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
-      <vertical-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
+      <sidebar-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
   </div>
 </template>
 
 <script>
 import path from 'path'
-import { isExternal } from '@/utils/index'
+import { isExternal } from '@/utils'
 import Item from './Item'
 import AppLink from './Link'
 
-import verticalItem from './verticalItem'
-
 export default {
-  name: 'SidebarItem',
-  components: { Item, AppLink, verticalItem },
+  name: 'VerticalItem',
+  components: { Item, AppLink },
+
   props: {
     // route object
     item: {
@@ -95,21 +92,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.menu-item {
-  text-align: center;
-
-  height: 48px;
-  line-height: 48px;
-}
 .svg-icon {
-  margin-right: 5px;
-}
-
-.el-menu-item.is-active {
-  border-bottom: 2px solid #409eff !important;
-}
-
-.el-submenu.is-active {
-  border-bottom: 2px solid #409eff !important;
+  // margin-right: 8px;
 }
 </style>

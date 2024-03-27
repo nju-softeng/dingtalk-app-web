@@ -2,10 +2,23 @@
   <div class="app-container">
     <div class="processWrap">
       <div class="processBox">
-        <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 10px;" @click="currentOperation='添加会议'; addProcessDialogVisible=true">新建会议记录
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          style="margin-bottom: 10px;"
+          @click="
+            currentOperation = '添加会议';
+            addProcessDialogVisible = true;
+          "
+        >新建会议记录
         </el-button>
         <div class="processList">
-          <el-table :data="processList" fit highlight-current-row class="tableClass">
+          <el-table
+            :data="processList"
+            fit
+            highlight-current-row
+            class="tableClass"
+          >
             <el-table-column label="会议名称" width="460px" align="center">
               <template slot-scope="{ row }">
                 <span>{{ row.conferenceName }}</span>
@@ -21,14 +34,15 @@
                 <span>{{ row.user.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" width="200px" >
               <template slot-scope="{ row }">
-                <el-tooltip
-                  effect="dark"
-                  content="详情"
-                  placement="top"
-                >
-                  <el-button class="detailBtn" icon="el-icon-more" size="mini" @click="getDetail(row.id)" />
+                <el-tooltip effect="dark" content="详情" placement="top">
+                  <el-button
+                    class="detailBtn"
+                    icon="el-icon-more"
+                    size="mini"
+                    @click="getDetail(row.id)"
+                  />
                 </el-tooltip>
                 <el-tooltip
                   v-show="row.user.id === uid"
@@ -36,18 +50,44 @@
                   content="编辑"
                   placement="top"
                 >
-                  <el-button class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" @click="modifyProcess(row)" />
+                  <el-button
+                    class="modifyBtn"
+                    type="primary"
+                    icon="el-icon-s-operation"
+                    size="mini"
+                    @click="modifyProcess(row)"
+                  />
                 </el-tooltip>
-                <el-button v-show="row.user.id !== uid" class="modifyBtn" type="primary" icon="el-icon-s-operation" size="mini" disabled />
+                <el-button
+                  v-show="row.user.id !== uid"
+                  class="modifyBtn"
+                  type="primary"
+                  icon="el-icon-s-operation"
+                  size="mini"
+                  disabled
+                />
                 <el-tooltip
                   v-show="row.user.id === uid"
                   effect="dark"
                   content="删除"
                   placement="top"
                 >
-                  <el-button class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" @click="deleteWholeProcess(row.id)" />
+                  <el-button
+                    class="deleteBtn"
+                    type="danger"
+                    icon="el-icon-delete-solid"
+                    size="mini"
+                    @click="deleteWholeProcess(row.id)"
+                  />
                 </el-tooltip>
-                <el-button v-show="row.user.id !== uid" class="deleteBtn" type="danger" icon="el-icon-delete-solid" size="mini" disabled />
+                <el-button
+                  v-show="row.user.id !== uid"
+                  class="deleteBtn"
+                  type="danger"
+                  icon="el-icon-delete-solid"
+                  size="mini"
+                  disabled
+                />
               </template>
             </el-table-column>
           </el-table>
@@ -71,40 +111,57 @@
     <el-dialog
       :title="currentOperation"
       :visible.sync="addProcessDialogVisible"
-      width="30%"
       :before-close="clearBeforeClose"
     >
-      <el-form ref="addProcessForm" :model="addProcessForm" :rules="rules" label-width="100px" style="margin-left: 36px">
-        <el-form-item prop="conferenceName" label="会议名称:">
-          <el-col :span="12">
-            <el-input v-model="addProcessForm.conferenceName" placeholder="请输入会议名称" style="width: 200px" />
-          </el-col>
-        </el-form-item>
-        <el-form-item prop="year" label="会议年份:">
-          <el-col :span="12">
+      <div>
+        <el-form
+          ref="addProcessForm"
+          :model="addProcessForm"
+          :rules="rules"
+          style=""
+        >
+          <el-form-item prop="conferenceName" label="会议名称:">
+            <el-input
+              v-model="addProcessForm.conferenceName"
+              placeholder="请输入会议名称"
+            />
+          </el-form-item>
+          <el-form-item prop="year" label="会议年份:">
             <el-date-picker
               v-model="addProcessForm.year"
               value-format="yyyy"
               format="yyyy 年"
               type="year"
               placeholder="选择年份"
-              style="width: 200px"
+              style="width: fit-content;"
             />
-          </el-col>
-        </el-form-item>
-        <process-ppt-upload v-show="currentOperation === '添加会议'" ref="child" :file="file" @changeFile="changeFile" />
-      </el-form>
-      <span slot="footer">
-        <el-button @click="cancelAddProcess">取 消</el-button>
-        <el-button type="primary" @click="addNewProcess('addProcessForm')">确 认</el-button>
-      </span>
+          </el-form-item>
+          <process-ppt-upload
+            v-show="currentOperation === '添加会议'"
+            ref="child"
+            :file="file"
+            @changeFile="changeFile"
+          />
+        </el-form>
+        <span slot="footer">
+          <el-button @click="cancelAddProcess">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="addNewProcess('addProcessForm')"
+          >确 认</el-button>
+        </span>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import ProcessPptUpload from './processPptUpload'
-import { getProcessProperty, addProcessProperty, deleteProcessProperty } from '@/api/processProperty'
+import {
+  getProcessProperty,
+  addProcessProperty,
+  deleteProcessProperty
+} from '@/api/processProperty'
 export default {
   name: 'ProjectProcess',
   components: { ProcessPptUpload },
@@ -124,13 +181,16 @@ export default {
         file: null
       },
       rules: {
-        conferenceName: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+        conferenceName: [
+          { required: true, message: '请输入事件名称', trigger: 'blur' }
+        ],
         year: [{ required: true, message: '请输入事件年份', trigger: 'blur' }]
       },
       uid: -1
     }
   },
   created() {
+    sessionStorage.setItem('inner-cur-page', 1)
     this.currentPage = parseInt(sessionStorage.getItem('inner-cur-page')) || 1
     this.fetchProcess(this.currentPage)
     this.uid = parseInt(sessionStorage.getItem('uid'))
@@ -141,13 +201,13 @@ export default {
       console.log(this.processList)
       return new Promise((resolve, reject) => {
         getProcessProperty(page, 10)
-          .then(res => {
+          .then((res) => {
             this.processList = res.data.list
             this.total = res.data.total
             console.log(res)
             resolve(res)
           })
-          .catch(err => {
+          .catch((err) => {
             reject(err)
           })
       })
@@ -171,43 +231,56 @@ export default {
       this.$router.push('/property/academic/process-detail/' + id)
     },
     deleteWholeProcess(id) {
-      deleteProcessProperty(id).then(() => {
-        this.$message.success('删除成功')
-        this.fetchProcess(this.currentPage)
-      }).catch(() => {
-        this.$message.error('删除失败')
-      })
+      deleteProcessProperty(id)
+        .then(() => {
+          this.$message.success('删除成功')
+          this.fetchProcess(this.currentPage)
+        })
+        .catch(() => {
+          this.$message.error('删除失败')
+        })
     },
     addNewProcess(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.addProcessForm.filePath = 'Property/Academic/Process/' + this.addProcessForm.conferenceName + '/' + this.addProcessForm.year + '/' + sessionStorage.getItem('name')
+          this.addProcessForm.filePath =
+            'Property/Academic/Process/' +
+            this.addProcessForm.conferenceName +
+            '/' +
+            this.addProcessForm.year +
+            '/' +
+            sessionStorage.getItem('name')
           const formData = new FormData()
           if (this.file != null) {
             formData.append('file', this.file.raw)
           } else {
             formData.append('file', null)
           }
-          formData.append('processPropertyVOJsonStr', JSON.stringify(this.addProcessForm))
-          addProcessProperty(formData).then(() => {
-            if (this.currentOperation === '添加会议') {
-              this.$message.success('添加成功')
-            } else if (this.currentOperation === '修改会议') {
-              this.$message.success('修改成功')
-            } else {
-              this.$message.error('未知的状态！')
-            }
-            this.cancelAddProcess()
-            this.fetchProcess(this.currentPage)
-          }).catch(() => {
-            if (this.currentOperation === '添加会议') {
-              this.$message.error('添加失败')
-            } else if (this.currentOperation === '修改会议') {
-              this.$message.error('修改失败')
-            } else {
-              this.$message.error('未知的状态！')
-            }
-          })
+          formData.append(
+            'processPropertyVOJsonStr',
+            JSON.stringify(this.addProcessForm)
+          )
+          addProcessProperty(formData)
+            .then(() => {
+              if (this.currentOperation === '添加会议') {
+                this.$message.success('添加成功')
+              } else if (this.currentOperation === '修改会议') {
+                this.$message.success('修改成功')
+              } else {
+                this.$message.error('未知的状态！')
+              }
+              this.cancelAddProcess()
+              this.fetchProcess(this.currentPage)
+            })
+            .catch(() => {
+              if (this.currentOperation === '添加会议') {
+                this.$message.error('添加失败')
+              } else if (this.currentOperation === '修改会议') {
+                this.$message.error('修改失败')
+              } else {
+                this.$message.error('未知的状态！')
+              }
+            })
         } else {
           this.$notify({
             title: '添加失败',
@@ -252,56 +325,56 @@ export default {
 </script>
 
 <style scoped>
-  .app-container {
-    padding: 0 12px;
-    background-color: #fafafa;
-    border-radius: 0;
-  }
+.app-container {
+  padding: 0 12px;
+  background-color: #fafafa;
+  border-radius: 0;
+}
 
-  .processWrap {
-    border: 1px solid #e8e8e8;
-    border-radius: 2px;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.processWrap {
+  border: 1px solid #e8e8e8;
+  border-radius: 2px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.processBox {
+  background: #fff;
+  padding: 10px 15px;
+  min-height: 540px;
+}
+
+@media only screen and (min-width: 1400px) {
   .processBox {
-    background: #fff;
-    padding: 10px 15px;
-    min-height: 540px;
+    max-width: 1305px !important;
   }
+}
 
-  @media only screen and (min-width: 1400px) {
-    .processBox {
-      max-width: 1305px !important;
-    }
-  }
+.processList {
+  min-height: 500px;
+}
 
-  .processList {
-    min-height: 500px;
-  }
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
 
-  .pagination {
-    margin-top:16px;
-    display:flex;
-    justify-content:center;
-  }
+.detailBtn {
+  padding: 2px 6px;
+  border-radius: 5px;
+}
 
-  .detailBtn {
-    padding: 2px 6px;
-    border-radius: 5px;
-  }
+.modifyBtn {
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-left: 16px;
+}
 
-  .modifyBtn {
-    padding: 2px 6px;
-    border-radius: 5px;
-    margin-left: 16px;
-  }
-
-  .deleteBtn {
-    padding: 2px 6px;
-    border-radius: 5px;
-    margin-left: 16px;
-  }
+.deleteBtn {
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-left: 16px;
+}
 </style>

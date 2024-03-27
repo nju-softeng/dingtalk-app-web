@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <div>
       <el-tooltip
         class="item"
@@ -9,9 +9,9 @@
       >
         <el-button type="primary" @click="refreshUser">拉取钉钉用户</el-button>
       </el-tooltip>
-      <span
-        style="padding-left:100px;color: #999999; font-size:13px"
-      >当前评审人:</span>
+      <!-- <span style="padding-left:100px;color: #999999; font-size:13px"
+        >当前评审人:</span
+      >
       <span
         v-for="(item, index) in auditors"
         :key="index"
@@ -24,7 +24,7 @@
         style="margin:0 5px; font-size:13px;color: #999999"
       >
         未设置
-      </span>
+      </span> -->
     </div>
     <el-divider />
     <div class="filtrate">
@@ -60,11 +60,11 @@
         style="margin-left:5px"
         @click="refresh"
       >
-        重置
+        刷新
       </el-button>
       <el-button
         size="mini"
-        type="success"
+        type="error"
         plain
         icon="el-icon-s-release"
         style="float:right"
@@ -77,6 +77,7 @@
     <div>
       <el-table
         :data="list"
+        fit
         style="margin-top:10px;"
         :header-cell-style="{ background: '#eef1f6' }"
       >
@@ -97,13 +98,49 @@
             <span v-if="row.position === undefined">未设置</span>
           </template>
         </el-table-column>
-        <el-table-column prop="role" align="center" label="权限">
+        <el-table-column
+          prop="role"
+          align="center"
+          label="管理权限"
+          width="150"
+        >
           <template slot-scope="{ row }">
-            <el-tag v-if="row.authority === 0" type="info">普通用户</el-tag>
-            <el-tag v-else type="success">评审人</el-tag>
+            <div style="overflow: auto; height: 30px;">
+              <template v-if="row.permissionList.length !== 0">
+                <el-tag
+                  v-for="permission in row.permissionList"
+                  :key="permission.id"
+                  effect="plain"
+                >{{ permission.name }}</el-tag>
+              </template>
+              <template v-else>
+                <el-tag type="info" effect="plain">无</el-tag>
+              </template>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column width="200px" align="center" label="操作">
+        <el-table-column
+          prop="role"
+          align="center"
+          label="所属研究组"
+          width="150"
+        >
+          <template slot-scope="{ row }">
+            <div style="overflow: auto; height: 30px;">
+              <template v-if="row.teamList.length !== 0">
+                <el-tag
+                  v-for="team in row.teamList"
+                  :key="team.id"
+                  effect="plain"
+                >{{ team.name }}</el-tag>
+              </template>
+              <template v-else>
+                <el-tag type="info" effect="plain">无</el-tag>
+              </template>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="操作" fixed="right">
           <template slot-scope="{ row }">
             <el-button
               type="text"
@@ -117,7 +154,7 @@
               title="停用后用户将移除绩效列表"
               width="195"
               style="font-size:13px"
-              trigger="click"
+              trigger="manual"
             >
               <div style="text-align: right; margin: 0">
                 <el-button
@@ -134,7 +171,11 @@
                   "
                 >确定</el-button>
               </div>
-              <el-button slot="reference" type="text">停用</el-button>
+              <el-button
+                slot="reference"
+                type="text"
+                @click="row.visible = true"
+              >停用</el-button>
             </el-popover>
           </template>
         </el-table-column>
@@ -158,6 +199,7 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="10"
+          :current-page="currentPage"
           @prev-click="handlePrev"
           @next-click="handleNext"
           @current-change="handleCurrentChange"
@@ -168,8 +210,9 @@
     <el-dialog
       title="编辑用户信息"
       :visible.sync="dialog"
-      width="35%"
+      width="400px"
       :lock-scroll="false"
+      @close="closeEdit()"
     >
       <div v-loading="loading">
         <el-form
@@ -204,7 +247,7 @@
           </el-form-item>
 
           <el-form-item label="用户权限">
-            <el-select
+            <!-- <el-select
               v-model="userForm.authority"
               style="width:200px"
               placeholder="请选择"
@@ -215,13 +258,20 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </el-select>
+            </el-select> -->
+            <PermissionEdit
+              ref="permissionEdit"
+              :user-id="this.userForm.id"
+            />
+          </el-form-item>
+          <el-form-item label="研究组">
+            <TeamEdit ref="teamEdit" :user-id="this.userForm.id" />
           </el-form-item>
         </el-form>
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">取 消</el-button>
+        <el-button @click="closeEdit()">取 消</el-button>
         <el-button type="primary" @click="submitUserInfo">确 定</el-button>
       </span>
     </el-dialog>
@@ -230,8 +280,9 @@
       title="停用列表"
       :lock-scroll="false"
       :visible.sync="disableDialog"
+      width="400px"
     >
-      <el-table :data="disablelist">
+      <el-table :data="disablelist" height="600px">
         <el-table-column label="学号">
           <template slot-scope="{ row }">
             <span v-if="row.stuNum === undefined">未设置</span>
@@ -264,7 +315,10 @@ import {
   queryDisableUser
 } from '@/api/system'
 import { listAuditors } from '@/api/user'
+import PermissionEdit from '@/components/PermissionsEdit'
+import TeamEdit from '@/components/TeamsEdit'
 export default {
+  components: { PermissionEdit, TeamEdit },
   data() {
     return {
       disableDialog: false,
@@ -281,8 +335,8 @@ export default {
         position: '',
         authority: null
       },
-      page: 0,
-      options: ['本科生', '专硕', '学硕', '博士生', '待定'],
+      currentPage: 1,
+      options: ['本科生', '专硕', '学硕', '博士生', '待定', '教师'],
       authorityList: [
         { label: '普通用户', value: 0 },
         { label: '评审人', value: 1 }
@@ -291,23 +345,23 @@ export default {
   },
   created() {
     this.fetchUserList(0)
-    listAuditors().then(res => {
+    listAuditors().then((res) => {
       this.auditors = res.data.auditorlist
     })
   },
   methods: {
     showDisableUser() {
       this.disableDialog = true
-      queryDisableUser().then(res => {
+      queryDisableUser().then((res) => {
         this.disablelist = res.data
       })
     },
     recoverU(uid) {
       enableUser(uid).then(() => {
-        queryDisableUser().then(res => {
+        queryDisableUser().then((res) => {
           this.disablelist = res.data
         })
-        this.fetchUserList(this.page)
+        this.fetchUserList(this.currentPage - 1)
         this.$message({
           showClose: true,
           message: '恢复成功',
@@ -317,7 +371,7 @@ export default {
     },
     disableU(uid) {
       disableUser(uid).then(() => {
-        this.fetchUserList(this.page)
+        this.fetchUserList(this.currentPage - 1)
         this.$message({
           showClose: true,
           message: '禁用成功',
@@ -326,44 +380,69 @@ export default {
       })
     },
     editUserInfo(data) {
+      console.log(data)
       this.userForm = data
       this.dialog = true
     },
     submitUserInfo() {
       this.loading = true
-      updateUserInfo(this.userForm).then(() => {
-        this.loading = false
-        this.dialog = false
-        this.fetchUserList(this.page)
-        this.$notify({
-          title: '成功',
-          message: this.userForm.name + ' 的信息保存成功',
-          position: 'bottom-right',
-          type: 'success'
+      updateUserInfo(this.userForm)
+        .then(() => {
+          this.$notify({
+            title: '成功',
+            message: this.userForm.name + ' 的信息保存成功',
+            position: 'bottom-right',
+            type: 'success'
+          })
         })
-      })
+        .then(() => {
+          this.$refs.permissionEdit.submitPermissionChange()
+        })
+        .then(() => {
+          this.$refs.teamEdit.submitTeamChange()
+        })
+        .then(() => {
+          // 保证前面两个then中的异步操作都执行完之后再更新页面
+          setTimeout(() => {
+            this.loading = false
+            this.dialog = false
+            this.fetchUserList(this.currentPage - 1)
+          }, 1000)
+        })
     },
 
     // 分页获取数据
     handleCurrentChange(val) {
-      this.page = val - 1
+      if (val == this.currentPage) return
       this.fetchUserList(val - 1)
+      // console.log("handleCurrentChange");
     },
     handlePrev(val) {
+      console.log(val)
+      // this.currentPage = this.currentPage - 1;
       this.fetchUserList(val - 1)
     },
     handleNext(val) {
+      console.log(val)
+      this.loading = true
+      // this.currentPage = this.currentPage + 1;
       this.fetchUserList(val - 1)
+      // console.log("handleNext");
     },
     fetchUserList(page) {
-      if (page === undefined) {
-        page = 0
-      }
-      queryUser(this.queryForm, page).then(res => {
-        this.list = res.data.content
-        this.total = res.data.total
-        console.log(this.list)
-      })
+      // if (page === undefined) {
+      //   page = 0;
+      // }
+      this.currentPage = page + 1
+      queryUser(this.queryForm, page)
+        .then((res) => {
+          this.list = res.data.content
+          this.total = res.data.total
+          // console.log(this.list);
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     search() {
       this.fetchUserList(0)
@@ -373,7 +452,8 @@ export default {
         name: '',
         position: ''
       }
-      this.fetchUserList(0)
+      console.log(this.currentPage)
+      this.fetchUserList(this.currentPage - 1)
     },
     // 拉取用户信息
     refreshUser() {
@@ -384,6 +464,14 @@ export default {
         })
         this.fetchUserList(0)
       })
+    },
+
+    closeEdit() {
+      this.dialog = false
+      this.$refs.permissionEdit.getPermission()
+      this.$refs.permissionEdit.updateOptions()
+      this.$refs.teamEdit.getTeams()
+      this.$refs.teamEdit.updateOptions()
     }
   }
 }
@@ -391,5 +479,11 @@ export default {
 <style lang="scss" scoped>
 .filtrate {
   padding-top: 10px;
+}
+
+.app-container {
+  padding: 12px;
+  background-color: #fafafa;
+  border-radius: 0;
 }
 </style>

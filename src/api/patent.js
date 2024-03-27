@@ -6,10 +6,12 @@ const api = {
   getPatentDetail: (id) => `/patent/${id}`,
   deletePatent: (id) => `/patent/${id}`,
   decideAudit: (id, isPass) => `/patent/${id}/auditState/${isPass}`,
-  decideAuthorization: (id, isPass) => `/patent/${id}/authorizationState/${isPass}`,
+  decideAuthorization: (id, isPass) =>
+    `/patent/${id}/authorizationState/${isPass}`,
   addPatentFile: (id, type) => `/patent/${id}/patentFile/fileType/${type}`,
   deletePatentFile: (id, type) => `/patent/${id}/patentFile/fileType/${type}`,
-  downloadPatentFile: (id, type) => `/patent/${id}/patentFile/fileType/${type}`
+  downloadPatentFile: (id, type) => `/patent/${id}/patentFile/fileType/${type}`,
+  queryPatentList: (page, size) => `/v2/patent/${page}/${size}`
 }
 
 // 添加专利
@@ -83,5 +85,13 @@ export function downloadPatentFile(id, type) {
   return axios({
     url: api.downloadPatentFile(id, type),
     method: 'get'
+  })
+}
+
+export function queryPatentList(page, size, payload) {
+  return axios({
+    url: api.queryPatentList(page, size),
+    method: 'post',
+    data: payload
   })
 }

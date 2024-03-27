@@ -8,6 +8,7 @@
         :paper-id="id"
         :paper-type="paperType"
         :paper-path="paperPath"
+        :first-author-id="firstAuthorId"
         @init="init"
       />
     </el-timeline>
@@ -19,6 +20,7 @@
         :paper-id="id"
         :paper-type="paperType"
         :paper-path="paperPath"
+        :first-author-id="firstAuthorId"
         @init="init"
       />
     </el-timeline>
@@ -39,18 +41,65 @@ export default {
     paperPath: {
       type: String,
       default: ''
+    },
+    firstAuthorId: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data() {
     return {
       cards: [
-        { fileName: '', fileId: '', fileTypeZHCN: '评审版本文件', fileType: 'reviewFile', fileShow: true },
-        { fileName: '', fileId: '', fileTypeZHCN: '提交版本文件', fileType: 'submissionFile', fileShow: false },
-        { fileName: '', fileId: '', fileTypeZHCN: '文献评审结果', fileType: 'commentFile', fileShow: false },
-        { fileName: '', fileId: '', fileTypeZHCN: '发表版本文件', fileType: 'publishedFile', fileShow: false },
-        { fileName: '', fileId: '', fileTypeZHCN: '发表版本LATEX文件', fileType: 'publishedLatexFile', fileShow: false },
-        { fileName: '', fileId: '', fileTypeZHCN: '源文件', fileType: 'sourceFile', fileShow: false },
-        { fileName: '', fileId: '', fileTypeZHCN: '对外版本文件', fileType: 'publicFile', fileShow: false }
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '评审版本文件',
+          fileType: 'reviewFile',
+          fileShow: true
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '提交版本文件',
+          fileType: 'submissionFile',
+          fileShow: false
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '文献评审结果',
+          fileType: 'commentFile',
+          fileShow: false
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '发表版本文件',
+          fileType: 'publishedFile',
+          fileShow: false
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '发表版本LATEX文件',
+          fileType: 'publishedLatexFile',
+          fileShow: false
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '源文件',
+          fileType: 'sourceFile',
+          fileShow: false
+        },
+        {
+          fileName: '',
+          fileId: '',
+          fileTypeZHCN: '对外版本文件',
+          fileType: 'publicFile',
+          fileShow: false
+        }
       ]
     }
   },
@@ -58,16 +107,24 @@ export default {
     // console.log(this.paperType)
     this.id = this.$route.params.id
     this.init()
+    console.log(this.firstAuthorId)
   },
   methods: {
     init() {
       if (this.paperType === 0 || this.paperType === 2) {
-        getPaperFileInfo(sessionStorage.getItem('uid'), this.id).then(res => this.handleRes(res))
+        getPaperFileInfo(parseInt(sessionStorage.getItem('uid')), this.id).then((res) =>
+          this.handleRes(res)
+        )
       } else if (this.paperType === 1) {
-        getExternalPaperFileInfo(sessionStorage.getItem('uid'), this.id).then(res => this.handleRes(res))
+        getExternalPaperFileInfo(
+            parseInt(sessionStorage.getItem('uid')),
+          this.id
+        ).then((res) => this.handleRes(res))
       }
     },
     handleRes(res) {
+      // this.firstAuthorId = res.data.paperDetails[0].user.id;
+      // console.log(res.data);
       this.cards[0].fileName = res.data.reviewFileName
       this.cards[0].fileId = res.data.reviewFileId
       this.cards[1].fileName = res.data.submissionFileName
@@ -91,18 +148,20 @@ export default {
           judge = false
         }
       }
-      if (this.paperType === 2) { this.cards[1].fileShow = true }
+      if (this.paperType === 2) {
+        this.cards[1].fileShow = true
+      }
     }
   }
 }
 </script>
 
-<style>
-    .files {
-        min-height: calc(100vh - 280px);
-        max-width: 1256px;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 10px 20px 0;
-    }
+<style scoped>
+.files {
+  min-height: calc(100vh - 280px);
+  max-width: 1256px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 20px 0;
+}
 </style>

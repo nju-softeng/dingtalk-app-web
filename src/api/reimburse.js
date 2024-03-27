@@ -8,7 +8,8 @@ const api = {
   setState: (id, state) => `/reimburse/${id}/state/${state}`,
   addReimbursementFile: (id) => `/reimburse/${id}/reimbursementFile`,
   deleteReimbursementFile: (id) => `/reimbursementFile/${id}`,
-  downloadReimbursementFile: (id) => `/reimbursementFile/${id}`
+  downloadReimbursementFile: (id) => `/reimbursementFile/${id}`,
+  queryReimbursementList: (page, size) => `/v2/reimbursement/${page}/${size}`
 }
 
 // 添加专利
@@ -73,5 +74,13 @@ export function downloadReimbursementFile(id) {
     url: api.downloadReimbursementFile(id),
     responseType: 'blob',
     method: 'get'
+  })
+}
+
+export function queryReimbursementList(page, size, payload) {
+  return axios({
+    url: api.queryReimbursementList(page, size),
+    method: 'post',
+    data: payload
   })
 }

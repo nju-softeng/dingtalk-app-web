@@ -2,7 +2,8 @@ import axios from '@/utils/request'
 
 const api = {
   application: '/application',
-  listApplication: (page, size) => '/application/page/' + page + '/size/' + size,
+  listApplication: (page, size) =>
+    '/application/page/' + page + '/size/' + size,
   applicationPager: '/application/page/',
   getDate: '/date_code',
   pendingAudit: '/pending_audit',
@@ -60,4 +61,3 @@ export function getAudit() {
     method: 'get'
   })
 }
-
